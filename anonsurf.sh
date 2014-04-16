@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# AnonSurf is a FORK of the original backbox-anonymous script 
+# AnonSurf is inspired to the original backbox-anonymous script 
 # distributed as part of backbox-default-settings package.
-# It was modified and forked in order to make it fully compatible with
-# Parrot Security OS and other debian-based systems, and is part of
-# parrot-anon package
+# It was modified and forked from the homonimous module of PenMode in order to make it fully compatible with
+# Parrot Security OS and other debian-based systems, and it is part of
+# parrot-anon package.
 #
 #
 # Devs:
@@ -16,6 +16,7 @@
 # modify it under the terms of the GNU General Public License as 
 # published by the Free Software Foundation, either version 3 of the 
 # License, or (at your option) any later version.
+# You can get a copy of the license at www.gnu.org/licenses
 #
 # anonsurf is distributed in the hope that it will be 
 # useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -45,7 +46,6 @@ TOR_PORT="9040"
 
 case "$1" in
     start)
-    	sleep 1
 		# Make sure only root can run this script
 		if [ $(id -u) -ne 0 ]; then
 		  echo "\n$GREEN[$RED!$GREEN] $RED R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
@@ -113,13 +113,12 @@ case "$1" in
 		if [ ! -e /var/run/tor/tor.pid ]; then	
 			echo " $RED*$BLUE Tor is not running! $GREEN starting $BLUE for you\n" >&2
 			service tor start
-			sleep 4
+			sleep 6
 		fi
 		
 		if ! [ -f /etc/network/iptables.rules ]; then
 			iptables-save > /etc/network/iptables.rules
 			echo " $GREEN*$BLUE Saved iptables rules"
-			sleep 1
 		fi
 
 		iptablesip -F
@@ -146,7 +145,7 @@ case "$1" in
 		echo "$GREEN *$BLUE Redirected all traffic throught Tor\n"
 		echo "$GREEN[$BLUE i$GREEN ]$BLUE Are you using Tor?$RESETCOLOR\n"
 		echo "$GREEN *$BLUE Please refer to $RED http://penmode.tk/ipphos$RESETCOLOR\n"
-		echo "$GREEN *$BLUE Remember to $RED disable $BLUE your $GREEN firewall $BLUE before proceeding\n\tor enable all ports required by a normal tor connection"
+		
 	;;
     stop)
     	sleep 1
@@ -161,7 +160,6 @@ case "$1" in
 		iptables -F
 		iptables -t nat -F
 		echo " $GREEN*$BLUE Deleted all iptables rules"
-		sleep 1
 		
 		if [ -f /etc/network/iptables.rules ]; then
 			iptables-restore < /etc/network/iptables.rules
