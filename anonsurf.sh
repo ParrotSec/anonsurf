@@ -1,5 +1,15 @@
 #!/bin/bash
 
+### BEGIN INIT INFO
+# Provides:          anonsurf
+# Required-Start:    tor
+# Required-Stop:
+# Should-Stop:
+# Default-Start:      
+# Default-Stop:		  0 1 6
+# Short-Description: Anonymize the entire system under TOR.
+### END INIT INFO
+
 # AnonSurf is inspired to the original backbox-anonymous script
 # distributed as part of backbox-default-settings package.
 # It was modified and forked from the homonimous module of PenMode, developed by the "Pirates' Crew" in order to make it fully compatible with
@@ -43,148 +53,186 @@ TOR_UID="debian-tor"
 TOR_PORT="9040"
 
 
-function start {
-# Make sure only root can run this script
-if [ $(id -u) -ne 0 ]; then
-echo -e -e "\n$GREEN[$RED!$GREEN] $RED R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
-exit 1
-fi
 
-# Check defaults for Tor
-grep -q -x 'RUN_DAEMON="yes"' /etc/default/tor
-if [ $? -ne 0 ]; then
-echo -e "\n$GREEN[$RED!$GREEN]$RED Please add the following to your /etc/default/tor and restart service:$RESETCOLOR\n" >&2
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
-echo -e 'RUN_DAEMON="yes"'
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
-exit 1
-fi	
 
-# Check torrc config file
-grep -q -x 'VirtualAddrNetwork 10.192.0.0/10' /etc/tor/torrc
-if [ $? -ne 0 ]; then
-echo -e "\n$RED[!] Please add the following to your /etc/tor/torrc and restart service:$RESETCOLOR\n" >&2
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
-echo -e 'VirtualAddrNetwork 10.192.0.0/10'
-echo -e 'AutomapHostsOnResolve 1'
-echo -e 'TransPort 9040'
-echo -e 'DNSPort 53'
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
-exit 1
-fi
-grep -q -x 'AutomapHostsOnResolve 1' /etc/tor/torrc
-if [ $? -ne 0 ]; then
-echo -e "\n$RED[!] Please add the following to your /etc/tor/torrc and restart service:$RESETCOLOR\n" >&2
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
-echo -e 'VirtualAddrNetwork 10.192.0.0/10'
-echo -e 'AutomapHostsOnResolve 1'
-echo -e 'TransPort 9040'
-echo -e 'DNSPort 53'
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
-exit 1
-fi
-grep -q -x 'TransPort 9040' /etc/tor/torrc
-if [ $? -ne 0 ]; then
-echo -e "\n$RED[!] Please add the following to your /etc/tor/torrc and restart service:$RESETCOLOR\n" >&2
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
-echo -e 'VirtualAddrNetwork 10.192.0.0/10'
-echo -e 'AutomapHostsOnResolve 1'
-echo -e 'TransPort 9040'
-echo -e 'DNSPort 53'
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
-exit 1
-fi
-grep -q -x 'DNSPort 53' /etc/tor/torrc
-if [ $? -ne 0 ]; then
-echo -e "\n$RED[!] Please add the following to your /etc/tor/torrc and restart service:$RESETCOLOR\n" >&2
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
-echo -e 'VirtualAddrNetwork 10.192.0.0/10'
-echo -e 'AutomapHostsOnResolve 1'
-echo -e 'TransPort 9040'
-echo -e 'DNSPort 53'
-echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
-exit 1
-fi
-
-echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
-
-if [ ! -e /var/run/tor/tor.pid ]; then
-echo -e " $RED*$BLUE Tor is not running! $GREEN starting $BLUE for you\n" >&2
-service tor start
-sleep 6
-fi
-if ! [ -f /etc/network/iptables.rules ]; then
-iptables-save > /etc/network/iptables.rules
-echo -e " $GREEN*$BLUE Saved iptables rules"
-fi
-
-iptables -F
-iptables -t nat -F
-
-echo -e -n " $GREEN*$BLUE Service "
-service resolvconf stop 2>/dev/null || echo -e "resolvconf already stopped"
-
-echo -e 'nameserver 127.0.0.1' > /etc/resolv.conf
-echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor"
-
-iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN #-m owner --uid-owner $TOR_UID
-iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
-for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
-iptables -t nat -A OUTPUT -d $NET -j RETURN
-done
-iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
-iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-for NET in $TOR_EXCLUDE 127.0.0.0/8; do
-iptables -A OUTPUT -d $NET -j ACCEPT
-done
-iptables -A OUTPUT -j ACCEPT # -m owner --uid-owner $TOR_UID
-iptables -A OUTPUT -j REJECT
-echo -e "$GREEN *$BLUE Redirected all traffic throught Tor\n"
-echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf-TOR tunnel$RESETCOLOR\n"
+function init {
+	echo -e -n " $GREEN*$BLUE killing dangerous applications"
+	killall -q "chrome dropbox iceweasel skype icedove thunderbird firefox chromium xchat transmission"
+	
+	echo -e -n " $GREEN*$BLUE cleaning some dangerous caches"
+	bleachbit -c "adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history system.cache system.memory system.recent_documents" >&2	
 }
+
+
+
+
+
+
+function start {
+	# Make sure only root can run this script
+	if [ $(id -u) -ne 0 ]; then
+		echo -e -e "\n$GREEN[$RED!$GREEN] $RED R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
+		exit 1
+	fi
+	
+	# Check defaults for Tor
+	grep -q -x 'RUN_DAEMON="yes"' /etc/default/tor
+	if [ $? -ne 0 ]; then
+		echo -e "\n$GREEN[$RED!$GREEN]$RED Please add the following to your /etc/default/tor and restart service:$RESETCOLOR\n" >&2
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
+		echo -e 'RUN_DAEMON="yes"'
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
+		exit 1
+	fi	
+	
+	# Check torrc config file
+	grep -q -x 'VirtualAddrNetwork 10.192.0.0/10' /etc/tor/torrc
+	if [ $? -ne 0 ]; then
+		echo -e "\n$RED[!] Please add the following to your /etc/tor/torrc and restart service:$RESETCOLOR\n" >&2
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
+		echo -e 'VirtualAddrNetwork 10.192.0.0/10'
+		echo -e 'AutomapHostsOnResolve 1'
+		echo -e 'TransPort 9040'
+		echo -e 'DNSPort 53'
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
+	exit 1
+	fi
+	grep -q -x 'AutomapHostsOnResolve 1' /etc/tor/torrc
+	if [ $? -ne 0 ]; then
+		echo -e "\n$RED[!] Please add the following to your /etc/tor/torrc and restart service:$RESETCOLOR\n" >&2
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
+		echo -e 'VirtualAddrNetwork 10.192.0.0/10'
+		echo -e 'AutomapHostsOnResolve 1'
+		echo -e 'TransPort 9040'
+		echo -e 'DNSPort 53'
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
+		exit 1
+	fi
+	grep -q -x 'TransPort 9040' /etc/tor/torrc
+	if [ $? -ne 0 ]; then
+		echo -e "\n$RED[!] Please add the following to your /etc/tor/torrc and restart service:$RESETCOLOR\n" >&2
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
+		echo -e 'VirtualAddrNetwork 10.192.0.0/10'
+		echo -e 'AutomapHostsOnResolve 1'
+		echo -e 'TransPort 9040'
+		echo -e 'DNSPort 53'
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
+	exit 1
+	fi
+	grep -q -x 'DNSPort 53' /etc/tor/torrc
+	if [ $? -ne 0 ]; then
+		echo -e "\n$RED[!] Please add the following to your /etc/tor/torrc and restart service:$RESETCOLOR\n" >&2
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
+		echo -e 'VirtualAddrNetwork 10.192.0.0/10'
+		echo -e 'AutomapHostsOnResolve 1'
+		echo -e 'TransPort 9040'
+		echo -e 'DNSPort 53'
+		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
+		exit 1
+	fi
+	
+	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
+	
+	if [ ! -e /var/run/tor/tor.pid ]; then
+		echo -e " $RED*$BLUE Tor is not running! $GREEN starting $BLUE for you\n" >&2
+		service tor start
+		sleep 6
+	fi
+	if ! [ -f /etc/network/iptables.rules ]; then
+		iptables-save > /etc/network/iptables.rules
+		echo -e " $GREEN*$BLUE Saved iptables rules"
+	fi
+	
+	iptables -F
+	iptables -t nat -F
+	
+	echo -e -n " $GREEN*$BLUE Service "
+	service resolvconf stop 2>/dev/null || echo -e "resolvconf already stopped"
+	
+	echo -e 'nameserver 127.0.0.1\nnameserver 199.175.54.136' > /etc/resolv.conf
+	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor"
+
+	# set iptables nat
+	iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN
+	iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
+	iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 53
+	iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
+	
+	#resolve .onion domains mapping 10.192.0.0/10 address space
+	iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports 9040
+	iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports 9040
+	
+	#exclude local addresses
+	for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
+		iptables -t nat -A OUTPUT -d $NET -j RETURN
+	done
+	
+	#redirect all other output through TOR
+	iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
+	iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $TOR_PORT
+	iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $TOR_PORT
+	
+	#accept already established connections
+	iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+	
+	#exclude local addresses
+	for NET in $TOR_EXCLUDE 127.0.0.0/8; do
+		iptables -A OUTPUT -d $NET -j ACCEPT
+	done
+	
+	#allow only tor output
+	iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
+	iptables -A OUTPUT -j REJECT
+
+	echo -e "$GREEN *$BLUE Redirected all traffic throught Tor\n"
+	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf-TOR tunnel$RESETCOLOR\n"
+	sleep 4
+}
+
 
 
 
 
 function stop {
-# Make sure only root can run our script
-if [ $(id -u) -ne 0 ]; then
-echo -e "\n$GREEN[$RED!$GREEN] $RED R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
-exit 1
-fi
-echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
+	# Make sure only root can run our script
+	if [ $(id -u) -ne 0 ]; then
+		echo -e "\n$GREEN[$RED!$GREEN] $RED R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
+		exit 1
+	fi
+	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
-iptables -F
-iptables -t nat -F
-echo -e " $GREEN*$BLUE Deleted all iptables rules"
-
-if [ -f /etc/network/iptables.rules ]; then
-iptables-restore < /etc/network/iptables.rules
-rm /etc/network/iptables.rules
-echo -e " $GREEN*$BLUE Restored iptables rules"
-fi
-echo -e -n " $GREEN*$BLUE Service "
-service resolvconf start 2>/dev/null || echo -e "resolvconf already started"
-sleep 1
-
-echo -e " $GREEN*$BLUE Stopped anonymous mode\n"
+	iptables -F
+	iptables -t nat -F
+	echo -e " $GREEN*$BLUE Deleted all iptables rules"
+	
+	if [ -f /etc/network/iptables.rules ]; then
+		iptables-restore < /etc/network/iptables.rules
+		rm /etc/network/iptables.rules
+		echo -e " $GREEN*$BLUE Restored iptables rules"
+	fi
+	echo -e -n " $GREEN*$BLUE Service "
+	service resolvconf start 2>/dev/null || echo -e "resolvconf already started"
+	sleep 1
+	
+	echo -e " $GREEN*$BLUE Stopped anonymous mode\n"
+	sleep 4
 }
-
-
-
-
 
 function change {
-service tor stop
-service tor start
-sleep 4
-echo -e " $GREEN*$BLUE Restarted tor daemon and forced to change nodes\n"
+	service tor stop
+	sleep 1
+	service tor start
+	sleep 4
+	echo -e " $GREEN*$BLUE Restarted tor daemon and forced to change nodes\n"
+	sleep 1
 }
+
 
 
 case "$1" in
     start)
 start
+init
 ;;
     stop)
 stop
@@ -193,13 +241,14 @@ stop
 $0 stop
 sleep 1
 $0 start
+
 ;;
     change)
 change
 ;;
     *)
 echo -e "
-Parrot AnonSurf Module (v 0.7)
+Parrot AnonSurf Module (v 0.9.1)
 	Usage:
 	$RED┌─[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""}
