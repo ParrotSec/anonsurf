@@ -80,7 +80,7 @@ function starti2p {
 	service tor stop
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
-	echo -e 'nameserver 127.0.0.1\nnameserver 199.175.54.136\nnameserver 23.94.123.134' > /etc/resolv.conf
+	echo -e 'nameserver 127.0.1.1\nnameserver 199.175.54.136\nnameserver 23.94.123.134' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use localhost and FrozenDNS"
 	sudo -u i2psvc i2prouter start
 	iceweasel http://127.0.0.1:7657/home &
@@ -264,7 +264,7 @@ function start {
 	
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
-	echo -e 'nameserver 127.0.0.1\nnameserver 199.175.54.136\nnameserver 23.94.123.134' > /etc/resolv.conf
+	echo -e 'nameserver 127.0.1.1\nnameserver 199.175.54.136\nnameserver 23.94.123.134' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and FrozenDNS"
 
 	# set iptables nat
