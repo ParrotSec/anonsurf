@@ -248,8 +248,8 @@ function start {
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
 		echo -e -n " $GREEN*$BLUE Service " 
 		service resolvconf stop
-		service dnsmasq stop
-		service nscd stop
+		killall -q dnsmasq
+		killall -q nscd
 		sleep 4
 		service tor start
 		sleep 6
