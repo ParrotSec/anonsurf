@@ -108,7 +108,7 @@ function ip {
 }
 
 function iceweasel_tor {
-	directory="/dev/shm/.mozilla/firefox/profile/a6mpn2rf.default"
+	directory="/dev/shm/.mozilla/firefox/profile/"
 	profile="profile_for_tor.tar.gz"
 
 	if [ -d "$directory" ] ; then
@@ -119,7 +119,7 @@ function iceweasel_tor {
 		notify "The profile was loaded in the ram."
 		sleep 0.4
 		killall -q iceweasel firefox
-		iceweasel -profile /dev/shm/.mozilla/firefox/profile/a6mpn2rf.default &
+		iceweasel -profile /dev/shm/.mozilla/firefox/profile/anonprofile.parrot &
 		exit
 	else
 		echo -e "\n[$CYAN nfo$RESETCOLOR ]$GREEN Please wait ...$RESETCOLOR\n"
@@ -135,7 +135,7 @@ function iceweasel_tor {
 		notify "Starting browser in RAM-only mode"
 		sleep 0.4
 		killall -q iceweasel firefox
-		iceweasel -profile /dev/shm/.mozilla/firefox/profile/a6mpn2rf.default &
+		iceweasel -profile /dev/shm/.mozilla/firefox/profile/anonprofile.parrot &
 		exit
 	fi
 }
