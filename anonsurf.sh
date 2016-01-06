@@ -108,7 +108,7 @@ function ip {
 }
 
 function iceweasel_tor {
-	directory="/dev/shm/.mozilla/firefox/profile/a6mpn2rf.default"
+	directory="/dev/shm/.mozilla/firefox/profile/"
 	profile="profile_for_tor.tar.gz"
 
 	if [ -d "$directory" ] ; then
@@ -119,7 +119,7 @@ function iceweasel_tor {
 		notify "The profile was loaded in the ram."
 		sleep 0.4
 		killall -q iceweasel firefox
-		iceweasel -profile /dev/shm/.mozilla/firefox/profile/a6mpn2rf.default &
+		iceweasel -profile /dev/shm/.mozilla/firefox/profile/anonprofile.parrot &
 		exit
 	else
 		echo -e "\n[$CYAN nfo$RESETCOLOR ]$GREEN Please wait ...$RESETCOLOR\n"
@@ -135,7 +135,7 @@ function iceweasel_tor {
 		notify "Starting browser in RAM-only mode"
 		sleep 0.4
 		killall -q iceweasel firefox
-		iceweasel -profile /dev/shm/.mozilla/firefox/profile/a6mpn2rf.default &
+		iceweasel -profile /dev/shm/.mozilla/firefox/profile/anonprofile.parrot &
 		exit
 	fi
 }
@@ -248,8 +248,8 @@ function start {
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
 		echo -e -n " $GREEN*$BLUE Service " 
 		service resolvconf stop
-		killall -q dnsmasq
-		killall -q nscd
+		killall dnsmasq
+		killall nscd
 		sleep 4
 		service tor start
 		sleep 6
@@ -264,7 +264,7 @@ function start {
 	
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
-	echo -e 'nameserver 127.0.1.1\nnameserver 199.175.54.136\nnameserver 23.94.123.134' > /etc/resolv.conf
+	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and FrozenDNS"
 
 	# set iptables nat
@@ -389,7 +389,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 1.3.1)
+Parrot AnonSurf Module (v 1.3.2)
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
