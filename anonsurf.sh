@@ -9,12 +9,6 @@
 # Default-Stop:
 # Short-Description: Transparent Proxy through TOR.
 ### END INIT INFO
-
-# AnonSurf is inspired by the homonimous module of PenMode, developed by the "Pirates' Crew" in
-# order to make it fully compatible with
-# Parrot  OS and other debian-based systems, and it is part of
-# parrot-anon package.
-#
 #
 # Devs:
 # Lorenzo 'EclipseSpark' Faletra <eclipse@frozenbox.org>
@@ -50,7 +44,7 @@ TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
 TOR_UID="debian-tor"
 
 # Tor's TransPort
-TOR_PORT="9040"
+TOR_PORT="9140"
 
 
 function notify {
@@ -58,13 +52,12 @@ function notify {
 		/usr/bin/notify-send "AnonSurf" "$1"
 	fi
 }
-
 export notify
 
 
 function init {
 	echo -e -n " $GREEN*$BLUE killing dangerous applications"
-	killall -q chrome dropbox iceweasel skype icedove thunderbird firefox chromium xchat transmission
+	killall -q chrome dropbox iceweasel skype icedove thunderbird firefox chromium xchat hexchat transmission steam
 	notify "dangerous applications killed"
 	
 	echo -e -n " $GREEN*$BLUE cleaning some dangerous cache elements"
@@ -80,7 +73,7 @@ function starti2p {
 	service tor stop
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
-	echo -e 'nameserver 127.0.1.1\nnameserver 199.175.54.136\nnameserver 23.94.123.134' > /etc/resolv.conf
+	echo -e 'nameserver 127.0.1.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use localhost and FrozenDNS"
 	sudo -u i2psvc i2prouter start
 	iceweasel http://127.0.0.1:7657/home &
@@ -107,7 +100,7 @@ function ip {
 	echo -e "\n\n----------------------------------------------------------------------"
 }
 
-function iceweasel_tor {
+function firefox_tor {
 	directory="/dev/shm/.mozilla/firefox/profile/"
 	profile="profile_for_tor.tar.gz"
 
@@ -135,7 +128,7 @@ function iceweasel_tor {
 		notify "Starting browser in RAM-only mode"
 		sleep 0.4
 		killall -q iceweasel firefox
-		iceweasel -profile /dev/shm/.mozilla/firefox/profile/anonprofile.parrot &
+		firefox -profile /dev/shm/.mozilla/firefox/profile/anonprofile.parrot &
 		exit
 	fi
 }
@@ -152,26 +145,16 @@ function start {
 		exit 1
 	fi
 	
-	# Check defaults for Tor
-	grep -q -x 'RUN_DAEMON="yes"' /etc/default/tor
-	if [ $? -ne 0 ]; then
-		echo -e "\n$GREEN[$RED!$GREEN]$RED Please add the following to your /etc/default/tor and restart service:$RESETCOLOR\n" >&2
-		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR"
-		echo -e 'RUN_DAEMON="yes"'
-		echo -e "$BLUE#----------------------------------------------------------------------#$RESETCOLOR\n"
-		exit 1
-	fi
-	
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 	
-	if [ ! -e /var/run/tor/tor.pid ]; then
+	if [ ! -e /etc/anonsurf/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
 		echo -e -n " $GREEN*$BLUE Service " 
 		service resolvconf stop
-		killall dnsmasq
-		killall nscd
+		service dnsmasq stop
+		killall dnsmasq nscd
 		sleep 4
-		service tor start
+		tor -f /etc/anonsurf/torrc
 		sleep 6
 	fi
 	if ! [ -f /etc/network/iptables.rules ]; then
@@ -189,13 +172,15 @@ function start {
 
 	# set iptables nat
 	iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN
-	iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
-	iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 53
-	iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
+
+	#set dns redirect
+	iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 5353
+	iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 5353
+	iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 5353
 	
 	#resolve .onion domains mapping 10.192.0.0/10 address space
-	iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports 9040
-	iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports 9040
+	iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
+	iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
 	
 	#exclude local addresses
 	for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
@@ -251,9 +236,9 @@ function stop {
 		rm /etc/resolv.conf
 		cp /etc/resolv.conf.bak /etc/resolv.conf
 	fi
-	service tor stop
-	sleep 4
-	service resolvconf start
+	pkill /etc/anonsurf/tor.pid && rm -f /etc/anonsurf/tor.pid
+	sleep 6
+	service resolvconf start || service resolvconf restart
 	service nscd start
 	service dnsmasq start
 	sleep 1
@@ -264,7 +249,8 @@ function stop {
 }
 
 function change {
-	service tor reload
+	pkill /etc/anonsurf/tor.pid && rm -f /etc/anonsurf/tor.pid
+	tor -f /etc/anonsurf/torrc
 	sleep 4
 	echo -e " $GREEN*$BLUE Tor daemon reloaded and forced to change nodes\n"
 	notify "Identity changed"
@@ -293,8 +279,8 @@ case "$1" in
 	myip)
 		ip
 	;;
-	iceweasel_tor)
-		iceweasel_tor
+	firefox_tor)
+		firefox_tor
 	;;
 	starti2p)
 		starti2p
@@ -309,7 +295,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 1.3.2)
+Parrot AnonSurf Module (v 2.0)
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
