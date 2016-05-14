@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Sat, 14 May 2016 03:14:57 +0200
+Source: anonsurf
+Binary: anonsurf
+Architecture: source all
+Version: 2.0+parrot2
+Distribution: testing
+Urgency: medium
+Maintainer: Lorenzo "Palinuro" Faletra <palinuro@frozenbox.org>
+Changed-By: Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>
+Description:
+ anonsurf   - AnonSurf
+Changes:
+ anonsurf (2.0+parrot2) testing; urgency=medium
+ .
+   * Fix dns port for tor daemon
+Checksums-Sha1:
+ 0eb6c46125b826fccb1fffc576d00c896495ccee 743 anonsurf_2.0+parrot2.dsc
+ 9c316536c23f702c0da0e7e27c556b4d0ed31ef5 4639152 anonsurf_2.0+parrot2.tar.xz
+ bc1b45dd0f9cac03f94bba3ce185c1a892db86fc 4637788 anonsurf_2.0+parrot2_all.deb
+Checksums-Sha256:
+ 944efa90c7e8b1faa19aee5e88ef54cefd90c592e0bde28acffb575da63d40f2 743 anonsurf_2.0+parrot2.dsc
+ 96301bdfa9414ea75f740dfce9a9c9622e742d14f658ee09bbc2fc437237e0bb 4639152 anonsurf_2.0+parrot2.tar.xz
+ 5dea5eb4a59e8d73c865259323233c060842a3467bceb7d9367aaf43fe873e8a 4637788 anonsurf_2.0+parrot2_all.deb
+Files:
+ 7644530e04c6145aa3f5bb8714fb454b 743 parrot optional anonsurf_2.0+parrot2.dsc
+ 4bb995f084959b617dd888817745d73a 4639152 parrot optional anonsurf_2.0+parrot2.tar.xz
+ cc10dc309017f6aabf2a229b7505be58 4637788 parrot optional anonsurf_2.0+parrot2_all.deb

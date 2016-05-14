@@ -1,0 +1,27 @@
+anonsurf (2.0+parrot2) testing; urgency=medium
+
+  * Fix dns port for tor daemon
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Sat, 14 May 2016 03:14:57 +0200
+
+anonsurf (2.0+parrot0) testing; urgency=medium
+
+  * Update tor behavior
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Sun, 08 May 2016 04:12:53 +0200
+
+anonsurf (2.0) testing; urgency=medium
+
+  [Lisetta sheireen Ferrero]
+  * Reviewed torrc rules
+  * Make dedicated torrc file
+
+  [Lorenzo palinuro Faletra]
+  * Updated core engine to 2.0
+  * Made tor daemon standalone
+  * Cut useless stuff
+
+  [Chris Spillane]
+  * Update onion.pac for *.i2p support
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Sat, 07 May 2016 12:42:15 +0200
