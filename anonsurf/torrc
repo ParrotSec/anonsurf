@@ -9,6 +9,7 @@ SocksPort 127.0.0.1:9150 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtoco
 DNSPort 127.0.0.1:53
 #daemonize
 RunAsDaemon 1
+Log notice file /tmp/anonsurf.log
 #sandbox
 Sandbox 1
 #use this PID file

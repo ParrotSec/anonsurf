@@ -57,7 +57,7 @@ export notify
 
 function init {
 	echo -e -n " $GREEN*$BLUE killing dangerous applications"
-	killall -q chrome dropbox iceweasel skype icedove thunderbird firefox chromium xchat hexchat transmission steam
+	killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam
 	notify "dangerous applications killed"
 	
 	echo -e -n " $GREEN*$BLUE cleaning some dangerous cache elements"
@@ -150,7 +150,6 @@ function start {
 	if [ ! -e /etc/anonsurf/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
 		echo -e -n " $GREEN*$BLUE Service " 
-		service resolvconf stop
 		service dnsmasq stop
 		killall dnsmasq nscd
 		sleep 4
@@ -176,7 +175,7 @@ function start {
 	#set dns redirect
 	iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
 	iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 53
-	iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 5353
+	iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
 	
 	#resolve .onion domains mapping 10.192.0.0/10 address space
 	iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
@@ -237,9 +236,9 @@ function stop {
 		cp /etc/resolv.conf.bak /etc/resolv.conf
 	fi
 	pkill /etc/anonsurf/tor.pid && rm -f /etc/anonsurf/tor.pid
+	killall tor && rm -f /etc/anonsurf/tor.pid
 	sleep 6
 	service resolvconf start || service resolvconf restart
-	service nscd start
 	service dnsmasq start
 	sleep 1
 	

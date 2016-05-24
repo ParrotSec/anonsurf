@@ -1,3 +1,9 @@
+anonsurf (2.0+parrot3) testing; urgency=medium
+
+  * Fix configuration problems
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Tue, 24 May 2016 11:31:56 +0200
+
 anonsurf (2.0+parrot2) testing; urgency=medium
 
   * Fix dns port for tor daemon
