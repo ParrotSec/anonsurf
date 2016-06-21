@@ -7,9 +7,11 @@ clean:
 
 install:
 	mkdir -p $(DESTDIR)/etc/anonsurf/
+	mkdir -p $(DESTDIR)/etc/tor/
 	mkdir -p $(DESTDIR)/usr/bin/
 	mkdir -p $(DESTDIR)/etc/init.d/
 	cp onion.pac $(DESTDIR)/etc/anonsurf/
+	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
 	cp profile_for_tor.tar.gz $(DESTDIR)/etc/anonsurf/
 	cp torrc $(DESTDIR)/etc/anonsurf/
 	cp anonsurf.sh $(DESTDIR)/usr/bin/anonsurf

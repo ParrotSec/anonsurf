@@ -1,0 +1,116 @@
+ dpkg-buildpackage -rfakeroot -D -us -uc
+dpkg-buildpackage: info: source package anonsurf
+dpkg-buildpackage: info: source version 2.0+parrot4
+dpkg-buildpackage: info: source distribution testing
+dpkg-buildpackage: info: source changed by Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>
+ dpkg-source --before-build anonsurf
+dpkg-buildpackage: info: host architecture amd64
+ fakeroot debian/rules clean
+dh clean
+   dh_testdir
+   dh_auto_clean
+   dh_clean
+ dpkg-source -b anonsurf
+dpkg-source: info: using source format '3.0 (native)'
+dpkg-source: info: building anonsurf in anonsurf_2.0+parrot4.tar.xz
+dpkg-source: info: building anonsurf in anonsurf_2.0+parrot4.dsc
+ debian/rules build
+dh build
+   dh_testdir
+   dh_update_autotools_config
+   dh_auto_configure
+   dh_auto_build
+	make -j1
+make[1]: ingresso nella directory "/home/eclipse/Desktop/repo/anonsurf/anonsurf"
+make[1]: Nessuna operazione da eseguire per "all".
+make[1]: uscita dalla directory "/home/eclipse/Desktop/repo/anonsurf/anonsurf"
+   dh_auto_test
+ fakeroot debian/rules binary
+dh binary
+   dh_testroot
+   dh_prep
+   dh_auto_install
+	make -j1 install DESTDIR=/home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf AM_UPDATE_INFO_DIR=no
+make[1]: ingresso nella directory "/home/eclipse/Desktop/repo/anonsurf/anonsurf"
+mkdir -p /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/anonsurf/
+mkdir -p /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/tor/
+mkdir -p /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/usr/bin/
+mkdir -p /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/init.d/
+cp onion.pac /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/anonsurf/
+ln -s /etc/anonsurf/onion.pac /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/tor/onion.pac
+cp profile_for_tor.tar.gz /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/anonsurf/
+cp torrc /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/anonsurf/
+cp anonsurf.sh /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/usr/bin/anonsurf
+cp anonsurf.sh /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/init.d/anonsurf
+chown root:root /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/usr/bin/anonsurf
+chmod 775 /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/usr/bin/anonsurf
+ln -s /usr/bin/anonsurf /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/usr/bin/anon
+cp -rf anonsurf/* /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/
+chown root:root /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/anonsurf -R
+chmod 644 /home/eclipse/Desktop/repo/anonsurf/anonsurf/debian/anonsurf/etc/anonsurf -R
+make[1]: uscita dalla directory "/home/eclipse/Desktop/repo/anonsurf/anonsurf"
+   dh_installdocs
+   dh_installchangelogs
+   dh_perl
+   dh_link
+   dh_strip_nondeterminism
+   dh_compress
+   dh_fixperms
+   dh_installdeb
+   dh_gencontrol
+   dh_md5sums
+   dh_builddeb
+dpkg-deb: building package 'anonsurf' in '../anonsurf_2.0+parrot4_all.deb'.
+ dpkg-genchanges  >../anonsurf_2.0+parrot4_amd64.changes
+dpkg-genchanges: info: including full source code in upload
+ dpkg-source --after-build anonsurf
+dpkg-buildpackage: info: full upload; Debian-native package (full source is included)
+Now running lintian...
+W: anonsurf source: debhelper-but-no-misc-depends anonsurf
+W: anonsurf source: maintainer-script-lacks-debhelper-token debian/anonsurf.postinst
+W: anonsurf source: maintainer-script-lacks-debhelper-token debian/anonsurf.postrm
+W: anonsurf source: maintainer-also-in-uploaders
+W: anonsurf source: changelog-should-mention-nmu
+W: anonsurf source: source-nmu-has-incorrect-version-number 2.0+parrot4
+W: anonsurf source: out-of-date-standards-version 3.9.6 (current is 3.9.8)
+E: anonsurf: copyright-file-contains-full-gpl-license
+E: anonsurf: copyright-should-refer-to-common-license-file-for-gpl
+E: anonsurf: description-starts-with-package-name
+E: anonsurf: description-too-short AnonSurf
+E: anonsurf: description-is-pkg-name AnonSurf
+W: anonsurf: unknown-section parrot
+E: anonsurf: depends-on-essential-package-without-using-version depends: bash
+W: anonsurf: non-standard-dir-perm etc/anonsurf/ 0655 != 0755
+W: anonsurf: package-contains-timestamped-gzip etc/anonsurf/profile_for_tor.tar.gz
+W: anonsurf: script-in-etc-init.d-not-registered-via-update-rc.d etc/init.d/anonsurf
+E: anonsurf: init.d-script-does-not-implement-required-option etc/init.d/anonsurf force-reload
+W: anonsurf: binary-without-manpage usr/bin/anon
+W: anonsurf: binary-without-manpage usr/bin/anonsurf
+W: anonsurf: desktop-command-not-in-package usr/share/applications/anon-change-identity.desktop menuexecg
+W: anonsurf: desktop-entry-invalid-category anonsurf usr/share/applications/anon-change-identity.desktop
+W: anonsurf: desktop-entry-lacks-main-category usr/share/applications/anon-change-identity.desktop
+W: anonsurf: desktop-entry-invalid-category anonsurf usr/share/applications/anon-i2p-start.desktop
+W: anonsurf: desktop-entry-lacks-main-category usr/share/applications/anon-i2p-start.desktop
+W: anonsurf: desktop-entry-invalid-category anonsurf usr/share/applications/anon-i2p-stop.desktop
+W: anonsurf: desktop-entry-lacks-main-category usr/share/applications/anon-i2p-stop.desktop
+W: anonsurf: desktop-command-not-in-package usr/share/applications/anon-surf-start.desktop menuexecg
+W: anonsurf: desktop-entry-invalid-category anonsurf usr/share/applications/anon-surf-start.desktop
+W: anonsurf: desktop-entry-lacks-main-category usr/share/applications/anon-surf-start.desktop
+W: anonsurf: desktop-command-not-in-package usr/share/applications/anon-surf-stop.desktop menuexecg
+W: anonsurf: desktop-entry-invalid-category anonsurf usr/share/applications/anon-surf-stop.desktop
+W: anonsurf: desktop-entry-lacks-main-category usr/share/applications/anon-surf-stop.desktop
+W: anonsurf: desktop-mime-but-no-exec-code usr/share/applications/firefox-ram.desktop
+W: anonsurf: script-not-executable usr/share/applications/anon-change-identity.desktop
+W: anonsurf: unusual-interpreter usr/share/applications/anon-change-identity.desktop #!xdg-open
+W: anonsurf: script-not-executable usr/share/applications/anon-i2p-start.desktop
+W: anonsurf: unusual-interpreter usr/share/applications/anon-i2p-start.desktop #!xdg-open
+W: anonsurf: script-not-executable usr/share/applications/anon-i2p-stop.desktop
+W: anonsurf: unusual-interpreter usr/share/applications/anon-i2p-stop.desktop #!xdg-open
+W: anonsurf: script-not-executable usr/share/applications/anon-surf-start.desktop
+W: anonsurf: unusual-interpreter usr/share/applications/anon-surf-start.desktop #!xdg-open
+W: anonsurf: script-not-executable usr/share/applications/anon-surf-stop.desktop
+W: anonsurf: unusual-interpreter usr/share/applications/anon-surf-stop.desktop #!xdg-open
+W: anonsurf: script-not-executable usr/share/applications/firefox-ram.desktop
+W: anonsurf: unusual-interpreter usr/share/applications/firefox-ram.desktop #!xdg-open
+W: anonsurf: init.d-script-does-not-source-init-functions etc/init.d/anonsurf
+Finished running lintian.

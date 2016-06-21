@@ -1,3 +1,9 @@
+anonsurf (2.0+parrot4) testing; urgency=medium
+
+  * add onion.pac symlink
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Tue, 21 Jun 2016 18:30:10 +0200
+
 anonsurf (2.0+parrot3) testing; urgency=medium
 
   * Fix configuration problems
