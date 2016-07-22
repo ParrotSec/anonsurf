@@ -1,0 +1,30 @@
+Format: 1.8
+Date: Fri, 22 Jul 2016 18:32:42 +0200
+Source: anonsurf
+Binary: anonsurf
+Architecture: source all
+Version: 2.1+parrot0
+Distribution: testing
+Urgency: medium
+Maintainer: Lorenzo "Palinuro" Faletra <palinuro@frozenbox.org>
+Changed-By: Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>
+Description:
+ anonsurf   - AnonSurf
+Changes:
+ anonsurf (2.1+parrot0) testing; urgency=medium
+ .
+   * Restore original TOR ports (9040 and 9050)
+   * Remove firefox profile
+   * Review a bunch of stuff
+Checksums-Sha1:
+ d0ddb6a46af474682e2f6bc9a8a7ff25bb953a82 737 anonsurf_2.1+parrot0.dsc
+ 7fa1024bc7cc0886b3217eb4044ba239eaf4e11d 20180 anonsurf_2.1+parrot0.tar.xz
+ 6450e11fac283ca31706da7f0c8fbd639bc42f96 17312 anonsurf_2.1+parrot0_all.deb
+Checksums-Sha256:
+ f37aa3f112f77a0f129842b5aa8c868592c1e77243bcaa48c30b4d184780dcd5 737 anonsurf_2.1+parrot0.dsc
+ 6eeeac2307b3202b9f11915a413cfa7f9d1e61025ea882403633d0f5d397f2a7 20180 anonsurf_2.1+parrot0.tar.xz
+ 88ff790b1f67a6db4119bcb18cd4732d9204af6c99b14ce3a0f4edf702c90bcd 17312 anonsurf_2.1+parrot0_all.deb
+Files:
+ 3f6df5bb800c39f8506353156b46d74f 737 parrot optional anonsurf_2.1+parrot0.dsc
+ d56d8733687e89b4d9cb87f696ecbf67 20180 parrot optional anonsurf_2.1+parrot0.tar.xz
+ 3fca2cb11dc636f9866b7aef02974012 17312 parrot optional anonsurf_2.1+parrot0_all.deb

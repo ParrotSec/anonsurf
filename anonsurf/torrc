@@ -3,8 +3,8 @@ VirtualAddrNetwork 10.192.0.0/10
 AutomapHostsOnResolve 1
 AutomapHostsSuffixes .exit,.onion,.parrot,.frozen,.fx
 #define a non-standard ports to not conflitcs with other tor instances
-TransPort 127.0.0.1:9140 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtocol IsolateDestPort IsolateDestAddr
-SocksPort 127.0.0.1:9150 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtocol IsolateDestPort IsolateDestAddr
+TransPort 127.0.0.1:9040 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtocol IsolateDestPort IsolateDestAddr
+SocksPort 127.0.0.1:9050 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtocol IsolateDestPort IsolateDestAddr
 #use tor to resolve domain names
 DNSPort 127.0.0.1:53
 #daemonize
@@ -31,19 +31,19 @@ MaxClientCircuitsPending 48
 UseEntryGuards 1
 UseEntryGuardsAsDirGuards 1
 EnforceDistinctSubnets 1
-#ok, it is a bit complex, so i will spend more words here:
-#this option means that tor will try to use the previously used
-#exit node for these domains, this is helpful in case of
-#websites with sessions related to your IP that may change
-#their behavior if your ip changes, but this option may help
-#websites to associate all your actions to a single
-#navigation session, by watching your IP.
+# ok, it is a bit complex, so i will spend more words here:
+# this option means that tor will try to use the previously used
+# exit node for these domains, this is helpful in case of
+# websites with sessions related to your IP that may change
+# their behavior if your ip changes, but this option may help
+# websites to associate all your actions to a single
+# navigation session, by watching your IP.
 #
-#We decided to use it for the following addresses
-#because they track you anyway by using cookies
-#(so they will know who you are wven if you
-#change IP), so we decided to use the IP of the
-#same exit node in order to not let these services
-#map your exit nodes pool, so they will know
-#only one of the exit nodes in your pool.
+# We decided to use it for the following addresses
+# because they track you anyway by using cookies
+# (so they will know who you are even if you
+# change IP), so we decided to use the IP of the
+# same exit node in order to not let these services
+# map your exit nodes pool, so they will know
+# only one of the exit nodes in your pool.
 TrackHostExits .facebook.com,.facebook.net,.twitter.com,.fbcdn.com,.fbcdn.net,.akamaihd.com,.google.com,.google.it,.google.fr,.google.de,.google.br,.yandex.ru,.yandex.com,.gmail.com,.googleapis.com,.gstatic.com,.adform.net,.google-analitics.com,.googletagservices.com

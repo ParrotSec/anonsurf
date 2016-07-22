@@ -1,3 +1,11 @@
+anonsurf (2.1+parrot0) testing; urgency=medium
+
+  * Restore original TOR ports (9040 and 9050)
+  * Remove firefox profile
+  * Review a bunch of stuff
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Fri, 22 Jul 2016 18:32:42 +0200
+
 anonsurf (2.0+parrot4) testing; urgency=medium
 
   * add onion.pac symlink

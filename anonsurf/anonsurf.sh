@@ -44,7 +44,7 @@ TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
 TOR_UID="debian-tor"
 
 # Tor's TransPort
-TOR_PORT="9140"
+TOR_PORT="9040"
 
 
 function notify {
@@ -96,45 +96,9 @@ function ip {
 
 	echo -e "\nMy ip is:\n"
 	sleep 1
-	wget -qO- http://frozenbox.org/ip
+	wget -qO- http://ip.frozenbox.org/
 	echo -e "\n\n----------------------------------------------------------------------"
 }
-
-function firefox_tor {
-	directory="/dev/shm/.mozilla/firefox/profile/"
-	profile="profile_for_tor.tar.gz"
-
-	if [ -d "$directory" ] ; then
-		echo -e "\n[$CYAN nfo$RESETCOLOR ]$GREEN Please wait ...$RESETCOLOR\n"
-		notify "Please wait ..."
-		sleep 0.7
-		echo -e "\n[$CYAN nfo$RESETCOLOR ]$GREEN The profile was loaded in the ram.$RESETCOLOR\n"
-		notify "The profile was loaded in the ram."
-		sleep 0.4
-		killall -q iceweasel firefox
-		iceweasel -profile /dev/shm/.mozilla/firefox/profile/anonprofile.parrot &
-		exit
-	else
-		echo -e "\n[$CYAN nfo$RESETCOLOR ]$GREEN Please wait ...$RESETCOLOR\n"
-		notify "Please wait ..."
-		sleep 0.3
-		cd /opt/anonsurf/
-		cp $profile /dev/shm/ #> /dev/null
-		sleep 0.3
-		cd /dev/shm/
-		tar xzvf $profile #> /dev/null
-		sleep 0.3
-		echo -e "\n[$CYAN nfo$RESETCOLOR ]$GREEN The profile was loaded in the ram.$RESETCOLOR\n"
-		notify "Starting browser in RAM-only mode"
-		sleep 0.4
-		killall -q iceweasel firefox
-		firefox -profile /dev/shm/.mozilla/firefox/profile/anonprofile.parrot &
-		exit
-	fi
-}
-
-
-
 
 
 
@@ -257,6 +221,7 @@ function change {
 }
 
 function status {
+	cat /tmp/anonsurf.log
 	service tor status
 }
 
@@ -294,7 +259,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.0)
+Parrot AnonSurf Module (v 2.1)
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}

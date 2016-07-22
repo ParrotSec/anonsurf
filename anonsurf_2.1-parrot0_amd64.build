@@ -1,0 +1,15 @@
+ dpkg-buildpackage -rfakeroot -D -us -uc
+dpkg-buildpackage: info: source package anonsurf
+dpkg-buildpackage: info: source version 2.1-parrot0
+dpkg-buildpackage: info: source distribution testing
+dpkg-buildpackage: info: source changed by Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>
+ dpkg-source --before-build anonsurf
+dpkg-buildpackage: info: host architecture amd64
+ fakeroot debian/rules clean
+dh clean
+   dh_testdir
+   dh_auto_clean
+   dh_clean
+ dpkg-source -b anonsurf
+dpkg-source: error: can't build with source format '3.0 (native)': native package version may not have a revision
+dpkg-buildpackage: error: dpkg-source -b anonsurf gave error exit status 255
