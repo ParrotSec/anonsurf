@@ -41,7 +41,7 @@ TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
 
 # The UID Tor runs as
 # change it if, starting tor, the command 'ps -e | grep tor' returns a different UID
-TOR_UID="debian-tor"
+TOR_UID="0"
 
 # Tor's TransPort
 TOR_PORT="9040"
@@ -71,9 +71,10 @@ function init {
 function starti2p {
 	echo -e -n " $GREEN*$BLUE starting I2P services"
 	service tor stop
+	killall tor
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
-	echo -e 'nameserver 127.0.1.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
+	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use localhost and FrozenDNS"
 	sudo -u i2psvc i2prouter start
 	iceweasel http://127.0.0.1:7657/home &
@@ -114,8 +115,10 @@ function start {
 	if [ ! -e /etc/anonsurf/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
 		echo -e -n " $GREEN*$BLUE Service " 
+		service nscd stop
 		service dnsmasq stop
 		killall dnsmasq nscd
+		echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd stop errors if they are not installed or stopped already."
 		sleep 4
 		tor -f /etc/anonsurf/torrc
 		sleep 6
@@ -159,7 +162,7 @@ function start {
 	iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 	
 	#exclude local addresses
-	for NET in $TOR_EXCLUDE 127.0.0.0/8; do
+	for NET in $TOR_EXCLUDE 127.0.0.0/8 127.0.1.0/8; do
 		iptables -A OUTPUT -d $NET -j ACCEPT
 	done
 	
@@ -204,6 +207,8 @@ function stop {
 	sleep 6
 	service resolvconf start || service resolvconf restart
 	service dnsmasq start
+	service nscd start
+	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed or started already."
 	sleep 1
 	
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
@@ -213,7 +218,6 @@ function stop {
 
 function change {
 	pkill /etc/anonsurf/tor.pid && rm -f /etc/anonsurf/tor.pid
-	tor -f /etc/anonsurf/torrc
 	sleep 4
 	echo -e " $GREEN*$BLUE Tor daemon reloaded and forced to change nodes\n"
 	notify "Identity changed"
@@ -222,7 +226,6 @@ function change {
 
 function status {
 	cat /tmp/anonsurf.log
-	service tor status
 }
 
 case "$1" in
@@ -259,7 +262,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.1)
+Parrot AnonSurf Module (v 2.2)
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}

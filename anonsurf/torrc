@@ -1,5 +1,5 @@
 ##define virtual network mask
-VirtualAddrNetwork 10.192.0.0/10
+VirtualAddrNetworkIPv4 10.192.0.0/10
 AutomapHostsOnResolve 1
 AutomapHostsSuffixes .exit,.onion,.parrot,.frozen,.fx
 #define a non-standard ports to not conflitcs with other tor instances

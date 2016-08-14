@@ -13,8 +13,8 @@ install:
 	cp onion.pac $(DESTDIR)/etc/anonsurf/
 	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
 	cp torrc $(DESTDIR)/etc/anonsurf/
-	cp anonsurf.sh $(DESTDIR)/usr/bin/anonsurf
 	cp anonsurf.sh $(DESTDIR)/etc/init.d/anonsurf
+	ln -s $(DESTDIR)/etc/init.d/anonsurf $(DESTDIR)/usr/bin/anonsurf
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
 	ln -s /usr/bin/anonsurf $(DESTDIR)/usr/bin/anon
