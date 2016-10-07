@@ -280,7 +280,8 @@ echo -e "
 Parrot AnonSurf Module (v 2.2)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
-		and a huge amount of Caffeine!
+		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
+		and a huge amount of Caffeine + some GNU/GPL v3 stuff
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
@@ -295,8 +296,9 @@ Parrot AnonSurf Module (v 2.2)
 	----[ I2P related features ]----
 	$RED starti2p$BLUE -$GREEN Start i2p services
 	$RED stopi2p$BLUE -$GREEN Stop i2p services
-$RESETCOLOR	
-Dance like no one's watching. Encrypt like everyone is." >&2
+$RESETCOLOR
+Dance like no one's watching. Encrypt like everyone is.
+" >&2
 
 exit 1
 ;;

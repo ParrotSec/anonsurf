@@ -12,8 +12,8 @@ Build-Depends-Indep: pkg-config
 Package-List:
  anonsurf deb parrot optional arch=all
 Checksums-Sha1:
- 3aeac53205de4970f37cb6863fac0d64c1939068 20372 anonsurf_2.2+parrot1.tar.xz
+ f4ab91f95c24482a85f79d1497fbf9891bf49f04 20188 anonsurf_2.2+parrot1.tar.xz
 Checksums-Sha256:
- 5b111fa393d96f0fccace32b02dd2943ccabc0549670de373718c22a8e71885d 20372 anonsurf_2.2+parrot1.tar.xz
+ d2fdb29a8a2319fed218781f8146b3c9d5a351381e17d2baec1a8e3e16aed2f6 20188 anonsurf_2.2+parrot1.tar.xz
 Files:
- e754bf722b380facdc5ee1d59b12db55 20372 anonsurf_2.2+parrot1.tar.xz
+ 6f02707f60ff56fd052e20a77dccaab1 20188 anonsurf_2.2+parrot1.tar.xz
