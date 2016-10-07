@@ -1,3 +1,19 @@
+anonsurf (2.2+parrot0) testing; urgency=medium
+
+  [ Lisetta "Sheireen" Ferrero ]
+  * Fix iptables commands priorities
+  * Update and beautify usage banner
+  * Add developers (and caffeine) to the usage banner
+  * Add dance/encrypt message
+  * Improve how tor start/stop is handled
+  * Remove old useless stuff
+
+  [ Lorenzo "Palinuro" Faletra ]
+  * Recheck torrc
+  * Review and test Sheireen's stuff
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Fri, 07 Oct 2016 19:03:36 +0200
+
 anonsurf (2.1+parrot0) testing; urgency=medium
 
   * Restore original TOR ports (9040 and 9050)

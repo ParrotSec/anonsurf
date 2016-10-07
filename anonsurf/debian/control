@@ -1,10 +1,9 @@
 Source: anonsurf
 Section: parrot
 Priority: optional
-Maintainer: Frozenbox Developers <dev@parrotsec.org>, 
+Maintainer: Parrot Team <parrot-devel@lists.parrotsec.org>
 Uploaders: Lorenzo "Palinuro" Faletra <palinuro@frozenbox.org>,
-           Lisetta "Sheireen" Ferrero <sheireen@frozenbox.org>,
-           Francesco "mibofra" Bonanno <mibofra@frozenbox.org>
+           Lisetta "Sheireen" Ferrero <sheireen@frozenbox.org>
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9)
 Build-Depends-Indep: pkg-config

@@ -41,7 +41,7 @@ TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
 
 # The UID Tor runs as
 # change it if, starting tor, the command 'ps -e | grep tor' returns a different UID
-TOR_UID="0"
+TOR_UID="debian-tor"
 
 # Tor's TransPort
 TOR_PORT="9040"
@@ -54,15 +54,24 @@ function notify {
 }
 export notify
 
+function clean_dhcp {
+	dhclient -r
+	rm -f /var/lib/dhcp/dhclient*
+	echo -e -n "$BLUE[$GREEN*$BLUE] DHCP address released"
+	notify "DHCP address released"
+}
+
 
 function init {
-	echo -e -n " $GREEN*$BLUE killing dangerous applications"
+	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications"
 	killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam
-	notify "dangerous applications killed"
+	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed"
+	notify "Dangerous applications killed"
 	
-	echo -e -n " $GREEN*$BLUE cleaning some dangerous cache elements"
+	echo -e -n "$BLUE[$GREEN*$BLUE] cleaning some dangerous cache elements"
 	bleachbit -c adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history &> /dev/null
-	notify "cache cleaned"
+	echo -e -n "$BLUE[$GREEN*$BLUE] Cache cleaned"
+	notify "Cache cleaned"
 }
 
 
@@ -71,23 +80,24 @@ function init {
 function starti2p {
 	echo -e -n " $GREEN*$BLUE starting I2P services"
 	service tor stop
-	killall tor
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
 	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
-	echo -e " $GREEN*$BLUE Modified resolv.conf to use localhost and FrozenDNS"
+	echo -e -n "$BLUE[$GREEN*$BLUE] Modified resolv.conf to use localhost and FrozenDNS"
 	sudo -u i2psvc i2prouter start
 	iceweasel http://127.0.0.1:7657/home &
+	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon started"
 	notify "I2P daemon started"
 }
 
 function stopi2p {
-	echo -e -n " $GREEN*$BLUE stopping I2P services"
+	echo -e -n "$BLUE[$GREEN*$BLUE] Stopping I2P services"
 	sudo -u i2psvc i2prouter stop
 	if [ -e /etc/resolv.conf.bak ]; then
 		rm /etc/resolv.conf
 		cp /etc/resolv.conf.bak /etc/resolv.conf
 	fi
+	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon stopped"
 	notify "I2P daemon stopped"
 }
 
@@ -98,6 +108,8 @@ function ip {
 	echo -e "\nMy ip is:\n"
 	sleep 1
 	wget -qO- http://ip.frozenbox.org/
+	echo -e "\n"
+	echo -e "if the two letters nation code is T1\n then you are succesfully connected to tor"
 	echo -e "\n\n----------------------------------------------------------------------"
 }
 
@@ -114,15 +126,20 @@ function start {
 	
 	if [ ! -e /etc/anonsurf/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
-		echo -e -n " $GREEN*$BLUE Service " 
-		service nscd stop
-		service dnsmasq stop
-		killall dnsmasq nscd
-		echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd stop errors if they are not installed or stopped already."
-		sleep 4
-		tor -f /etc/anonsurf/torrc
-		sleep 6
+		echo -e -n " $GREEN*$BLUE Service "
+		echo -n " * Service "
+		service nscd stop 2>/dev/null || echo "nscd already stopped"
+		echo -n " * Service "
+		service resolvconf stop 2>/dev/null || echo "resolvconf already stopped"
+		echo -n " * Service "
+		service dnsmasq stop 2>/dev/null || echo "dsmasq already stopped"
+		killall dnsmasq nscd resolvconf 2>/dev/null || true
+		sleep 5
+		systemctl start tor
+		sleep 20
 	fi
+	
+	
 	if ! [ -f /etc/network/iptables.rules ]; then
 		iptables-save > /etc/network/iptables.rules
 		echo -e " $GREEN*$BLUE Saved iptables rules"
@@ -151,20 +168,16 @@ function start {
 	#exclude local addresses
 	for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
 		iptables -t nat -A OUTPUT -d $NET -j RETURN
+		iptables -A OUTPUT -d "$NET" -j ACCEPT
 	done
 	
-	#redirect all other output through TOR
+	#redirect all other output through TOR	
 	iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
 	iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $TOR_PORT
 	iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $TOR_PORT
 	
 	#accept already established connections
 	iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-	
-	#exclude local addresses
-	for NET in $TOR_EXCLUDE 127.0.0.0/8 127.0.1.0/8; do
-		iptables -A OUTPUT -d $NET -j ACCEPT
-	done
 	
 	#allow only tor output
 	iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
@@ -173,7 +186,7 @@ function start {
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
 	notify "Global Anonymous Proxy Activated"
-	sleep 4
+	sleep 10
 }
 
 
@@ -202,6 +215,7 @@ function stop {
 		rm /etc/resolv.conf
 		cp /etc/resolv.conf.bak /etc/resolv.conf
 	fi
+	service tor stop
 	pkill /etc/anonsurf/tor.pid && rm -f /etc/anonsurf/tor.pid
 	killall tor && rm -f /etc/anonsurf/tor.pid
 	sleep 6
@@ -217,14 +231,18 @@ function stop {
 }
 
 function change {
+	service tor stop
 	pkill /etc/anonsurf/tor.pid && rm -f /etc/anonsurf/tor.pid
 	sleep 4
+	service tor start
+	sleep 10
 	echo -e " $GREEN*$BLUE Tor daemon reloaded and forced to change nodes\n"
 	notify "Identity changed"
 	sleep 1
 }
 
 function status {
+	service tor@default status
 	cat /tmp/anonsurf.log
 }
 
@@ -246,9 +264,6 @@ case "$1" in
 	myip)
 		ip
 	;;
-	firefox_tor)
-		firefox_tor
-	;;
 	starti2p)
 		starti2p
 	;;
@@ -263,22 +278,26 @@ case "$1" in
    *)
 echo -e "
 Parrot AnonSurf Module (v 2.2)
+	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
+		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
+		and a huge amount of Caffeine!
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
 	
-	$RED start$BLUE -$GREEN Start system-wide anonymous
-		  tunneling under TOR proxy through iptables	  
-	$RED stop$BLUE -$GREEN Reset original iptables settings
-		  and return to clear navigation
+	$RED start$BLUE -$GREEN Start system-wide TOR tunnel	
+	$RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
 	$RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
-	$RED change$BLUE -$GREEN Changes identity restarting TOR
+	$RED change$BLUE -$GREEN Restart TOR to change identity
 	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
+	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
+	
 	----[ I2P related features ]----
 	$RED starti2p$BLUE -$GREEN Start i2p services
 	$RED stopi2p$BLUE -$GREEN Stop i2p services
-	
-$RESETCOLOR" >&2
+$RESETCOLOR	
+Dance like no one's watching. Encrypt like everyone is." >&2
+
 exit 1
 ;;
 esac

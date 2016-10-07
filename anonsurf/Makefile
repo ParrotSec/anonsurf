@@ -1,6 +1,3 @@
-INSTALL=install -m 0644
-
-
 all:
 
 clean:
@@ -9,15 +6,14 @@ install:
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/etc/tor/
 	mkdir -p $(DESTDIR)/usr/bin/
-	mkdir -p $(DESTDIR)/etc/init.d/
+	mkdir -  $(DESTDIR)/usr/share/applications/
 	cp onion.pac $(DESTDIR)/etc/anonsurf/
 	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
 	cp torrc $(DESTDIR)/etc/anonsurf/
-	cp anonsurf.sh $(DESTDIR)/etc/init.d/anonsurf
-	ln -s $(DESTDIR)/etc/init.d/anonsurf $(DESTDIR)/usr/bin/anonsurf
+	cp anonsurf.sh $(DESTDIR)/usr/bin/anonsurf
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
 	ln -s /usr/bin/anonsurf $(DESTDIR)/usr/bin/anon
-	cp -rf anonsurf/* $(DESTDIR)/
+	cp -rf launchers/* $(DESTDIR)/usr/share/applications/
 	chown root:root $(DESTDIR)/etc/anonsurf -R
 	chmod 644 $(DESTDIR)/etc/anonsurf -R

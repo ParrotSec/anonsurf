@@ -1,29 +1,40 @@
 ##define virtual network mask
-VirtualAddrNetworkIPv4 10.192.0.0/10
+VirtualAddrNetwork 10.192.0.0/10
 AutomapHostsOnResolve 1
 AutomapHostsSuffixes .exit,.onion,.parrot,.frozen,.fx
-#define a non-standard ports to not conflitcs with other tor instances
+
+#define tor ports and explicitly declare some security flags
 TransPort 127.0.0.1:9040 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtocol IsolateDestPort IsolateDestAddr
 SocksPort 127.0.0.1:9050 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtocol IsolateDestPort IsolateDestAddr
+
 #use tor to resolve domain names
 DNSPort 127.0.0.1:53
+
 #daemonize
 RunAsDaemon 1
+
+#move log to /tmp to prevent proofs to be stored on disk ;)
 Log notice file /tmp/anonsurf.log
+
 #sandbox
 Sandbox 1
+
 #use this PID file
 PidFile /etc/anonsurf/tor.pid
+
 #use hardware accaleration when possible for crypto
 HardwareAccel 1
+
 #socket safety hacks
 TestSocks 1
 WarnUnsafeSocks 1
 AllowNonRFC953Hostnames 0
 AllowDotExit 0
 WarnPlaintextPorts 23,109,110,143,80
+
 #dns safety hacks
 ClientRejectInternalAddresses 1
+
 #circuit hacks
 NewCircuitPeriod 40
 MaxCircuitDirtiness 600
@@ -31,6 +42,7 @@ MaxClientCircuitsPending 48
 UseEntryGuards 1
 UseEntryGuardsAsDirGuards 1
 EnforceDistinctSubnets 1
+
 # ok, it is a bit complex, so i will spend more words here:
 # this option means that tor will try to use the previously used
 # exit node for these domains, this is helpful in case of
@@ -46,4 +58,8 @@ EnforceDistinctSubnets 1
 # same exit node in order to not let these services
 # map your exit nodes pool, so they will know
 # only one of the exit nodes in your pool.
-TrackHostExits .facebook.com,.facebook.net,.twitter.com,.fbcdn.com,.fbcdn.net,.akamaihd.com,.google.com,.google.it,.google.fr,.google.de,.google.br,.yandex.ru,.yandex.com,.gmail.com,.googleapis.com,.gstatic.com,.adform.net,.google-analitics.com,.googletagservices.com
+TrackHostExits .facebook.com,.facebook.net,.twitter.com,.fbcdn.com,.fbcdn.net,.akamaihd.com,.google.com,.google.it,.google.fr,.google.de,.google.br,.yandex.ru,.yandex.com,.gmail.com,.googleapis.com,.gstatic.com,.adform.net,.google-analitics.com,.googletagservices.com,.cloudflare.com,.akamaihd.com,.akamai.com,.cloudfront.net,.cloudfront.com
+
+
+
+
