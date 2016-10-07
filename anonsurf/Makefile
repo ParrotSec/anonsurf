@@ -6,10 +6,11 @@ install:
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/etc/tor/
 	mkdir -p $(DESTDIR)/usr/bin/
-	mkdir -  $(DESTDIR)/usr/share/applications/
-	cp onion.pac $(DESTDIR)/etc/anonsurf/
+	mkdir -p  $(DESTDIR)/usr/share/applications/
+	
+	cp onion.pac $(DESTDIR)/etc/anonsurf/onion.pac
 	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
-	cp torrc $(DESTDIR)/etc/anonsurf/
+	cp torrc $(DESTDIR)/etc/anonsurf/torrc
 	cp anonsurf.sh $(DESTDIR)/usr/bin/anonsurf
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf

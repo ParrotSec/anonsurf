@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Fri, 07 Oct 2016 20:06:32 +0200
+Source: anonsurf
+Binary: anonsurf
+Architecture: source all
+Version: 2.2+parrot1
+Distribution: testing
+Urgency: medium
+Maintainer: Parrot Team <parrot-devel@lists.parrotsec.org>
+Changed-By: Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>
+Description:
+ anonsurf   - AnonSurf
+Changes:
+ anonsurf (2.2+parrot1) testing; urgency=medium
+ .
+   * Merge modifications from Francesco "Mibofra" Bonanno
+Checksums-Sha1:
+ 21b2c85ef5cbaf5ad59607c6f59c5a7d1a3bd662 732 anonsurf_2.2+parrot1.dsc
+ 4b3c4be8682060f9c4107acd5df3058498b09ab5 20188 anonsurf_2.2+parrot1.tar.xz
+ 143f203000651bc1ebe4fe9e9963d1a544d0d27d 17624 anonsurf_2.2+parrot1_all.deb
+Checksums-Sha256:
+ 6fc8c99b4fa62a3ec3d11fe485a34c75733b10f1d5dd6906db5f89aebd423d0e 732 anonsurf_2.2+parrot1.dsc
+ e1e58161b28289c19498e9bedc700ef8e2a7b4989fe8a8265f877a2d2be2c509 20188 anonsurf_2.2+parrot1.tar.xz
+ f4d9540a9a5959861437149453a9269c118de077512d7dfc26c6c54fae3a51be 17624 anonsurf_2.2+parrot1_all.deb
+Files:
+ 9130a193ae47c0b0ee1f1d3e53c29bbc 732 parrot optional anonsurf_2.2+parrot1.dsc
+ 4e3665f75a6135b9168c40998312efba 20188 parrot optional anonsurf_2.2+parrot1.tar.xz
+ 8a8376c8eceff3aadc84373770033ef8 17624 parrot optional anonsurf_2.2+parrot1_all.deb

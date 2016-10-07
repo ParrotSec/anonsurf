@@ -1,0 +1,13 @@
+Package: anonsurf
+Version: 2.2+parrot1
+Architecture: all
+Maintainer: Parrot Team <parrot-devel@lists.parrotsec.org>
+Installed-Size: 70
+Depends: bash, iptables, tor, i2p
+Recommends: parrot-core, parrot-menu, parrot-anon
+Suggests: vidalia
+Section: parrot
+Priority: optional
+Homepage: http://www.parrotsec.org/
+Description: AnonSurf
+ Anonymizaton toolkit for Parrot Security OS
