@@ -124,7 +124,7 @@ function start {
 	
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 	
-	if [ ! -e /etc/anonsurf/tor.pid ]; then
+	if [ ! -e /tmp/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
 		echo -e -n " $GREEN*$BLUE Stopping service nscd"
 		service nscd stop 2>/dev/null || echo " (already stopped)"

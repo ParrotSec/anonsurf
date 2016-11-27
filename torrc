@@ -20,7 +20,7 @@ Log notice file /tmp/anonsurf.log
 Sandbox 1
 
 #use this PID file
-#PidFile /etc/anonsurf/tor.pid
+PidFile /tor.pid
 
 #use hardware accaleration when possible for crypto
 HardwareAccel 1
