@@ -1,3 +1,9 @@
+anonsurf (2.3+parrot0) testing; urgency=medium
+
+  * Update to Anonsurf 2.3
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 27 Nov 2016 17:54:34 +0100
+
 anonsurf (2.2+parrot1) testing; urgency=medium
 
   * Merge modifications from Francesco "Mibofra" Bonanno
