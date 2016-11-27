@@ -63,14 +63,14 @@ function clean_dhcp {
 
 
 function init {
-	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications"
+	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
 	killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam
 	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed"
 	notify "Dangerous applications killed"
 	
-	echo -e -n "$BLUE[$GREEN*$BLUE] cleaning some dangerous cache elements"
+	echo -e -n "$BLUE[$GREEN*$BLUE] cleaning some dangerous cache elements\n"
 	bleachbit -c adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history &> /dev/null
-	echo -e -n "$BLUE[$GREEN*$BLUE] Cache cleaned"
+	echo -e -n "$BLUE[$GREEN*$BLUE] Cache cleaned\n"
 	notify "Cache cleaned"
 }
 
@@ -83,7 +83,7 @@ function starti2p {
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
 	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
-	echo -e -n "$BLUE[$GREEN*$BLUE] Modified resolv.conf to use localhost and FrozenDNS"
+	echo -e -n "$BLUE[$GREEN*$BLUE] Modified resolv.conf to use tor and ParrotDNS\n"
 	sudo -u i2psvc i2prouter start
 	iceweasel http://127.0.0.1:7657/home &
 	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon started"
@@ -91,13 +91,13 @@ function starti2p {
 }
 
 function stopi2p {
-	echo -e -n "$BLUE[$GREEN*$BLUE] Stopping I2P services"
+	echo -e -n "$BLUE[$GREEN*$BLUE] Stopping I2P services\n"
 	sudo -u i2psvc i2prouter stop
 	if [ -e /etc/resolv.conf.bak ]; then
 		rm /etc/resolv.conf
 		cp /etc/resolv.conf.bak /etc/resolv.conf
 	fi
-	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon stopped"
+	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon stopped\n"
 	notify "I2P daemon stopped"
 }
 
@@ -126,14 +126,16 @@ function start {
 	
 	if [ ! -e /etc/anonsurf/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
-		echo -e -n " $GREEN*$BLUE Service "
-		echo -n " * Service "
-		service nscd stop 2>/dev/null || echo "nscd already stopped"
-		echo -n " * Service "
-		service resolvconf stop 2>/dev/null || echo "resolvconf already stopped"
-		echo -n " * Service "
-		service dnsmasq stop 2>/dev/null || echo "dsmasq already stopped"
+		echo -e -n " $GREEN*$BLUE Stopping service nscd"
+		service nscd stop 2>/dev/null || echo " (already stopped)"
+		echo -e -n " $GREEN*$BLUE Stopping service resolvconf"
+		service resolvconf stop 2>/dev/null || echo " (already stopped)"
+		echo -e -n " $GREEN*$BLUE Stopping service dnsmasq"
+		service dnsmasq stop 2>/dev/null || echo " (already stopped)"
 		killall dnsmasq nscd resolvconf 2>/dev/null || true
+		sleep 2
+		killall -9 dnsmasq 2>/dev/null || true
+		service resolvconf start 
 		sleep 5
 		systemctl start tor
 		sleep 20
@@ -210,18 +212,19 @@ function stop {
 		rm /etc/network/iptables.rules
 		echo -e " $GREEN*$BLUE Iptables rules restored"
 	fi
-	echo -e -n " $GREEN*$BLUE Service "
+	echo -e -n " $GREEN*$BLUE Restore DNS service"
 	if [ -e /etc/resolv.conf.bak ]; then
 		rm /etc/resolv.conf
 		cp /etc/resolv.conf.bak /etc/resolv.conf
 	fi
 	service tor stop
-	pkill /etc/anonsurf/tor.pid && rm -f /etc/anonsurf/tor.pid
-	killall tor && rm -f /etc/anonsurf/tor.pid
+	sleep 2
+	killall tor
 	sleep 6
-	service resolvconf start || service resolvconf restart
-	service dnsmasq start
-	service nscd start
+	echo -e -n " $GREEN*$BLUE Restarting services\n"
+	service resolvconf start || service resolvconf restart || true
+	service dnsmasq start || true
+	service nscd start || true
 	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed or started already."
 	sleep 1
 	
@@ -232,7 +235,6 @@ function stop {
 
 function change {
 	service tor stop
-	pkill /etc/anonsurf/tor.pid && rm -f /etc/anonsurf/tor.pid
 	sleep 4
 	service tor start
 	sleep 10
@@ -243,7 +245,7 @@ function change {
 
 function status {
 	service tor@default status
-	cat /tmp/anonsurf.log
+	cat /tmp/anonsurf.log || cat /var/log/tor/log
 }
 
 case "$1" in
@@ -277,7 +279,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.2)
+Parrot AnonSurf Module (v 2.3)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
