@@ -7,3 +7,4 @@ Exec=anonsurf stopi2p
 Name=stop i2p services
 Icon=player_stop
 Categories=anonsurf;
+X-Parrot-Package=i2p

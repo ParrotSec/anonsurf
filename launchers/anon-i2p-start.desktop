@@ -7,3 +7,4 @@ Exec=anonsurf starti2p
 Name=start i2p services
 Icon=stock_media-play
 Categories=anonsurf;
+X-Parrot-Package=i2p

@@ -1,3 +1,9 @@
+anonsurf (2.3+parrot1) testing; urgency=medium
+
+  * move i2p as recommended package
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 25 Dec 2016 17:15:22 +0100
+
 anonsurf (2.3+parrot0) testing; urgency=medium
 
   * Update to Anonsurf 2.3
