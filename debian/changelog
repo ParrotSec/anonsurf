@@ -1,3 +1,10 @@
+anonsurf (2.3+parrot3) testing; urgency=medium
+
+  * improve i2p launchers
+  * replace iceweasel with firefox
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Wed, 28 Dec 2016 14:17:50 +0100
+
 anonsurf (2.3+parrot1) testing; urgency=medium
 
   * move i2p as recommended package

@@ -13,7 +13,7 @@ Package: anonsurf
 Architecture: all
 Priority: optional
 Depends: bash, iptables, tor
-Recommends: i2p, parrot-core, parrot-menu, parrot-anon
+Recommends: i2p, freenet, parrot-core, parrot-menu, parrot-anon
 Suggests: vidalia
 Description: AnonSurf
  Anonymizaton toolkit for Parrot Security OS
