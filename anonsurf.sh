@@ -36,6 +36,8 @@ export GREEN='\033[1;92m'
 export RED='\033[1;91m'
 export RESETCOLOR='\033[1;00m'
 
+dep=(tor i2p)
+
 # Destinations you don't want routed through Tor
 TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
 
@@ -46,6 +48,12 @@ TOR_UID="debian-tor"
 # Tor's TransPort
 TOR_PORT="9040"
 
+check_dep() {
+	if !( which "$1" &>/dev/null ); then
+		echo "$1 not found"
+		missing="1"
+	fi
+	}
 
 function notify {
 	if [ -e /usr/bin/notify-send ]; then
@@ -247,6 +255,17 @@ function status {
 	service tor@default status
 	cat /tmp/anonsurf.log || cat /var/log/tor/log
 }
+
+for i in "${dep[@]}"
+do
+	check_dep "$i"
+done
+
+if [ "$missing" == "1" ]; then
+       	exit 1
+fi
+	       
+
 
 case "$1" in
 	start)
