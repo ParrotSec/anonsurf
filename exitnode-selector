@@ -1,0 +1,46 @@
+#!/bin/bash
+# Shell script to change Tor exit node country
+
+IFS=$'\n'
+PS3="Chose the country: "
+
+get_country_code() {
+    country_data=$(grep -i "$1" exitnodes.csv)
+    if [ "$country_data" ]
+    then
+        if [ $(echo "$country_data" | wc -l) -gt 1 ]
+        then
+            select country in $country_data
+            do
+                if [ "$country" ]
+                then
+                    country_data=$country
+                    break
+                fi
+            done
+        fi
+
+        country_code=$(echo $country_data | rev | cut -d "," -f1 | rev)
+
+    else
+        echo "Could not find country."
+        return 1
+    fi
+
+    echo "Country code: $country_code"
+    return 0
+}
+
+change_country() {
+    echo -e "authenticate \"kuhNygbtfu76fFUbgv\"\nSETCONF ExitNodes={$country_code}\nSETCONF StrictNodes=1\nsignal newnym" | nc localhost -q 1 9051
+    return 0
+}
+
+if [ $# -eq 1 ]
+then
+    country_name=$1
+else
+    read -p "Country name to search: " country_name
+fi
+
+test $country_name = "all" || get_country_code $country_name && change_country

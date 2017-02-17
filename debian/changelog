@@ -1,3 +1,9 @@
+anonsurf (2.3+parrot4) testing; urgency=medium
+
+  * Include gnunet as recommended package
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 29 Dec 2016 18:31:47 +0100
+
 anonsurf (2.3+parrot3) testing; urgency=medium
 
   * improve i2p launchers
