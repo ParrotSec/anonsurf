@@ -1,3 +1,9 @@
+anonsurf (2.4+parrot0) testing; urgency=medium
+
+  * Disable ipv6 while anonsurf is running
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 16 Apr 2017 23:59:29 +0200
+
 anonsurf (2.3+parrot4) testing; urgency=medium
 
   * Include gnunet as recommended package

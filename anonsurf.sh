@@ -163,6 +163,10 @@ function start {
 	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and FrozenDNS"
 
+	# disable ipv6
+	sysctl -w net.ipv6.conf.all.disable_ipv6=1
+	sysctl -w net.ipv6.conf.default.disable_ipv6=1
+
 	# set iptables nat
 	iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN
 
@@ -225,6 +229,11 @@ function stop {
 		rm /etc/resolv.conf
 		cp /etc/resolv.conf.bak /etc/resolv.conf
 	fi
+	
+	# re-enable ipv6
+	sysctl -w net.ipv6.conf.all.disable_ipv6=0
+	sysctl -w net.ipv6.conf.default.disable_ipv6=0
+	
 	service tor stop
 	sleep 2
 	killall tor
@@ -298,7 +307,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.3)
+Parrot AnonSurf Module (v 2.4)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
