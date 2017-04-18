@@ -1,3 +1,10 @@
+anonsurf (2.4+parrot1) testing; urgency=medium
+
+  * Remove dependencies checker
+  * Clean whitespaces in empty lines
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Tue, 18 Apr 2017 10:59:32 +0200
+
 anonsurf (2.4+parrot0) testing; urgency=medium
 
   * Disable ipv6 while anonsurf is running
