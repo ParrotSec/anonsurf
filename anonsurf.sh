@@ -36,7 +36,6 @@ export GREEN='\033[1;92m'
 export RED='\033[1;91m'
 export RESETCOLOR='\033[1;00m'
 
-dep=(tor i2p)
 
 # Destinations you don't want routed through Tor
 TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
@@ -47,13 +46,6 @@ TOR_UID="debian-tor"
 
 # Tor's TransPort
 TOR_PORT="9040"
-
-check_dep() {
-	if !( which "$1" &>/dev/null ); then
-		echo "$1 not found"
-		missing="1"
-	fi
-	}
 
 function notify {
 	if [ -e /usr/bin/notify-send ]; then
@@ -75,7 +67,7 @@ function init {
 	killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam
 	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed"
 	notify "Dangerous applications killed"
-	
+
 	echo -e -n "$BLUE[$GREEN*$BLUE] cleaning some dangerous cache elements\n"
 	bleachbit -c adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history &> /dev/null
 	echo -e -n "$BLUE[$GREEN*$BLUE] Cache cleaned\n"
@@ -129,9 +121,9 @@ function start {
 		echo -e -e "\n$GREEN[$RED!$GREEN] $RED R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
 		exit 1
 	fi
-	
+
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
-	
+
 	if [ ! -e /tmp/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
 		echo -e -n " $GREEN*$BLUE Stopping service nscd"
@@ -148,16 +140,16 @@ function start {
 		systemctl start tor
 		sleep 20
 	fi
-	
-	
+
+
 	if ! [ -f /etc/network/iptables.rules ]; then
 		iptables-save > /etc/network/iptables.rules
 		echo -e " $GREEN*$BLUE Saved iptables rules"
 	fi
-	
+
 	iptables -F
 	iptables -t nat -F
-	
+
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
 	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
@@ -174,25 +166,25 @@ function start {
 	iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
 	iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 53
 	iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
-	
+
 	#resolve .onion domains mapping 10.192.0.0/10 address space
 	iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
 	iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
-	
+
 	#exclude local addresses
 	for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
 		iptables -t nat -A OUTPUT -d $NET -j RETURN
 		iptables -A OUTPUT -d "$NET" -j ACCEPT
 	done
-	
-	#redirect all other output through TOR	
+
+	#redirect all other output through TOR
 	iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
 	iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $TOR_PORT
 	iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $TOR_PORT
-	
+
 	#accept already established connections
 	iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-	
+
 	#allow only tor output
 	iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
 	iptables -A OUTPUT -j REJECT
@@ -218,7 +210,7 @@ function stop {
 	iptables -F
 	iptables -t nat -F
 	echo -e " $GREEN*$BLUE Deleted all iptables rules"
-	
+
 	if [ -f /etc/network/iptables.rules ]; then
 		iptables-restore < /etc/network/iptables.rules
 		rm /etc/network/iptables.rules
@@ -229,11 +221,11 @@ function stop {
 		rm /etc/resolv.conf
 		cp /etc/resolv.conf.bak /etc/resolv.conf
 	fi
-	
+
 	# re-enable ipv6
 	sysctl -w net.ipv6.conf.all.disable_ipv6=0
 	sysctl -w net.ipv6.conf.default.disable_ipv6=0
-	
+
 	service tor stop
 	sleep 2
 	killall tor
@@ -244,7 +236,7 @@ function stop {
 	service nscd start || true
 	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed or started already."
 	sleep 1
-	
+
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
 	notify "Global Anonymous Proxy Stopped"
 	sleep 4
@@ -265,15 +257,6 @@ function status {
 	cat /tmp/anonsurf.log || cat /var/log/tor/log
 }
 
-for i in "${dep[@]}"
-do
-	check_dep "$i"
-done
-
-if [ "$missing" == "1" ]; then
-       	exit 1
-fi
-	       
 
 
 case "$1" in
@@ -315,14 +298,14 @@ Parrot AnonSurf Module (v 2.4)
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
-	
+
 	$RED start$BLUE -$GREEN Start system-wide TOR tunnel	
 	$RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
 	$RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
 	$RED change$BLUE -$GREEN Restart TOR to change identity
 	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
 	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
-	
+
 	----[ I2P related features ]----
 	$RED starti2p$BLUE -$GREEN Start i2p services
 	$RED stopi2p$BLUE -$GREEN Stop i2p services
