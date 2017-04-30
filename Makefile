@@ -13,7 +13,7 @@ install:
 	cp torrc $(DESTDIR)/etc/anonsurf/torrc
 	cp anonsurf.sh $(DESTDIR)/usr/bin/anonsurf
 	cp exitnode-selector $(DESTDIR)/usr/bin/exitnode-selector
-	cp exitnodes.csv /etc/anonsurf/exitnodes.csv
+	cp exitnodes.csv $(DESTDIR)/etc/anonsurf/exitnodes.csv
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
 	chown root:root $(DESTDIR)/usr/bin/exitnode-selector
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
