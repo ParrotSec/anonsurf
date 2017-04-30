@@ -12,7 +12,10 @@ install:
 	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
 	cp torrc $(DESTDIR)/etc/anonsurf/torrc
 	cp anonsurf.sh $(DESTDIR)/usr/bin/anonsurf
+	cp exitnode-selector $(DESTDIR)/usr/bin/exitnode-selector
+	cp exitnodes.csv /etc/anonsurf/exitnodes.csv
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
+	chown root:root $(DESTDIR)/usr/bin/exitnode-selector
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
 	ln -s /usr/bin/anonsurf $(DESTDIR)/usr/bin/anon
 	cp -rf launchers/* $(DESTDIR)/usr/share/applications/

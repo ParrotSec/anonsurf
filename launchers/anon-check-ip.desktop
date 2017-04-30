@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Exec=anonsurf ip
+Name=check IP
+Comment=Print the current IP address
+Icon=network-server
+Categories=anonsurf;
+

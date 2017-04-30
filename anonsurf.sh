@@ -31,6 +31,11 @@
 # along with Parrot Security OS. If not, see <http://www.gnu.org/licenses/>.
 
 
+
+
+
+
+
 export BLUE='\033[1;94m'
 export GREEN='\033[1;92m'
 export RED='\033[1;91m'
@@ -47,6 +52,14 @@ TOR_UID="debian-tor"
 # Tor's TransPort
 TOR_PORT="9040"
 
+
+
+
+
+
+
+
+
 function notify {
 	if [ -e /usr/bin/notify-send ]; then
 		/usr/bin/notify-send "AnonSurf" "$1"
@@ -54,12 +67,20 @@ function notify {
 }
 export notify
 
+
+
+
+
 function clean_dhcp {
 	dhclient -r
 	rm -f /var/lib/dhcp/dhclient*
 	echo -e -n "$BLUE[$GREEN*$BLUE] DHCP address released"
 	notify "DHCP address released"
 }
+
+
+
+
 
 
 function init {
@@ -77,14 +98,13 @@ function init {
 
 
 
+
+
+
+
 function starti2p {
 	echo -e -n " $GREEN*$BLUE starting I2P services"
-	service tor stop
-	cp /etc/resolv.conf /etc/resolv.conf.bak
-	touch /etc/resolv.conf
-	sudo echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
-	echo -e -n "$BLUE[$GREEN*$BLUE] Modified resolv.conf to use tor and ParrotDNS\n"
-	sudo -u i2psvc i2prouter start
+	gksu -u i2psvc i2prouter start
 	firefox http://127.0.0.1:7657/home &
 	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon started"
 	notify "I2P daemon started"
@@ -92,11 +112,7 @@ function starti2p {
 
 function stopi2p {
 	echo -e -n "$BLUE[$GREEN*$BLUE] Stopping I2P services\n"
-	sudo -u i2psvc i2prouter stop
-	if [ -e /etc/resolv.conf.bak ]; then
-		sudo rm /etc/resolv.conf
-		sudo cp /etc/resolv.conf.bak /etc/resolv.conf
-	fi
+	gksu -u i2psvc i2prouter stop
 	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon stopped\n"
 	notify "I2P daemon stopped"
 }
@@ -105,12 +121,11 @@ function stopi2p {
 
 function ip {
 
+	MYIP=`wget -qO- https://start.parrotsec.org/ip/`
 	echo -e "\nMy ip is:\n"
-	sleep 1
-	wget -qO- http://ip.frozenbox.org/
+	echo $MYIP
 	echo -e "\n"
-	echo -e "if the two letters nation code is T1\n then you are succesfully connected to tor"
-	echo -e "\n\n----------------------------------------------------------------------"
+	notify "My IP is:\n\n$MYIP"
 }
 
 
@@ -192,6 +207,8 @@ function start {
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
 	notify "Global Anonymous Proxy Activated"
+	sleep 1
+	notify "Dance like no one's watching. Encrypt like everyone is :)"
 	sleep 10
 }
 
@@ -238,34 +255,32 @@ function stop {
 	sleep 1
 
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
-	notify "Global Anonymous Proxy Stopped"
+	notify "Global Anonymous Proxy Closed - Stop dancing :("
 	sleep 4
 }
 
 function change {
-	service tor stop
-	sleep 4
-	service tor start
+	exitnode-selector
 	sleep 10
 	echo -e " $GREEN*$BLUE Tor daemon reloaded and forced to change nodes\n"
-	notify "Identity changed"
+	notify "Identity changed - let's dance again!"
 	sleep 1
 }
 
 function status {
 	service tor@default status
-	cat /tmp/anonsurf.log || cat /var/log/tor/log
+	cat /tmp/anonsurf-tor.log || cat /var/log/tor/log
 }
 
 
 
 case "$1" in
 	start)
-		init
+		zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" && init
 		start
 	;;
 	stop)
-		init
+		zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" && init
 		stop
 	;;
 	change)
@@ -275,6 +290,9 @@ case "$1" in
 		status
 	;;
 	myip)
+		ip
+	;;
+	ip)
 		ip
 	;;
 	starti2p)
@@ -290,7 +308,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.4)
+Parrot AnonSurf Module (v 2.5)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>

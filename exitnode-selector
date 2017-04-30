@@ -5,7 +5,7 @@ IFS=$'\n'
 PS3="Chose the country: "
 
 get_country_code() {
-    country_data=$(grep -i "$1" exitnodes.csv)
+    country_data=$(grep -i "$1" /etc/anonsurf/exitnodes.csv)
     if [ "$country_data" ]
     then
         if [ $(echo "$country_data" | wc -l) -gt 1 ]

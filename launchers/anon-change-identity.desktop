@@ -4,8 +4,8 @@ Version=1.0
 Type=Application
 Terminal=true
 Exec=menuexecg "anonsurf change"
-Name=change identity
-Comment=Restart TOR daemon to change exit node
+Name=change exit node
+Comment=Select the exit country to use
 Icon=reload
 Categories=anonsurf;
 
