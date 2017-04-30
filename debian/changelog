@@ -1,3 +1,9 @@
+anonsurf (2.5+parrot1) testing; urgency=medium
+
+  * Add libnotify-bin to the recommended packages.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 30 Apr 2017 03:07:31 +0200
+
 anonsurf (2.5+parrot0) testing; urgency=medium
 
   * Improve IP checker.
