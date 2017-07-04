@@ -1,3 +1,15 @@
+anonsurf (2.5+parrot4) testing; urgency=medium
+
+  * Add more useful dependencies.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Tue, 04 Jul 2017 15:09:13 +0200
+
+anonsurf (2.5+parrot3) testing; urgency=medium
+
+  * Fix i2p launchers
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Mon, 01 May 2017 04:02:59 +0200
+
 anonsurf (2.5+parrot2) testing; urgency=medium
 
   * Fix makefile

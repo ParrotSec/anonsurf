@@ -104,7 +104,7 @@ function init {
 
 function starti2p {
 	echo -e -n " $GREEN*$BLUE starting I2P services"
-	gksu -u i2psvc i2prouter start
+	gksu service i2p start
 	firefox http://127.0.0.1:7657/home &
 	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon started"
 	notify "I2P daemon started"
@@ -112,7 +112,7 @@ function starti2p {
 
 function stopi2p {
 	echo -e -n "$BLUE[$GREEN*$BLUE] Stopping I2P services\n"
-	gksu -u i2psvc i2prouter stop
+	gksu service i2p stop
 	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon stopped\n"
 	notify "I2P daemon stopped"
 }

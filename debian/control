@@ -13,7 +13,7 @@ Package: anonsurf
 Architecture: all
 Priority: optional
 Depends: bash, iptables, tor
-Recommends: libnotify-bin, i2p, freenet, gnunet-gtk, gnunet, parrot-core, parrot-menu, parrot-anon
+Recommends: libnotify-bin, i2p, freenet, gnunet-gtk, gnunet, onioncircuits, connect-proxy onionshare, torsocks, tor-geoipdb, parrot-core, parrot-menu, parrot-anon
 Suggests: vidalia
 Description: AnonSurf
  Anonymizaton toolkit for Parrot Security OS
