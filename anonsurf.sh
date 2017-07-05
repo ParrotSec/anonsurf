@@ -167,8 +167,8 @@ function start {
 
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
-	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.144\nnameserver 92.222.97.145' > /etc/resolv.conf
-	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and FrozenDNS"
+	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.145\nnameserver 192.99.85.244' > /etc/resolv.conf
+	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS"
 
 	# disable ipv6
 	sysctl -w net.ipv6.conf.all.disable_ipv6=1

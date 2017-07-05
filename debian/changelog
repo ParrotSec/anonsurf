@@ -1,3 +1,10 @@
+anonsurf (2.5+parrot5) testing; urgency=medium
+
+  * Update ParrotDNS ip addresses.
+  * Update to debhelper 10.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Wed, 05 Jul 2017 14:11:22 +0200
+
 anonsurf (2.5+parrot4) testing; urgency=medium
 
   * Add more useful dependencies.
