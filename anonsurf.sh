@@ -180,7 +180,7 @@ function changemac {
 	systemctl start NetworkManager
 	
 	## Waiting for restart the service
-	while [ `systemctl status NetworkManager | grep Active | awk '{ print $2 }'` != "active"]
+	while [ `systemctl status NetworkManager | grep Active | awk '{ print $2 }'` != "active" ]
 	do
 		usleep 1000000
 	done
