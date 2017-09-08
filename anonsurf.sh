@@ -16,7 +16,7 @@
 # Francesco 'mibofra'/'Eli Aran'/'SimpleSmibs' Bonanno <mibofra@ircforce.tk> <mibofra@frozenbox.org>
 #
 # Extended:
-# Daniel 'sawyer' Garcia <dagaba13@gmail.com>
+# Daniel 'Sawyer' Garcia <dagaba13@gmail.com>
 #
 # anonsurf is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -176,7 +176,14 @@ function changemac {
 	done
 
 	# Uncomment in case of error
-	systemctl restart NetworkManager
+	systemctl stop NetworkManager
+	systemctl start NetworkManager
+	
+	## Waiting for restart the service
+	while [ `systemctl status NetworkManager | grep Active | awk '{ print $2 }'` != "active"]
+	do
+		usleep 1000000
+	done
 
 	LEIDO=$(cat /tmp/.changemac)
 	/usr/bin/notify-send "Current changing" "$LEIDO"
@@ -389,6 +396,8 @@ Parrot AnonSurf Module (v 2.5)
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
 		and a huge amount of Caffeine + some GNU/GPL v3 stuff
+	Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
+
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
