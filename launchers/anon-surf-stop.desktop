@@ -4,6 +4,6 @@ Version=1.0
 Type=Application
 Terminal=true
 Exec=menuexecg "anonsurf stop"
-Name=anonymous mode stop
+Name=Anonsurf Stop
 Icon=player_stop
 Categories=anonsurf;

@@ -4,6 +4,6 @@ Version=1.0
 Type=Application
 Terminal=true
 Exec=menuexecg "anonsurf start"
-Name=anonymous mode start
+Name=Anonsurf Start
 Icon=stock_media-play
 Categories=anonsurf;

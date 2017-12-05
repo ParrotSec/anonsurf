@@ -85,8 +85,8 @@ function clean_dhcp {
 
 function init {
 	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
-	killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam
-	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed"
+	sudo killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam
+	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed\n"
 	notify "Dangerous applications killed"
 
 	echo -e -n "$BLUE[$GREEN*$BLUE] cleaning some dangerous cache elements\n"
@@ -103,10 +103,10 @@ function init {
 
 
 function starti2p {
-	echo -e -n " $GREEN*$BLUE starting I2P services"
+	echo -e -n " $GREEN*$BLUE starting I2P services\n"
 	gksu service i2p start
 	firefox http://127.0.0.1:7657/home &
-	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon started"
+	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon started\n"
 	notify "I2P daemon started"
 }
 
@@ -140,12 +140,12 @@ function start {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
 	if [ ! -e /tmp/tor.pid ]; then
-		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you\n" >&2
-		echo -e -n " $GREEN*$BLUE Stopping service nscd"
+		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you" >&2
+		echo -e -n "\n $GREEN*$BLUE Stopping service nscd"
 		service nscd stop 2>/dev/null || echo " (already stopped)"
-		echo -e -n " $GREEN*$BLUE Stopping service resolvconf"
+		echo -e -n "\n $GREEN*$BLUE Stopping service resolvconf"
 		service resolvconf stop 2>/dev/null || echo " (already stopped)"
-		echo -e -n " $GREEN*$BLUE Stopping service dnsmasq"
+		echo -e -n "\n $GREEN*$BLUE Stopping service dnsmasq"
 		service dnsmasq stop 2>/dev/null || echo " (already stopped)"
 		killall dnsmasq nscd resolvconf 2>/dev/null || true
 		sleep 2
@@ -159,7 +159,7 @@ function start {
 
 	if ! [ -f /etc/network/iptables.rules ]; then
 		iptables-save > /etc/network/iptables.rules
-		echo -e " $GREEN*$BLUE Saved iptables rules"
+		echo -e "\n $GREEN*$BLUE Saved iptables rules\n"
 	fi
 
 	iptables -F
@@ -168,7 +168,7 @@ function start {
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
 	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.145\nnameserver 192.99.85.244' > /etc/resolv.conf
-	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS"
+	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS\n"
 
 	# disable ipv6
 	sysctl -w net.ipv6.conf.all.disable_ipv6=1
@@ -226,14 +226,14 @@ function stop {
 
 	iptables -F
 	iptables -t nat -F
-	echo -e " $GREEN*$BLUE Deleted all iptables rules"
+	echo -e "\n $GREEN*$BLUE Deleted all iptables rules"
 
 	if [ -f /etc/network/iptables.rules ]; then
 		iptables-restore < /etc/network/iptables.rules
 		rm /etc/network/iptables.rules
-		echo -e " $GREEN*$BLUE Iptables rules restored"
+		echo -e "\n $GREEN*$BLUE Iptables rules restored"
 	fi
-	echo -e -n " $GREEN*$BLUE Restore DNS service"
+	echo -e -n "\n $GREEN*$BLUE Restore DNS service"
 	if [ -e /etc/resolv.conf.bak ]; then
 		rm /etc/resolv.conf
 		cp /etc/resolv.conf.bak /etc/resolv.conf
@@ -247,7 +247,7 @@ function stop {
 	sleep 2
 	killall tor
 	sleep 6
-	echo -e -n " $GREEN*$BLUE Restarting services\n"
+	echo -e -n "\ $GREEN*$BLUE Restarting services\n"
 	service resolvconf start || service resolvconf restart || true
 	service dnsmasq start || true
 	service nscd start || true
@@ -308,7 +308,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.5)
+Parrot AnonSurf Module (v 2.6)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>

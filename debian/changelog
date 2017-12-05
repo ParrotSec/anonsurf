@@ -1,3 +1,10 @@
+anonsurf (2.6+parrot0) testing; urgency=medium
+
+  * Update torrc to not break apparmor rules.
+  * Minor fixes in output messages.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Tue, 05 Dec 2017 07:49:03 +0100
+
 anonsurf (2.5+parrot5) testing; urgency=medium
 
   * Update ParrotDNS ip addresses.

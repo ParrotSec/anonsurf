@@ -15,9 +15,6 @@ DNSPort 127.0.0.1:53
 #daemonize
 RunAsDaemon 1
 
-#move log to /tmp to prevent digital evidences to be stored on disk ;)
-Log notice file /tmp/anonsurf-tor.log
-
 #use hardware accaleration when possible for crypto
 HardwareAccel 1
 
@@ -34,25 +31,7 @@ NewCircuitPeriod 40
 MaxCircuitDirtiness 600
 MaxClientCircuitsPending 48
 UseEntryGuards 1
-UseEntryGuardsAsDirGuards 1
 EnforceDistinctSubnets 1
-
-# ok, it is a bit complex, so i will spend more words here:
-# this option means that tor will try to use the previously used
-# exit node for these domains, this is helpful in case of
-# websites with sessions related to your IP that may change
-# their behavior if your ip changes, but this option may help
-# websites to associate all your actions to a single
-# navigation session, by watching your IP.
-#
-# We decided to use it for the following addresses
-# because they track you anyway by using cookies
-# (so they will know who you are even if you
-# change IP), so we decided to use the IP of the
-# same exit node in order to not let these services
-# map your exit nodes pool, so they will know
-# only one of the exit nodes in your pool.
-TrackHostExits .facebook.com,.facebook.net,.twitter.com,.fbcdn.com,.fbcdn.net,.akamaihd.com,.google.com,.google.it,.google.fr,.google.de,.google.br,.yandex.ru,.yandex.com,.gmail.com,.googleapis.com,.gstatic.com,.adform.net,.google-analitics.com,.googletagservices.com,.cloudflare.com,.akamaihd.com,.akamai.com,.cloudfront.net,.cloudfront.com,.cloudflare.com
 
 
 
