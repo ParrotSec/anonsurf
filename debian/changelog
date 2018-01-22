@@ -1,3 +1,9 @@
+anonsurf (2.6+parrot1) testing; urgency=medium
+
+  * Rebuild package (tor was updated).
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Mon, 22 Jan 2018 23:33:28 +0100
+
 anonsurf (2.6+parrot0) testing; urgency=medium
 
   * Update torrc to not break apparmor rules.
