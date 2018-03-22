@@ -1,3 +1,9 @@
+anonsurf (2.6+parrot2) testing; urgency=medium
+
+  * Rebuild package (tor was updated).
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 22 Mar 2018 18:00:06 +0100
+
 anonsurf (2.6+parrot1) testing; urgency=medium
 
   * Rebuild package (tor was updated).
