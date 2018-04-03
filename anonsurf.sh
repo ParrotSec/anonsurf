@@ -15,6 +15,8 @@
 # Lisetta 'Sheireen' Ferrero <sheireen@frozenbox.org>
 # Francesco 'mibofra'/'Eli Aran'/'SimpleSmibs' Bonanno <mibofra@ircforce.tk> <mibofra@frozenbox.org>
 #
+# Extended:
+# Daniel 'Sawyer' Garcia <dagaba13@gmail.com>
 #
 # anonsurf is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -68,19 +70,12 @@ function notify {
 export notify
 
 
-
-
-
 function clean_dhcp {
 	dhclient -r
 	rm -f /var/lib/dhcp/dhclient*
 	echo -e -n "$BLUE[$GREEN*$BLUE] DHCP address released"
 	notify "DHCP address released"
 }
-
-
-
-
 
 
 function init {
@@ -96,12 +91,6 @@ function init {
 }
 
 
-
-
-
-
-
-
 function starti2p {
 	echo -e -n " $GREEN*$BLUE starting I2P services\n"
 	gksu service i2p start
@@ -110,13 +99,13 @@ function starti2p {
 	notify "I2P daemon started"
 }
 
+
 function stopi2p {
 	echo -e -n "$BLUE[$GREEN*$BLUE] Stopping I2P services\n"
 	gksu service i2p stop
 	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon stopped\n"
 	notify "I2P daemon stopped"
 }
-
 
 
 function ip {
@@ -129,15 +118,91 @@ function ip {
 }
 
 
+function mac {
+	#Select mac name
+	MACNAME=$(/sbin/ifconfig |grep ether |awk '{ print $2 ";" }' |tr -d '\n')
+	#Do array with the MACs Address	
+	arrMACNAME=(${MACNAME//;/ })
+	#Select interfaces	
+	MACINTERFACE=$(/sbin/ifconfig |grep "flags" |awk '{ if( $1 != "lo:" ) print ";" $1}' |tr -d ':\n')
+	#Do array with the interfaces
+	arrINTERFACE=(${MACINTERFACE//;/ })
+
+	echo -e "INTERFACE\tADDRESS" >> /tmp/.mac  
+	j=0
+	for i in  "${arrINTERFACE[@]}";  
+	do 
+	echo -e "$i\t\t${arrMACNAME[j++]}" >> /tmp/.mac
+	done
+
+	LEIDO=$(cat /tmp/.mac)
+	rm /tmp/.mac
+	/usr/bin/notify-send "MAC ADDRESS" "$LEIDO"
+}
+
+
+function changemac {
+	# Make sure only root can run our script
+	ME=$(whoami | tr [:lower:] [:upper:])
+
+	if [ $(id -u) -ne 0 ]; then
+		echo -e "\n$GREEN[$RED!$GREEN] $RED $ME R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
+		exit 1
+	fi
+
+	# Select interfaces
+	MACINTERFACE=$(/sbin/ifconfig |grep "flags" |awk '{ if( $1 != "lo:" ) print ";" $1}' |tr -d ':\n')
+	arrINTERFACE=(${MACINTERFACE//;/ })
+
+	#Change or restore MAC Address for Interfaces
+	for i in  "${arrINTERFACE[@]}";  
+	do 
+		MYMAC=$(/sbin/ifconfig |grep ether |awk '{ print $2 ";" }' |tr -d '\n')
+		/sbin/ifconfig $i down
+
+		if [ "$1" != "-r" ]; then
+			MAC=$(macchanger -r $i)
+			echo -e "Changing $i MAC ADDRESS"
+		else
+			MAC=$(macchanger --permanent $i)
+			echo -e "Restoring $i MAC ADDRESS"
+		fi
+
+		center="------------------- $i -------------------"
+		COLUMNS=$(tput cols) 
+		printf "%*s\n" $(((${#center}+$COLUMNS)/2)) "$center" >> /tmp/.changemac
+		echo -e "$MAC ------------------------------------------------------------------------------- \n" >> /tmp/.changemac
+		/sbin/ifconfig $i up	
+	done
+
+	# Uncomment in case of error
+	systemctl stop NetworkManager
+	systemctl start NetworkManager
+	
+	## Waiting for restart the service
+	while [ `systemctl status NetworkManager | grep Active | awk '{ print $2 }'` != "active" ]
+	do
+		usleep 1000000
+	done
+
+	LEIDO=$(cat /tmp/.changemac)
+	/usr/bin/notify-send "Current changing" "$LEIDO"
+	rm /tmp/.changemac
+}
+
 
 function start {
 	# Make sure only root can run this script
+	ME=$(whoami | tr [:lower:] [:upper:])
 	if [ $(id -u) -ne 0 ]; then
-		echo -e -e "\n$GREEN[$RED!$GREEN] $RED R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
+		echo -e -e "\n$GREEN[$RED!$GREEN] $RED $ME R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
 		exit 1
 	fi
 
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
+
+	#change mac addres
+	changemac
 
 	if [ ! -e /tmp/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you" >&2
@@ -213,15 +278,18 @@ function start {
 }
 
 
-
-
-
 function stop {
 	# Make sure only root can run our script
+	ME=$(whoami | tr [:lower:] [:upper:])
+
 	if [ $(id -u) -ne 0 ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
+		echo -e "\n$GREEN[$RED!$GREEN] $RED $ME R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
 		exit 1
 	fi
+
+	#restore mac addres
+	changemac -r
+
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
 	iptables -F
@@ -259,6 +327,7 @@ function stop {
 	sleep 4
 }
 
+
 function change {
 	exitnode-selector
 	sleep 10
@@ -266,6 +335,7 @@ function change {
 	notify "Identity changed - let's dance again!"
 	sleep 1
 }
+
 
 function status {
 	service tor@default status
@@ -295,6 +365,19 @@ case "$1" in
 	ip)
 		ip
 	;;
+	mymac)
+		mac
+	;;
+	mac)
+		mac
+	;;
+	changemac)
+		if [ "$2" == "-r" ]; then
+			changemac -r
+		else
+			changemac
+		fi
+	;;
 	starti2p)
 		starti2p
 	;;
@@ -313,6 +396,8 @@ Parrot AnonSurf Module (v 2.6)
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
 		and a huge amount of Caffeine + some GNU/GPL v3 stuff
+	Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
+
 	Usage:
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
@@ -323,6 +408,8 @@ Parrot AnonSurf Module (v 2.6)
 	$RED change$BLUE -$GREEN Restart TOR to change identity
 	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
 	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
+	$RED mymac$BLUE -$GREEN Check your mac and verify your change mac address
+	$RED changemac$BLUE -$GREEN Change your MAC ADDRESS $RED(-r to restore)
 
 	----[ I2P related features ]----
 	$RED starti2p$BLUE -$GREEN Start i2p services
