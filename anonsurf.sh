@@ -11,9 +11,9 @@
 ### END INIT INFO
 #
 # Devs:
-# Lorenzo 'EclipseSpark' Faletra <eclipse@frozenbox.org>
-# Lisetta 'Sheireen' Ferrero <sheireen@frozenbox.org>
-# Francesco 'mibofra'/'Eli Aran'/'SimpleSmibs' Bonanno <mibofra@ircforce.tk> <mibofra@frozenbox.org>
+# Lorenzo 'Palinuro' Faletra <palinuro@parrotsec.org>
+# Lisetta 'Sheireen' Ferrero <sheireen@autistiche.org>
+# Francesco 'Mibofra' Bonanno <mibofra@parrotsec.org>
 #
 # Extended:
 # Daniel 'Sawyer' Garcia <dagaba13@gmail.com>
@@ -80,7 +80,7 @@ function clean_dhcp {
 
 function init {
 	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
-	sudo killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam
+	sudo killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail
 	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed\n"
 	notify "Dangerous applications killed"
 
@@ -88,23 +88,6 @@ function init {
 	bleachbit -c adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history &> /dev/null
 	echo -e -n "$BLUE[$GREEN*$BLUE] Cache cleaned\n"
 	notify "Cache cleaned"
-}
-
-
-function starti2p {
-	echo -e -n " $GREEN*$BLUE starting I2P services\n"
-	gksu service i2p start
-	firefox http://127.0.0.1:7657/home &
-	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon started\n"
-	notify "I2P daemon started"
-}
-
-
-function stopi2p {
-	echo -e -n "$BLUE[$GREEN*$BLUE] Stopping I2P services\n"
-	gksu service i2p stop
-	echo -e -n "$BLUE[$GREEN*$BLUE] I2P daemon stopped\n"
-	notify "I2P daemon stopped"
 }
 
 
@@ -202,7 +185,8 @@ function start {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
 	#change mac addres
-	changemac
+	# TODO : this function needs to be tested on some special cases, leaving mac change implemented but disabled by now
+	#changemac
 
 	if [ ! -e /tmp/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you" >&2
@@ -353,16 +337,16 @@ case "$1" in
 		zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" && init
 		stop
 	;;
-	change)
+	changeid|change-id|change)
 		change
+	;;
+	changemac|change-mac|mac)
+	    changemac
 	;;
 	status)
 		status
 	;;
-	myip)
-		ip
-	;;
-	ip)
+	myip|ip)
 		ip
 	;;
 	mymac)
@@ -378,12 +362,6 @@ case "$1" in
 			changemac
 		fi
 	;;
-	starti2p)
-		starti2p
-	;;
-	stopi2p)
-		stopi2p
-	;;
 	restart)
 		$0 stop
 		sleep 1
@@ -391,7 +369,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.6)
+Parrot AnonSurf Module (v 2.7)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
@@ -405,15 +383,12 @@ Parrot AnonSurf Module (v 2.6)
 	$RED start$BLUE -$GREEN Start system-wide TOR tunnel	
 	$RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
 	$RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
-	$RED change$BLUE -$GREEN Restart TOR to change identity
+	$RED changeid$BLUE -$GREEN Restart TOR to change identity
+	$RED changemac$BLUE -$GREEN Change mac address
 	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
 	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
 	$RED mymac$BLUE -$GREEN Check your mac and verify your change mac address
 	$RED changemac$BLUE -$GREEN Change your MAC ADDRESS $RED(-r to restore)
-
-	----[ I2P related features ]----
-	$RED starti2p$BLUE -$GREEN Start i2p services
-	$RED stopi2p$BLUE -$GREEN Stop i2p services
 $RESETCOLOR
 Dance like no one's watching. Encrypt like everyone is.
 " >&2
