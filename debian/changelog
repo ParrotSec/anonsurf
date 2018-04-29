@@ -1,3 +1,12 @@
+anonsurf (2.7+parrot1) testing; urgency=medium
+
+  * Bump version 2.7
+  * Remove i2p support (we never really supported it)
+  * Include mac changer support
+  * Update copyright notes
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Mon, 09 Apr 2018 00:56:14 +0200
+
 anonsurf (2.6+parrot2) testing; urgency=medium
 
   * Rebuild package (tor was updated).

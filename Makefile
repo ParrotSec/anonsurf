@@ -19,6 +19,5 @@ install:
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
 	ln -s /usr/bin/anonsurf $(DESTDIR)/usr/bin/anon
 	cp -rf launchers/* $(DESTDIR)/usr/share/applications/
-	cp launchers/*-i2p-*.desktop $(DESTDIR)/usr/share/parrot-menu/applications/
 	chown root:root $(DESTDIR)/etc/anonsurf -R
 	chmod 644 $(DESTDIR)/etc/anonsurf -R
