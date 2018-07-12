@@ -340,8 +340,12 @@ case "$1" in
 	changeid|change-id|change)
 		change
 	;;
-	changemac|change-mac|mac)
-	    changemac
+	changemac|change-mac)
+	    if [ "$2" == "-r" ]; then
+			changemac -r
+		else
+			changemac
+		fi
 	;;
 	status)
 		status
@@ -349,18 +353,8 @@ case "$1" in
 	myip|ip)
 		ip
 	;;
-	mymac)
+	mac|mymac)
 		mac
-	;;
-	mac)
-		mac
-	;;
-	changemac)
-		if [ "$2" == "-r" ]; then
-			changemac -r
-		else
-			changemac
-		fi
 	;;
 	restart)
 		$0 stop
