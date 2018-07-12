@@ -343,7 +343,7 @@ case "$1" in
 	changemac|change-mac)
 	    if [ "$2" == "-r" ]; then
 			changemac -r
-		else
+	    else
 			changemac
 		fi
 	;;
