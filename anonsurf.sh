@@ -70,14 +70,6 @@ function notify {
 export notify
 
 
-function clean_dhcp {
-	dhclient -r
-	rm -f /var/lib/dhcp/dhclient*
-	echo -e -n "$BLUE[$GREEN*$BLUE] DHCP address released"
-	notify "DHCP address released"
-}
-
-
 function init {
 	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
 	sudo killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail
@@ -101,79 +93,6 @@ function ip {
 }
 
 
-function mac {
-	#Select mac name
-	MACNAME=$(/sbin/ifconfig |grep ether |awk '{ print $2 ";" }' |tr -d '\n')
-	#Do array with the MACs Address	
-	arrMACNAME=(${MACNAME//;/ })
-	#Select interfaces	
-	MACINTERFACE=$(/sbin/ifconfig |grep "flags" |awk '{ if( $1 != "lo:" ) print ";" $1}' |tr -d ':\n')
-	#Do array with the interfaces
-	arrINTERFACE=(${MACINTERFACE//;/ })
-
-	echo -e "INTERFACE\tADDRESS" >> /tmp/.mac  
-	j=0
-	for i in  "${arrINTERFACE[@]}";  
-	do 
-	echo -e "$i\t\t${arrMACNAME[j++]}" >> /tmp/.mac
-	done
-
-	LEIDO=$(cat /tmp/.mac)
-	rm /tmp/.mac
-	/usr/bin/notify-send "MAC ADDRESS" "$LEIDO"
-}
-
-
-function changemac {
-	# Make sure only root can run our script
-	ME=$(whoami | tr [:lower:] [:upper:])
-
-	if [ $(id -u) -ne 0 ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED $ME R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
-		exit 1
-	fi
-
-	# Select interfaces
-	MACINTERFACE=$(/sbin/ifconfig |grep "flags" |awk '{ if( $1 != "lo:" ) print ";" $1}' |tr -d ':\n')
-	arrINTERFACE=(${MACINTERFACE//;/ })
-
-	#Change or restore MAC Address for Interfaces
-	for i in  "${arrINTERFACE[@]}";  
-	do 
-		MYMAC=$(/sbin/ifconfig |grep ether |awk '{ print $2 ";" }' |tr -d '\n')
-		/sbin/ifconfig $i down
-
-		if [ "$1" != "-r" ]; then
-			MAC=$(macchanger -r $i)
-			echo -e "Changing $i MAC ADDRESS"
-		else
-			MAC=$(macchanger --permanent $i)
-			echo -e "Restoring $i MAC ADDRESS"
-		fi
-
-		center="------------------- $i -------------------"
-		COLUMNS=$(tput cols) 
-		printf "%*s\n" $(((${#center}+$COLUMNS)/2)) "$center" >> /tmp/.changemac
-		echo -e "$MAC ------------------------------------------------------------------------------- \n" >> /tmp/.changemac
-		/sbin/ifconfig $i up	
-	done
-
-	# Uncomment in case of error
-	systemctl stop NetworkManager
-	systemctl start NetworkManager
-	
-	## Waiting for restart the service
-	while [ `systemctl status NetworkManager | grep Active | awk '{ print $2 }'` != "active" ]
-	do
-		usleep 1000000
-	done
-
-	LEIDO=$(cat /tmp/.changemac)
-	/usr/bin/notify-send "Current changing" "$LEIDO"
-	rm /tmp/.changemac
-}
-
-
 function start {
 	# Make sure only root can run this script
 	ME=$(whoami | tr [:lower:] [:upper:])
@@ -183,10 +102,6 @@ function start {
 	fi
 
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
-
-	#change mac addres
-	# TODO : this function needs to be tested on some special cases, leaving mac change implemented but disabled by now
-	#changemac
 
 	if [ ! -e /tmp/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you" >&2
@@ -199,8 +114,6 @@ function start {
 		killall dnsmasq nscd resolvconf 2>/dev/null || true
 		sleep 2
 		killall -9 dnsmasq 2>/dev/null || true
-		service resolvconf start 
-		sleep 5
 		systemctl start tor
 		sleep 20
 	fi
@@ -216,17 +129,20 @@ function start {
 
 	cp /etc/resolv.conf /etc/resolv.conf.bak
 	touch /etc/resolv.conf
-	echo -e 'nameserver 127.0.0.1\nnameserver 92.222.97.145\nnameserver 192.99.85.244' > /etc/resolv.conf
-	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS\n"
+	echo -e 'nameserver 127.0.0.1\nnameserver 139.99.96.146\nnameserver 37.59.40.15\nnameserver 185.121.177.177' > /etc/resolv.conf
+	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS/OpenNIC\n"
 
 	# disable ipv6
+	echo -e " $GREEN*$BLUE Disabling IPv6 for security reasons\n"
 	sysctl -w net.ipv6.conf.all.disable_ipv6=1
 	sysctl -w net.ipv6.conf.default.disable_ipv6=1
 
 	# set iptables nat
+	echo -e " $GREEN*$BLUE Configuring iptables rules to route all traffic through tor\n"
 	iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN
 
 	#set dns redirect
+	echo -e " $GREEN*$BLUE Redirecting DNS traffic through tor\n"
 	iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
 	iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 53
 	iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
@@ -250,6 +166,7 @@ function start {
 	iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 	#allow only tor output
+	echo -e " $GREEN*$BLUE Allowing only tor to browse in clearnet\n"
 	iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
 	iptables -A OUTPUT -j REJECT
 
@@ -271,9 +188,6 @@ function stop {
 		exit 1
 	fi
 
-	#restore mac addres
-	changemac -r
-
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
 	iptables -F
@@ -288,7 +202,7 @@ function stop {
 	echo -e -n "\n $GREEN*$BLUE Restore DNS service"
 	if [ -e /etc/resolv.conf.bak ]; then
 		rm /etc/resolv.conf
-		cp /etc/resolv.conf.bak /etc/resolv.conf
+		mv /etc/resolv.conf.bak /etc/resolv.conf
 	fi
 
 	# re-enable ipv6
@@ -369,7 +283,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.7)
+Parrot AnonSurf Module (v 2.8)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
