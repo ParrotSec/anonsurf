@@ -1,3 +1,10 @@
+anonsurf (2.8.1+parrot1) testing; urgency=medium
+
+  * Disable LAN exclusions (read comment in code).
+  * Remove residual mac changer code.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 18 Oct 2018 13:49:34 +0200
+
 anonsurf (2.8+parrot1) testing; urgency=medium
 
   * Remove changemac feature

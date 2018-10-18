@@ -45,7 +45,11 @@ export RESETCOLOR='\033[1;00m'
 
 
 # Destinations you don't want routed through Tor
-TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
+# Commented to prevent data leaks in case of applications
+# that implement their own network stack that may
+# bypass the kernel firewall rules.
+#TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
+TOR_EXCLUDE=""
 
 # The UID Tor runs as
 # change it if, starting tor, the command 'ps -e | grep tor' returns a different UID
@@ -254,13 +258,6 @@ case "$1" in
 	changeid|change-id|change)
 		change
 	;;
-	changemac|change-mac)
-	    if [ "$2" == "-r" ]; then
-	        changemac -r
-	    else
-	        changemac
-	    fi
-	;;
 	status)
 		status
 	;;
@@ -277,7 +274,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.8)
+Parrot AnonSurf Module (v 2.8.1)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
@@ -288,15 +285,13 @@ Parrot AnonSurf Module (v 2.8)
 	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
 
-	$RED start$BLUE -$GREEN Start system-wide TOR tunnel	
+	$RED start$BLUE -$GREEN Start system-wide TOR tunnel
 	$RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
 	$RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
 	$RED changeid$BLUE -$GREEN Restart TOR to change identity
-	$RED changemac$BLUE -$GREEN Change mac address
 	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
 	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
 	$RED mymac$BLUE -$GREEN Check your mac and verify your change mac address
-	$RED changemac$BLUE -$GREEN Change your MAC ADDRESS $RED(-r to restore)
 $RESETCOLOR
 Dance like no one's watching. Encrypt like everyone is.
 " >&2
