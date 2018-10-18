@@ -45,11 +45,7 @@ export RESETCOLOR='\033[1;00m'
 
 
 # Destinations you don't want routed through Tor
-# Commented to prevent data leaks in case of applications
-# that implement their own network stack that may
-# bypass the kernel firewall rules.
-#TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
-TOR_EXCLUDE=""
+TOR_EXCLUDE="192.168.0.0/16 172.16.0.0/12 10.0.0.0/8"
 
 # The UID Tor runs as
 # change it if, starting tor, the command 'ps -e | grep tor' returns a different UID
@@ -131,8 +127,7 @@ function start {
 	iptables -F
 	iptables -t nat -F
 
-	cp /etc/resolv.conf /etc/resolv.conf.bak
-	touch /etc/resolv.conf
+	mv /etc/resolv.conf /etc/resolv.conf.bak
 	echo -e 'nameserver 127.0.0.1\nnameserver 139.99.96.146\nnameserver 37.59.40.15\nnameserver 185.121.177.177' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS/OpenNIC\n"
 

@@ -1,3 +1,10 @@
+anonsurf (2.8.1+parrot2) testing; urgency=medium
+
+  * Re-enable LAN traffic (it prevented proper tor routing).
+  * Fix resolv.conf replace and restore steps.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Fri, 19 Oct 2018 01:47:31 +0200
+
 anonsurf (2.8.1+parrot1) testing; urgency=medium
 
   * Disable LAN exclusions (read comment in code).
