@@ -1,10 +1,10 @@
 Source: anonsurf
 Section: parrot
 Priority: optional
-Maintainer: Parrot Team <parrot-devel@lists.parrotsec.org>
+Maintainer: Parrot Team <team@lparrotsec.org>
 Uploaders: Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>,
            Lisetta "Sheireen" Ferrero <sheireen@autistiche.org>
-Standards-Version: 4.0.0
+Standards-Version: 4.2.0
 Build-Depends: debhelper (>= 10)
 Build-Depends-Indep: pkg-config
 Homepage: https://www.parrotsec.org/
@@ -12,8 +12,8 @@ Homepage: https://www.parrotsec.org/
 Package: anonsurf
 Architecture: all
 Priority: optional
-Depends: bash, iptables, tor
-Recommends: libnotify-bin, i2p, onioncircuits, connect-proxy, onionshare, torsocks, tor-geoipdb, parrot-core, parrot-menu, parrot-crypto
+Depends: bash, iptables, nftables, tor
+Recommends: libnotify-bin, i2p, onioncircuits, connect-proxy, onionshare, torsocks, tor-geoipdb, parrot-menu
 Suggests: gnunet-gtk, gnunet, vidalia
 Description: AnonSurf
  Anonymizaton toolkit for Parrot Security OS

@@ -124,11 +124,11 @@ function start {
 		echo -e "\n $GREEN*$BLUE Saved iptables rules\n"
 	fi
 
-	iptables -F
-	iptables -t nat -F
+	/usr/sbin/iptables -F
+	/usr/sbin/iptables -t nat -F
 
 	mv /etc/resolv.conf /etc/resolv.conf.bak
-	echo -e 'nameserver 127.0.0.1\nnameserver 139.99.96.146\nnameserver 37.59.40.15\nnameserver 185.121.177.177' > /etc/resolv.conf
+	echo -e 'nameserver 127.0.0.1' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS/OpenNIC\n"
 
 	# disable ipv6
@@ -138,36 +138,36 @@ function start {
 
 	# set iptables nat
 	echo -e " $GREEN*$BLUE Configuring iptables rules to route all traffic through tor\n"
-	iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN
+	/usr/sbin/iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN
 
 	#set dns redirect
 	echo -e " $GREEN*$BLUE Redirecting DNS traffic through tor\n"
-	iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
-	iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 53
-	iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
+	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 53
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
 
 	#resolve .onion domains mapping 10.192.0.0/10 address space
-	iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
-	iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
 
 	#exclude local addresses
 	for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
-		iptables -t nat -A OUTPUT -d $NET -j RETURN
-		iptables -A OUTPUT -d "$NET" -j ACCEPT
+		/usr/sbin/iptables -t nat -A OUTPUT -d $NET -j RETURN
+		/usr/sbin/iptables -A OUTPUT -d "$NET" -j ACCEPT
 	done
 
 	#redirect all other output through TOR
-	iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
-	iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $TOR_PORT
-	iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $TOR_PORT
 
 	#accept already established connections
-	iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+	/usr/sbin/iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 	#allow only tor output
 	echo -e " $GREEN*$BLUE Allowing only tor to browse in clearnet\n"
-	iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
-	iptables -A OUTPUT -j REJECT
+	/usr/sbin/iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
+	/usr/sbin/iptables -A OUTPUT -j REJECT
 
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
@@ -189,8 +189,8 @@ function stop {
 
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
-	iptables -F
-	iptables -t nat -F
+	/usr/sbin/iptables -F
+	/usr/sbin/iptables -t nat -F
 	echo -e "\n $GREEN*$BLUE Deleted all iptables rules"
 
 	if [ -f /etc/network/iptables.rules ]; then
@@ -199,10 +199,8 @@ function stop {
 		echo -e "\n $GREEN*$BLUE Iptables rules restored"
 	fi
 	echo -e -n "\n $GREEN*$BLUE Restore DNS service"
-	if [ -e /etc/resolv.conf.bak ]; then
-		rm /etc/resolv.conf
-		mv /etc/resolv.conf.bak /etc/resolv.conf
-	fi
+	rm /etc/resolv.conf || true
+	ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf || true
 
 	# re-enable ipv6
 	sysctl -w net.ipv6.conf.all.disable_ipv6=0
@@ -269,7 +267,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.8.1)
+Parrot AnonSurf Module (v 2.9)
 	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>

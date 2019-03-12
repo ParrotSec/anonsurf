@@ -1,3 +1,14 @@
+anonsurf (2.9+parrot1) testing; urgency=medium
+
+  [ Lisetta "Sheireen" Ferrero ]
+  * Start migration to nftables.
+
+  [ Lorenzo "Palinuro" Faletra ]
+  * Fix resolv.conf restore bug by forcing symlink creation.
+  * Enforce tor resolver.
+
+ -- Lisetta "Sheireen" Ferrero <sheireen@autistiche.org>  Wed, 13 Mar 2019 00:39:54 +0100
+
 anonsurf (2.8.1+parrot2) testing; urgency=medium
 
   * Re-enable LAN traffic (it prevented proper tor routing).
