@@ -106,11 +106,11 @@ function start {
 	if [ ! -e /tmp/tor.pid ]; then
 		echo -e " $RED*$BLUE Tor is not running! $GREEN starting it $BLUE for you" >&2
 		echo -e -n "\n $GREEN*$BLUE Stopping service nscd"
-		service nscd stop 2>/dev/null || echo " (already stopped)"
+		/usr/sbin/service nscd stop 2>/dev/null || echo " (already stopped)"
 		echo -e -n "\n $GREEN*$BLUE Stopping service resolvconf"
-		service resolvconf stop 2>/dev/null || echo " (already stopped)"
+		/usr/sbin/service resolvconf stop 2>/dev/null || echo " (already stopped)"
 		echo -e -n "\n $GREEN*$BLUE Stopping service dnsmasq"
-		service dnsmasq stop 2>/dev/null || echo " (already stopped)"
+		/usr/sbin/service dnsmasq stop 2>/dev/null || echo " (already stopped)"
 		killall dnsmasq nscd resolvconf 2>/dev/null || true
 		sleep 2
 		killall -9 dnsmasq 2>/dev/null || true
@@ -120,7 +120,7 @@ function start {
 
 
 	if ! [ -f /etc/network/iptables.rules ]; then
-		iptables-save > /etc/network/iptables.rules
+		/usr/sbin/iptables-save > /etc/network/iptables.rules
 		echo -e "\n $GREEN*$BLUE Saved iptables rules\n"
 	fi
 
@@ -133,8 +133,8 @@ function start {
 
 	# disable ipv6
 	echo -e " $GREEN*$BLUE Disabling IPv6 for security reasons\n"
-	sysctl -w net.ipv6.conf.all.disable_ipv6=1
-	sysctl -w net.ipv6.conf.default.disable_ipv6=1
+	/sbin/sysctl -w net.ipv6.conf.all.disable_ipv6=1
+	/sbin/sysctl -w net.ipv6.conf.default.disable_ipv6=1
 
 	# set iptables nat
 	echo -e " $GREEN*$BLUE Configuring iptables rules to route all traffic through tor\n"
@@ -194,7 +194,7 @@ function stop {
 	echo -e "\n $GREEN*$BLUE Deleted all iptables rules"
 
 	if [ -f /etc/network/iptables.rules ]; then
-		iptables-restore < /etc/network/iptables.rules
+		/usr/sbin/iptables-restore < /etc/network/iptables.rules
 		rm /etc/network/iptables.rules
 		echo -e "\n $GREEN*$BLUE Iptables rules restored"
 	fi
@@ -203,17 +203,17 @@ function stop {
 	ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf || true
 
 	# re-enable ipv6
-	sysctl -w net.ipv6.conf.all.disable_ipv6=0
-	sysctl -w net.ipv6.conf.default.disable_ipv6=0
+	/sbin/sysctl -w net.ipv6.conf.all.disable_ipv6=0
+	/sbin/sysctl -w net.ipv6.conf.default.disable_ipv6=0
 
-	service tor stop
+	/usr/sbin/service tor stop
 	sleep 2
 	killall tor
 	sleep 6
 	echo -e -n "\ $GREEN*$BLUE Restarting services\n"
-	service resolvconf start || service resolvconf restart || true
-	service dnsmasq start || true
-	service nscd start || true
+	/usr/sbin/service resolvconf start || service resolvconf restart || true
+	/usr/sbin/service dnsmasq start || true
+	/usr/sbin/service nscd start || true
 	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed or started already."
 	sleep 1
 
@@ -233,7 +233,7 @@ function change {
 
 
 function status {
-	service tor@default status
+	/usr/sbin/service tor@default status
 	cat /tmp/anonsurf-tor.log || cat /var/log/tor/log
 }
 

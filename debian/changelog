@@ -1,3 +1,9 @@
+anonsurf (2.9+parrot2) testing; urgency=medium
+
+  * Make sbin binary paths absolute.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 14 Mar 2019 10:03:38 +0100
+
 anonsurf (2.9+parrot1) testing; urgency=medium
 
   [ Lisetta "Sheireen" Ferrero ]
