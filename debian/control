@@ -1,7 +1,7 @@
 Source: anonsurf
 Section: parrot
 Priority: optional
-Maintainer: Parrot Team <team@lparrotsec.org>
+Maintainer: Parrot Team <team@parrotsec.org>
 Uploaders: Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>,
            Lisetta "Sheireen" Ferrero <sheireen@autistiche.org>
 Standards-Version: 4.2.0
