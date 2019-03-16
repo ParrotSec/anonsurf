@@ -241,11 +241,13 @@ function status {
 
 case "$1" in
 	start)
-		zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" && init
+		zenity --question --text="Do you want anonsurf to kill dangerous applications and
+		clean some application caches?" --ellipsize && init
 		start
 	;;
 	stop)
-		zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" && init
+		zenity --question --text="Do you want anonsurf to kill dangerous applications and
+		clean some application caches?" --ellipsize && init
 		stop
 	;;
 	changeid|change-id|change)
