@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=anonsurf-gtk
+Name=AnonSurf GUI
+Comment=Manage AnonSurf using GUI interface
+Icon=anonsurf
+Categories=anonsurf;

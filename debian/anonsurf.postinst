@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+
+if [ -e /etc/tor/torrc ]; then
+ mv /etc/tor/torrc /etc/tor/torrc.orig
+fi
+if [ -e /etc/anonsurf/torrc ]; then
+ cp /etc/anonsurf/torrc /etc/tor/torrc
+fi

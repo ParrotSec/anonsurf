@@ -1,0 +1,271 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          anonsurf
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Default-Start:
+# Default-Stop:
+# Short-Description: Transparent Proxy through TOR.
+### END INIT INFO
+#
+# Devs:
+# Lorenzo 'Palinuro' Faletra <palinuro@parrotsec.org>
+# Lisetta 'Sheireen' Ferrero <sheireen@autistiche.org>
+# Francesco 'Mibofra' Bonanno <mibofra@parrotsec.org>
+#
+# Maintainer:
+# Nong Hoang 'DmKnght' Tu <dmknght@parrotsec.org>
+#
+# Extended:
+# Daniel 'Sawyer' Garcia <dagaba13@gmail.com>
+#
+# anonsurf is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+# You can get a copy of the license at www.gnu.org/licenses
+#
+# anonsurf is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Parrot Security OS. If not, see <http://www.gnu.org/licenses/>.
+
+
+export BLUE='\033[1;94m'
+export GREEN='\033[1;92m'
+export RED='\033[1;91m'
+export RESETCOLOR='\033[1;00m'
+
+
+function notify {
+	if [ -e /usr/bin/notify-send ]; then
+		/usr/bin/notify-send "AnonSurf" "$1"
+	fi
+}
+export notify
+
+
+function init {
+	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
+	sudo killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail
+	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed\n"
+	notify "Dangerous applications killed"
+
+	echo -e -n "$BLUE[$GREEN*$BLUE] cleaning some dangerous cache elements\n"
+	bleachbit -c adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history &> /dev/null
+	echo -e -n "$BLUE[$GREEN*$BLUE] Cache cleaned\n"
+	notify "Cache cleaned"
+}
+
+
+function ip {
+
+	MYIP=`wget -qO- https://start.parrotsec.org/ip/`
+	echo -e "\nMy ip is:\n"
+	echo $MYIP
+	echo -e "\n"
+	notify "My IP is:\n\n$MYIP"
+}
+
+
+function checkuid {
+	# Make sure only root can run this script
+	ME=$(whoami | tr [:lower:] [:upper:])
+	if [ $(id -u) -ne 0 ]; then
+		echo -e "\n$GREEN[$RED!$GREEN] $RED $ME R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
+		exit 1
+	fi
+}
+
+
+function start {
+	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
+
+	/usr/sbin/service anondaemon start
+
+	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
+	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
+	notify "Global Anonymous Proxy Activated"
+	sleep 1
+	notify "Dance like no one's watching. Encrypt like everyone is :)"
+	sleep 3
+}
+
+
+function stop {
+	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
+
+	/usr/sbin/service anondaemon stop
+
+	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
+	notify "Global Anonymous Proxy Closed - Stop dancing :("
+	sleep 3
+}
+
+
+function enable-boot {
+	if [ "$(systemctl list-unit-files | grep anondaemon | awk '{print $2}')" = "disabled" ]; then
+		systemctl enable anondaemon;
+		notify "Enabling AnonSurf at boot"
+	else
+		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf already enabled!$RESETCOLOR\n"
+	fi
+}
+
+
+function disable-boot {
+	if [ "$(systemctl list-unit-files | grep anondaemon | awk '{print $2}')" = "enabled" ]; then
+		systemctl enable anondaemon;
+		notify "Disabling AnonSurf at boot"
+	else
+		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf wasn't enabled. Nothing to disable!$RESETCOLOR\n"
+	fi
+}
+
+
+function change {
+	echo -e "authenticate \"kuhNygbtfu76fFUbgv\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+	/usr/sbin/service tor restart
+	sleep 1
+	echo -e " $GREEN*$BLUE Tor daemon reloaded and forced to change nodes\n"
+	notify "Identity changed - let's dance again!"
+	sleep 1
+}
+
+
+function status {
+	nyx
+}
+
+
+function dnsstart {
+	echo "Configuring OpenNIC DNS service"
+	notify "Configuring OpenNIC DNS service"
+	rm /etc/resolv.conf
+	cat /etc/anonsurf/resolv.conf.opennic > /etc/resolvconf/resolv.conf.d/tail
+	cat /etc/anonsurf/resolv.conf.opennic > /etc/resolv.conf
+	/usr/sbin/service resolvconf restart
+	touch /etc/anonsurf/opennic.lock
+	echo "done"
+	notify "done"
+}
+
+
+function dnsstop {
+	echo "Deconfiguring OpenNIC DNS service"
+	notify "Deconfiguring OpenNIC DNS service"
+	rm /etc/resolv.conf
+	ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
+	echo > /etc/resolvconf/resolv.conf.d/tail
+	/usr/sbin/service resolvconf restart
+	rm /etc/anonsurf/opennic.lock
+	echo "done"
+	notify "done"
+}
+
+
+function dns {
+    if [ -f /etc/anonsurf/opennic.lock ]; then
+        dnsstop
+    elif [ ! -f /etc/anonsurf/opennic.lock ]; then
+        dnsstart
+    fi
+}
+
+
+case "$1" in
+	start)
+	# Only start if anondaemon is not running
+	# TODO try to run if the service status is failed?
+		checkuid
+		if [ "$(systemctl is-active anondaemon)" = "inactive" ]; then
+			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
+			start
+		else
+			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
+		fi
+	;;
+	stop)
+	# Only stop if the anondaemon is running
+		checkuid
+		if [ "$(systemctl is-active anondaemon)" = "active" ]; then
+			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
+			stop
+		else
+			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't stop service!$RESETCOLOR\n" >&2
+		fi
+	;;
+	changeid|change-id|change)
+		checkuid
+		change
+	;;
+	status)
+		if [ "$(service anondaemon status | grep Active | awk '{print $2}')" = "active" ]; then
+			status
+		else
+			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running!$RESETCOLOR\n"
+		fi
+	;;
+	myip|ip)
+		ip
+	;;
+	dns)
+		dns
+	;;
+	restart)
+		# Restart if the daemon is running onnly
+		checkuid
+		if [ "$(service anondaemon status | grep Active | awk '{print $2}')" = "active" ]; then
+			$0 stop
+			sleep 1
+			$0 start
+		else
+			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't restart service!$RESETCOLOR\n" >&2
+		fi
+	;;
+	enable-boot)
+		checkuid
+		enable-boot
+	;;
+	disable-boot)
+		checkuid
+		disable-boot
+	;;
+   *)
+echo -e "
+Parrot AnonSurf Module (v 2.11)
+	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
+		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
+		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
+	Maintained by Nong Hoang \"DmKnght\" Tu <dmknght@parrotsec.org>
+		and a huge amount of Caffeine + some GNU/GPL v3 stuff
+	Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
+
+	Usage:
+	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
+	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
+
+	$RED start$BLUE -$GREEN Start system-wide TOR tunnel
+	$RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
+	$RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
+	$RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
+	$RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
+	$RED changeid$BLUE -$GREEN Restart TOR to change identity
+	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
+	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
+	$RED dns$BLUE -$GREEN Replace your DNS with the OpenNIC DNS servers.
+$RESETCOLOR
+Dance like no one's watching. Encrypt like everyone is.
+" >&2
+
+exit 1
+;;
+esac
+
+echo -e $RESETCOLOR
+exit 0

@@ -1,0 +1,10 @@
+# ParrotDNS/OpenNIC AnyCast IPs
+nameserver 185.121.177.177
+nameserver 169.239.202.202
+nameserver 198.251.90.108
+nameserver 198.251.90.109
+nameserver 198.251.90.110
+
+# Round Robin
+options rotate
+

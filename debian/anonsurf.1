@@ -1,0 +1,56 @@
+.TH AnonSurf
+.SH Name
+anonsurf \- Anonymizaton toolkit for Parrot Security OS
+.SH Usage
+AnonSurf [start | stop | restart | changeid | status | myip | dns]
+.SH DESCRIPTION
+.PP
+Setup Tor proxy to route all traffic through Tor - This is command line management system for AnonSurf (CLI)
+
+* Functions:
+  * Start / stop / restart AnonSurf
+  * Check current Tor status using Nyx
+  * Change your ID by restarting to switch Tor nodes
+  * Check your current public IP
+  * Change DNS settings to OpenNIC DNS service
+
+* start:
+  * Ask user to
+    * Kill dangerous applications (chrome skype thunderbird firefox...) 
+    * Clear DNS cache (clears stored websites resolved by DNS)
+  * Kill nscd, resolvconf, dnsmasq service
+  * Create system daemon starting Tor proxy gate
+    * Disable IPv6 (security/IPv6 may reveal permanent MAC address)
+    * Routes all internet packets/traffic through Tor
+    * All DNS through Tor
+
+* changeid:
+  * Changes Tor node giving us new IP address
+
+* status:
+  * Use Nyx application to display information about Tor service, bandwith, nodes...
+
+* myip:
+  * Check current IP address with Parrot OS server
+
+* dns:
+  * Check "lock" file in /etc/anonsurf/opennic.lock
+  * Change DNS server settings in /etc/resolv.conf to use OpenNIC DNS addresses
+  or revert back to original DNS servers
+
+* To enable anonsurf on systemd/boot, use: systemctl enable anondaemon
+
+.PP
+
+
+.SH AUTHOR
+Developed by:
+ * Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>
+ * Lisetta "Sheireen" Ferrero <sheireen@parrotsec.org>
+ * Francesco "Mibofra" Bonanno <mibofra@parrotsec.org>
+
+Maintained by:
+ * Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>
+
+.PP
+This manual and package was written by Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org> and RightToPrivacy <righttoprivacy@tutanota.com>

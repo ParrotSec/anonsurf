@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Exec=menuexecg anonsurf dns
+Name=Set/Unset OpenNIC DNS service
+Comment=Use the uncensored and prvacy-respectful OpenNIC DNS service.
+Icon=network-server
+Categories=anonsurf;
+

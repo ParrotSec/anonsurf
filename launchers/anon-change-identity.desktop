@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Exec=menuexecg "anonsurf change"
+Name=change exit node
+Comment=Changes Tor node giving us new IP address
+Icon=reload
+Categories=anonsurf;

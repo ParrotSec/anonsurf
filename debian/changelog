@@ -1,0 +1,288 @@
+anonsurf (2.11.2+parrot1) testing; urgency=medium
+
+  * Edit rule to auto get gintro
+
+ -- dmknght <dmknght@parrotsec.org>  Fri, 24 Jan 2020 21:13:04 +0700
+
+anonsurf (2.11.2+parrot0) testing; urgency=medium
+
+  * Status check now use native vte instead of system term
+  * Bugs fix for nyx delay (tor service problem)
+  * Add anonymous.png icon, fix icon missing when switch theme
+
+ -- dmknght <dmknght@parrotsec.org>  Fri, 24 Jan 2020 20:28:18 +0700
+
+anonsurf (2.11+parrot1) testing; urgency=medium
+
+  * Add enable / disable at boot options
+
+ -- dmknght <dmknght@parrotsec.org>  Wed, 15 Jan 2020 17:01:33 +0700
+
+anonsurf (2.11+parrot0) testing; urgency=medium
+
+  * Change program model to system unit
+  * Create GUI interface
+  * Update copyright standard
+  * Use auto change node instead of country code
+
+ -- dmknght <dmknght@parrotsec.org>  Wed, 15 Jan 2020 09:14:02 +0700
+
+anonsurf (2.10+parrot3) testing; urgency=medium
+
+  * Disable dhcp dns addresses when in opennic mode.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 19 May 2019 15:17:55 +0200
+
+anonsurf (2.10+parrot2) testing; urgency=medium
+
+  * Fix syntax errors.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 14 Apr 2019 06:01:32 +0200
+
+anonsurf (2.10+parrot1) testing; urgency=medium
+
+  * Add OpenNIC DNS feature.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 14 Apr 2019 05:51:18 +0200
+
+anonsurf (2.9.1+parrot1) testing; urgency=medium
+
+  * Remove macchanger residual code.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sat, 06 Apr 2019 13:39:41 +0200
+
+anonsurf (2.9+parrot3) testing; urgency=medium
+
+  * Make dialog box wider than it is tall.
+    + So that you can break the text using only two lines.
+    + https://github.com/ParrotSec/anonsurf/pull/4
+  * Manually set wicth for dialog box
+    + This way text will remain aligned left and,
+    + differently than when option `--ellipsize` is used, not centered.
+    + https://github.com/ParrotSec/anonsurf/pull/4
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sat, 30 Mar 2019 15:32:55 +0100
+
+anonsurf (2.9+parrot2) testing; urgency=medium
+
+  * Make sbin binary paths absolute.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 14 Mar 2019 10:03:38 +0100
+
+anonsurf (2.9+parrot1) testing; urgency=medium
+
+  [ Lisetta "Sheireen" Ferrero ]
+  * Start migration to nftables.
+
+  [ Lorenzo "Palinuro" Faletra ]
+  * Fix resolv.conf restore bug by forcing symlink creation.
+  * Enforce tor resolver.
+
+ -- Lisetta "Sheireen" Ferrero <sheireen@autistiche.org>  Wed, 13 Mar 2019 00:39:54 +0100
+
+anonsurf (2.8.1+parrot2) testing; urgency=medium
+
+  * Re-enable LAN traffic (it prevented proper tor routing).
+  * Fix resolv.conf replace and restore steps.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Fri, 19 Oct 2018 01:47:31 +0200
+
+anonsurf (2.8.1+parrot1) testing; urgency=medium
+
+  * Disable LAN exclusions (read comment in code).
+  * Remove residual mac changer code.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 18 Oct 2018 13:49:34 +0200
+
+anonsurf (2.8+parrot1) testing; urgency=medium
+
+  * Remove changemac feature
+    + anonsurf is not the proper place to take care of mac randomization.
+  * Update output messages
+  * Fix resolv.conf restore.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 09 Aug 2018 18:40:24 +0200
+
+anonsurf (2.7+parrot3) testing; urgency=medium
+
+  * Remove mac checker launcher.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sat, 02 Jun 2018 01:04:25 +0200
+
+anonsurf (2.7+parrot1) testing; urgency=medium
+
+  * Bump version 2.7
+  * Remove i2p support (we never really supported it)
+  * Include mac changer support
+  * Update copyright notes
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Mon, 09 Apr 2018 00:56:14 +0200
+
+anonsurf (2.6+parrot2) testing; urgency=medium
+
+  * Rebuild package (tor was updated).
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 22 Mar 2018 18:00:06 +0100
+
+anonsurf (2.6+parrot1) testing; urgency=medium
+
+  * Rebuild package (tor was updated).
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Mon, 22 Jan 2018 23:33:28 +0100
+
+anonsurf (2.6+parrot0) testing; urgency=medium
+
+  * Update torrc to not break apparmor rules.
+  * Minor fixes in output messages.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Tue, 05 Dec 2017 07:49:03 +0100
+
+anonsurf (2.5+parrot5) testing; urgency=medium
+
+  * Update ParrotDNS ip addresses.
+  * Update to debhelper 10.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Wed, 05 Jul 2017 14:11:22 +0200
+
+anonsurf (2.5+parrot4) testing; urgency=medium
+
+  * Add more useful dependencies.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Tue, 04 Jul 2017 15:09:13 +0200
+
+anonsurf (2.5+parrot3) testing; urgency=medium
+
+  * Fix i2p launchers
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Mon, 01 May 2017 04:02:59 +0200
+
+anonsurf (2.5+parrot2) testing; urgency=medium
+
+  * Fix makefile
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 30 Apr 2017 03:10:45 +0200
+
+anonsurf (2.5+parrot1) testing; urgency=medium
+
+  * Add libnotify-bin to the recommended packages.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 30 Apr 2017 03:07:31 +0200
+
+anonsurf (2.5+parrot0) testing; urgency=medium
+
+  * Improve IP checker.
+  * Add exit node country selector.
+  * Fix i2p launchers.
+  * Improve popup notifications.
+  * Remove deprecated instructions from torrc.
+  * Add a dialog question for the startup cleaners.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 30 Apr 2017 03:01:42 +0200
+
+anonsurf (2.4+parrot1) testing; urgency=medium
+
+  * Remove dependencies checker
+  * Clean whitespaces in empty lines
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Tue, 18 Apr 2017 10:59:32 +0200
+
+anonsurf (2.4+parrot0) testing; urgency=medium
+
+  * Disable ipv6 while anonsurf is running
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 16 Apr 2017 23:59:29 +0200
+
+anonsurf (2.3+parrot4) testing; urgency=medium
+
+  * Include gnunet as recommended package
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 29 Dec 2016 18:31:47 +0100
+
+anonsurf (2.3+parrot3) testing; urgency=medium
+
+  * improve i2p launchers
+  * replace iceweasel with firefox
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Wed, 28 Dec 2016 14:17:50 +0100
+
+anonsurf (2.3+parrot1) testing; urgency=medium
+
+  * move i2p as recommended package
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 25 Dec 2016 17:15:22 +0100
+
+anonsurf (2.3+parrot0) testing; urgency=medium
+
+  * Update to Anonsurf 2.3
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sun, 27 Nov 2016 17:54:34 +0100
+
+anonsurf (2.2+parrot1) testing; urgency=medium
+
+  * Merge modifications from Francesco "Mibofra" Bonanno
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Fri, 07 Oct 2016 20:06:32 +0200
+
+anonsurf (2.2+parrot0) testing; urgency=medium
+
+  [ Lisetta "Sheireen" Ferrero ]
+  * Fix iptables commands priorities
+  * Update and beautify usage banner
+  * Add developers (and caffeine) to the usage banner
+  * Add dance/encrypt message
+  * Improve how tor start/stop is handled
+  * Remove old useless stuff
+
+  [ Lorenzo "Palinuro" Faletra ]
+  * Recheck torrc
+  * Review and test Sheireen's stuff
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Fri, 07 Oct 2016 19:03:36 +0200
+
+anonsurf (2.1+parrot0) testing; urgency=medium
+
+  * Restore original TOR ports (9040 and 9050)
+  * Remove firefox profile
+  * Review a bunch of stuff
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Fri, 22 Jul 2016 18:32:42 +0200
+
+anonsurf (2.0+parrot4) testing; urgency=medium
+
+  * add onion.pac symlink
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Tue, 21 Jun 2016 18:30:10 +0200
+
+anonsurf (2.0+parrot3) testing; urgency=medium
+
+  * Fix configuration problems
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Tue, 24 May 2016 11:31:56 +0200
+
+anonsurf (2.0+parrot2) testing; urgency=medium
+
+  * Fix dns port for tor daemon
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Sat, 14 May 2016 03:14:57 +0200
+
+anonsurf (2.0+parrot0) testing; urgency=medium
+
+  * Update tor behavior
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Sun, 08 May 2016 04:12:53 +0200
+
+anonsurf (2.0) testing; urgency=medium
+
+  [Lisetta sheireen Ferrero]
+  * Reviewed torrc rules
+  * Make dedicated torrc file
+
+  [Lorenzo palinuro Faletra]
+  * Updated core engine to 2.0
+  * Made tor daemon standalone
+  * Cut useless stuff
+
+  [Chris Spillane]
+  * Update onion.pac for *.i2p support
+
+ -- Lorenzo "Palinuro" Faletra <eclipse@parrotsec.org>  Sat, 07 May 2016 12:42:15 +0200
