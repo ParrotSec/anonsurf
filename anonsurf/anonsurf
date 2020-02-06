@@ -86,7 +86,7 @@ function checkuid {
 function start {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
-	/usr/sbin/service anondaemon start
+	/usr/sbin/service anonservice start
 
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
@@ -100,7 +100,7 @@ function start {
 function stop {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
-	/usr/sbin/service anondaemon stop
+	/usr/sbin/service anonservice stop
 
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
 	notify "Global Anonymous Proxy Closed - Stop dancing :("
@@ -109,8 +109,8 @@ function stop {
 
 
 function enable-boot {
-	if [ "$(systemctl list-unit-files | grep anondaemon | awk '{print $2}')" = "disabled" ]; then
-		systemctl enable anondaemon;
+	if [ "$(systemctl list-unit-files | grep anonservice | awk '{print $2}')" = "disabled" ]; then
+		systemctl enable anonservice;
 		notify "Enabling AnonSurf at boot"
 	else
 		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf already enabled!$RESETCOLOR\n"
@@ -119,8 +119,8 @@ function enable-boot {
 
 
 function disable-boot {
-	if [ "$(systemctl list-unit-files | grep anondaemon | awk '{print $2}')" = "enabled" ]; then
-		systemctl enable anondaemon;
+	if [ "$(systemctl list-unit-files | grep anonservice | awk '{print $2}')" = "enabled" ]; then
+		systemctl enable anonservice;
 		notify "Disabling AnonSurf at boot"
 	else
 		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf wasn't enabled. Nothing to disable!$RESETCOLOR\n"
@@ -180,10 +180,10 @@ function dns {
 
 case "$1" in
 	start)
-	# Only start if anondaemon is not running
+	# Only start if anonservice is not running
 	# TODO try to run if the service status is failed?
 		checkuid
-		if [ "$(systemctl is-active anondaemon)" = "inactive" ]; then
+		if [ "$(systemctl is-active anonservice)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
 			start
 		else
@@ -191,9 +191,9 @@ case "$1" in
 		fi
 	;;
 	stop)
-	# Only stop if the anondaemon is running
+	# Only stop if the anonservice is running
 		checkuid
-		if [ "$(systemctl is-active anondaemon)" = "active" ]; then
+		if [ "$(systemctl is-active anonservice)" = "active" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
 			stop
 		else
@@ -205,7 +205,7 @@ case "$1" in
 		change
 	;;
 	status)
-		if [ "$(service anondaemon status | grep Active | awk '{print $2}')" = "active" ]; then
+		if [ "$(service anonservice status | grep Active | awk '{print $2}')" = "active" ]; then
 			status
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running!$RESETCOLOR\n"
@@ -220,7 +220,7 @@ case "$1" in
 	restart)
 		# Restart if the daemon is running onnly
 		checkuid
-		if [ "$(service anondaemon status | grep Active | awk '{print $2}')" = "active" ]; then
+		if [ "$(service anonservice status | grep Active | awk '{print $2}')" = "active" ]; then
 			$0 stop
 			sleep 1
 			$0 start

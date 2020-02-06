@@ -1,0 +1,13 @@
+[Unit]
+Description="Anonsurf Daemon Service"
+Before=poweroff.target reboot.target
+After=network.target
+
+[Service]
+ExecStart=/etc/anonsurf/anondaemon start
+ExecReload=/etc/anonsurf/anondaemon restart
+ExecStop=/etc/anonsurf/anondaemon stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

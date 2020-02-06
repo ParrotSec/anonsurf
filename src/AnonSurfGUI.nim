@@ -27,15 +27,15 @@ proc anonsurfControl(b: Button) =
 
 proc actionCancel(b: Button, d: Dialog) =
   d.destroy()
-    
+
 
 proc bootAction(b: Button, l: Label) =
   if b.label == "Enable":
-    discard execShellCmd("gksu systemctl enable anondaemon")
+    discard execShellCmd("gksu systemctl enable anonservice")
   else:
-    discard execShellCmd("gksu systemctl disable anondaemon")
-    
-  let currentStatus = execProcess("systemctl list-unit-files | grep anondaemon | awk '{print $2}'")
+    discard execShellCmd("gksu systemctl disable anonservice")
+  
+  let currentStatus = execProcess("systemctl list-unit-files | grep anonservice | awk '{print $2}'")
   if currentStatus == "disabled\n":
     l.label = "AnonSurf on boot is inactived"
     b.setLabel("Enable")
@@ -116,7 +116,7 @@ proc setStartup(b: Button) =
     btnArea = newBox(Orientation.horizontal, 3)
     btnClose = newButton("Close")
     btnAction = newButton("Enable AnonSurf at boot")
-    currentStatus = execProcess("systemctl list-unit-files | grep anondaemon | awk '{print $2}'")
+    currentStatus = execProcess("systemctl list-unit-files | grep anonservice | awk '{print $2}'")
 
   labelStatus.setXalign(0.0)
   bootDialog.setTitle("System Startup")
@@ -142,7 +142,7 @@ proc setStartup(b: Button) =
 proc refreshStatus(args: Obj): bool =
   # TODO work with update ip label
   let
-    output = execProcess("systemctl is-active anondaemon").replace("\n", "")
+    output = execProcess("systemctl is-active anonservice").replace("\n", "")
     dnsLock = "/etc/anonsurf/opennic.lock"
   
   if serviceThread.running():
