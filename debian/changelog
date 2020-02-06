@@ -1,5 +1,16 @@
 anonsurf (2.11.3+parrot0) testing; urgency=medium
 
+  [ dmknght ]
+  * Remove  icon
+
+  [ Vangelis Mouhtsis ]
+  * debian/control: Bump Standards-Version: to 4.5.0. No changes needed.
+  * debian/control: Use debhelper-compat notation (and switch to DH compat level 12), drop debian/compat file.
+
+ -- Vangelis Mouhtsis <vangelis@gnugr.org>  Thu, 06 Feb 2020 13:24:16 +0200
+
+anonsurf (2.11.3+parrot0) testing; urgency=medium
+
   * Remove icons. Anonsurf now use global icon from parrot-menu
   * Add some pre-support to sysvinit
   * Change anondaemon to anonservice
