@@ -1,3 +1,9 @@
+anonsurf (2.11.3+parrot1) testing; urgency=medium
+
+  * Change "anonsurfservice" to "anonsurfd"
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Sun, 23 Feb 2020 04:31:18 +0700
+
 anonsurf (2.11.3+parrot0) testing; urgency=medium
 
   [ dmknght ]
