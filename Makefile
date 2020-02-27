@@ -18,7 +18,7 @@ install:
 	cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp anonsurf/anondaemon $(DESTDIR)/etc/anonsurf/
 	cp anonsurfd/anonsurfd.service $(DESTDIR)/lib/systemd/system/
-	cp anonsurfd/anonsurfd $(DESTDIR)/etc/init.d/
+	# cp anonsurfd/anonsurfd $(DESTDIR)/etc/init.d/
 	cp anonsurf/anonsurf $(DESTDIR)/usr/bin/
 	cp resolv.conf.opennic $(DESTDIR)/etc/anonsurf/resolv.conf.opennic
 
