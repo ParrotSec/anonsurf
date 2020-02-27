@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ### BEGIN INIT INFO
+# PUT THIS SCRIPT INSIDE /etc/anonsurf/ AS DAEMON SCRIPT
 # Provides:          anonsurf
 # Required-Start:
 # Required-Stop:
