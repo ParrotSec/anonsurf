@@ -15,10 +15,18 @@ var serviceThread: system.Thread[tuple[command: string]]
 
 
 proc runThread(argv: tuple[command: string]) {.thread.} =
+  #[
+    Create a thread to run system progress in background
+    The main GUI won't be hanged
+  ]#
   discard execShellCmd(argv.command)
 
 
 proc anonsurfControl(b: Button) =
+  #[
+    Enable / disable anonsurf.
+    Automatically check for task (enable or disable) by button title
+  ]#
   if b.label == "Enable":
     createThread(serviceThread, runThread, ("gksu anonsurf start",))
   else:
@@ -26,10 +34,19 @@ proc anonsurfControl(b: Button) =
 
 
 proc actionCancel(b: Button, d: Dialog) =
+  #[
+    Destroy dialog when user click on a button
+  ]#
   d.destroy()
 
 
 proc bootAction(b: Button, l: Label) =
+  #[
+    Enable / disable anonsurf start at boot
+    1. Automatically choose enable and disable by using button's title
+    2. Check anonsurfd (daemon unit) and showing current status of anonsurfd
+    # TODO show `failed to enable / disable`
+  ]#
   if b.label == "Enable":
     discard execShellCmd("gksu systemctl enable anonsurfd")
   else:
@@ -44,7 +61,7 @@ proc bootAction(b: Button, l: Label) =
     b.setLabel("Disable")
 
 
-proc change(b: Button) =
+proc actionChange(b: Button) =
   #[
     Send change node command to Control port then restart tor service
     Host: 127.0.0.1 | localhost
@@ -79,7 +96,10 @@ proc change(b: Button) =
   discard noti.show()
 
 
-proc status(b: Button) =
+proc actionStatus(b: Button) =
+  #[
+    Spawn a native GTK terminal and run nyx with it to show current tor status
+  ]#
   let
     statusDialog = newDialog()
     statusArea = statusDialog.getContentArea()
@@ -231,8 +251,8 @@ proc createArea(boxMain: Box) =
   labelChange.setXalign(0.0)
 
   btnRunAnon.connect("clicked", anonsurfControl)
-  btnCheckStatus.connect("clicked", status)
-  btnChangeID.connect("clicked", change)
+  btnCheckStatus.connect("clicked", actionStatus)
+  btnChangeID.connect("clicked", actionChange)
   btnDNS.connect("clicked", setDNS)
 
   
