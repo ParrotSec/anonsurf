@@ -40,7 +40,7 @@ proc actionCancel(b: Button, d: Dialog) =
   d.destroy()
 
 
-proc bootAction(b: Button, l: Label) =
+proc actionSystemdSwitch(b: Button, l: Label) =
   #[
     Enable / disable anonsurf start at boot
     1. Automatically choose enable and disable by using button's title
@@ -124,11 +124,11 @@ proc actionStatus(b: Button) =
   statusDialog.showAll
 
 
-proc setDNS(b: Button) =
+proc actionSetDNS(b: Button) =
   discard execShellCmd("gksu anonsurf dns")
 
 
-proc setStartup(b: Button) =
+proc actionSetStartup(b: Button) =
   let
     bootDialog = newDialog()
     bootArea = bootDialog.getContentArea()
@@ -148,7 +148,7 @@ proc setStartup(b: Button) =
     labelStatus.label = "AnonSurf on boot is actived\n"
     btnAction.setLabel("Disable")
   
-  btnAction.connect("clicked", bootAction, labelStatus)
+  btnAction.connect("clicked", actionSystemdSwitch, labelStatus)
   btnClose.connect("clicked", actionCancel, bootDialog)
 
   btnArea.packStart(btnAction, false, true, 3)
@@ -253,7 +253,7 @@ proc createArea(boxMain: Box) =
   btnRunAnon.connect("clicked", anonsurfControl)
   btnCheckStatus.connect("clicked", actionStatus)
   btnChangeID.connect("clicked", actionChange)
-  btnDNS.connect("clicked", setDNS)
+  btnDNS.connect("clicked", actionSetDNS)
 
   
   boxRun.packStart(labelRun, false, true, 3)
@@ -274,7 +274,7 @@ proc createArea(boxMain: Box) =
   boxMain.packStart(labelAnonsurf, false, true, 3)
   boxMain.packStart(boxAnonsurf, false, true, 3)
 
-  btnAtBoot.connect("clicked", setStartup)
+  btnAtBoot.connect("clicked", actionSetStartup)
   boxMain.packStart(btnAtBoot, false,  true, 3)
 
   boxMain.packStart(labelDNS, false, true, 3)
