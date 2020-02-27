@@ -53,12 +53,12 @@ proc actionSystemdSwitch(b: Button, l: Label) =
     discard execShellCmd("gksu systemctl disable anonsurfd")
   
   let currentStatus = execProcess("systemctl list-unit-files | grep anonsurfd | awk '{print $2}'")
-  if currentStatus == "disabled\n":
-    l.label = "AnonSurf on boot is inactived"
-    b.setLabel("Enable")
-  else:
+  if currentStatus == "enabled\n":
     l.label = "AnonSurf on boot is actived"
     b.setLabel("Disable")
+  else:
+    l.label = "AnonSurf on boot is inactived"
+    b.setLabel("Enable")
 
 
 proc actionChange(b: Button) =
