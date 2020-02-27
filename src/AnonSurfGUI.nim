@@ -53,11 +53,26 @@ proc actionSystemdSwitch(b: Button, l: Label) =
     discard execShellCmd("gksu systemctl disable anonsurfd")
   
   let currentStatus = execProcess("systemctl list-unit-files | grep anonsurfd | awk '{print $2}'")
+  #[
+    Check REAL status of anonsurfd on the system.
+    1. If output == enabled -> it is enabled
+    2. If output == disabled -> it is disabled
+    3. If output != [enabled, disabled] -> failed or error
+    Check if task (enable, disable) failed
+    1. User click on Enable and status == disabled -> failed to disable
+    -> label == "Enable" and status == "disabled"
+    2. User click on Disable and status == enabled -> failed to enable
+    -> label == "Disable" and status == "enabled"
+  ]#
   if currentStatus == "enabled\n":
     l.label = "AnonSurf on boot is actived"
+    if b.label == "Disable":
+      l.label = "Failed to disable anonsurf. " & l.label
     b.setLabel("Disable")
   else:
     l.label = "AnonSurf on boot is inactived"
+    if b.label == "Enable":
+      l.label = "Failed to enable anonsurf. " & l.label
     b.setLabel("Enable")
 
 
