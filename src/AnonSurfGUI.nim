@@ -311,25 +311,57 @@ proc createArea(boxMain: Box) =
   # Add the box to the anonsurf box
   boxAnonsurf.packstart(boxChange, false, true, 3)
   
+  # Add the Anonsurf section to Main section
   boxMain.packStart(boxAnonsurf, false, true, 3)
 
+  #[
+    Add "Startup button" to main
+  ]#
   let
     btnAtBoot = newButton("System Startup")
-    
+
   btnAtBoot.connect("clicked", actionSetStartup)
   boxMain.packStart(btnAtBoot, false,  true, 3)
 
-
+  #[
+    Create boxExtra for OpenNIC, McChanger and other feature in future
+  ]#
   let
-    boxDNS = newBox(Orientation.horizontal, 3) # Create a box for DNS area
+    boxExtra = newBox(Orientation.horizontal, 3)
+
+  #[
+    Create box DNS for OpenNIC service
+  ]#
+  let
+    boxDNS = newBox(Orientation.vertical, 3) # Create a box for DNS area
     labelDNS = newLabel("OpenNIC DNS")
     btnDNS = newButton()
 
+  # init label and button
   labelDNS.setXalign(0.0)
   btnDNS.connect("clicked", actionSetDNS)
+  # Add label and button to box DNS
+  boxDNS.packStart(labelDNS, false, true, 3)
   boxDNS.packStart(btnDNS, false, true, 3)
-  boxMain.packStart(labelDNS, false, true, 3)
-  boxMain.packStart(boxDNS, false, true, 3)
+  # Add box DNS to Extra section
+  boxExtra.packStart(boxDNS, false, true, 3)
+  
+  let
+    boxMacChanger = newBox(Orientation.vertical, 3)
+    labelMacChanger = newLabel("MAC Changer")
+    btnMacChange = newButton("Random MAC")
+
+  # init label and button
+  labelMacChanger.setXalign(0.0)
+  # btnMacChange.connect("clicked", actionMacChange)
+  # Add label and button to box Mac Change
+  boxMacChanger.packstart(labelMacChanger, false, true, 3)
+  # boxMacChanger.packStart(btnMacChange, false, true, 3)
+
+  boxExtra.packStart(boxMacChanger, false, true, 3)
+
+  # Add box Extra  to main section
+  boxMain.packStart(boxExtra, false, true, 3)
 
   var args = Obj(btnRun: btnRunAnon, btnStatus: btnCheckStatus, btnChange: btnChangeID, btnSetDNS: btnDNS)
   discard timeoutAdd(200, refreshStatus, args)
