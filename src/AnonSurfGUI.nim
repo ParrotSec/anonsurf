@@ -244,54 +244,90 @@ proc createArea(boxMain: Box) =
   ]#
   let
     boxAnonsurf = newBox(Orientation.horizontal, 3) # The whole box
-    boxRun = newBox(Orientation.vertical, 3) # The box to generate Run button and its label
-    boxStatus = newBox(Orientation.vertical, 3) # The box to generate Check status button and its label
-    boxChange = newBox(Orientation.vertical, 3) # The box to generate Change current node button and its label
-    labelRun = newLabel("Service")
-    labelStatus = newLabel("Status")
-    labelChange = newLabel("Change Node")
+
+  #[
+    Draw the anonsurf section.
+    It has
+    1. Title
+    2. Label of buttons
+    3. Buttons
+    4. The big button System startup
+  ]#
+
+  # Create Main label for anonsurf section and add it to main section
+  let
     labelAnonsurf = newLabel("AnonSurf")
+  boxMain.packStart(labelAnonsurf, false, true, 3)
+  
+  #[
+    Create a vertical boxes to have
+    1. label of the button
+    2. button
+  ]#
+
+  # Add section run to anonsurf section
+  let
+    boxRun = newBox(Orientation.vertical, 3) # The box to generate Run button and its label
+    labelRun = newLabel("Service")
     btnRunAnon = newButton("Start AnonSurf")
-    btnCheckStatus = newButton("Check Status")
-    btnChangeID = newButton("Change ID")
-    btnAtBoot = newButton("System Startup")
-    boxDNS = newBox(Orientation.horizontal, 3) # Create a box for DNS area
-    labelDNS = newLabel("OpenNIC DNS")
-    btnDNS = newButton()
-  
 
-  labelDNS.setXalign(0.0)
+  # init label, button
   labelRun.setXalign(0.0)
-  labelStatus.setXalign(0.0)
-  labelChange.setXalign(0.0)
-
   btnRunAnon.connect("clicked", anonsurfControl)
-  btnCheckStatus.connect("clicked", actionStatus)
-  btnChangeID.connect("clicked", actionChange)
-  btnDNS.connect("clicked", actionSetDNS)
 
-  
+  # Add label and button to box run
   boxRun.packStart(labelRun, false, true, 3)
   boxRun.packStart(btnRunAnon, false, true, 3)
+  # Add box Run to anonsurf section
+  boxAnonsurf.packstart(boxRun, false, true, 3)
 
+  # Add section Status to anonsurf section
+  let
+    btnCheckStatus = newButton("Check Status")
+    labelStatus = newLabel("Status")
+    boxStatus = newBox(Orientation.vertical, 3) # The box to generate Check status button and its label
+
+  # init label and button
+  labelStatus.setXalign(0.0)
+  btnCheckStatus.connect("clicked", actionStatus)
+  # Add them to box
   boxStatus.packStart(labelStatus, false, true, 3)
   boxStatus.packStart(btnCheckStatus, false, true,3)
+  # Add the box to anonsurf section
+  boxAnonsurf.packstart(boxStatus, false, true, 3)
 
+  # Add Change Node to Anosnurf section
+  let
+    btnChangeID = newButton("Change ID")
+    labelChange = newLabel("Change Node")
+    boxChange = newBox(Orientation.vertical, 3) # The box to generate Change current node button and its label
+  
+  # Init label and button
+  labelChange.setXalign(0.0)
+  btnChangeID.connect("clicked", actionChange)
+  # Add label and button to the box
   boxChange.packStart(labelChange, false, true, 3)
   boxChange.packStart(btnChangeID, false, true ,3)
-
-  boxAnonsurf.packstart(boxRun, false, true, 3)
-  boxAnonsurf.packstart(boxStatus, false, true, 3)
+  # Add the box to the anonsurf box
   boxAnonsurf.packstart(boxChange, false, true, 3)
-
-  boxDNS.packStart(btnDNS, false, true, 3)
   
-  boxMain.packStart(labelAnonsurf, false, true, 3)
   boxMain.packStart(boxAnonsurf, false, true, 3)
 
+  let
+    btnAtBoot = newButton("System Startup")
+    
   btnAtBoot.connect("clicked", actionSetStartup)
   boxMain.packStart(btnAtBoot, false,  true, 3)
 
+
+  let
+    boxDNS = newBox(Orientation.horizontal, 3) # Create a box for DNS area
+    labelDNS = newLabel("OpenNIC DNS")
+    btnDNS = newButton()
+
+  labelDNS.setXalign(0.0)
+  btnDNS.connect("clicked", actionSetDNS)
+  boxDNS.packStart(btnDNS, false, true, 3)
   boxMain.packStart(labelDNS, false, true, 3)
   boxMain.packStart(boxDNS, false, true, 3)
 
