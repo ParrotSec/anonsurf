@@ -3,6 +3,7 @@ import os
 import osproc
 import strutils
 import net
+import macutils / controller
 
 type
   Obj = ref object
@@ -111,6 +112,43 @@ proc actionChange(b: Button) =
   discard noti.show()
 
 
+proc drawMACDialog(b: Button) =
+  let
+    macDialog = newDialog()
+    macArea = macDialog.getContentArea()
+
+  let
+    boxIfaceSelector = newBox(Orientation.horizontal, 3)
+    labelSelect = newLabel("Network Interface")
+    ifaceSelector = newComboBoxText()
+    allIfaces = getValidIfaces()
+
+  for iface in allIfaces:
+    ifaceSelector.append_text(iface)
+  ifaceSelector.append_text("all")
+
+  boxIfaceSelector.packStart(labelSelect, false, true, 3)
+  boxIfaceSelector.packStart(ifaceSelector, true, true, 3)
+
+  macArea.packStart(boxIfaceSelector, false, true, 3)
+
+  let
+    boxButton =  newBox(Orientation.horizontal, 3)
+    btnRestore = newButton("Restore")
+    btnRandom = newButton("Random MAC")
+    btnCancel = newButton("Cancel")
+
+  btnRestore.setSensitive(false) # TODO change it by click on the iface
+  boxButton.packStart(btnRestore, false, true, 3)
+  boxButton.packStart(btnRandom, false, true, 3)
+  btnCancel.connect("clicked", actionCancel, macDialog)
+  boxButton.packStart(btnCancel, false, true, 3)
+
+  macArea.packStart(boxButton, false, true, 3)
+
+  macDialog.showAll
+
+
 proc actionStatus(b: Button) =
   #[
     Spawn a native GTK terminal and run nyx with it to show current tor status
@@ -168,6 +206,7 @@ proc actionSetStartup(b: Button) =
 
   btnArea.packStart(btnAction, false, true, 3)
   btnArea.packStart(btnClose, false, true, 3)
+
   bootArea.packStart(labelStatus, false, true, 3)
   bootArea.packStart(btnArea, false, true, 3)
 
@@ -353,10 +392,10 @@ proc createArea(boxMain: Box) =
 
   # init label and button
   labelMacChanger.setXalign(0.0)
-  # btnMacChange.connect("clicked", actionMacChange)
+  btnMacChange.connect("clicked", drawMACDialog)
   # Add label and button to box Mac Change
   boxMacChanger.packstart(labelMacChanger, false, true, 3)
-  # boxMacChanger.packStart(btnMacChange, false, true, 3)
+  boxMacChanger.packStart(btnMacChange, false, true, 3)
 
   boxExtra.packStart(boxMacChanger, false, true, 3)
 

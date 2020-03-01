@@ -1,7 +1,7 @@
 import os
 import strutils
 
-proc getMacIfaces(): seq[string] =
+proc getValidIfaces*(): seq[string] =
   #[
     Get all avaiable net iface in the system
       and remove localhost, docker, virtualbox interfaces
