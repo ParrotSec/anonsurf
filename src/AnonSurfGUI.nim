@@ -122,10 +122,14 @@ proc drawMACDialog(b: Button) =
     labelSelect = newLabel("Network Interface")
     ifaceSelector = newComboBoxText()
     allIfaces = getValidIfaces()
-
-  for iface in allIfaces:
-    ifaceSelector.append_text(iface)
-  ifaceSelector.append_text("all")
+  
+  if len(allIfaces) > 1:
+    for iface in allIfaces:
+      ifaceSelector.append_text(iface)
+    ifaceSelector.append_text("all")
+  else:
+    ifaceSelector.append_text(allIfaces[0])
+    ifaceSelector.active = 0
 
   boxIfaceSelector.packStart(labelSelect, false, true, 3)
   boxIfaceSelector.packStart(ifaceSelector, true, true, 3)
