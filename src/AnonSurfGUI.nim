@@ -3,7 +3,7 @@ import os
 import osproc
 import strutils
 import net
-import macutils / controller
+import macutils / macControl
 
 type
   Obj = ref object
