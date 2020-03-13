@@ -3,7 +3,7 @@ import os
 import osproc
 import strutils
 import net
-import macutils / macControl
+import utils / [dnsutils, macutils]
 
 type
   Obj = ref object
@@ -112,10 +112,42 @@ proc actionChange(b: Button) =
   discard noti.show()
 
 
+proc drawDNSDialog(b: Button) =
+  #[
+    Draw a Dialog and
+      1. Show current DNS status:
+        a) AnonSurf: Tor is running and DNS is using localhost. Disable buttons
+        b) Localhost: Use localhost without Tor setting
+        c) Static: Doesn't apply settingss from DHCP
+          - OpenNIC
+          - User settings
+          - Sometime settings of 1 DHCP server is saved in system. Check it (TODO)
+        d) Dynamic: Use only settings from DHCP
+        e) TODO check the mix of DHCP and other static settings
+      2. Apply settings # TODO think about how to apply it (drop down menu?)
+  ]#
+  let
+    dnsDialog = newDialog()
+    dnsArea = dnsDialog.getContentArea()
+  dnsDialog.setTitle("AnonSurf - DNS")
+
+  let
+    labelStatus = newLabel(dnsStatusCheck())
+  dnsArea.packStart(labelStatus, false, true, 3)
+  
+  let
+    btnCancel = newButton("Cancel")
+  btnCancel.connect("clicked", actionCancel, dnsDialog)
+  dnsArea.packStart(btnCancel, false, true, 3)
+
+  dnsDialog.showAll
+
 proc drawMACDialog(b: Button) =
   let
     macDialog = newDialog()
     macArea = macDialog.getContentArea()
+
+  macDialog.setTitle("AnonSurf - Random MAC")
 
   let
     boxIfaceSelector = newBox(Orientation.horizontal, 3)
@@ -181,8 +213,8 @@ proc actionStatus(b: Button) =
   statusDialog.showAll
 
 
-proc actionSetDNS(b: Button) =
-  discard execShellCmd("gksu anonsurf dns")
+# proc actionSetDNS(b: Button) =
+#   discard execShellCmd("gksu anonsurf dns")
 
 
 proc actionSetStartup(b: Button) =
@@ -221,7 +253,7 @@ proc refreshStatus(args: Obj): bool =
   # TODO work with update ip label
   let
     output = execProcess("systemctl is-active anonsurfd").replace("\n", "")
-    dnsLock = "/etc/anonsurf/opennic.lock"
+    # dnsLock = "/etc/anonsurf/opennic.lock"
   
   if serviceThread.running():
     args.btnRun.label = "Switching"
@@ -265,14 +297,14 @@ proc refreshStatus(args: Obj): bool =
       args.btnChange.setSensitive(false)
 
       args.btnSetDNS.setSensitive(true)
-      if existsFile(dnsLock):
-        # OpenNic is already set. Disable it
-        args.btnSetDNS.label = "Disable" # Todo change to shorter name
-        args.btnSetDNS.setTooltipText("Start using OpenNIC DNS")
-      else:
-        # OpenNic is not set. Enable it
-        args.btnSetDNS.label = "Enable"
-        args.btnSetDNS.setTooltipText("Stop using OpenNIC DNS")
+      # if existsFile(dnsLock):
+      #   # OpenNic is already set. Disable it
+      #   args.btnSetDNS.label = "Disable" # Todo change to shorter name
+      #   args.btnSetDNS.setTooltipText("Start using OpenNIC DNS")
+      # else:
+      #   # OpenNic is not set. Enable it
+      #   args.btnSetDNS.label = "Enable"
+      #   args.btnSetDNS.setTooltipText("Stop using OpenNIC DNS")
 
   return SOURCE_CONTINUE
 
@@ -371,37 +403,43 @@ proc createArea(boxMain: Box) =
   ]#
   let
     boxExtra = newBox(Orientation.horizontal, 3)
+    labelExtra = newLabel("Extra") # TODO edit here
+  labelExtra.setXalign(0.0)
+  boxMain.packStart(labelExtra, false, true, 3)
 
   #[
     Create box DNS for OpenNIC service
   ]#
   let
-    boxDNS = newBox(Orientation.vertical, 3) # Create a box for DNS area
-    labelDNS = newLabel("OpenNIC DNS")
-    btnDNS = newButton()
+    # boxDNS = newBox(Orientation.vertical, 3) # Create a box for DNS area
+    # labelDNS = newLabel("OpenNIC DNS")
+    btnDNS = newButton("DNS Manager")
 
   # init label and button
-  labelDNS.setXalign(0.0)
-  btnDNS.connect("clicked", actionSetDNS)
+  # labelDNS.setXalign(0.0)
+  btnDNS.connect("clicked", drawDNSDialog)
   # Add label and button to box DNS
-  boxDNS.packStart(labelDNS, false, true, 3)
-  boxDNS.packStart(btnDNS, false, true, 3)
+  # boxDNS.packStart(labelDNS, false, true, 3)
+  # boxDNS.packStart(btnDNS, false, true, 3)
   # Add box DNS to Extra section
-  boxExtra.packStart(boxDNS, false, true, 3)
+  # boxExtra.packStart(boxDNS, false, true, 3)
+  boxExtra.packStart(btnDNS, false, true, 3)
   
   let
-    boxMacChanger = newBox(Orientation.vertical, 3)
-    labelMacChanger = newLabel("MAC Changer")
-    btnMacChange = newButton("Random MAC")
+    # boxMacChanger = newBox(Orientation.vertical, 3)
+    # labelMacChanger = newLabel("MAC Changer")
+    btnMacChange = newButton("MAC Changer")
 
   # init label and button
-  labelMacChanger.setXalign(0.0)
+  # labelMacChanger.setXalign(0.0)
   btnMacChange.connect("clicked", drawMACDialog)
   # Add label and button to box Mac Change
-  boxMacChanger.packstart(labelMacChanger, false, true, 3)
-  boxMacChanger.packStart(btnMacChange, false, true, 3)
+  # boxMacChanger.packstart(labelMacChanger, false, true, 3)
+  # boxMacChanger.packStart(btnMacChange, false, true, 3)
 
-  boxExtra.packStart(boxMacChanger, false, true, 3)
+  # boxExtra.packStart(boxMacChanger, false, true, 3)
+
+  boxExtra.packStart(btnMacChange, false, true, 3)
 
   # Add box Extra  to main section
   boxMain.packStart(boxExtra, false, true, 3)

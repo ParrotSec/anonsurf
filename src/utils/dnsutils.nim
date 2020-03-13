@@ -1,7 +1,7 @@
 import osproc
 import strutils
 
-proc dnsCheck*(): string =
+proc dnsStatusCheck*(): string =
   #[
     Check current system DNS settings.
     1. localhost ->  possibly under Tor
