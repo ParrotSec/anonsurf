@@ -230,12 +230,12 @@ proc actionSetStartup(b: Button) =
   labelStatus.setXalign(0.0)
   bootDialog.setTitle("System Startup")
 
-  if currentStatus == "disabled\n":
-    labelStatus.label = "AnonSurf on boot is inactived"
-    btnAction.setLabel("Enable")
-  else:
+  if currentStatus == "enabled\n":
     labelStatus.label = "AnonSurf on boot is actived\n"
     btnAction.setLabel("Disable")
+  else:
+    labelStatus.label = "AnonSurf on boot is inactived"
+    btnAction.setLabel("Enable")
   
   btnAction.connect("clicked", actionSystemdSwitch, labelStatus)
   btnClose.connect("clicked", actionCancel, bootDialog)
