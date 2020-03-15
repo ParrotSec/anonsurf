@@ -132,7 +132,30 @@ proc drawDNSDialog(b: Button) =
   dnsDialog.setTitle("AnonSurf - DNS")
 
   let
-    labelStatus = newLabel(dnsStatusCheck())
+    dnsStatus = dnsStatusCheck()
+    labelStatus = newLabel()
+  if dnsStatus == -2:
+    labelStatus.setText("Can't not find resolv.conf")
+  elif dnsStatus == -1:
+    labelStatus.setText("localhost")
+  elif dnsStatus == 0:
+    labelStatus.setText("AnonSurf DNS")
+  elif dnsStatus == 10:
+    labelStatus.setText("Static setting")
+  elif dnsStatus == 11:
+    labelStatus.setText("Static setting (with OpenNIC)")
+  elif dnsStatus == 12:
+    labelStatus.setText("Static setting (with Custom)")
+  elif dnsStatus == 13:
+    labelStatus.setText("Static setting (with OpenNIC + Custom)")
+  elif dnsStatus == 20:
+    labelStatus.setText("Dynamic setting")
+  elif dnsStatus == 21:
+    labelStatus.setText("Dynamic setting (with OpenNIC)")
+  elif dnsStatus == 22:
+    labelStatus.setText("Dynamic setting (with Custom)")
+  elif dnsStatus == 23:
+    labelStatus.setText("Dynamic setting (with OpenNIC + Custom)")
   dnsArea.packStart(labelStatus, false, true, 3)
   
   let
