@@ -1,5 +1,6 @@
 import osproc
 import os
+import osproc
 import strutils
 
 
@@ -13,6 +14,10 @@ proc checkDNSServers(path: string): int =
       3: Use both OpenNIC and custom
   ]#
   result = 0
+  let
+    dnsDHCP = execProcess("nmcli dev show | grep 'DNS'  | awk '{print $2}'")
+    dnsOpenNIC = "185.121.177.177\n169.239.202.202\n198.251.90.108\n198.251.90.109\nnameserver 198.251.90.110"
+
   for line in lines(path):
     if line.startsWith("#"):
       # We skip comments
@@ -23,20 +28,21 @@ proc checkDNSServers(path: string): int =
     elif isNilOrWhitespace(line):
       discard
     # Check if OpenNIC DNS is in the setting
-    elif line == "nameserver 185.121.177.177" or
-      line == "nameserver 169.239.202.202" or
-      line == "nameserver 198.251.90.108" or
-      line == "nameserver 198.251.90.109" or
-      line == "nameserver 198.251.90.110": # TODO check DNNS
-      if result == 0 or result == 2:
-        # Don't add if the result was added
-        result += 1
     elif line.startsWith("nameserver"):
-      # TODO: homegateway makes a bug here.
+      let dnsName = line.split(" ")[1]
+      # if current DNS is provided by DHCP server -> dynamic only
+      if dnsName in dnsDHCP:
+        discard
+      # if DNS is in list of OpenNIC
+      elif dnsName in dnsOpenNIC:
+        if result == 0 or result == 2:
+          # Don't add if the result was added
+          result += 1
       # Custom name server
+      else:
       # We don't add if name result was added
-      if result == 0 or result == 1:
-        result += 2
+        if result == 0 or result == 1:
+          result += 2
 
 
 proc dnsStatusCheck*(): int =
