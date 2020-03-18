@@ -19,6 +19,9 @@ proc checkDNSServers(path: string): int =
       discard
     elif line == "options rotate":
       discard
+    # Check empty line
+    elif isNilOrWhitespace(line):
+      discard
     # Check if OpenNIC DNS is in the setting
     elif line == "nameserver 185.121.177.177" or
       line == "nameserver 169.239.202.202" or
@@ -29,6 +32,7 @@ proc checkDNSServers(path: string): int =
         # Don't add if the result was added
         result += 1
     elif line.startsWith("nameserver"):
+      # TODO: homegateway makes a bug here.
       # Custom name server
       # We don't add if name result was added
       if result == 0 or result == 1:
