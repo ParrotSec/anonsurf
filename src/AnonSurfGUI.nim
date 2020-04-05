@@ -126,6 +126,7 @@ proc drawDNSDialog(b: Button) =
         e) TODO check the mix of DHCP and other static settings
       2. Apply settings # TODO think about how to apply it (drop down menu?)
   ]#
+  # TODO if user choose Dynamic -> Remove None in DHCP
   let
     dnsDialog = newDialog()
     dnsArea = dnsDialog.getContentArea()
@@ -141,7 +142,7 @@ proc drawDNSDialog(b: Button) =
   elif dnsStatus == 0:
     labelStatus.setText("AnonSurf DNS")
   elif dnsStatus == 10:
-    labelStatus.setText("Static setting")
+    labelStatus.setText("Static setting (DHCP)")
   elif dnsStatus == 11:
     labelStatus.setText("Static setting (with OpenNIC)")
   elif dnsStatus == 12:
@@ -149,7 +150,7 @@ proc drawDNSDialog(b: Button) =
   elif dnsStatus == 13:
     labelStatus.setText("Static setting (with OpenNIC + Custom)")
   elif dnsStatus == 20:
-    labelStatus.setText("Dynamic setting")
+    labelStatus.setText("Dynamic setting (DHCP)")
   elif dnsStatus == 21:
     labelStatus.setText("Dynamic setting (with OpenNIC)")
   elif dnsStatus == 22:
@@ -158,6 +159,51 @@ proc drawDNSDialog(b: Button) =
     labelStatus.setText("Dynamic setting (with OpenNIC + Custom)")
   dnsArea.packStart(labelStatus, false, true, 3)
   
+  let
+    btnInit = newComboBoxText()
+
+  btnInit.appendText("Dynamic")
+  btnInit.appendText("Static")
+  btnInit.active = 0
+
+  let
+    btnDHCPOptions = newComboBoxText()
+
+  btnDHCPOptions.appendText("DHCP")
+  btnDHCPOptions.appendText("None")
+  btnDHCPOptions.active = 0
+
+  let
+    btnCustomOptions = newComboBoxText()
+  
+  btnCustomOptions.appendText("None")
+  btnCustomOptions.appendText("OpenNIC")
+  btnCustomOptions.appendText("Custom")
+  btnCustomOptions.active = 0
+
+  let
+    boxDHCP = newBox(Orientation.vertical, 3)
+    labelDHCP = newLabel("DHCP DNS")
+
+  boxDHCP.packStart(labelDHCP, false, true, 3)
+  boxDHCP.packStart(btnDHCPOptions, false, true, 3)
+
+  let
+    boxCustomOptions = newBox(Orientation.vertical, 3)
+    labelCustom = newLabel("Custom DNS")
+
+  boxCustomOptions.packStart(labelCustom, false, true, 3)
+  boxCustomOptions.packStart(btnCustomOptions, false, true, 3)
+
+  let
+    boxSetDNSOptions = newBox(Orientation.horizontal, 3)
+
+  boxSetDNSOptions.packStart(boxDHCP, false, true, 3)
+  boxSetDNSOptions.packStart(boxCustomOptions, false, true, 3)
+
+  dnsArea.packStart(btnInit, false, true, 3)
+  dnsArea.packStart(boxSetDNSOptions, false, true, 3)
+
   let
     btnCancel = newButton("Cancel")
   btnCancel.connect("clicked", actionCancel, dnsDialog)
@@ -481,6 +527,7 @@ proc main =
     boxMain = newBox(Orientation.vertical, 3)
   
   mainBoard.title = "AnonSurf GUI"
+  discard mainBoard.setIconFromFile("/usr/share/icons/anonsurf.png")
 
   createArea(boxMain)
 
