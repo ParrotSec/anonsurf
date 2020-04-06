@@ -21,24 +21,24 @@ proc status() =
   if statusResult == 0:
     stdout.write("Under AnonSurf\n")
   elif statusResult == -1:
-    stderr.write("[x] Only using localhost")
+    stderr.write("[x] Only using localhost\n")
   else:
     if statusResult == 20:
-      stdout.write("Using static settings")
+      stdout.write("Using static settings\n")
     elif statusResult == 21:
-      stdout.write("Using static + OpenNIC addresses")
+      stdout.write("Using static + OpenNIC addresses\n")
     elif statusResult == 22:
-      stdout.write("Using static + custom addresses")
+      stdout.write("Using static + custom addresses\n")
     elif statusResult == 23:
-      stdout.write("Using static + OpenNIC + Custom addresses")
+      stdout.write("Using static + OpenNIC + Custom addresses\n")
     elif statusResult == 10:
-      stdout.write("Using dynaimc settings")
+      stdout.write("Using dynaimc settings\n")
     elif statusResult == 11:
-      stdout.write("Using dynaimc + OpenNIC addresses")
+      stdout.write("Using dynaimc + OpenNIC addresses\n")
     elif statusResult == 12:
-      stdout.write("Using dynaimc + custom addresses")
+      stdout.write("Using dynaimc + custom addresses\n")
     elif statusResult == 13:
-      stdout.write("Using dynaimc + OpenNIC + Custom addresses")
+      stdout.write("Using dynaimc + OpenNIC + Custom addresses\n")
 
 
 proc writeOpenNICToTail() = 
