@@ -11,13 +11,21 @@ const
   resolvTail =  "/etc/resolvconf/resolv.conf.d/tail"
   resolvConf = "/etc/resolv.conf"
   runResolvConf = "/etc/resolvconf/run/resolv.conf"
+  dhcpAddrFile = "/run/resolvconf/interface/NetworkManager" # TODO check for multiple if
 
 
 proc help() =
   discard
 
 
+proc readDHCPDNS(): string =
+  return readFile(dhcpAddrFile)
+
+
 proc status() =
+  #[
+    Get current settings of DNS on system
+  ]#
   let statusResult = dnsStatusCheck()
   if statusResult == 0:
     stdout.write("Under AnonSurf\n")
@@ -44,35 +52,42 @@ proc status() =
 
 proc writeDNSToTail(data: string) = 
   #[
-    Use append mode to write data to tail after clean tail
+    With dynamic setting for DNS, all custom data should be in tail (didn't test base or head)
+      tail is recommended
+    We write data with append method so we can write custom addresses and OpenNIC (by user requires)
   ]#
 
+  let fResolvTail = open(resolvTail, fmAppend)
+
   try:
-    let fResolvTail = open(resolvTail, fmAppend)
     fResolvTail.write(data)
-    fResolvTail.close()
   except:
     stderr.write("[x] Error while writing OpenNIC to resolv.conf tail\n")
     stderr.write("[!] Debug: Func writeDNSToTail\n")
+  finally:
+    fResolvTail.close()
 
 
 proc writeDNSToResolv(data: string) =
   #[
-    Use append mode to write data to resolv.conf
+    With dynamic setting, we can write addresses into /etc/resolv.conf
+    We write data with append method so we can write custom addresses and OpenNIC (by user requires)
   ]#
+  let fResolv = open(resolvConf, fmAppend)
 
   try:
-    let fResolv = open(resolvConf, fmAppend)
     fResolv.write(data)
-    fResolv.close()
   except:
     stderr.write("[x] Error while writing OpenNIC to resolv.conf\n")
     stderr.write("[!] Debug: Func writeDNSToResolv\n")
+  finally:
+    fResolv.close()
 
 
 proc cleanTail() =
   #[
-    We clean base, head, original, tail in /etc/resolvconf/resolv.conf.d
+    We clean tail in /etc/resolvconf/resolv.conf.d
+    Maybe we should clean base, head, original?
   ]#
   writeFile(resolvTail, "")
 
@@ -124,10 +139,12 @@ proc main() =
   ]#
 
   if paramCount() == 0:
+    # If user didn't give anything, we show current status and how to use the program
     help()
     status()
     return
   elif paramCount() == 1:
+    # If user provided 1 param, we check if it is help or status
     if paramStr(1) == "help" or paramStr(1) == "-h" or paramStr(1) == "--help":
       help()
       return
@@ -135,20 +152,40 @@ proc main() =
       status()
       return
     elif paramStr(1) != "static" and paramStr(1) != "dynamic":
+      # If we can't define command, interrupt here
       help()
-      stderr.write("[x] Err Unknow option\n")
+      stderr.write("[x] Err: Unknow option\n")
   
+  # We clean all base files for new settings
   doBasicMake(paramStr(1))
+
+  if paramCount() == 1 and paramStr(1) == "static":
+    stderr.write("[x] Err: Must provide address for static DNS")
+    return
+
+  if paramCount() == 2 and paramStr(1) == "static" and paramStr(2) == "dhcp":
+    stderr.write("[-] Warn: DNS address[es] of DHCP server might not work in other network location")
 
   var allDNSAddress: string = ""
 
+  # If there are more than dynamic and static arg only,
+  # args must be server addresses option
+  # we check if each addr is valid IP addr and write into file
+  
+  # If there is other custom options, we check if it is valid address or option
   if paramCount() >= 2:
     for i in 2 .. paramCount():
+      # If user select opennic, we write addresses to good place
       if paramStr(i) == "opennic":
         if paramStr(1) == "dynamic":
           writeDNSToTail(openNICAddr)
         elif paramStr(1) == "static":
           writeDNSToResolv(openNICAddr)
+      elif paramStr(i) == "dhcp":
+        # If user select DHCP server, we write our DNS to setting
+        if paramStr(1) == "static":
+          # We only apply for static because dynamic should always have it
+          writeDNSToResolv(readDHCPDNS())
       elif isIpAddress(paramStr(i)):
         allDNSAddress &= "nameserver " & paramStr(i) & "\n"
     
@@ -157,7 +194,9 @@ proc main() =
     elif paramStr(1) == "static":
       writeDNSToResolv(allDNSAddress)
 
+  # We apply options even there is no custom option. It must work for both
   if paramStr(1) == "dynamic":
+    # If dynamic is using, surely the DNS addr of DHCP is in here
     if execShellCmd("resolvconf -u") == 0:
       stderr.write("[x] Error: while updating resolv.conf config\n")
       stderr.write("[!] Debug: Executing resolvconf -u error\n")
