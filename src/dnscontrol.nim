@@ -3,14 +3,15 @@
 ]#
 
 import os
+import net
 import utils / dnsutils
 
-
 const
-  openNICAddr = "185.121.177.177\n169.239.202.202\n198.251.90.108\n198.251.90.109\nnameserver 198.251.90.110"
+  openNICAddr ="nameserver 185.121.177.177\nnameserver 169.239.202.202\nnameserver 198.251.90.108\nnameserver 198.251.90.109\nnameserver 198.251.90.110\n"
   resolvTail =  "/etc/resolvconf/resolv.conf.d/tail"
   resolvConf = "/etc/resolv.conf"
   runResolvConf = "/etc/resolvconf/run/resolv.conf"
+
 
 proc help() =
   discard
@@ -41,31 +42,32 @@ proc status() =
       stdout.write("Using dynaimc + OpenNIC + Custom addresses\n")
 
 
-proc writeOpenNICToTail() = 
+proc writeDNSToTail(data: string) = 
   #[
     Use append mode to write data to tail after clean tail
   ]#
-  # writeFile(mainPath, openNICDNS)
+
   try:
     let fResolvTail = open(resolvTail, fmAppend)
-    fResolvTail.write(openNICAddr)
+    fResolvTail.write(data)
     fResolvTail.close()
   except:
-    stderr.write("Error while writing OpenNIC to Tail")
+    stderr.write("[x] Error while writing OpenNIC to resolv.conf tail\n")
+    stderr.write("[!] Debug: Func writeDNSToTail\n")
 
 
-proc writeOpenNICToResolv() =
+proc writeDNSToResolv(data: string) =
   #[
     Use append mode to write data to resolv.conf
   ]#
 
-  # writeFile(mainPath, openNICDNS)
   try:
-    let fResolvTail = open(resolvTail, fmAppend)
-    fResolvTail.write(openNICAddr)
-    fResolvTail.close()
+    let fResolv = open(resolvConf, fmAppend)
+    fResolv.write(data)
+    fResolv.close()
   except:
-    stderr.write("Error while writing OpenNIC to Tail")
+    stderr.write("[x] Error while writing OpenNIC to resolv.conf\n")
+    stderr.write("[!] Debug: Func writeDNSToResolv\n")
 
 
 proc cleanTail() =
@@ -83,10 +85,11 @@ proc freshResolv(resolvType: string) =
       else (create dynamic) -> Link file from run
   ]#
   if not tryRemoveFile(resolvConf):
-    stderr.write("Error while removing symlink")
+    stderr.write("[x] Error while removing symlink\n")
+    stderr.write("[!] Debug: Func freshResolv\n")
   else:
     try:
-      if resolvType == "0":
+      if resolvType == "static":
         # Dynamic
         writeFile(resolvConf, "")
       else:
@@ -94,6 +97,7 @@ proc freshResolv(resolvType: string) =
         createSymlink(runResolvConf, resolvConf)
     except:
       stderr.write("Error while making new resolv.conf")
+      stderr.write("[!] Debug: Func freshResolv\n")
 
 
 proc doBasicMake(dynamicOpt: string) =
@@ -102,9 +106,7 @@ proc doBasicMake(dynamicOpt: string) =
 
 
 proc main() =
-  # TODO take agruments here
-  # TODO support both GUI and CLI
-  # TODO add status option
+  # TODO help
   #[
     We manage DNS addresses here
     1. Generate new resolv.conf file
@@ -134,15 +136,30 @@ proc main() =
       return
     elif paramStr(1) != "static" and paramStr(1) != "dynamic":
       help()
-      stderr.write("Unknow option\n")
+      stderr.write("[x] Err Unknow option\n")
   
   doBasicMake(paramStr(1))
 
-  if paramStr(1) == "dynamic":
-    writeOpenNICToTail()
-  elif paramStr(1) == "static":
-    writeOpenNICToResolv()
+  var allDNSAddress: string = ""
 
-  # TODO opennic and custom addresses here
+  if paramCount() >= 2:
+    for i in 2 .. paramCount():
+      if paramStr(i) == "opennic":
+        if paramStr(1) == "dynamic":
+          writeDNSToTail(openNICAddr)
+        elif paramStr(1) == "static":
+          writeDNSToResolv(openNICAddr)
+      elif isIpAddress(paramStr(i)):
+        allDNSAddress &= "nameserver " & paramStr(i) & "\n"
+    
+    if paramStr(1) == "dynamic":
+      writeDNSToTail(allDNSAddress)
+    elif paramStr(1) == "static":
+      writeDNSToResolv(allDNSAddress)
+
+  if paramStr(1) == "dynamic":
+    if execShellCmd("resolvconf -u") == 0:
+      stderr.write("[x] Error: while updating resolv.conf config\n")
+      stderr.write("[!] Debug: Executing resolvconf -u error\n")
 
 main()
