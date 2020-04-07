@@ -3,6 +3,7 @@
 ]#
 
 import os
+import osproc
 import net
 import strutils
 import utils / dnsutils
@@ -206,7 +207,8 @@ proc main() =
   # We apply options even there is no custom option. It must work for both
   if paramStr(1) == "dynamic":
     # If dynamic is using, surely the DNS addr of DHCP is in here
-    if execShellCmd("/usr/sbin/resolvconf -u") == 0:
+    # if execShellCmd("/usr/sbin/resolvconf -u") == 0:
+    if execCmd("/usr/sbin/resolvconf -u") == 0:
       stderr.write("[x] Error: while updating resolv.conf config\n")
       stderr.write("[!] Debug: Executing resolvconf -u error\n")
 
