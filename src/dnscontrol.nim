@@ -210,6 +210,8 @@ proc main() =
       stderr.write("[x] Error: while updating resolv.conf config\n")
       stderr.write("[!] Debug: Executing resolvconf -u error\n")
 
+  status()
+
 main()
 
 stdout.write("[*] Completed!\n")
