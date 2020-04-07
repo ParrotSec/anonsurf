@@ -121,7 +121,7 @@ proc freshResolv(resolvType: string) =
         # Static
         createSymlink(runResolvConf, resolvConf)
     except:
-      stderr.write("Error while making new resolv.conf")
+      stderr.write("Error while making new resolv.conf\n")
       stderr.write("[!] Debug: Func freshResolv\n")
 
 
@@ -169,11 +169,11 @@ proc main() =
   doBasicMake(paramStr(1))
 
   if paramCount() == 1 and paramStr(1) == "static":
-    stderr.write("[x] Err: Must provide address for static DNS")
+    stderr.write("[x] Err: Must provide address for static DNS\n")
     return
 
   if paramCount() == 2 and paramStr(1) == "static" and paramStr(2) == "dhcp":
-    stderr.write("[-] Warn: DNS address[es] of DHCP server might not work in other network location")
+    stderr.write("[-] Warn: DNS address[es] of DHCP server might not work in other network location\n")
 
   var allDNSAddress: string = ""
 
@@ -211,3 +211,5 @@ proc main() =
       stderr.write("[!] Debug: Executing resolvconf -u error\n")
 
 main()
+
+stdout.write("[*] Completed!\n")
