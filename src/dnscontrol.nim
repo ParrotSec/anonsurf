@@ -4,6 +4,7 @@
 
 import os
 import net
+import strutils
 import utils / dnsutils
 
 const
@@ -15,7 +16,16 @@ const
 
 
 proc help() =
-  discard
+  let progName = getAppFileName().split("/")[^1]
+  stdout.write(progName & " help | -h | --help [Show help banner]\n")
+  stdout.write(progName & " status [Show current DNS settings]\n")
+  stdout.write(progName & " dynamic [Always use DNS from DHCP service]\n")
+  stdout.write(progName & " dynamic <address> [Combine DNS from DHCP and custom address]\n")
+  stdout.write(progName & " static <address> [Use static DNS address(es). Your settings wont be changed after reboot]\n")
+  stdout.write("Address could be:\n")
+  stdout.write("    opennic: OpenNIC DNS addresses\n")
+  stdout.write("    dhcp: Address that DHCP provides [Use for static setting]\n")
+  stdout.write("    IPv4 or IPv6 format\n")
 
 
 proc readDHCPDNS(): string =
