@@ -19,9 +19,9 @@ proc help() =
   let progName = getAppFileName().split("/")[^1]
   stdout.write(progName & " help | -h | --help [Show help banner]\n")
   stdout.write(progName & " status [Show current DNS settings]\n")
-  stdout.write(progName & " dynamic [Always use DNS from DHCP service]\n")
-  stdout.write(progName & " dynamic <address> [Combine DNS from DHCP and custom address]\n")
-  stdout.write(progName & " static <address> [Use static DNS address(es). Your settings wont be changed after reboot]\n")
+  stdout.write("sudo " & progName & " dynamic [Always use DNS from DHCP service]\n")
+  stdout.write("sudo " & progName & " dynamic <address> [Combine DNS from DHCP and custom address]\n")
+  stdout.write("sudo " & progName & " static <address> [Use static DNS address(es). Your settings wont be changed after reboot]\n")
   stdout.write("Address could be:\n")
   stdout.write("    opennic: OpenNIC DNS addresses\n")
   stdout.write("    dhcp: Address that DHCP provides [Use for static setting]\n")
@@ -131,7 +131,6 @@ proc doBasicMake(dynamicOpt: string) =
 
 
 proc main() =
-  # TODO help
   #[
     We manage DNS addresses here
     1. Generate new resolv.conf file
@@ -207,7 +206,7 @@ proc main() =
   # We apply options even there is no custom option. It must work for both
   if paramStr(1) == "dynamic":
     # If dynamic is using, surely the DNS addr of DHCP is in here
-    if execShellCmd("resolvconf -u") == 0:
+    if execShellCmd("/usr/sbin/resolvconf -u") == 0:
       stderr.write("[x] Error: while updating resolv.conf config\n")
       stderr.write("[!] Debug: Executing resolvconf -u error\n")
 
