@@ -51,13 +51,13 @@ proc status() =
     elif statusResult == 23:
       stdout.write("Using static + OpenNIC + Custom addresses\n")
     elif statusResult == 10:
-      stdout.write("Using dynaimc settings\n")
+      stdout.write("Using dynamic settings\n")
     elif statusResult == 11:
-      stdout.write("Using dynaimc + OpenNIC addresses\n")
+      stdout.write("Using dynamic + OpenNIC addresses\n")
     elif statusResult == 12:
-      stdout.write("Using dynaimc + custom addresses\n")
+      stdout.write("Using dynamic + custom addresses\n")
     elif statusResult == 13:
-      stdout.write("Using dynaimc + OpenNIC + Custom addresses\n")
+      stdout.write("Using dynamic + OpenNIC + Custom addresses\n")
 
 
 proc writeDNSToTail(data: string) = 
