@@ -112,6 +112,10 @@ proc actionChange(b: Button) =
   discard noti.show()
 
 
+proc actionApplyDNS(b: Button) =
+  discard
+
+
 proc drawDNSDialog(b: Button) =
   #[
     Draw a Dialog and
@@ -206,8 +210,18 @@ proc drawDNSDialog(b: Button) =
 
   let
     btnCancel = newButton("Cancel")
+    btnApply = newButton("Apply")
+  
   btnCancel.connect("clicked", actionCancel, dnsDialog)
-  dnsArea.packStart(btnCancel, false, true, 3)
+  btnApply.connect("clicked", actionApplyDNS)
+  
+  let
+    boxBtnArea = newBox(Orientation.horizontal, 3)
+
+  boxBtnArea.packStart(btnApply, true, true, 3)
+  boxBtnArea.packStart(btnCancel, false, true, 3)
+
+  dnsArea.packStart(boxBtnArea, false, true, 3)
 
   dnsDialog.showAll
 
