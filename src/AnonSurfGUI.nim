@@ -12,6 +12,11 @@ type
     btnChange: Button
     btnSetDNS: Button
 
+  DnsObj = ref object
+    cmbDynamic: ComboBoxText
+    cmbDHCP: ComboBoxText
+    cmbCustom: ComboBoxText
+
 var serviceThread: system.Thread[tuple[command: string]]
 
 
@@ -112,8 +117,30 @@ proc actionChange(b: Button) =
   discard noti.show()
 
 
-proc actionApplyDNS(b: Button) =
-  discard
+proc actionApplyDNS(b: Button, args: DnsObj) =
+  # TODO create dialog here
+  # TODO ask custom DNS
+  # TODO add open nic and custom
+  if args.cmbDynamic.activeText == "Dynamic":
+    if args.cmbDHCP.activeText == "None" and args.cmbCustom.activeText == "None":
+      echo "Automatically use DHCP DNS - Dynamic setting"
+    else:
+      if args.cmbCustom.activeText == "OpenNIC":
+        echo "<program> dynamic opennic"
+      elif args.cmbCustom.activeText == "Custom":
+        echo "<program> dynamic custom"
+      else:
+        echo "<program> dynamic"
+  elif args.cmbDynamic.activeText == "Static":
+    if args.cmbDHCP.activeText == "None" and args.cmbCustom.activeText == "None":
+      echo "Static setting must have address"
+    else:
+      if args.cmbCustom.activeText == "OpenNIC":
+        echo "<program> static opennic"
+      elif args.cmbCustom.activeText == "Custom":
+        echo "<program> static address"
+      else:
+        echo "Error: static needs address"
 
 
 proc drawDNSDialog(b: Button) =
@@ -211,9 +238,11 @@ proc drawDNSDialog(b: Button) =
   let
     btnCancel = newButton("Cancel")
     btnApply = newButton("Apply")
+
+  var args = DnsObj(cmbDynamic: btnInit, cmbDHCP: btnDHCPOptions, cmbCustom: btnCustomOptions)
   
   btnCancel.connect("clicked", actionCancel, dnsDialog)
-  btnApply.connect("clicked", actionApplyDNS)
+  btnApply.connect("clicked", actionApplyDNS, args)
   
   let
     boxBtnArea = newBox(Orientation.horizontal, 3)
