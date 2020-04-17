@@ -16,7 +16,7 @@ install:
 	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
 	cp torrc $(DESTDIR)/etc/anonsurf/torrc
 	
-	cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
+	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp anonsurf/anondaemon $(DESTDIR)/etc/anonsurf/
 	cp anonsurfd/anonsurfd.service $(DESTDIR)/lib/systemd/system/
 	# cp anonsurfd/anonsurfd $(DESTDIR)/etc/init.d/
