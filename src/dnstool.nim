@@ -60,7 +60,7 @@ proc banner() =
 
 proc help() =
   banner()
-  let progName = getAppFileName().split("/")[^1]
+  let progName = getAppFileName()
   showHelpCmd(cmd = progName, keyword = "help | -h | --help", descr = "Show help banner")
   showHelpCmd(cmd = progName, keyword = "status", descr = "Show current system DNS")
   showHelpCmd(cmd = "sudo " & progName, keyword = "dynamic", descr = "Use DHCP's DNS")
