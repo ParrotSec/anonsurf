@@ -18,10 +18,10 @@ install:
 	
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp -r src/dnstool $(DESTDIR)/etc/anonsurf/
-	cp anonsurf/anondaemon $(DESTDIR)/etc/anonsurf/
+	cp daemon/anondaemon $(DESTDIR)/etc/anonsurf/
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anonsurfd $(DESTDIR)/etc/init.d/
-	cp anonsurf/anonsurf $(DESTDIR)/usr/bin/
+	cp binaries/anonsurf $(DESTDIR)/usr/bin/
 	cp resolv.conf.opennic $(DESTDIR)/etc/anonsurf/resolv.conf.opennic
 
 	cp -rf launchers/* $(DESTDIR)/usr/share/applications/
