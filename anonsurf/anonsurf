@@ -65,7 +65,6 @@ function init {
 
 
 function ip {
-
 	MYIP=`wget -qO- https://start.parrotsec.org/ip/`
 	echo -e "\nMy ip is:\n"
 	echo $MYIP
@@ -144,38 +143,40 @@ function status {
 }
 
 
-function dnsstart {
-	echo "Configuring OpenNIC DNS service"
-	notify "Configuring OpenNIC DNS service"
-	rm /etc/resolv.conf
-	cat /etc/anonsurf/resolv.conf.opennic > /etc/resolvconf/resolv.conf.d/tail
-	cat /etc/anonsurf/resolv.conf.opennic > /etc/resolv.conf
-	/usr/sbin/service resolvconf restart
-	touch /etc/anonsurf/opennic.lock
-	echo "done"
-	notify "done"
-}
+# function dnsstart {
+# 	echo "Configuring OpenNIC DNS service"
+# 	notify "Configuring OpenNIC DNS service"
+# 	rm /etc/resolv.conf
+# 	cat /etc/anonsurf/resolv.conf.opennic > /etc/resolvconf/resolv.conf.d/tail
+# 	cat /etc/anonsurf/resolv.conf.opennic > /etc/resolv.conf
+# 	/usr/sbin/service resolvconf restart
+# 	touch /etc/anonsurf/opennic.lock
+# 	echo "done"
+# 	notify "done"
+# }
 
 
-function dnsstop {
-	echo "Deconfiguring OpenNIC DNS service"
-	notify "Deconfiguring OpenNIC DNS service"
-	rm /etc/resolv.conf
-	ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
-	echo > /etc/resolvconf/resolv.conf.d/tail
-	/usr/sbin/service resolvconf restart
-	rm /etc/anonsurf/opennic.lock
-	echo "done"
-	notify "done"
-}
+# function dnsstop {
+# 	echo "Deconfiguring OpenNIC DNS service"
+# 	notify "Deconfiguring OpenNIC DNS service"
+# 	rm /etc/resolv.conf
+# 	ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
+# 	echo > /etc/resolvconf/resolv.conf.d/tail
+# 	/usr/sbin/service resolvconf restart
+# 	rm /etc/anonsurf/opennic.lock
+# 	echo "done"
+# 	notify "done"
+# }
 
 
 function dns {
-    if [ -f /etc/anonsurf/opennic.lock ]; then
-        dnsstop
-    elif [ ! -f /etc/anonsurf/opennic.lock ]; then
-        dnsstart
-    fi
+    # if [ -f /etc/anonsurf/opennic.lock ]; then
+    #     dnsstop
+    # elif [ ! -f /etc/anonsurf/opennic.lock ]; then
+    #     dnsstart
+    # fi
+		echo "Please use /etc/anonsurf/dnstool instead"
+		/etc/anonsurf/dnstool help
 }
 
 
