@@ -245,7 +245,7 @@ Parrot AnonSurf Module (v 2.11)
 		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
 		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
 	Maintained by Nong Hoang \"DmKnght\" Tu <dmknght@parrotsec.org>
-		and a huge amount of Caffeine + some GNU/GPL v3 stuff
+		and a huge amount of Caffeine, Mountain Dew + some GNU/GPL v3 stuff
 	Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
 
 	Usage:
@@ -260,7 +260,7 @@ Parrot AnonSurf Module (v 2.11)
 	$RED changeid$BLUE -$GREEN Restart TOR to change identity
 	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
 	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
-	$RED dns$BLUE -$GREEN Replace your DNS with the OpenNIC DNS servers.
+	$RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /etc/anonsurf/dnstool.
 $RESETCOLOR
 Dance like no one's watching. Encrypt like everyone is.
 " >&2
