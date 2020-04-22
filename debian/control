@@ -1,5 +1,5 @@
 Source: anonsurf
-Section: parrot
+Section: net
 Priority: optional
 Maintainer: Parrot Team <team@parrotsec.org>
 Uploaders: Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>,
