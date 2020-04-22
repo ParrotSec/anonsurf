@@ -25,7 +25,7 @@ proc checkDNSServers(path: string): int =
     elif line == "options rotate":
       discard
     # Check empty line
-    elif isNilOrWhitespace(line):
+    elif isEmptyOrWhitespace(line):
       discard
     # Check if OpenNIC DNS is in the setting
     elif line.startsWith("nameserver"):
