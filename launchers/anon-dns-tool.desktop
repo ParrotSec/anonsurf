@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Exec=menuexecg /etc/anonsurf/dnstool
+Name=Set/Fix DNS settings
+Comment=Set DNS address[es] and fix DNS problems.
+Icon=network-server
+Categories=anonsurf;
