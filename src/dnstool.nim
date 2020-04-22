@@ -4,7 +4,6 @@
 
 import os
 import net
-import strutils
 import utils / dnsutils
 
 const
