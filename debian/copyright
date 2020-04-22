@@ -20,8 +20,8 @@ Files:
   debian/anonsurf.1
   anonsurf/anondaemon
   anonsurf/anonsurf
-  anonsurf/anonsurfd
-  anonsurf/anonsurfd.service
+  sys-units/anonsurfd
+  sys-units/anonsurfd.service
   AnonSurfGUI.nimble
   launcher/anon-gui.desktop
   src/*
