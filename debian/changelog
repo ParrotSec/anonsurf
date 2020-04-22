@@ -1,4 +1,4 @@
-anonsurf (2.12.0+parrot0) UNRELEASED; urgency=medium
+anonsurf (2.12.0+parrot0) testing; urgency=medium
 
   * dnstool: Upgrade help banner
   * anonsurf: dns func now use dnstool instead
