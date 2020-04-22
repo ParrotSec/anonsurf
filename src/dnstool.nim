@@ -15,17 +15,65 @@ const
   dhcpAddrFile = "/run/resolvconf/interface/NetworkManager" # TODO check for multiple if
 
 
+proc showHelpDesc(keyword = "", descr = "") =
+  #[
+    Make color for description
+    syntax:
+      <keyword>: <description>
+    keyword -> red
+    description -> blue
+  ]#
+  var helpDesc = ""
+  if keyword != "":
+    helpDesc = "\e[31m" & keyword & "\e[0m: "
+  helpDesc &= "\e[34m" & descr & "\e[0m"
+
+  echo "  " & helpDesc
+
+
+proc showHelpCmd(cmd = "dnstool", keyword = "help", args = "", descr = "") =
+  #[
+    Make color for command syntax in help bannner
+    Print them in help
+    Syntax: <command> <keyword> <args> [<description>]
+    command -> light green
+    keyword -> red
+    args (optional) -> yellow
+    description (optional) -> blue
+  ]#
+  var cmdOutput = ""
+  cmdOutput &= "\e[32m" & cmd & "\e[0m " # Green color for command
+  cmdOutput &= "\e[31m" & keyword & "\e[0m " # Red color for keyword
+  if args != "":
+    cmdOutput &= "\e[33m" & args & "\e[0m "
+  if descr != "":
+    cmdOutput &= "[\e[34m" & descr & "\e[0m]"
+  
+  echo cmdOutput
+
+proc banner() =
+  stdout.write("DNS Tool: A CLI tool to change DNS settings quickly\n")
+  stdout.write("Developer: Nong Hoang \"DmKnght\" Tu <dmknght@parrotsec.org>\n")
+  stdout.write("Gitlab: https://nest.parrot.sh/packages/tools/anonsurf\n")
+  stdout.write("License: GPL3\n\n")
+
+
 proc help() =
+  banner()
   let progName = getAppFileName().split("/")[^1]
-  stdout.write(progName & " help | -h | --help [Show help banner]\n")
-  stdout.write(progName & " status [Show current DNS settings]\n")
-  stdout.write("sudo " & progName & " dynamic [Always use DNS from DHCP service]\n")
-  stdout.write("sudo " & progName & " dynamic <address> [Combine DNS from DHCP and custom address]\n")
-  stdout.write("sudo " & progName & " static <address> [Use static DNS address(es). Your settings wont be changed after reboot]\n")
-  stdout.write("Address could be:\n")
-  stdout.write("    opennic: OpenNIC DNS addresses\n")
-  stdout.write("    dhcp: Address that DHCP provides [Use for static setting]\n")
-  stdout.write("    IPv4 or IPv6 format\n")
+  showHelpCmd(cmd = progName, keyword = "help | -h | --help", descr = "Show help banner")
+  showHelpCmd(cmd = progName, keyword = "status", descr = "Show current system DNS")
+  showHelpCmd(cmd = "sudo " & progName, keyword = "dynamic", descr = "Use DHCP's DNS")
+  showHelpCmd(cmd = "sudo " & progName, keyword = "dynamic", args = "<Address[es]>", descr = "Use DHCP's DNS and custom DNS address[es]")
+  showHelpCmd(cmd = "sudo " & progName, keyword = "static", args = "<Address[es]>", descr = "Use custom DNS address[es]")
+  stdout.write("\nAddress could be:\n")
+  showHelpDesc(keyword = "opennic", descr = "OpenNIC address[es]")
+  showHelpDesc(keyword = "dhcp", descr = "Address[es] of current DHCP settings")
+  showHelpDesc(descr = "Any IPv4 or IPv6 address[es]")
+  stdout.write("\nStatic and Dynamic:\n")
+  showHelpDesc(keyword = "static", descr = "Keep DNS settings after reboot or join other network")
+  showHelpDesc(keyword = "dynamic", descr = "Doesn't keep current address[es] after reboot or join new network")
+  stdout.write("\n")
 
 
 proc readDHCPDNS(): string =
@@ -43,7 +91,7 @@ proc status() =
     stderr.write("[x] Only using localhost\n")
   else:
     if statusResult == 20:
-      stdout.write("Using static settings\n")
+      stdout.write("Using static setting\n")
     elif statusResult == 21:
       stdout.write("Using static + OpenNIC addresses\n")
     elif statusResult == 22:
