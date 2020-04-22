@@ -33,4 +33,3 @@ install:
 	chmod 644 $(DESTDIR)/etc/anonsurf -R
 	chmod 775 $(DESTDIR)/etc/anonsurf/anondaemon
 	chmod 775 $(DESTDIR)/etc/anonsurf/dnstool
-
