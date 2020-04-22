@@ -18,8 +18,8 @@ License: GPL-3.0+
 Files:
   debian/changelog
   debian/anonsurf.1
-  anonsurf/anondaemon
-  anonsurf/anonsurf
+  daemon/anondaemon
+  binaries/anonsurf
   sys-units/anonsurfd
   sys-units/anonsurfd.service
   AnonSurfGUI.nimble
