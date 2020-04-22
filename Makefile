@@ -32,4 +32,4 @@ install:
 	chown root:root $(DESTDIR)/etc/anonsurf -R
 	chmod 644 $(DESTDIR)/etc/anonsurf -R
 	chmod 775 $(DESTDIR)/etc/anonsurf/anondaemon
-	chmod 775 $(DESTDIR)/etc/anonsurf/dnstool
+	chmod 775 $(DESTDIR)/usr/bin/dnstool

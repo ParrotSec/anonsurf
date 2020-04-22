@@ -175,8 +175,8 @@ function dns {
     # elif [ ! -f /etc/anonsurf/opennic.lock ]; then
     #     dnsstart
     # fi
-		echo "Please use /etc/anonsurf/dnstool instead"
-		/etc/anonsurf/dnstool help
+		echo "Please use /usr/bin/dnstool instead"
+		/usr//bin/dnstool help
 }
 
 
@@ -260,7 +260,7 @@ Parrot AnonSurf Module (v 2.11)
 	$RED changeid$BLUE -$GREEN Restart TOR to change identity
 	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
 	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
-	$RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /etc/anonsurf/dnstool.
+	$RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.
 $RESETCOLOR
 Dance like no one's watching. Encrypt like everyone is.
 " >&2
