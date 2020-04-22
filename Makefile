@@ -17,7 +17,7 @@ install:
 	cp torrc $(DESTDIR)/etc/anonsurf/torrc
 	
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
-	cp -r src/dnstool $(DESTDIR)/etc/anonsurf/
+	cp -r src/dnstool $(DESTDIR)/usr/bin/
 	cp daemon/anondaemon $(DESTDIR)/etc/anonsurf/
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anonsurfd $(DESTDIR)/etc/init.d/
