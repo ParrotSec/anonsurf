@@ -1,3 +1,13 @@
+anonsurf (2.12.0+parrot1) testing; urgency=medium
+
+  * Update descriptions in control
+  * Change folder names for development maintaince:
+    anonsurf, anonsurfd.
+  * Update copyright for new path
+  * Move dnstool from /etc/anonsurf/ to /usr/bin/
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Thu, 23 Apr 2020 02:25:09 +0700
+
 anonsurf (2.12.0+parrot0) testing; urgency=medium
 
   * dnstool: Upgrade help banner
