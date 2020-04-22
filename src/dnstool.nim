@@ -84,28 +84,29 @@ proc status() =
   #[
     Get current settings of DNS on system
   ]#
+  stdout.write("Your system is: ")
   let statusResult = dnsStatusCheck()
   if statusResult == 0:
-    stdout.write("Under AnonSurf\n")
+    stdout.write("under AnonSurf connection\n")
   elif statusResult == -1:
-    stderr.write("[x] Only using localhost\n")
+    stderr.write("[x] using localhost only. This might be an error\n")
   else:
     if statusResult == 20:
-      stdout.write("Using static setting\n")
+      stdout.write("using static setting\n")
     elif statusResult == 21:
-      stdout.write("Using static + OpenNIC addresses\n")
+      stdout.write("using static + OpenNIC addresses\n")
     elif statusResult == 22:
-      stdout.write("Using static + custom addresses\n")
+      stdout.write("using static + custom addresses\n")
     elif statusResult == 23:
-      stdout.write("Using static + OpenNIC + Custom addresses\n")
+      stdout.write("using static + OpenNIC + Custom addresses\n")
     elif statusResult == 10:
-      stdout.write("Using dynamic settings\n")
+      stdout.write("using dynamic settings\n")
     elif statusResult == 11:
-      stdout.write("Using dynamic + OpenNIC addresses\n")
+      stdout.write("using dynamic + OpenNIC addresses\n")
     elif statusResult == 12:
-      stdout.write("Using dynamic + custom addresses\n")
+      stdout.write("using dynamic + custom addresses\n")
     elif statusResult == 13:
-      stdout.write("Using dynamic + OpenNIC + Custom addresses\n")
+      stdout.write("using dynamic + OpenNIC + Custom addresses\n")
 
 
 proc writeDNSToTail(data: string) = 
