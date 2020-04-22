@@ -16,7 +16,8 @@ Depends: bash, iptables, nftables, tor, libc6
 Recommends: libnotify-bin, i2p, onioncircuits, connect-proxy, onionshare, torsocks, tor-geoipdb, parrot-menu
 Suggests: gnunet-gtk, gnunet, vidalia
 Description: Anonymization toolkit for Parrot Security OS
- AnonSurf is an anonymization toolkit that applies configurations and toolkits to prevent
- tracking and surveillance on end-user.
- AnonSurf create a Tor transparent proxy and use iptables to forward all traffic through
- Tor network. It also disables IPv6, clear applications's cache to prevent data leak.
+ AnonSurf is an anonymization toolkit that applies configurations and toolkits
+ to prevent tracking and surveillance on end-user. AnonSurf create a Tor
+ transparent proxy and use iptables to forward all traffic through Tor
+ network. It also disables IPv6, clear applications's cache to prevent
+ data leak.
