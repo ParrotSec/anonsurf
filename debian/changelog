@@ -1,3 +1,10 @@
+anonsurf (2.12.1+parrot0) testing; urgency=medium
+
+  * Restore backup of DNS instead  of create new symlink
+  * Remove OpenNIC resolv.conf because of new dnstool
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Fri, 24 Apr 2020 02:08:41 +0700
+
 anonsurf (2.12.0+parrot1) testing; urgency=medium
 
   * Update descriptions in control
