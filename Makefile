@@ -22,11 +22,11 @@ install:
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anonsurfd $(DESTDIR)/etc/init.d/
 	cp binaries/anonsurf $(DESTDIR)/usr/bin/
-	cp resolv.conf.opennic $(DESTDIR)/etc/anonsurf/resolv.conf.opennic
+	# cp resolv.conf.opennic $(DESTDIR)/etc/anonsurf/resolv.conf.opennic
 
 	cp -rf launchers/* $(DESTDIR)/usr/share/applications/
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
-	chown root:root $(DESTDIR)/etc/anonsurf/resolv.conf.opennic
+	# chown root:root $(DESTDIR)/etc/anonsurf/resolv.conf.opennic
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
 	ln -s /usr/bin/anonsurf $(DESTDIR)/usr/bin/anon
 	chown root:root $(DESTDIR)/etc/anonsurf -R

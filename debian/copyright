@@ -4,7 +4,6 @@ Upstream-Contact: Nong Hoang "DmKnght" Tu dmknght@parrotsec.org
 Source: https://nest.parrot.sh/packages/tools/anonsurf
 
 Files:
-  resolv.conf.opennic
   torrc
   onion.pac
   debian/*

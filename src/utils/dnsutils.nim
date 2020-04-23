@@ -90,7 +90,6 @@ proc dnsStatusCheck*(): int =
       Check if system is using dynamic setting (default of Debian) or static
       If static, check OpenNIC setting or custom setting
       /etc/anonsurf/opennic.lock exists -> system is using OpenNIC DNS
-      Verify it by comparing /etc/anonsurf/resolv.conf.opennic?
       If ln -s /run/resolvconf/resolv.conf /etc/resolv.conf -> dynamic
     ]#
     let resolvInfo = getFileInfo(resolvPath, followSymlink = false)
