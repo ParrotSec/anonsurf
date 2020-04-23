@@ -4,7 +4,7 @@ clean:
 
 install:
 	#nim c src/AnonSurfGUI.nim
-	nim c src/dnstool.nim
+	nim c --nimcache:/tmp src/dnstool.nim
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/etc/tor/
 	mkdir -p $(DESTDIR)/etc/init.d/
