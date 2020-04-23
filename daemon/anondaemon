@@ -148,7 +148,8 @@ function stop {
 	fi
 	echo -e -n "\n $GREEN*$BLUE Restore DNS service"
 	rm /etc/resolv.conf || true
-	ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf || true
+	mv /etc/resolv.conf.bak /etc/resolv.conf || true
+	# ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf || true
 
 	# re-enable ipv6
 	/sbin/sysctl -w net.ipv6.conf.all.disable_ipv6=0
