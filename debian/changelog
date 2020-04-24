@@ -1,3 +1,9 @@
+anonsurf (2.12.1+parrot2) rolling; urgency=medium
+
+  * Fix wrong status in dnstool when AnonSurf is running
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sat, 25 Apr 2020 02:45:20 +0700
+
 anonsurf (2.12.1+parrot1) rolling; urgency=medium
 
   * Flag package as architecture-specific.
