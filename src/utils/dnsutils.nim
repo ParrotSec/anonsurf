@@ -80,7 +80,7 @@ proc dnsStatusCheck*(): int =
       2. If anonsurf is not running, return localhost, red text
     ]#
     let anonsurfStatus = execProcess("systemctl is-active anonsurfd").replace("\n", "")
-    if anonsurfStatus == "actived":
+    if anonsurfStatus == "active":
       result = 0
     else:
       # TODO use red color here
