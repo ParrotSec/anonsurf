@@ -1,16 +1,12 @@
-<<<<<<< HEAD
 anonsurf (2.12.1+parrot2) rolling-testing; urgency=medium
 
+  [Lorenzo "Palinuro" Faletra]
   * Don't make it start at boot by default.
 
- -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sat, 25 Apr 2020 15:38:33 +0200
-=======
-anonsurf (2.12.1+parrot2) rolling; urgency=medium
-
+  [Nong Hoang "DmKnght" Tu]
   * Fix wrong status in dnstool when AnonSurf is running
 
- -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sat, 25 Apr 2020 02:45:20 +0700
->>>>>>> b99ecb9526d9a764b5a969ace798bc06d90a451e
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Sat, 25 Apr 2020 15:38:33 +0200
 
 anonsurf (2.12.1+parrot1) rolling; urgency=medium
 
