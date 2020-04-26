@@ -170,6 +170,8 @@ proc drawDNSDialog(b: Button) =
     labelStatus.setText("Can't not find resolv.conf")
   elif dnsStatus == -1:
     labelStatus.setText("localhost")
+  elif dnsStatus == -3:
+    labelStatus.setTExt("Resolv.conf is empty")
   elif dnsStatus == 0:
     labelStatus.setText("AnonSurf DNS")
   elif dnsStatus == 10:

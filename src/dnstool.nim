@@ -89,6 +89,10 @@ proc status() =
     stdout.write("under AnonSurf connection\n")
   elif statusResult == -1:
     stderr.write("[x] using localhost only. This might be an error\n")
+  elif statusResult == -2:
+    stderr.write("[x] having error: resolf.conf not found\n")
+  elif statusResult == -3:
+    stderr.write("[x] having error: resolv.conf is empty\n")
   else:
     if statusResult == 20:
       stdout.write("using static setting\n")

@@ -58,6 +58,7 @@ proc dnsStatusCheck*(): int =
       0: AnonSurf DNS (running)
       -1: Localhost only
       -2: File not found
+      -3: File is empty
       10: Static
         1.0: Static only?
         1.1: OpenNIC
@@ -71,7 +72,9 @@ proc dnsStatusCheck*(): int =
   ]#
   const resolvPath = "/etc/resolv.conf"
   if not existsFile(resolvPath):
-    result = 2
+    return -2
+  elif isEmptyOrWhitespace(readFile(resolvPath)):
+    return -3
   let dnsSettings = readFile(resolvPath)
   if dnsSettings == "nameserver 127.0.0.1\n":
     #[
