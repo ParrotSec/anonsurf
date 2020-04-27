@@ -1,9 +1,16 @@
+anonsurf (2.12.1+parrot4) rolling; urgency=medium
+
+  * Move gui launcher to other location.
+  * Correct real name in changelog
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Mon, 27 Apr 2020 11:09:14 +0700
+
 anonsurf (2.12.1+parrot3) rolling; urgency=medium
 
   * Fix the status check for missing resolv.conf
   * Add check for empty resolv.conf file
 
- -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Mon, 27 Apr 2020 04:04:50 +0700
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Mon, 27 Apr 2020 04:04:50 +0700
 
 anonsurf (2.12.1+parrot2) rolling-testing; urgency=medium
 
