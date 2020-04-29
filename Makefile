@@ -24,7 +24,7 @@ install:
 	# cp sys-units/anonsurfd $(DESTDIR)/etc/init.d/
 	cp binaries/anonsurf $(DESTDIR)/usr/bin/
 	# cp resolv.conf.opennic $(DESTDIR)/etc/anonsurf/resolv.conf.opennic
-	cp completion/anon-completion $(DESTDIR)/etc/bash_completion.d/
+	# cp completion/anon-completion $(DESTDIR)/etc/bash_completion.d/
 
 	cp -rf launchers/* $(DESTDIR)/usr/share/applications/
 	chown root:root $(DESTDIR)/usr/bin/anonsurf

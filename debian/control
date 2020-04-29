@@ -5,7 +5,7 @@ Maintainer: Parrot Team <team@parrotsec.org>
 Uploaders: Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>,
            Lisetta "Sheireen" Ferrero <sheireen@autistiche.org>
 Standards-Version: 4.5.0
-Build-Depends: debhelper-compat (= 12), nim, gcc
+Build-Depends: debhelper-compat (= 12), nim, gcc, bash-completion
 Build-Depends-Indep: pkg-config
 Homepage: https://www.parrotsec.org/
 
