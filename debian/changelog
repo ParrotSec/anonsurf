@@ -1,3 +1,9 @@
+anonsurf (2.12.2+parrot0) rolling; urgency=medium
+
+  * Add basic bash completion for anonsurf
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Wed, 29 Apr 2020 23:49:17 +0700
+
 anonsurf (2.12.1+parrot4) rolling; urgency=medium
 
   * Move gui launcher to other location.
