@@ -63,7 +63,7 @@ function disableService {
 		echo -e -n "\n $GREEN*$BLUE Stopping service dnsmasq"
 		/usr/sbin/service dnsmasq stop 2>/dev/null || echo " (already stopped)"
 		killall dnsmasq nscd resolvconf 2>/dev/null || true
-		sleep 2
+		sleep 1
 		killall -9 dnsmasq 2>/dev/null || true
 	fi
 }
@@ -80,8 +80,8 @@ function enableService {
 
 
 function start {
-	/usr/sbin/service tor start
-	sleep 3
+	# /usr/sbin/service tor start
+	# sleep 3
 
 	if ! [ -f /etc/network/iptables.rules ]; then
 		/usr/sbin/iptables-save > /etc/network/iptables.rules
@@ -132,7 +132,7 @@ function start {
 	echo -e " $GREEN*$BLUE Allowing only tor to browse in clearnet\n"
 	/usr/sbin/iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
 	/usr/sbin/iptables -A OUTPUT -j REJECT
-	sleep 2
+	# sleep 2
 }
 
 
@@ -155,10 +155,10 @@ function stop {
 	/sbin/sysctl -w net.ipv6.conf.all.disable_ipv6=0
 	/sbin/sysctl -w net.ipv6.conf.default.disable_ipv6=0
 
-	/usr/sbin/service tor stop
+	# /usr/sbin/service tor stop
 	sleep 1
 	killall tor
-	sleep 1
+	# sleep 1
 }
 
 

@@ -86,25 +86,27 @@ function checkuid {
 function start {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
+	/usr/sbin/service tor start
 	/usr/sbin/service anonsurfd start
 
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
 	notify "Global Anonymous Proxy Activated"
 	sleep 1
-	notify "Dance like no one's watching. Encrypt like everyone is :)"
-	sleep 3
+	# notify "Dance like no one's watching. Encrypt like everyone is :)"
+	# sleep 3
 }
 
 
 function stop {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
+	/usr/sbin/service tor stop
 	/usr/sbin/service anonsurfd stop
 
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
 	notify "Global Anonymous Proxy Closed - Stop dancing :("
-	sleep 3
+	sleep 1
 }
 
 
@@ -176,7 +178,7 @@ function dns {
     #     dnsstart
     # fi
 		echo "Please use /usr/bin/dnstool instead"
-		/usr//bin/dnstool help
+		/usr/bin/dnstool help
 }
 
 
