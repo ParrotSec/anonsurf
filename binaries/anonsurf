@@ -53,7 +53,7 @@ export notify
 
 function init {
 	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
-	sudo killall -q chrome dropbox iceweasel skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail
+	sudo killall -q chrome dropbox skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail
 	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed\n"
 	notify "Dangerous applications killed"
 
@@ -87,6 +87,7 @@ function start {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
 	/usr/sbin/service tor start
+	# TODO terminate if tor failed to start
 	/usr/sbin/service anonsurfd start
 
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
