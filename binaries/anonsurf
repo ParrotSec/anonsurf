@@ -103,8 +103,6 @@ function stop {
 	# /usr/sbin/service tor stop
 	/usr/sbin/service anonsurfd stop
 
-	rm /etc/anonsurf/torrc
-
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
 	notify "Global Anonymous Proxy Closed - Stop dancing :("
 	sleep 1
