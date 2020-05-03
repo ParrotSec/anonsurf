@@ -54,5 +54,5 @@ proc genTorrc*(isTorBridge: bool = false): string =
   if isTorBridge == true:
     result &= "#Bridge config\nBridgeRelay 1\nExtORPort auto\nServerTransportPlugin obfs4 exec /usr/bin/obfs4proxy\n"
     result &= "ORPort 9001\n" # TODO check here Security reason
-    result &= "ServerTransportListenAddr obfs4 0.0.0.0:9443" # TODO check here. Security reason
+    result &= "ServerTransportListenAddr obfs4 0.0.0.0:9443\n" # TODO check here. Security reason
     # TODO ServerTransportListenAddr obfs4 0.0.0.0:TODO2
