@@ -97,22 +97,10 @@ function start {
 }
 
 
-# function start-bridge {
-# 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode via obfs4 bridge:$RESETCOLOR\n"
-
-# 	/usr/sbin/service anonsurfd start bridge
-
-# 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
-# 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
-# 	notify "Global Anonymous Proxy Activated"
-# 	sleep 1
-# }
-
-
 function stop {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
-	# /usr/sbin/service tor stop
+	/usr/sbin/service tor stop
 	/usr/sbin/service anonsurfd stop
 
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
@@ -170,23 +158,34 @@ case "$1" in
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
+			echo -e "$GREEN *$BLUE Generating torrc"
+			/etc/anonsurf/make-torrc
+			echo -e "$GREEN *$BLUE Starting tor service"
+			/usr/sbin/service tor start
+			echo -e "$GREEN *$BLUE Making firewall rules"
 			start
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
 		fi
 	;;
 
-	# start-bridge)
-	# # Only start if anonsurfd is not running
-	# # TODO try to run if the service status is failed?
-	# 	checkuid
-	# 	if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
-	# 		zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
-	# 		start-bridge
-	# 	else
-	# 		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
-	# 	fi
-	# ;;
+	start-bridge)
+	# Only start if anonsurfd is not running
+	# TODO try to run if the service status is failed?
+		checkuid
+		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
+			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
+			echo -e "$GREEN *$BLUE Generating torrc"
+			/etc/anonsurf/make-torrc bridge
+			echo -e "$GREEN *$BLUE Starting tor service"
+			/usr/sbin/service tor start
+			# start-bridge
+			echo -e "$GREEN *$BLUE Making firewall rules"
+			start
+		else
+			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
+		fi
+	;;
 	
 	stop)
 	# Only stop if the anonsurfd is running
