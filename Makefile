@@ -37,10 +37,13 @@ install:
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anonsurfd $(DESTDIR)/etc/init.d/
 
-	# Init folders
-	chown root:root $(DESTDIR)/usr/bin/anonsurf
-	chmod 775 $(DESTDIR)/usr/bin/anonsurf
+	# Init permission for folders
 	chown root:root $(DESTDIR)/etc/anonsurf -R
 	chmod 644 $(DESTDIR)/etc/anonsurf -R
+
+	# Init permission for files
+	chown root:root $(DESTDIR)/usr/bin/anonsurf
+	chmod 775 $(DESTDIR)/usr/bin/anonsurf
 	chmod 775 $(DESTDIR)/etc/anonsurf/anondaemon
 	chmod 775 $(DESTDIR)/usr/bin/dnstool
+	chmod 775 $(DESTDIR)/usr/bin/make-torrc
