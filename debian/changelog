@@ -1,3 +1,9 @@
+anonsurf (2.13.0+parrot0) rolling-testing; urgency=medium
+
+  * Add obfs4 bridge support in config generation
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sun, 03 May 2020 07:58:45 +0700
+
 anonsurf (2.12.2+parrot0) rolling; urgency=medium
 
   * Add basic bash completion for anonsurf
