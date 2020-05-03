@@ -23,8 +23,36 @@ proc generateHashsum*(password: string): string =
   return $secureHash(password)
 
 
-proc genTorrc*(): string =
-  let
-    baseData = readFile("/etc/anonsurf/torrc.base")
+proc genBridgeAddr*(): string =
+  #[
+    Read the list from official list
+    Random selecting from the list
+  ]#
+  const
+    basePath = "/etc/anonsurf/obfs4bridge.list" # TODO change here. Development only
+    # basePath = "/home/dmknght/Parrot_Projects/anonsurf/obfs4bridge.list"
 
-  return baseData & "\nHashedControlPassword 16:" & generateHashsum(generatePassword())
+  var
+    allBridgeAddr: seq[string]
+
+  for line in lines(basePath):
+    if not line.startsWith("#") and not isEmptyOrWhitespace(line):
+      allBridgeAddr.add(line)
+  
+  return sample(allBridgeAddr)
+
+
+proc genTorrc*(isTorBridge: bool = false): string =
+  const
+    basePath = "/etc/anonsurf/torrc.base" # TODO change here. Development only
+    # basePath = "/home/dmknght/Parrot_Projects/anonsurf/torrc.base"
+
+  result = readFile(basePath)
+
+  result &= "\nHashedControlPassword 16:" & generateHashsum(generatePassword()) & "\n"
+
+  if isTorBridge == true:
+    result &= "#Bridge config\nBridgeRelay 1\nExtORPort auto\nServerTransportPlugin obfs4 exec /usr/bin/obfs4proxy\n"
+    result &= "ORPort 9001\n" # TODO check here Security reason
+    result &= "ServerTransportListenAddr obfs4 0.0.0.0:9443" # TODO check here. Security reason
+    # TODO ServerTransportListenAddr obfs4 0.0.0.0:TODO2
