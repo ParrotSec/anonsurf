@@ -51,7 +51,7 @@ TOR_UID="debian-tor"
 
 # Tor's TransPort
 TOR_PORT="9040"
-BRIDGE_PORT="9443"
+TOR_PORT="9443"
 
 
 function disableService {
@@ -171,8 +171,8 @@ function start-bridge {
 	/usr/sbin/iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
 
 	#resolve .onion domains mapping 10.192.0.0/10 address space
-	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $BRIDGE_PORT
-	/usr/sbin/iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $BRIDGE_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
 
 	#exclude local addresses
 	for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
@@ -181,9 +181,9 @@ function start-bridge {
 	done
 
 	#redirect all other output through TOR
-	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $BRIDGE_PORT
-	/usr/sbin/iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $BRIDGE_PORT
-	/usr/sbin/iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $BRIDGE_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $TOR_PORT
 
 	#accept already established connections
 	/usr/sbin/iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
