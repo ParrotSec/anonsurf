@@ -70,7 +70,7 @@ function disableService {
 
 
 function enableService {
-	echo -e -n "\ $GREEN*$BLUE Restarting services\n"
+	echo -e -n " $GREEN*$BLUE Restarting services\n"
 	/usr/sbin/service resolvconf start || service resolvconf restart || true
 	/usr/sbin/service dnsmasq start || true
 	/usr/sbin/service nscd start || true
@@ -172,8 +172,8 @@ function start {
 # 	/usr/sbin/iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
 
 # 	#resolve .onion domains mapping 10.192.0.0/10 address space
-# 	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $BRIDGE_PORT
-# 	/usr/sbin/iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $BRIDGE_PORT
+# 	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
+# 	/usr/sbin/iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
 
 # 	#exclude local addresses
 # 	for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
@@ -182,9 +182,9 @@ function start {
 # 	done
 
 # 	#redirect all other output through TOR
-# 	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $BRIDGE_PORT
-# 	/usr/sbin/iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $BRIDGE_PORT
-# 	/usr/sbin/iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $BRIDGE_PORT
+# 	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
+# 	/usr/sbin/iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $TOR_PORT
+# 	/usr/sbin/iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $TOR_PORT
 
 # 	#accept already established connections
 # 	/usr/sbin/iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -227,13 +227,14 @@ function stop {
 case "$1" in
 	start)
 		disableService
+		# start
+		if [ "$2" == "bridge" ]
+		then
+			/etc/anonsurf/make-torrc bridge
+		else
+			/etc/anonsurf/make-torrc
+		fi
 		start
-		# if [ "$2" == "bridge" ]
-		# then
-		# 	start-bridge
-		# else
-		# 	start
-		# fi
 	;;
 	stop)
 		stop
