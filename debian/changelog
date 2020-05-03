@@ -1,3 +1,10 @@
+anonsurf (2.13.0+parrot1) rolling-testing; urgency=medium
+
+  * Correct the configuration for Obfs4Bridge
+  * Add "meu" to support list
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sun, 03 May 2020 08:33:46 +0700
+
 anonsurf (2.13.0+parrot0) rolling-testing; urgency=medium
 
   * Add obfs4 bridge support in config generation
