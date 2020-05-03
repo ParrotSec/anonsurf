@@ -95,7 +95,7 @@ function start {
 
 	mv /etc/resolv.conf /etc/resolv.conf.bak
 	echo -e 'nameserver 127.0.0.1' > /etc/resolv.conf
-	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS/OpenNIC\n"
+	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor\n"
 
 	# disable ipv6
 	echo -e " $GREEN*$BLUE Disabling IPv6 for security reasons\n"
@@ -153,7 +153,7 @@ function start-bridge {
 
 	mv /etc/resolv.conf /etc/resolv.conf.bak
 	echo -e 'nameserver 127.0.0.1' > /etc/resolv.conf
-	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor and ParrotDNS/OpenNIC\n"
+	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor\n"
 
 	# disable ipv6
 	echo -e " $GREEN*$BLUE Disabling IPv6 for security reasons\n"
