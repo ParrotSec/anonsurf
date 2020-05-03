@@ -97,6 +97,18 @@ function start {
 }
 
 
+function start-bridge {
+	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode via obfs4 bridge:$RESETCOLOR\n"
+
+	/usr/sbin/service anonsurfd start-bridge
+
+	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
+	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
+	notify "Global Anonymous Proxy Activated"
+	sleep 1
+}
+
+
 function stop {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
@@ -171,8 +183,7 @@ case "$1" in
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			echo -e "$GREEN *$BLUE Generating Torrc with Obfs4 bridge"
-			/etc/anonsurf/make-torrc bridge # TODO move to service
-			start
+			start-bridge
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
 		fi
