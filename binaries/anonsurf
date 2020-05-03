@@ -105,6 +105,8 @@ function stop {
 	/usr/sbin/service tor stop
 	/usr/sbin/service anonsurfd stop
 
+	rm /etc/anonsurf/torrc
+
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
 	notify "Global Anonymous Proxy Closed - Stop dancing :("
 	sleep 1
@@ -132,6 +134,7 @@ function disable-boot {
 
 
 function change {
+	# TOD change authenticate here
 	echo -e "authenticate \"kuhNygbtfu76fFUbgv\"\nsignal newnym\nquit" | nc localhost -q 1 9051
 	/usr/sbin/service tor restart
 	sleep 1
@@ -190,11 +193,27 @@ case "$1" in
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
+			echo -e "$GREEN *$BLUE Generating Torrc\n"
+			/etc/anonsurf/make-torrc
 			start
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
 		fi
 	;;
+	start-bridge)
+	# Only start if anonsurfd is not running
+	# TODO try to run if the service status is failed?
+		checkuid
+		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
+			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
+			echo -e "$GREEN *$BLUE Generating Torrc with Obfs4 bridge\n"
+			/etc/anonsurf/make-torrc bridge
+			start
+		else
+			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
+		fi
+	;;
+	
 	stop)
 	# Only stop if the anonsurfd is running
 		checkuid
@@ -256,6 +275,7 @@ Parrot AnonSurf Module (v 2.11)
 	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
 
 	$RED start$BLUE -$GREEN Start system-wide TOR tunnel
+	$RED start-bridge$BLUE -$GREEN Start system-wide TOR tunnel with Obfs4 Bridge support
 	$RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
 	$RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
 	$RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
