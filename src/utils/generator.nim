@@ -49,12 +49,15 @@ proc genTorrc*(isTorBridge: bool = false): string =
 
   result = readFile(basePath)
 
-  result &= "\nHashedControlPassword 16:" & generateHashsum(generatePassword()) & "\n"
+  result &= "\nHashedControlPassword 16:" & generateHashsum(generatePassword()) & "\n\n"
 
   if isTorBridge == true:
     # https://sigvids.gitlab.io/create-tor-private-obfs4-bridges.html
     # https://community.torproject.org/relay/setup/bridge/debian-ubuntu/
-    result &= "#Bridge config\nBridgeRelay 1\nExtORPort auto\nServerTransportPlugin obfs4 exec /usr/bin/obfs4proxy\n"
-    result &= "ORPort 9001\n" # TODO check here Security reason
-    result &= "ServerTransportListenAddr obfs4 0.0.0.0:9443\n" # TODO check here. Security reason
+    result &= "#Bridge config\nUseBridges 1\nBridgeRelay 1\nExtORPort auto\n"
+    result &= "ServerTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 0.0.0.0:9443\n" # TODO check here Security reason
+    result &= "Bridge " & genBridgeAddr()
+    # result &= "ServerTransportListenAddr obfs4 0.0.0.0:9443\n" # TODO check here. Security reason
     # TODO ServerTransportListenAddr obfs4 0.0.0.0:TODO2
+
+echo genTorrc(true)
