@@ -51,7 +51,7 @@ function notify {
 export notify
 
 
-function init {
+function kill-apps {
 	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
 	sudo killall -q chrome dropbox skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail
 	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed\n"
@@ -159,7 +159,7 @@ case "$1" in
 	# TODO try to run if the service status is failed?
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
-			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
+			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			echo -e "$GREEN *$BLUE Generating Torrc\n"
 			/etc/anonsurf/make-torrc
 			start
@@ -172,7 +172,7 @@ case "$1" in
 	# TODO try to run if the service status is failed?
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
-			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
+			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			echo -e "$GREEN *$BLUE Generating Torrc with Obfs4 bridge\n"
 			/etc/anonsurf/make-torrc bridge
 			start
@@ -185,7 +185,7 @@ case "$1" in
 	# Only stop if the anonsurfd is running
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
-			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && init
+			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			stop
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't stop service!$RESETCOLOR\n" >&2
