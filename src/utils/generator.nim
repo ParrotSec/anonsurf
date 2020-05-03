@@ -1,8 +1,9 @@
 import random
 import strutils
-import std/sha1
+# import osproc
 
 randomize()
+
 
 proc generatePassword*(): string =
   #[
@@ -14,13 +15,6 @@ proc generatePassword*(): string =
     password = password & sample(strutils.Letters)
 
   return password
-
-
-proc generateHashsum*(password: string): string =
-  #[
-    Generate sha1 sum and return as string
-  ]#
-  return $secureHash(password)
 
 
 proc genBridgeAddr*(): string =
@@ -46,10 +40,18 @@ proc genTorrc*(isTorBridge: bool = false): string =
   const
     basePath = "/etc/anonsurf/torrc.base" # TODO change here. Development only
     # basePath = "/home/dmknght/Parrot_Projects/anonsurf/torrc.base"
+  # let
+  #   randPasswd = generatePassword()
+    # torHashedPasswd = execProcess("tor --hash-password " & randPasswd & " 2>/dev/null")
 
   result = readFile(basePath)
+  # BUG: must generate password by tor tor --hash-password bullshit
+  # Use old config temp
+  result &= "\nHashedControlPassword 16:FDE8ED505C45C8BA602385E2CA5B3250ED00AC0920FEC1230813A1F86F\n"
 
-  result &= "\nHashedControlPassword 16:" & generateHashsum(generatePassword()) & "\n\n"
+  # echo randPasswd
+  # result &= "\nHashedControlPassword " & torHashedPasswd & "\n\n"
+
 
   if isTorBridge == true:
     # https://sigvids.gitlab.io/create-tor-private-obfs4-bridges.html
