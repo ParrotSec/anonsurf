@@ -160,7 +160,7 @@ case "$1" in
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
-			echo -e "$GREEN *$BLUE Generating Torrc\n"
+			echo -e "$GREEN *$BLUE Generating Torrc"
 			/etc/anonsurf/make-torrc
 			start
 		else
@@ -173,7 +173,7 @@ case "$1" in
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
-			echo -e "$GREEN *$BLUE Generating Torrc with Obfs4 bridge\n"
+			echo -e "$GREEN *$BLUE Generating Torrc with Obfs4 bridge"
 			/etc/anonsurf/make-torrc bridge
 			start
 		else
