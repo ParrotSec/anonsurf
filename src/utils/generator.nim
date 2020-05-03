@@ -59,5 +59,3 @@ proc genTorrc*(isTorBridge: bool = false): string =
     result &= "Bridge " & genBridgeAddr()
     # result &= "ServerTransportListenAddr obfs4 0.0.0.0:9443\n" # TODO check here. Security reason
     # TODO ServerTransportListenAddr obfs4 0.0.0.0:TODO2
-
-echo genTorrc(true)
