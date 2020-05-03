@@ -226,7 +226,12 @@ function stop {
 case "$1" in
 	start)
 		disableService
-		start
+		if [ "$2" == "bridge" ]
+		then
+			start-bridge
+		else
+			start
+		fi
 	;;
 	stop)
 		stop
