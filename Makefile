@@ -10,7 +10,7 @@ install:
 	# Make dest folders for Deb packaging
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/etc/tor/
-	mkdir -p $(DESTDIR)/etc/init.d/
+	# mkdir -p $(DESTDIR)/etc/init.d/
 	mkdir -p $(DESTDIR)/usr/bin/
 	mkdir -p $(DESTDIR)/usr/share/applications/
 	mkdir -p $(DESTDIR)/usr/share/parrot-menu/applications/
