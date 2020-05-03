@@ -56,6 +56,6 @@ proc genTorrc*(isTorBridge: bool = false): string =
     # https://community.torproject.org/relay/setup/bridge/debian-ubuntu/
     result &= "#Bridge config\nUseBridges 1\nBridgeRelay 1\nExtORPort auto\n"
     result &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 0.0.0.0:9443\n" # TODO check here Security reason
-    result &= "Bridge " & genBridgeAddr()
+    result &= "Bridge " & genBridgeAddr() & "\n"
     # result &= "ServerTransportListenAddr obfs4 0.0.0.0:9443\n" # TODO check here. Security reason
     # TODO ServerTransportListenAddr obfs4 0.0.0.0:TODO2
