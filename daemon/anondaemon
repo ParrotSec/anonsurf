@@ -218,7 +218,7 @@ function stop {
 	/usr/sbin/service tor stop
 	sleep 1
 	killall tor
-	rm /etc/anonsurf/torrc
+	# rm /etc/anonsurf/torrc
 	# sleep 1
 }
 
