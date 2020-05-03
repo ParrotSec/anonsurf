@@ -86,7 +86,7 @@ function checkuid {
 function start {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
-	/usr/sbin/service tor start
+	# /usr/sbin/service tor start
 	# TODO terminate if tor failed to start
 	/usr/sbin/service anonsurfd start
 
@@ -100,7 +100,7 @@ function start {
 function stop {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
-	/usr/sbin/service tor stop
+	# /usr/sbin/service tor stop
 	/usr/sbin/service anonsurfd stop
 
 	rm /etc/anonsurf/torrc
@@ -161,7 +161,6 @@ case "$1" in
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			echo -e "$GREEN *$BLUE Generating Torrc"
-			/etc/anonsurf/make-torrc
 			start
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
@@ -174,7 +173,7 @@ case "$1" in
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			echo -e "$GREEN *$BLUE Generating Torrc with Obfs4 bridge"
-			/etc/anonsurf/make-torrc bridge
+			/etc/anonsurf/make-torrc bridge # TODO move to service
 			start
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2

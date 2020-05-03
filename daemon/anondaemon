@@ -80,7 +80,8 @@ function enableService {
 
 
 function start {
-	# /usr/sbin/service tor start
+	/etc/anonsurf/make-torrc
+	/usr/sbin/service tor start
 	# sleep 3
 
 	if ! [ -f /etc/network/iptables.rules ]; then
@@ -155,7 +156,7 @@ function stop {
 	/sbin/sysctl -w net.ipv6.conf.all.disable_ipv6=0
 	/sbin/sysctl -w net.ipv6.conf.default.disable_ipv6=0
 
-	# /usr/sbin/service tor stop
+	/usr/sbin/service tor stop
 	sleep 1
 	killall tor
 	# sleep 1
