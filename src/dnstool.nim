@@ -10,7 +10,7 @@ const
   openNICAddr ="nameserver 185.121.177.177\nnameserver 169.239.202.202\nnameserver 198.251.90.108\nnameserver 198.251.90.109\nnameserver 198.251.90.110\n"
   resolvTail =  "/etc/resolvconf/resolv.conf.d/tail"
   resolvConf = "/etc/resolv.conf"
-  runResolvConf = "/etc/resolvconf/run/resolv.conf"
+  runResolvConf = "/run/resolvconf/resolv.conf"
   dhcpAddrFile = "/run/resolvconf/interface/NetworkManager" # TODO check for multiple if
 
 
