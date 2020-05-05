@@ -95,21 +95,21 @@ proc status() =
     stderr.write("[x] having error: resolv.conf is empty\n")
   else:
     if statusResult == 20:
-      stdout.write("using static setting\n")
+      stdout.write("using dynamic setting\n")
     elif statusResult == 21:
-      stdout.write("using static + OpenNIC addresses\n")
-    elif statusResult == 22:
-      stdout.write("using static + custom addresses\n")
-    elif statusResult == 23:
-      stdout.write("using static + OpenNIC + Custom addresses\n")
-    elif statusResult == 10:
-      stdout.write("using dynamic settings\n")
-    elif statusResult == 11:
       stdout.write("using dynamic + OpenNIC addresses\n")
-    elif statusResult == 12:
+    elif statusResult == 22:
       stdout.write("using dynamic + custom addresses\n")
-    elif statusResult == 13:
+    elif statusResult == 23:
       stdout.write("using dynamic + OpenNIC + Custom addresses\n")
+    elif statusResult == 10:
+      stdout.write("using static settings\n")
+    elif statusResult == 11:
+      stdout.write("using static + OpenNIC addresses\n")
+    elif statusResult == 12:
+      stdout.write("using static + custom addresses\n")
+    elif statusResult == 13:
+      stdout.write("using static + OpenNIC + Custom addresses\n")
 
 
 proc writeDNSToTail(data: string) = 
