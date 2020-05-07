@@ -37,24 +37,39 @@ proc createArea(boxMainWindow: Box) =
     mainStack = newstack()
 
   #[  Draw first row
-    Show current status of AnonSurf
-    We show fast status like actived / inactived
+  First column: Icon of AnonSurf. Color as current status
+    1. Error: Red
+    2. Not connected: yellow
+    3. Connected, no error: green
+  Second column:
+    Show current status of AnonSurf fast status like actived / inactived
+    Show details button
+  Detail:
     When we click on it, it will show something like:
       Tor: is actived
       AnonSurf: is actived
+      DNS under tor
       Nyx in vte terminal
       A button that can change id
       Check IP
   ]#
   let
     # TODO Use icon here
-    boxStatus = newBox(Orientation.vertical, 3)
-    labelStatus = newLabel("Inactivated")
+    boxStatus = newBox(Orientation.horizontal, 3)
+    boxStatusIcon = newBox(Orientation.vertical, 3)
+    boxStatusDetails = newBox(Orientation.vertical, 3)
+    labelStatus = newLabel("Your connection isn't protected")
     btnDetails = newButton("Details")
+    statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/50px/Anonsurf_Nobg.png")
 
-  boxStatus.add(labelStatus)
-  boxStatus.add(btnDetails)
-  # TODO connect button details to the plan
+  boxStatusDetails.add(labelStatus)
+  boxStatusDetails.add(btnDetails)
+
+  boxStatusIcon.add(statusImage)
+
+  boxStatus.packStart(boxStatusIcon, false, true, 3)
+  boxStatus.packEnd(boxStatusDetails, false, true, 3)
+  
   boxDashboard.add(boxStatus)
 
   #[
