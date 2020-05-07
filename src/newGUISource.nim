@@ -1,6 +1,61 @@
 import gintro / [gtk, glib, gobject]#, notify, vte]
 
 
+proc showCurrentDetails(b: Button) =
+  #[
+    Show a new dialog about all details
+    Services:
+      Tor: is actived
+      AnonSurf: is actived
+    DNS:
+      DNS under tor
+    Buttons:
+      A button that can change id
+      Check IP
+    Monitor:
+      Nyx in vte terminal
+  ]#
+  #[
+    Box 1: vertical: AnonSurf, Tor, DNS details
+    Box 2: Horizontal: Buttons: changeID, checkIP
+    Box 3: VTE: Nyx
+  ]#
+
+  #[
+    Add status
+  ]#
+  let
+    statusDialog = newDialog()
+    statusArea = statusDialog.getContentArea()
+    boxStatus = newBox(Orientation.vertical, 3)
+    boxServicesStatus = newBox(Orientation.vertical, 3)
+    labelAnonStatus = newLabel("AnonSurf: Not running")
+    labelTor = newLabel("Tor: Not running")
+    labelDNS = newLabel("DNS: DNS status")
+
+  boxServicesStatus.add(labelAnonStatus)
+  boxServicesStatus.add(labelTor)
+  boxServicesStatus.add(labelDNS)
+  boxStatus.add(boxServicesStatus)
+
+  #[
+    Add buttons
+  ]#
+  let
+    boxStatusButtons = newBox(Orientation.horizontal, 3)
+    btnChangeID = newButton("Change ID")
+    btnCheckIP = newButton("Check IP")
+
+  boxStatusButtons.add(btnChangeID)
+  boxStatusButtons.add(btnCheckIP)
+
+  statusArea.add(boxStatus)
+  statusArea.add(boxStatusButtons)
+  
+  statusDialog.setTitle("AnonSurf Status")
+  statusDialog.showAll()
+
+
 proc onClickDashboard(b: Button, s: Stack) =
   #[
     init action for back button and button in Dashboard
@@ -63,6 +118,8 @@ proc createArea(boxMainWindow: Box) =
     statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/50px/Anonsurf_Nobg.png")
 
   boxStatusDetails.add(labelStatus)
+
+  btnDetails.connect("clicked", showCurrentDetails)
   boxStatusDetails.add(btnDetails)
 
   boxStatusIcon.add(statusImage)
