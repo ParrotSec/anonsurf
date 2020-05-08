@@ -164,13 +164,19 @@ proc restoreBackup() =
       stderr.write("[-] You are having same configurations. Aborted!\n")
     # If we backed up symlink of /run/resolvconf/resolv.conf, it should have the same data
     elif readFile(runResolvConf) == readFile(backupFile):
-      stdout.write("[-] Backup file has same DHCP configurations. Use DHCP settings\n")
-      createSymlink(runResolvConf, resolvConf)
-      stdout.write("[*] Restored from " & backupFile & "\n")
+      if tryRemoveFile(resolvConf):
+        stdout.write("[-] Backup file has same DHCP configurations. Use DHCP settings\n")
+        createSymlink(runResolvConf, resolvConf)
+        stdout.write("[*] Restored from " & backupFile & "\n")
+      else:
+        stderr.write("[x] Error while removing /etc/resolv.conf\n")
     # It seems good. We restore the data
     else:
-      copyFile(backupFile, resolvConf)
-      stdout.write("[*] Restored from " & backupFile & "\n")
+      if tryRemoveFile(resolvConf):
+        copyFile(backupFile, resolvConf)
+        stdout.write("[*] Restored from " & backupFile & "\n")
+      else:
+        stderr.write("[x] Error while removing /etc/resolv.conf\n")
 
 
 proc writeDNSToTail(data: string) = 
