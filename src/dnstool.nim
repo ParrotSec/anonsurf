@@ -12,6 +12,7 @@ const
   resolvConf = "/etc/resolv.conf"
   runResolvConf = "/run/resolvconf/resolv.conf"
   dhcpAddrFile = "/run/resolvconf/interface/NetworkManager" # TODO check for multiple if
+  backupFile = "/etc/resolv.conf.bak"
 
 
 proc showHelpDesc(keyword = "", descr = "") =
@@ -65,6 +66,8 @@ proc help() =
   showHelpCmd(cmd = "sudo " & progName, keyword = "dynamic", descr = "Use DHCP's DNS")
   showHelpCmd(cmd = "sudo " & progName, keyword = "dynamic", args = "<Address[es]>", descr = "Use DHCP's DNS and custom DNS address[es]")
   showHelpCmd(cmd = "sudo " & progName, keyword = "static", args = "<Address[es]>", descr = "Use custom DNS address[es]")
+  showHelpCmd(cmd = "sudo " & progName, keyword = "create-backup", descr = "Make backup for current settings in /etc/resolv.conf")
+  showHelpCmd(cmd = "sudo " & progName, keyword = "restore-backup", descr = "Restore backup of /etc/resolv.conf")
   stdout.write("\nAddress could be:\n")
   showHelpDesc(keyword = "opennic", descr = "OpenNIC address[es]")
   showHelpDesc(keyword = "dhcp", descr = "Address[es] of current DHCP settings")
@@ -110,6 +113,64 @@ proc status() =
       stdout.write("using static + custom addresses\n")
     elif statusResult == 13:
       stdout.write("using static + OpenNIC + Custom addresses\n")
+
+
+proc makeBackUp() =
+  #[
+    Create backup file for /etc/resolv.conf
+    The new backup file should be in /etc/resolv.conf.bak
+  ]#
+
+  let
+    dnsStatus = dnsStatusCheck()
+  # Check if /etc/resolv.conf is there, else error
+  if dnsStatus == -2:
+    stderr.write("[x] /etc/resolv.conf not found\n")
+    return
+  # Check if /etc/resolv.conf is not empty file
+  elif dnsStatus == -3:
+    stderr.write("[x] /etc/resolv.conf is empty\n")
+  # Check if /etc/resolv.conf is not having only localhost
+  elif dnsStatus == -1:
+    stderr.write("[x] /etc/resolv.conf only has localhost setting. Aborted!\n")
+  # If AnonSurf is running.
+  elif dnsStatus == 0:
+    stderr.write("[-] AnonSurf is running. Don't make backup for safe reason\n")
+  else:
+    # If backup exists, check backup
+    if fileExists(backupFile):
+      # Only overwrite if the backup is different
+      if readFile(resolvConf) == readFile(backupFile):
+        stderr.write("[-] You are having same configurations. Aborted!\n")
+    # No previous backup, write it
+    else:
+      copyFile(resolvConf, backupFile)
+      stdout.write("[*] Created backup in " & backupFile & "\n")
+
+
+proc restoreBackup() =
+  #[
+    Restore data from /etc/resolv.conf.bak to /etc/resolv.conf
+  ]#
+  # Don't overwrite current settings when AnonSurf is running
+  if dnsStatusCheck() == 0:
+    stderr.write("[x] AnonSurf is running. Aborted!\n")
+  # No DNS file is found
+  elif not fileExists(backupFile):
+    stderr.write("[x] No backup file founnd\n")
+  else:
+    # Don't overwrite when it has the same data
+    if readFile(resolvConf) == readFile(backupFile):
+      stderr.write("[-] You are having same configurations. Aborted!\n")
+    # If we backed up symlink of /run/resolvconf/resolv.conf, it should have the same data
+    elif readFile(runResolvConf) == readFile(backupFile):
+      stdout.write("[-] Backup file has same DHCP configurations. Use DHCP settings\n")
+      createSymlink(runResolvConf, resolvConf)
+      stdout.write("[*] Restored from " & backupFile & "\n")
+    # It seems good. We restore the data
+    else:
+      copyFile(backupFile, resolvConf)
+      stdout.write("[*] Restored from " & backupFile & "\n")
 
 
 proc writeDNSToTail(data: string) = 
@@ -216,6 +277,10 @@ proc main() =
       # If we can't define command, interrupt here
       help()
       stderr.write("[x] Err: Unknow option\n")
+    elif paramStr(1) == "create-backup":
+      makeBackUp()
+    elif paramStr(1) == "restore-backup":
+      restoreBackup()
   
   # We clean all base files for new settings
   doBasicMake(paramStr(1))
