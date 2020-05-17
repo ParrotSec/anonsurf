@@ -71,6 +71,14 @@ proc onClickDashboard(b: Button, s: Stack) =
       s.setVisibleChildName("tools")
 
 
+proc refreshStatus(): bool =
+  #[
+    Update current status everytime
+  ]#
+  discard
+  return SOURCE_CONTINUE
+
+
 proc createArea(boxMainWindow: Box) =
   #[
     Create a Kaspersky-like UI or XFCE4 control Pannel like UI
@@ -115,9 +123,13 @@ proc createArea(boxMainWindow: Box) =
     boxStatusDetails = newBox(Orientation.vertical, 3)
     labelStatus = newLabel("Your connection isn't protected")
     btnDetails = newButton("Details")
-    statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/50px/Anonsurf_Nobg.png")
+    # statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/50px/Anonsurf_Nobg.png")
+    statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/Anonsurf_Logo_by_Serverket.png")
+    statusBackground = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/background_warn.png")
 
+  boxStatus.setSizeRequest(300, 70)
   boxStatusDetails.add(labelStatus)
+  # boxStatus.
 
   btnDetails.connect("clicked", showCurrentDetails)
   boxStatusDetails.add(btnDetails)
@@ -141,11 +153,17 @@ proc createArea(boxMainWindow: Box) =
     boxMainButtons = newBox(Orientation.horizontal, 3)
 
   btnAnon.connect("clicked", onClickDashboard, mainStack)
-  boxMainButtons.add(btnAnon)
+  btnAnon.setSizeRequest(80, 80)
+  boxMainButtons.packStart(btnAnon, false, true, 3)
+
   btnBoot.connect("clicked", onClickDashboard, mainStack)
+  btnBoot.setSizeRequest(80, 80)
   boxMainButtons.add(btnBoot)
+
   btnExtra.connect("clicked", onClickDashboard, mainStack)
-  boxMainButtons.add(btnExtra)
+  btnExtra.setSizeRequest(80, 80)
+  boxMainButtons.packEnd(btnExtra, false, true, 3)
+
   boxMainButtons.show()
 
   boxDashboard.add(boxMainButtons)
