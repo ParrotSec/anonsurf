@@ -7,7 +7,7 @@ type
     isAnonSurfBoot: bool
 
 
-proc getStatusService(serviceName: string): int =
+proc getStatusService*(serviceName: string): int =
   #[
     Check if service is actived
     # TODO use native check instead of subprocess

@@ -2,6 +2,7 @@ import osproc
 import os
 import osproc
 import strutils
+import status
 
 
 proc checkDNSServers(path: string): int =
@@ -82,12 +83,12 @@ proc dnsStatusCheck*(): int =
       1. If anonsurf is running, return AnonSurf and disable buttons
       2. If anonsurf is not running, return localhost, red text
     ]#
-    let anonsurfStatus = execProcess("systemctl is-active anonsurfd").replace("\n", "")
-    if anonsurfStatus == "active":
-      result = 0
+    let anonsurfStatus = getStatusService("anonsurfd")
+    if anonsurfStatus == 1:
+      return 0
     else:
       # TODO use red color here
-      result = -1
+      return -1
   else:
     #[
       Check if system is using dynamic setting (default of Debian) or static
