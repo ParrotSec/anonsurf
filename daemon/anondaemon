@@ -97,9 +97,10 @@ function start {
 	/usr/sbin/iptables -F
 	/usr/sbin/iptables -t nat -F
 
-	dnstool make-backup
+	/usr/bin/dnstool make-backup
+	/usr/bin/dnstool static localhost
 	# mv /etc/resolv.conf /etc/resolv.conf.bak
-	echo -e 'nameserver 127.0.0.1' > /etc/resolv.conf
+	# echo -e 'nameserver 127.0.0.1' > /etc/resolv.conf
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor\n"
 
 	# disable ipv6
@@ -154,7 +155,7 @@ function stop {
 		echo -e "\n $GREEN*$BLUE Iptables rules restored"
 	fi
 	echo -e -n "\n $GREEN*$BLUE Restore DNS service"
-	dnstool restore-backup
+	/usr/bin/dnstool restore-backup
 	# rm /etc/resolv.conf || true
 	# mv /etc/resolv.conf.bak /etc/resolv.conf || true
 	# ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf || true
