@@ -1,7 +1,6 @@
 import gintro / [gtk, glib, gobject]#, notify, vte]
 import utils / status
 
-# TODO show help page base on current selected frame
 
 proc onClickDashboard(b: Button, s: Stack) =
   #[
@@ -23,6 +22,21 @@ proc onClickDashboard(b: Button, s: Stack) =
 proc onClickExit(b: Button) =
   mainQuit()
 
+
+proc onClickMainHelp(b: Button) =
+  #[
+    Show help for main and credit in new dialog
+  ]#
+  discard
+
+
+proc onClickAnonHelp(b: Button) =
+  #[
+    Show help about AnonSurf in new dialog
+    1. How to use
+    2. Explain
+  ]#
+  discard
 
 proc refreshStatus(): bool =
   #[
@@ -121,15 +135,15 @@ proc createArea(boxMainWindow: Box) =
   boxDashboard.add(boxMainButtons)
 
   let
-    boxExtrasButtons = newBox(Orientation.horizontal, 3)
-    btnHelp = newButton("Help")
+    boxBottomButtons = newBox(Orientation.horizontal, 3)
+    btnMainHelp = newButton("Help")
     btnExit = newButton("Exit")
 
   btnExit.connect("clicked", onClickExit)
-  boxExtrasButtons.packStart(btnExit, false, true, 3)
-  boxExtrasButtons.packEnd(btnHelp, false, true, 3)
+  boxBottomButtons.packStart(btnExit, false, true, 3)
+  boxBottomButtons.packEnd(btnMainHelp, false, true, 3)
 
-  boxDashboard.packEnd(boxExtrasButtons, false, true, 3)
+  boxDashboard.packEnd(boxBottomButtons, false, true, 3)
 
 
   ## End of draw second row
