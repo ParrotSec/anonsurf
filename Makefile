@@ -35,6 +35,7 @@ install:
 	# Add system units
 	cp daemon/anondaemon $(DESTDIR)/etc/anonsurf/
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/
+	cp sys-units/anonsurfd@tor.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anonsurfd $(DESTDIR)/etc/init.d/
 
 	# Init permission for folders

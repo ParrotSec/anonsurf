@@ -82,10 +82,10 @@ function enableService {
 function start {
 	# If tor didn't start, we start it
 	# It is used for startup
-	if [ `systemctl is-active tor` != "active" ]
-	then
-		/usr/sbin/service tor start
-	fi
+	# if [ `systemctl is-active tor` != "active" ]
+	# then
+	# 	/usr/sbin/service tor start
+	# fi
 
 	# sleep 3
 
