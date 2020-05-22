@@ -159,18 +159,49 @@ proc createArea(boxMainWindow: Box) =
   let
     btnStart = newButton("Start")
     btnStartBridge = newButton("Start Bridge")
+    labelAnonStart = newLabel("Start Normal")
+    labelAnonStartBridge = newLabel("Start with Obfs4 Bridge")
+    boxAnonStart = newBox(Orientation.vertical, 3)
+    boxAnonStartBridge = newBox(Orientation.vertical, 3)
+
+  boxAnonStart.add(labelAnonStart)
+  boxAnonStart.add(btnStart)
+
+  boxAnonStartBridge.add(labelAnonStartBridge)
+  boxAnonStartBridge.add(btnStartBridge)
+  
+  let
+    boxAnonStartArea = newBox(Orientation.horizontal, 3)
+  boxAnonStartArea.add(boxAnonStart)
+  boxAnonStartArea.packEnd(boxAnonStartBridge, false, true, 3)
+
+  let
     btnStop = newButton("Stop")
+    labelStop = newLabel("Stop AnonSurf")
+    boxAnonStop = newBox(Orientation.vertical, 3)
+  
+  boxAnonStop.add(labelStop)
+  boxAnonStop.add(btnStop)
+
+  let
+    boxAnonBottomButtons = newBox(Orientation.horizontal, 3)
     btnAnonBack = newButton("Back")
-    boxAnonButtons = newBox(Orientation.horizontal, 3)
-
-  boxAnonButtons.add(btnStart)
-  boxAnonButtons.add(btnStartBridge)
-  boxAnonButtons.add(btnStop)
+    btnAnonHelp = newButton("Help")
+  
   btnAnonBack.connect("clicked", onClickDashboard, mainStack)
-  boxAnonButtons.add(btnAnonBack)
-  boxAnonButtons.show()
+  boxAnonBottomButtons.packStart(btnAnonBack, false, true, 3)
+  boxAnonBottomButtons.packEnd(btnAnonHelp, false, true, 3)
 
-  mainStack.addNamed(boxAnonButtons, "anonsurf")
+  let
+    boxAnonArea = newBox(Orientation.vertical, 3)
+
+  boxAnonArea.add(boxAnonStartArea)
+  boxAnonArea.add(boxAnonStop)
+  boxAnonArea.packEnd(boxAnonBottomButtons, false, true, 3)
+
+  boxAnonArea.show()
+  
+  mainStack.addNamed(boxAnonArea, "anonsurf")
   # End of AnonSurf board
   
   #[
