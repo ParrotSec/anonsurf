@@ -1,6 +1,7 @@
 import gintro / [gtk, glib, gobject]#, notify, vte]
 import utils / status
 
+# TODO show help page base on current selected frame
 
 proc onClickDashboard(b: Button, s: Stack) =
   #[
@@ -17,6 +18,10 @@ proc onClickDashboard(b: Button, s: Stack) =
       s.setVisibleChildName("tools")
     elif b.label == "Details":
       s.setVisibleChildName("details")
+
+
+proc onClickExit(b: Button) =
+  mainQuit()
 
 
 proc refreshStatus(): bool =
@@ -73,8 +78,8 @@ proc createArea(boxMainWindow: Box) =
     labelStatus = newLabel("Your connection isn't protected")
     btnDetails = newButton("Details")
     # statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/50px/Anonsurf_Nobg.png")
-    statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/Anonsurf_Logo_by_Serverket.png")
-    statusBackground = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/background_warn.png")
+    # statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/Anonsurf_Logo_by_Serverket.png")
+    # statusBackground = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/background_warn.png")
 
   boxStatus.setSizeRequest(300, 70)
   boxStatusDetails.add(labelStatus)
@@ -83,7 +88,7 @@ proc createArea(boxMainWindow: Box) =
   # btnDetails.connect("clicked", showCurrentDetails)
   boxStatusDetails.add(btnDetails)
 
-  boxStatusIcon.add(statusImage)
+  # boxStatusIcon.add(statusImage)
 
   boxStatus.packStart(boxStatusIcon, false, true, 3)
   boxStatus.packEnd(boxStatusDetails, false, true, 3)
@@ -112,10 +117,20 @@ proc createArea(boxMainWindow: Box) =
   btnExtra.connect("clicked", onClickDashboard, mainStack)
   btnExtra.setSizeRequest(80, 80)
   boxMainButtons.packEnd(btnExtra, false, true, 3)
-
   boxMainButtons.show()
-
   boxDashboard.add(boxMainButtons)
+
+  let
+    boxExtrasButtons = newBox(Orientation.horizontal, 3)
+    btnHelp = newButton("Help")
+    btnExit = newButton("Exit")
+
+  btnExit.connect("clicked", onClickExit)
+  boxExtrasButtons.packStart(btnExit, false, true, 3)
+  boxExtrasButtons.packEnd(btnHelp, false, true, 3)
+
+  boxDashboard.packEnd(boxExtrasButtons, false, true, 3)
+
 
   ## End of draw second row
   boxDashboard.showAll()
