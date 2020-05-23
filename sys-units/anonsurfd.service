@@ -11,4 +11,4 @@ ExecStop=/etc/anonsurf/anondaemon stop
 RemainAfterExit=yes
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
