@@ -1,6 +1,20 @@
 import gintro / [gtk, glib, gobject]#, notify, vte]
 import utils / status
 
+type
+  rObject = ref object
+    rLabelFastStatus: Label
+    rLabelAnonStatus: Label
+    rLabelTorStatus: Label
+    rLabelDNSStatus: Label
+    rLabelStatusBoot: Label
+    # rImgStatus: 
+    rBtnStart: Button
+    rButtonStartBridge: Button
+    rButtonStop: Button
+    rButtonRestart: Button
+    rButtonSetBoot: Button
+
 
 proc onClickDashboard(b: Button, s: Stack) =
   #[
@@ -38,7 +52,7 @@ proc onClickAnonHelp(b: Button) =
   ]#
   discard
 
-proc refreshStatus(): bool =
+proc refreshStatus(args: rObject): bool =
   #[
     Update current status everytime
   ]#
@@ -176,10 +190,18 @@ proc createArea(boxMainWindow: Box) =
   boxAnonStartArea.packEnd(boxAnonStartBridge, false, true, 3)
 
   let
+    btnRestart = newButton("Restart")
+    labelRestart = newLabel("Restart AnonSurf")
+    boxAnonRestart = newBox(Orientation.vertical, 3)
+    
+  boxAnonRestart.add(labelRestart)
+  boxAnonRestart.add(btnRestart)
+
+  let
     btnStop = newButton("Stop")
     labelStop = newLabel("Stop AnonSurf")
     boxAnonStop = newBox(Orientation.vertical, 3)
-  
+
   boxAnonStop.add(labelStop)
   boxAnonStop.add(btnStop)
 
@@ -196,6 +218,7 @@ proc createArea(boxMainWindow: Box) =
     boxAnonArea = newBox(Orientation.vertical, 3)
 
   boxAnonArea.add(boxAnonStartArea)
+  boxAnonArea.add(boxAnonRestart)
   boxAnonArea.add(boxAnonStop)
   boxAnonArea.packEnd(boxAnonBottomButtons, false, true, 3)
 
@@ -267,12 +290,12 @@ proc createArea(boxMainWindow: Box) =
   let
     boxStatusServices = newBox(Orientation.vertical, 3)
     labelAnonStatus = newLabel("AnonSurf: Not running")
-    labelTor = newLabel("Tor: Not running")
-    labelDNS = newLabel("DNS: DNS status")
+    labelTorStatus = newLabel("Tor: Not running")
+    labelDNSStatus = newLabel("DNS: DNS status")
 
   boxStatusServices.add(labelAnonStatus)
-  boxStatusServices.add(labelTor)
-  boxStatusServices.add(labelDNS)
+  boxStatusServices.add(labelTorStatus)
+  boxStatusServices.add(labelDNSStatus)
 
   #[
     Add buttons
@@ -307,6 +330,25 @@ proc createArea(boxMainWindow: Box) =
   mainStack.addNamed(boxDetails, "details")
 
   # End of full details dashboard
+
+  var
+    refreshObjs: rObject
+
+  refreshObjs = rObject(
+    rLabelFastStatus: labelStatus,
+    rLabelAnonStatus: labelAnonStatus,
+    rLabelTorStatus: labelTorStatus,
+    rLabelDNSStatus: labelDNSStatus,
+    rLabelStatusBoot: labelBootStatus,
+    # rImgStatus: 
+    rBtnStart: btnStart,
+    rButtonStartBridge: btnStartBridge,
+    rButtonStop: btnStop,
+    rButtonRestart: btnRestart,
+    rButtonSetBoot: btnBootSwitch,
+  )
+
+  discard timeoutAdd(200, refreshStatus, refreshObjs)
   
   # Add everything to window
   boxMainWindow.add(mainStack)
