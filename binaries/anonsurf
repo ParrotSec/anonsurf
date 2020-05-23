@@ -161,7 +161,7 @@ case "$1" in
 			echo -e "$GREEN *$BLUE Generating torrc"
 			/etc/anonsurf/make-torrc
 			echo -e "$GREEN *$BLUE Starting tor service"
-			# /usr/sbin/service tor start
+			/usr/sbin/service tor start
 			echo -e "$GREEN *$BLUE Making firewall rules"
 			start
 		else
@@ -178,7 +178,7 @@ case "$1" in
 			echo -e "$GREEN *$BLUE Generating torrc"
 			/etc/anonsurf/make-torrc bridge
 			echo -e "$GREEN *$BLUE Starting tor service"
-			# /usr/sbin/service tor start
+			/usr/sbin/service tor start
 			# start-bridge
 			echo -e "$GREEN *$BLUE Making firewall rules"
 			start

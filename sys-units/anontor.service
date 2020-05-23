@@ -10,8 +10,8 @@ NotifyAccess=all
 PIDFile=/run/tor/tor.pid
 PermissionsStartOnly=yes
 ExecStartPre=/usr/bin/install -Z -m 02755 -o debian-tor -g debian-tor -d /run/tor
-ExecStartPre=/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/anonsurf/torrc --RunAsDaemon 0 --verify-config
-ExecStart=/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/anonsurf/torrc --RunAsDaemon 0
+ExecStartPre=/usr/bin/tor -f /etc/anonsurf/torrc --RunAsDaemon 0 --verify-config
+ExecStart=/usr/bin/tor -f /etc/anonsurf/torrc --RunAsDaemon 0
 ExecReload=/bin/kill -HUP ${MAINPID}
 KillSignal=SIGINT
 TimeoutStartSec=300
@@ -32,3 +32,6 @@ ReadWriteDirectories=-/var/lib/tor
 ReadWriteDirectories=-/var/log/tor
 ReadWriteDirectories=-/run
 CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH
+
+[Install]
+WantedBy=default.target

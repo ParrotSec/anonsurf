@@ -1,59 +1,21 @@
 import gintro / [gtk, glib, gobject]#, notify, vte]
+import utils / [status, dnsutils]
 
-
-proc showCurrentDetails(b: Button) =
-  #[
-    Show a new dialog about all details
-    Services:
-      Tor: is actived
-      AnonSurf: is actived
-    DNS:
-      DNS under tor
-    Buttons:
-      A button that can change id
-      Check IP
-    Monitor:
-      Nyx in vte terminal
-  ]#
-  #[
-    Box 1: vertical: AnonSurf, Tor, DNS details
-    Box 2: Horizontal: Buttons: changeID, checkIP
-    Box 3: VTE: Nyx
-  ]#
-
-  #[
-    Add status
-  ]#
-  let
-    statusDialog = newDialog()
-    statusArea = statusDialog.getContentArea()
-    boxStatus = newBox(Orientation.vertical, 3)
-    boxServicesStatus = newBox(Orientation.vertical, 3)
-    labelAnonStatus = newLabel("AnonSurf: Not running")
-    labelTor = newLabel("Tor: Not running")
-    labelDNS = newLabel("DNS: DNS status")
-
-  boxServicesStatus.add(labelAnonStatus)
-  boxServicesStatus.add(labelTor)
-  boxServicesStatus.add(labelDNS)
-  boxStatus.add(boxServicesStatus)
-
-  #[
-    Add buttons
-  ]#
-  let
-    boxStatusButtons = newBox(Orientation.horizontal, 3)
-    btnChangeID = newButton("Change ID")
-    btnCheckIP = newButton("Check IP")
-
-  boxStatusButtons.add(btnChangeID)
-  boxStatusButtons.add(btnCheckIP)
-
-  statusArea.add(boxStatus)
-  statusArea.add(boxStatusButtons)
-  
-  statusDialog.setTitle("AnonSurf Status")
-  statusDialog.showAll()
+type
+  rObject = ref object
+    rLabelFastStatus: Label
+    rLabelAnonStatus: Label
+    rLabelTorStatus: Label
+    rLabelDNSStatus: Label
+    rLabelStatusBoot: Label
+    # rImgStatus: 
+    rBtnNyx: Button
+    rBtnStart: Button
+    rBtnStartBridge: Button
+    rBtnStop: Button
+    rBtnRestart: Button
+    rBtnChangeID: Button
+    rBtnSetBoot: Button
 
 
 proc onClickDashboard(b: Button, s: Stack) =
@@ -69,13 +31,137 @@ proc onClickDashboard(b: Button, s: Stack) =
       s.setVisibleChildName("boot")
     elif b.label == "More Tools":
       s.setVisibleChildName("tools")
+    elif b.label == "Details":
+      s.setVisibleChildName("details")
 
 
-proc refreshStatus(): bool =
+proc onClickExit(b: Button) =
+  mainQuit()
+
+
+proc onClickMainHelp(b: Button) =
+  #[
+    Show help for main and credit in new dialog
+  ]#
+  discard
+
+
+proc onClickAnonHelp(b: Button) =
+  #[
+    Show help about AnonSurf in new dialog
+    1. How to use
+    2. Explain
+  ]#
+  discard
+
+proc refreshStatus(args: rObject): bool =
   #[
     Update current status everytime
   ]#
-  discard
+  let
+    basicStatus = getSurfStatus()
+    dnsStatus = dnsStatusCheck()
+  
+  case dnsStatus
+  of 0:
+    args.rLabelDNSStatus.text = "Under Tor Tunnel"
+  of -1:
+    args.rLabelDNSStatus.text = "Localhost (error)"
+  of -2:
+    args.rLabelDNSStatus.text = "/etc/resolv.conf not found"
+  of -3:
+    args.rLabelDNSStatus.text = "/etc/resolv.conf is empty"
+  of 11:
+    args.rLabelDNSStatus.text = "Static: OpenNIC DNS"
+  of 12:
+    args.rLabelDNSStatus.text = "Static: custom DNS"
+  of 13:
+    args.rLabelDNSStatus.text = "Static: OpenNIC + Custom DNS"
+  of 20:
+    args.rLabelDNSStatus.text = "Dynamic: DHCP"
+  of 21:
+    args.rLabelDNSStatus.text = "Dynamic: DHCP with OpenNIC DNS"
+  of 22:
+    args.rLabelDNSStatus.text = "Dynamic: DHCP with Custom DNS"
+  of 23:
+    args.rLabelDNSStatus.text = "Dynamic: DHCP with OpenNIC + Custom DNS"
+  else:
+    discard
+
+  #[
+    Update boot's status by the label
+  ]#
+  if basicStatus.isAnonSurfBoot:
+    args.rLabelStatusBoot.text = "It is enabled"
+    args.rBtnSetBoot.setLabel("Disable")
+  else:
+    args.rLabelStatusBoot.text = "It is not enabled"
+    args.rBtnSetBoot.setLabel("Enable")
+
+  #[
+    Update Tor's status by the label
+  ]#
+  case basicStatus.isTorService
+  of 1: # Tor is running
+    args.rLabelTorStatus.text = "Tor is running"
+  of 0: # Tor is not running
+    args.rLabelTorStatus.text = "Tor is not running"
+  else: # Tor failed to run
+    args.rLabelTorStatus.text = "Tor start failed (error)"
+
+  #[
+    Update other labels and buttons base on AnonSurf status
+  ]#
+  case basicStatus.isAnonSurfService
+  of 1: # AnonSurf is running
+    # Show status of labels
+    args.rLabelAnonStatus.text = "AnonSurf is running"
+    # Disable buttons that can start AnonSurf
+    args.rBtnStart.setSensitive(false)
+    args.rBtnStartBridge.setSensitive(false)
+    # Enable buttons that can change AnonSurf running state
+    args.rBtnRestart.setSensitive(true)
+    args.rBtnStop.setSensitive(true)
+    args.rBtnChangeID.setSensitive(true)
+    # Enable nyx to check AnonSurf status
+    args.rBtnNyx.setSensitive(true)
+    # Check fast status
+    if basicStatus.isTorService == 1:
+      args.rLabelFastStatus.text = "AnonSurf is running"
+    elif basicStatus.isTorService == 0:
+      args.rLabelFastStatus.text = "AnonSurf is running but Tor isn't"
+    else:
+      args.rLabelFastStatus.text = "AnonSurf is running but Tor failed"
+  of 0: # AnonSurf is not running
+    # Show status of label
+    args.rLabelAnonStatus.text = "AnonSurf is not running"
+    # Enable buttons that can start AnonSurf
+    args.rBtnStart.setSensitive(true)
+    args.rBtnStartBridge.setSensitive(true)
+    # Disable buttons that can change AnonSurf running state
+    args.rBtnRestart.setSensitive(false)
+    args.rBtnStop.setSensitive(false)
+    args.rBtnChangeID.setSensitive(false)
+    # Disable nyx button
+    args.rBtnNyx.setSensitive(false)
+    # Update fast status
+    args.rLabelFastStatus.text = "AnonSurf is not running"
+  else:
+    # Show status of label
+    args.rLabelAnonStatus.text = "AnonSurf failed to run (error)"
+    # Disable buttons can start AnonSurf
+    args.rBtnStart.setSensitive(false)
+    args.rBtnStartBridge.setSensitive(false)
+    # Disable restart button because it is having error
+    args.rBtnRestart.setSensitive(false)
+    args.rBtnChangeID.setSensitive(false)
+    # Enable stop button
+    args.rBtnStop.setSensitive(true)
+    # Disable nyx button
+    args.rBtnNyx.setSensitive(false)
+    # Update fast status
+    args.rLabelFastStatus.text = "AnonSurf failed to run"
+
   return SOURCE_CONTINUE
 
 
@@ -124,17 +210,17 @@ proc createArea(boxMainWindow: Box) =
     labelStatus = newLabel("Your connection isn't protected")
     btnDetails = newButton("Details")
     # statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/50px/Anonsurf_Nobg.png")
-    statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/Anonsurf_Logo_by_Serverket.png")
-    statusBackground = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/background_warn.png")
+    # statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/Anonsurf_Logo_by_Serverket.png")
+    # statusBackground = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/background_warn.png")
 
   boxStatus.setSizeRequest(300, 70)
   boxStatusDetails.add(labelStatus)
   # boxStatus.
 
-  btnDetails.connect("clicked", showCurrentDetails)
+  # btnDetails.connect("clicked", showCurrentDetails)
   boxStatusDetails.add(btnDetails)
 
-  boxStatusIcon.add(statusImage)
+  # boxStatusIcon.add(statusImage)
 
   boxStatus.packStart(boxStatusIcon, false, true, 3)
   boxStatus.packEnd(boxStatusDetails, false, true, 3)
@@ -163,10 +249,20 @@ proc createArea(boxMainWindow: Box) =
   btnExtra.connect("clicked", onClickDashboard, mainStack)
   btnExtra.setSizeRequest(80, 80)
   boxMainButtons.packEnd(btnExtra, false, true, 3)
-
   boxMainButtons.show()
-
   boxDashboard.add(boxMainButtons)
+
+  let
+    boxBottomButtons = newBox(Orientation.horizontal, 3)
+    btnMainHelp = newButton("Help")
+    btnExit = newButton("Exit")
+
+  btnExit.connect("clicked", onClickExit)
+  boxBottomButtons.packStart(btnExit, false, true, 3)
+  boxBottomButtons.packEnd(btnMainHelp, false, true, 3)
+
+  boxDashboard.packEnd(boxBottomButtons, false, true, 3)
+
 
   ## End of draw second row
   boxDashboard.showAll()
@@ -181,18 +277,58 @@ proc createArea(boxMainWindow: Box) =
   let
     btnStart = newButton("Start")
     btnStartBridge = newButton("Start Bridge")
+    labelAnonStart = newLabel("Start Normal")
+    labelAnonStartBridge = newLabel("Start with Obfs4 Bridge")
+    boxAnonStart = newBox(Orientation.vertical, 3)
+    boxAnonStartBridge = newBox(Orientation.vertical, 3)
+
+  boxAnonStart.add(labelAnonStart)
+  boxAnonStart.add(btnStart)
+
+  boxAnonStartBridge.add(labelAnonStartBridge)
+  boxAnonStartBridge.add(btnStartBridge)
+  
+  let
+    boxAnonStartArea = newBox(Orientation.horizontal, 3)
+  boxAnonStartArea.add(boxAnonStart)
+  boxAnonStartArea.packEnd(boxAnonStartBridge, false, true, 3)
+
+  let
+    btnRestart = newButton("Restart")
+    labelRestart = newLabel("Restart AnonSurf")
+    boxAnonRestart = newBox(Orientation.vertical, 3)
+    
+  boxAnonRestart.add(labelRestart)
+  boxAnonRestart.add(btnRestart)
+
+  let
     btnStop = newButton("Stop")
+    labelStop = newLabel("Stop AnonSurf")
+    boxAnonStop = newBox(Orientation.vertical, 3)
+
+  boxAnonStop.add(labelStop)
+  boxAnonStop.add(btnStop)
+
+  let
+    boxAnonBottomButtons = newBox(Orientation.horizontal, 3)
     btnAnonBack = newButton("Back")
-    boxAnonButtons = newBox(Orientation.horizontal, 3)
-
-  boxAnonButtons.add(btnStart)
-  boxAnonButtons.add(btnStartBridge)
-  boxAnonButtons.add(btnStop)
+    btnAnonHelp = newButton("Help")
+  
   btnAnonBack.connect("clicked", onClickDashboard, mainStack)
-  boxAnonButtons.add(btnAnonBack)
-  boxAnonButtons.show()
+  boxAnonBottomButtons.packStart(btnAnonBack, false, true, 3)
+  boxAnonBottomButtons.packEnd(btnAnonHelp, false, true, 3)
 
-  mainStack.addNamed(boxAnonButtons, "anonsurf")
+  let
+    boxAnonArea = newBox(Orientation.vertical, 3)
+
+  boxAnonArea.add(boxAnonStartArea)
+  boxAnonArea.add(boxAnonRestart)
+  boxAnonArea.add(boxAnonStop)
+  boxAnonArea.packEnd(boxAnonBottomButtons, false, true, 3)
+
+  boxAnonArea.show()
+  
+  mainStack.addNamed(boxAnonArea, "anonsurf")
   # End of AnonSurf board
   
   #[
@@ -233,6 +369,94 @@ proc createArea(boxMainWindow: Box) =
 
   mainStack.addNamed(boxExtra, "tools")
   # End of extra dashboard
+
+  #[
+    Show a new dialog about all details
+    Services:
+      Tor: is actived
+      AnonSurf: is actived
+    DNS:
+      DNS under tor
+    Buttons:
+      A button that can change id
+      Check IP
+    Monitor:
+      Nyx in vte terminal - click button
+  ]#
+  #[
+    Box 1: vertical: AnonSurf, Tor, DNS details
+    Box 2: Horizontal: Buttons: changeID, checkIP
+  ]#
+
+  #[
+    Add status
+  ]#
+  let
+    boxStatusServices = newBox(Orientation.vertical, 3)
+    labelAnonStatus = newLabel("AnonSurf: Not running")
+    labelTorStatus = newLabel("Tor: Not running")
+    labelDNSStatus = newLabel("DNS: DNS status")
+
+  boxStatusServices.add(labelAnonStatus)
+  boxStatusServices.add(labelTorStatus)
+  boxStatusServices.add(labelDNSStatus)
+
+  #[
+    Add buttons
+  ]#
+  let
+    boxStatusButtons = newBox(Orientation.horizontal, 3)
+    btnChangeID = newButton("Change ID")
+    btnCheckIP = newButton("Check IP")
+    btnNyx = newButton("Nyx")
+    
+    
+  btnDetails.connect("clicked", onClickDashboard, mainStack)
+  
+  boxStatusButtons.add(btnChangeID)
+  boxStatusButtons.add(btnCheckIP)
+  boxStatusButtons.add(btnNyx)
+
+  let
+    boxDetailsBottomButtons  = newBox(Orientation.horizontal, 3)
+    btnDetailsBack = newButton("Back")
+
+  btnDetailsBack.connect("clicked", onClickDashboard, mainStack)
+  boxDetailsBottomButtons.add(btnDetailsBack)
+
+  let
+    boxDetails = newBox(Orientation.vertical, 3)
+
+  boxDetails.add(boxStatusServices)
+  boxDetails.add(boxStatusButtons)
+  boxDetails.packEnd(boxDetailsBottomButtons, false, true, 3)
+
+  boxDetails.showAll()
+  
+  mainStack.addNamed(boxDetails, "details")
+
+  # End of full details dashboard
+
+  var
+    refreshObjs: rObject
+
+  refreshObjs = rObject(
+    rLabelFastStatus: labelStatus,
+    rLabelAnonStatus: labelAnonStatus,
+    rLabelTorStatus: labelTorStatus,
+    rLabelDNSStatus: labelDNSStatus,
+    rLabelStatusBoot: labelBootStatus,
+    # rImgStatus:
+    rBtnNyx: btnNyx, 
+    rBtnStart: btnStart,
+    rBtnStartBridge: btnStartBridge,
+    rBtnStop: btnStop,
+    rBtnRestart: btnRestart,
+    rBtnChangeID: btnChangeID,
+    rBtnSetBoot: btnBootSwitch,
+  )
+
+  discard timeoutAdd(200, refreshStatus, refreshObjs)
   
   # Add everything to window
   boxMainWindow.add(mainStack)
