@@ -281,23 +281,29 @@ proc createArea(boxMainWindow: Box) =
     boxStatusButtons = newBox(Orientation.horizontal, 3)
     btnChangeID = newButton("Change ID")
     btnCheckIP = newButton("Check IP")
-    btnDetailsBack = newButton("Back")
+    
     
   btnDetails.connect("clicked", onClickDashboard, mainStack)
-  boxStatusButtons.add(btnDetailsBack)
+  
   boxStatusButtons.add(btnChangeID)
   boxStatusButtons.add(btnCheckIP)
+
+  let
+    boxDetailsBottomButtons  = newBox(Orientation.horizontal, 3)
+    btnDetailsBack = newButton("Back")
+
+  btnDetailsBack.connect("clicked", onClickDashboard, mainStack)
+  boxDetailsBottomButtons.add(btnDetailsBack)
 
   let
     boxDetails = newBox(Orientation.vertical, 3)
 
   boxDetails.add(boxStatusServices)
   boxDetails.add(boxStatusButtons)
+  boxDetails.packEnd(boxDetailsBottomButtons, false, true, 3)
 
   boxDetails.showAll()
   
-  btnDetailsBack.connect("clicked", onClickDashboard, mainStack)
-
   mainStack.addNamed(boxDetails, "details")
 
   # End of full details dashboard
