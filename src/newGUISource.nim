@@ -9,12 +9,12 @@ type
     rLabelDNSStatus: Label
     rLabelStatusBoot: Label
     # rImgStatus: 
-    # rBtnNyx: Button
+    rBtnNyx: Button
     rBtnStart: Button
-    rButtonStartBridge: Button
-    rButtonStop: Button
-    rButtonRestart: Button
-    rButtonSetBoot: Button
+    rBtnStartBridge: Button
+    rBtnStop: Button
+    rBtnRestart: Button
+    rBtnSetBoot: Button
 
 
 proc onClickDashboard(b: Button, s: Stack) =
@@ -59,14 +59,69 @@ proc refreshStatus(args: rObject): bool =
   ]#
   let
     basicStatus = getSurfStatus()
+  
+  # TODO check dns
 
   #[
-    Update boot status
+    Update boot's status by the label
   ]#
   if basicStatus.isAnonSurfBoot:
     args.rLabelStatusBoot.text = "It is enabled"
+    args.rBtnSetBoot.setLabel("Disable")
   else:
     args.rLabelStatusBoot.text = "It is not enabled"
+    args.rBtnSetBoot.setLabel("Enable")
+
+  #[
+    Update Tor's status by the label
+  ]#
+  case basicStatus.isTorService
+  of 1: # Tor is running
+    args.rLabelTorStatus.text = "Tor is running"
+  of 0: # Tor is not running
+    args.rLabelTorStatus.text = "Tor is not running"
+  else: # Tor failed to run
+    args.rLabelTorStatus.text = "Tor start failed (error)"
+
+  #[
+    Update other labels and buttons base on AnonSurf status
+  ]#
+  case basicStatus.isAnonSurfService
+  of 1: # AnonSurf is running
+    # Show status of labels
+    args.rLabelAnonStatus.text = "AnonSurf is running"
+    # Disable buttons that can start AnonSurf
+    args.rBtnStart.setSensitive(false)
+    args.rBtnStartBridge.setSensitive(false)
+    # Enable buttons that can change AnonSurf running state
+    args.rBtnRestart.setSensitive(true)
+    args.rBtnStop.setSensitive(true)
+    # Enable nyx to check AnonSurf status
+    args.rBtnNyx.setSensitive(true)
+  of 0: # AnonSurf is not running
+    # Show status of label
+    args.rLabelAnonStatus.text = "AnonSurf is not running"
+    # Enable buttons that can start AnonSurf
+    args.rBtnStart.setSensitive(true)
+    args.rBtnStartBridge.setSensitive(true)
+    # Disable buttons that can change AnonSurf running state
+    args.rBtnRestart.setSensitive(false)
+    args.rBtnStop.setSensitive(false)
+    # Disable nyx button
+    args.rBtnNyx.setSensitive(false)
+  else:
+    # Show status of label
+    args.rLabelAnonStatus.text = "AnonSurf failed to run (error)"
+    # Disable buttons can start AnonSurf
+    args.rBtnStart.setSensitive(false)
+    args.rBtnStartBridge.setSensitive(false)
+    # Disable restart button because it is having error
+    args.rBtnRestart.setSensitive(false)
+    # Enable stop button
+    args.rBtnStop.setSensitive(true)
+    # Disable nyx button
+    args.rBtnNyx.setSensitive(false)
+
   return SOURCE_CONTINUE
 
 
@@ -313,12 +368,14 @@ proc createArea(boxMainWindow: Box) =
     boxStatusButtons = newBox(Orientation.horizontal, 3)
     btnChangeID = newButton("Change ID")
     btnCheckIP = newButton("Check IP")
+    btnNyx = newButton("Nyx")
     
     
   btnDetails.connect("clicked", onClickDashboard, mainStack)
   
   boxStatusButtons.add(btnChangeID)
   boxStatusButtons.add(btnCheckIP)
+  boxStatusButtons.add(btnNyx)
 
   let
     boxDetailsBottomButtons  = newBox(Orientation.horizontal, 3)
@@ -349,12 +406,13 @@ proc createArea(boxMainWindow: Box) =
     rLabelTorStatus: labelTorStatus,
     rLabelDNSStatus: labelDNSStatus,
     rLabelStatusBoot: labelBootStatus,
-    # rImgStatus: 
+    # rImgStatus:
+    rBtnNyx: btnNyx, 
     rBtnStart: btnStart,
-    rButtonStartBridge: btnStartBridge,
-    rButtonStop: btnStop,
-    rButtonRestart: btnRestart,
-    rButtonSetBoot: btnBootSwitch,
+    rBtnStartBridge: btnStartBridge,
+    rBtnStop: btnStop,
+    rBtnRestart: btnRestart,
+    rBtnSetBoot: btnBootSwitch,
   )
 
   discard timeoutAdd(200, refreshStatus, refreshObjs)
