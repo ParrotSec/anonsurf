@@ -77,7 +77,7 @@ proc refreshStatus(args: rObject): bool =
   of 13:
     args.rLabelDNSStatus.text = "Static: OpenNIC + Custom DNS"
   of 20:
-    args.rLabelDNSStatus.text = "Dynamic: DHCP (dynamic)"
+    args.rLabelDNSStatus.text = "Dynamic: DHCP"
   of 21:
     args.rLabelDNSStatus.text = "Dynamic: DHCP with OpenNIC DNS"
   of 22:
