@@ -111,7 +111,6 @@ proc refreshStatus(args: rObject): bool =
   #[
     Update other labels and buttons base on AnonSurf status
   ]#
-  # TODO check fast status
   case basicStatus.isAnonSurfService
   of 1: # AnonSurf is running
     # Show status of labels
@@ -124,6 +123,13 @@ proc refreshStatus(args: rObject): bool =
     args.rBtnStop.setSensitive(true)
     # Enable nyx to check AnonSurf status
     args.rBtnNyx.setSensitive(true)
+    # Check fast status
+    if basicStatus.isTorService == 1:
+      args.rLabelFastStatus.text = "AnonSurf is running"
+    elif basicStatus.isTorService == 0:
+      args.rLabelFastStatus.text = "AnonSurf is running but Tor isn't"
+    else:
+      args.rLabelFastStatus.text = "AnonSurf is running but Tor failed"
   of 0: # AnonSurf is not running
     # Show status of label
     args.rLabelAnonStatus.text = "AnonSurf is not running"
@@ -135,6 +141,8 @@ proc refreshStatus(args: rObject): bool =
     args.rBtnStop.setSensitive(false)
     # Disable nyx button
     args.rBtnNyx.setSensitive(false)
+    # Update fast status
+    args.rLabelFastStatus.text = "AnonSurf is not running"
   else:
     # Show status of label
     args.rLabelAnonStatus.text = "AnonSurf failed to run (error)"
@@ -147,6 +155,8 @@ proc refreshStatus(args: rObject): bool =
     args.rBtnStop.setSensitive(true)
     # Disable nyx button
     args.rBtnNyx.setSensitive(false)
+    # Update fast status
+    args.rLabelFastStatus.text = "AnonSurf failed to run"
 
   return SOURCE_CONTINUE
 
