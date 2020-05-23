@@ -2,9 +2,9 @@ import osproc
 
 type
   Status* = ref object
-    isAnonSurfService: int
-    isTorService: int
-    isAnonSurfBoot: bool
+    isAnonSurfService*: int
+    isTorService*: int
+    isAnonSurfBoot*: bool
 
 
 proc getStatusService*(serviceName: string): int =
