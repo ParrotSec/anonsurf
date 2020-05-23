@@ -14,6 +14,7 @@ type
     rBtnStartBridge: Button
     rBtnStop: Button
     rBtnRestart: Button
+    rBtnChangeID: Button
     rBtnSetBoot: Button
 
 
@@ -121,6 +122,7 @@ proc refreshStatus(args: rObject): bool =
     # Enable buttons that can change AnonSurf running state
     args.rBtnRestart.setSensitive(true)
     args.rBtnStop.setSensitive(true)
+    args.rBtnChangeID.setSensitive(true)
     # Enable nyx to check AnonSurf status
     args.rBtnNyx.setSensitive(true)
     # Check fast status
@@ -139,6 +141,7 @@ proc refreshStatus(args: rObject): bool =
     # Disable buttons that can change AnonSurf running state
     args.rBtnRestart.setSensitive(false)
     args.rBtnStop.setSensitive(false)
+    args.rBtnChangeID.setSensitive(false)
     # Disable nyx button
     args.rBtnNyx.setSensitive(false)
     # Update fast status
@@ -151,6 +154,7 @@ proc refreshStatus(args: rObject): bool =
     args.rBtnStartBridge.setSensitive(false)
     # Disable restart button because it is having error
     args.rBtnRestart.setSensitive(false)
+    args.rBtnChangeID.setSensitive(false)
     # Enable stop button
     args.rBtnStop.setSensitive(true)
     # Disable nyx button
@@ -448,6 +452,7 @@ proc createArea(boxMainWindow: Box) =
     rBtnStartBridge: btnStartBridge,
     rBtnStop: btnStop,
     rBtnRestart: btnRestart,
+    rBtnChangeID: btnChangeID,
     rBtnSetBoot: btnBootSwitch,
   )
 
