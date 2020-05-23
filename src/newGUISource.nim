@@ -9,6 +9,7 @@ type
     rLabelDNSStatus: Label
     rLabelStatusBoot: Label
     # rImgStatus: 
+    # rBtnNyx: Button
     rBtnStart: Button
     rButtonStartBridge: Button
     rButtonStop: Button
@@ -58,6 +59,14 @@ proc refreshStatus(args: rObject): bool =
   ]#
   let
     basicStatus = getSurfStatus()
+
+  #[
+    Update boot status
+  ]#
+  if basicStatus.isAnonSurfBoot:
+    args.rLabelStatusBoot.text = "It is enabled"
+  else:
+    args.rLabelStatusBoot.text = "It is not enabled"
   return SOURCE_CONTINUE
 
 
