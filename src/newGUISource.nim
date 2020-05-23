@@ -1,5 +1,5 @@
 import gintro / [gtk, glib, gobject]#, notify, vte]
-import utils / status
+import utils / [status, dnsutils]
 
 type
   rObject = ref object
@@ -59,8 +59,33 @@ proc refreshStatus(args: rObject): bool =
   ]#
   let
     basicStatus = getSurfStatus()
+    dnsStatus = dnsStatusCheck()
   
-  # TODO check dns
+  case dnsStatus
+  of 0:
+    args.rLabelDNSStatus.text = "Under Tor Tunnel"
+  of -1:
+    args.rLabelDNSStatus.text = "Localhost (error)"
+  of -2:
+    args.rLabelDNSStatus.text = "/etc/resolv.conf not found"
+  of -3:
+    args.rLabelDNSStatus.text = "/etc/resolv.conf is empty"
+  of 11:
+    args.rLabelDNSStatus.text = "Static: OpenNIC DNS"
+  of 12:
+    args.rLabelDNSStatus.text = "Static: custom DNS"
+  of 13:
+    args.rLabelDNSStatus.text = "Static: OpenNIC + Custom DNS"
+  of 20:
+    args.rLabelDNSStatus.text = "Dynamic: DHCP (dynamic)"
+  of 21:
+    args.rLabelDNSStatus.text = "Dynamic: DHCP with OpenNIC DNS"
+  of 22:
+    args.rLabelDNSStatus.text = "Dynamic: DHCP with Custom DNS"
+  of 23:
+    args.rLabelDNSStatus.text = "Dynamic: DHCP with OpenNIC + Custom DNS"
+  else:
+    discard
 
   #[
     Update boot's status by the label
@@ -86,6 +111,7 @@ proc refreshStatus(args: rObject): bool =
   #[
     Update other labels and buttons base on AnonSurf status
   ]#
+  # TODO check fast status
   case basicStatus.isAnonSurfService
   of 1: # AnonSurf is running
     # Show status of labels
