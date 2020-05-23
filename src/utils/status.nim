@@ -40,6 +40,10 @@ proc getEnableService(serviceName: string): bool =
 
 
 proc getSurfStatus*(): Status =
+  #[
+    Get status of services (activated / inactivated)
+    TODO use libdbus https://nimble.directory/pkg/dbus
+  ]#
   let
     surfStatus = getStatusService("anonsurfd")
     torStatus = getStatusService("tor")
