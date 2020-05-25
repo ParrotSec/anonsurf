@@ -17,11 +17,12 @@ proc getStatusService*(serviceName: string): int =
       -1 failed
   ]#
   let serviceResult = execProcess("systemctl is-active " & serviceName)
-  if serviceResult == "active":
+ 
+  if serviceResult == "active\n":
     return 1
-  elif serviceResult == "inactive":
+  elif serviceResult == "inactive\n":
     return 0
-  elif serviceResult == "failed":
+  elif serviceResult == "failed\n":
     return -1
 
 
