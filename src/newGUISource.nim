@@ -1,5 +1,5 @@
 import gintro / [gtk, glib, gobject]#, notify, vte]
-import utils / [status, dnsutils]
+import utils / [status, dnsutils, help]
 
 type
   rObject = ref object
@@ -38,21 +38,6 @@ proc onClickDashboard(b: Button, s: Stack) =
 proc onClickExit(b: Button) =
   mainQuit()
 
-
-proc onClickMainHelp(b: Button) =
-  #[
-    Show help for main and credit in new dialog
-  ]#
-  discard
-
-
-proc onClickAnonHelp(b: Button) =
-  #[
-    Show help about AnonSurf in new dialog
-    1. How to use
-    2. Explain
-  ]#
-  discard
 
 proc refreshStatus(args: rObject): bool =
   #[
@@ -259,6 +244,7 @@ proc createArea(boxMainWindow: Box) =
 
   btnExit.connect("clicked", onClickExit)
   boxBottomButtons.packStart(btnExit, false, true, 3)
+  btnMainHelp.connect("clicked", onClickMainHelp)
   boxBottomButtons.packEnd(btnMainHelp, false, true, 3)
 
   boxDashboard.packEnd(boxBottomButtons, false, true, 3)
