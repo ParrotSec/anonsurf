@@ -8,7 +8,7 @@ type
     rLabelTorStatus: Label
     rLabelDNSStatus: Label
     rLabelStatusBoot: Label
-    # rImgStatus: 
+    rImgStatus: Image
     rBtnNyx: Button
     rBtnStart: Button
     rBtnStartBridge: Button
@@ -16,6 +16,11 @@ type
     rBtnRestart: Button
     rBtnChangeID: Button
     rBtnSetBoot: Button
+
+const # TODO change icon path here
+  imageFailed = "/home/dmknght/Parrot_Projects/anonsurf/icons/50px/anon_50px_failed.png"
+  imageUnprotected = "/home/dmknght/Parrot_Projects/anonsurf/icons/50px/anon_50px_unprotected.png"
+  imageProtected = "/home/dmknght/Parrot_Projects/anonsurf/icons/50px/anon_50px_protected.png"
 
 
 proc onClickDashboard(b: Button, s: Stack) =
@@ -112,12 +117,17 @@ proc refreshStatus(args: rObject): bool =
     args.rBtnNyx.setSensitive(true)
     # Check fast status
     if basicStatus.isTorService == 1:
+      args.rImgStatus.setFromFile(imageProtected)
       args.rLabelFastStatus.text = "AnonSurf is running"
     elif basicStatus.isTorService == 0:
+      args.rImgStatus.setFromFile(imageFailed)
       args.rLabelFastStatus.text = "AnonSurf is running but Tor isn't"
     else:
+      args.rImgStatus.setFromFile(imageFailed)
       args.rLabelFastStatus.text = "AnonSurf is running but Tor failed"
   of 0: # AnonSurf is not running
+    # Update image
+    args.rImgStatus.setFromFile(imageUnprotected)
     # Show status of label
     args.rLabelAnonStatus.text = "AnonSurf is not running"
     # Enable buttons that can start AnonSurf
@@ -132,6 +142,8 @@ proc refreshStatus(args: rObject): bool =
     # Update fast status
     args.rLabelFastStatus.text = "AnonSurf is not running"
   else:
+    # Update image
+    args.rImgStatus.setFromFile(imageFailed)
     # Show status of label
     args.rLabelAnonStatus.text = "AnonSurf failed to run (error)"
     # Disable buttons can start AnonSurf
@@ -194,20 +206,19 @@ proc createArea(boxMainWindow: Box) =
     boxStatusDetails = newBox(Orientation.vertical, 3)
     labelStatus = newLabel("Your connection isn't protected")
     btnDetails = newButton("Details")
-    # statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/50px/Anonsurf_Nobg.png")
-    # statusImage = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/Anonsurf_Logo_by_Serverket.png")
-    # statusBackground = newImageFromFile("/home/dmknght/Parrot_Projects/anonsurf/icons/background_warn.png")
 
   boxStatus.setSizeRequest(300, 70)
   boxStatusDetails.add(labelStatus)
   # boxStatus.
 
-  # btnDetails.connect("clicked", showCurrentDetails)
   boxStatusDetails.add(btnDetails)
 
-  # boxStatusIcon.add(statusImage)
+  let # TODO change icon path here
+    imgStatus = newImageFromFile(imageUnprotected)
 
-  boxStatus.packStart(boxStatusIcon, false, true, 3)
+  boxStatusIcon.add(imgStatus)
+
+  boxStatus.packStart(boxStatusIcon, true, true, 3)
   boxStatus.packEnd(boxStatusDetails, false, true, 3)
   
   boxDashboard.add(boxStatus)
@@ -432,7 +443,7 @@ proc createArea(boxMainWindow: Box) =
     rLabelTorStatus: labelTorStatus,
     rLabelDNSStatus: labelDNSStatus,
     rLabelStatusBoot: labelBootStatus,
-    # rImgStatus:
+    rImgStatus: imgStatus,
     rBtnNyx: btnNyx, 
     rBtnStart: btnStart,
     rBtnStartBridge: btnStartBridge,
