@@ -27,7 +27,7 @@ proc onClickDashboard(b: Button, s: Stack) =
   #[
     init action for back button and button in Dashboard
   ]#
-  if b.label == "Back":
+  if b.label == "Back" or b.label == "":
     s.setVisibleChildName("main")
   else:
     if b.label == "AnonSurf":
@@ -252,8 +252,10 @@ proc createArea(boxMainWindow: Box) =
     boxBottomButtons = newBox(Orientation.horizontal, 3)
     btnMainHelp = newButton("Help")
     btnExit = newButton("Exit")
+    imgExit = newImageFromIconName("exit", 3)
 
   btnExit.connect("clicked", onClickExit)
+  btnExit.setImage(imgExit)
   boxBottomButtons.packStart(btnExit, false, true, 3)
   btnMainHelp.connect("clicked", onClickMainHelp)
   boxBottomButtons.packEnd(btnMainHelp, false, true, 3)
@@ -308,10 +310,12 @@ proc createArea(boxMainWindow: Box) =
 
   let
     boxAnonBottomButtons = newBox(Orientation.horizontal, 3)
-    btnAnonBack = newButton("Back")
+    btnAnonBack = newButton("")
     btnAnonHelp = newButton("Help")
+    imgBack = newImageFromIconName("back", 3)
   
   btnAnonBack.connect("clicked", onClickDashboard, mainStack)
+  btnAnonBack.setImage(imgBack)
   boxAnonBottomButtons.packStart(btnAnonBack, false, true, 3)
   boxAnonBottomButtons.packEnd(btnAnonHelp, false, true, 3)
 
@@ -406,8 +410,7 @@ proc createArea(boxMainWindow: Box) =
     btnChangeID = newButton("Change ID")
     btnCheckIP = newButton("Check IP")
     btnNyx = newButton("Nyx")
-    
-    
+
   btnDetails.connect("clicked", onClickDashboard, mainStack)
   
   boxStatusButtons.add(btnChangeID)
@@ -416,9 +419,10 @@ proc createArea(boxMainWindow: Box) =
 
   let
     boxDetailsBottomButtons  = newBox(Orientation.horizontal, 3)
-    btnDetailsBack = newButton("Back")
+    btnDetailsBack = newButton("")
 
   btnDetailsBack.connect("clicked", onClickDashboard, mainStack)
+  btnDetailsBack.setImage(imgBack)
   boxDetailsBottomButtons.add(btnDetailsBack)
 
   let
