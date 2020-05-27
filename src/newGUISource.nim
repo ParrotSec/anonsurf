@@ -252,12 +252,14 @@ proc createArea(boxMainWindow: Box) =
     boxBottomButtons = newBox(Orientation.horizontal, 3)
     btnMainHelp = newButton("Help")
     btnExit = newButton("Exit")
-    imgExit = newImageFromIconName("exit", 3)
+    imgMainHelp = newImageFromIconName("help-about", 3)
+    imgMainExit = newImageFromIconName("exit", 3)
 
   btnExit.connect("clicked", onClickExit)
-  btnExit.setImage(imgExit)
+  btnExit.setImage(imgMainExit)
   boxBottomButtons.packStart(btnExit, false, true, 3)
   btnMainHelp.connect("clicked", onClickMainHelp)
+  btnMainHelp.setImage(imgMainHelp)
   boxBottomButtons.packEnd(btnMainHelp, false, true, 3)
 
   boxDashboard.packEnd(boxBottomButtons, false, true, 3)
@@ -312,10 +314,12 @@ proc createArea(boxMainWindow: Box) =
     boxAnonBottomButtons = newBox(Orientation.horizontal, 3)
     btnAnonBack = newButton("")
     btnAnonHelp = newButton("Help")
-    imgBack = newImageFromIconName("back", 3)
+    imgAnonHelp = newImageFromIconName("help-about", 3)
+    imgAnonBack = newImageFromIconName("back", 3)
   
   btnAnonBack.connect("clicked", onClickDashboard, mainStack)
-  btnAnonBack.setImage(imgBack)
+  btnAnonBack.setImage(imgAnonBack)
+  btnAnonHelp.setImage(imgAnonHelp)
   boxAnonBottomButtons.packStart(btnAnonBack, false, true, 3)
   boxAnonBottomButtons.packEnd(btnAnonHelp, false, true, 3)
 
@@ -420,9 +424,10 @@ proc createArea(boxMainWindow: Box) =
   let
     boxDetailsBottomButtons  = newBox(Orientation.horizontal, 3)
     btnDetailsBack = newButton("")
+    imgDetailsBack = newImageFromIconName("back", 3)
 
   btnDetailsBack.connect("clicked", onClickDashboard, mainStack)
-  btnDetailsBack.setImage(imgBack)
+  btnDetailsBack.setImage(imgDetailsBack)
   boxDetailsBottomButtons.add(btnDetailsBack)
 
   let
