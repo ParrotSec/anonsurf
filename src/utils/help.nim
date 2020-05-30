@@ -24,8 +24,8 @@ proc onClickMainHelp*(b: Button) =
 
   helpStack.addTitled(boxWhatIsAnonSurf, "anonsurf", "AnonSurf")
 
-  area.add(helpStack)
-  area.add(helpStackSwitcher)
+  area.packEnd(helpStack, false, true, 3)
+  area.packStart(helpStackSwitcher, false, true, 3)
 
   let
     boxCredit = newBox(Orientation.vertical, 3)
