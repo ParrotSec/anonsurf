@@ -19,7 +19,7 @@ proc restoreTorrc() =
     else:
       stderr.write("[x] Can not remove AnonSurf's torrc\n")
   else:
-    stderr.write("[x] Can find backup file. Ignore\n")
+    stderr.write("[x] Can not find backup file. Ignored...\n")
 
 
 proc replaceTorrc() =
