@@ -86,7 +86,7 @@ function checkuid {
 function start {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
-	# /usr/sbin/service tor start
+	/usr/sbin/service tor start
 	# TODO terminate if tor failed to start
 	/usr/sbin/service anonsurfd start
 
