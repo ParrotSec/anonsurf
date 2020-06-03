@@ -250,7 +250,7 @@ proc createArea(boxMainWindow: Box) =
 
   let
     boxBottomButtons = newBox(Orientation.horizontal, 3)
-    btnMainHelp = newButton("Help")
+    btnMainHelp = newButton("About")
     btnExit = newButton("Exit")
     imgMainHelp = newImageFromIconName("help-about", 3)
     imgMainExit = newImageFromIconName("exit", 3)
