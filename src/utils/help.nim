@@ -5,35 +5,19 @@ proc onClickMainHelp*(b: Button) =
     Show help for main and credit in new dialog
   ]#
   let
-    mainDialog = newDialog()
-    area = mainDialog.getContentArea()
+    anonAbout = newAboutDialog()
   
-  mainDialog.setTitle("Help")
+  anonAbout.setProgramName("AnonSurf")
+  anonAbout.setVersion("2.13.0")
+  anonAbout.setAuthors(["Nong Hoang Tu", "Palinuro"])
+  anonAbout.setComments("Anonymous Toolkit for Parrot OS")
+  anonAbout.setCopyright("2020 Palinuro")
+  anonAbout.setLicense("GPL-3.0")
+  anonAbout.setWebsite("https://nest.parrot.sh/packages/tools/anonsurf")
+  anonAbout.setWebsiteLabel("Source")
 
-  let
-    helpStack = newStack()
-    helpStackSwitcher = newStackSwitcher()
-
-  helpStackSwitcher.setStack(helpStack)
-  
-  let
-    boxWhatIsAnonSurf = newBox(Orientation.vertical, 3)
-    labelTest = newLabel("This is test label for help of AnonSurf")
-
-  boxWhatIsAnonSurf.add(labelTest)
-
-  helpStack.addTitled(boxWhatIsAnonSurf, "anonsurf", "AnonSurf")
-
-  area.packEnd(helpStack, false, true, 3)
-  area.packStart(helpStackSwitcher, false, true, 3)
-
-  let
-    boxCredit = newBox(Orientation.vertical, 3)
-    labelTestCredit = newLabel("All authors of anonsurf and all URL")
-  
-  boxCredit.add(labelTestCredit)
-  helpStack.addTitled(boxCredit, "credit", "Credit")
-  mainDialog.showAll()
+  discard anonAbout.run()
+  anonAbout.destroy()
 
 
 proc onClickAnonHelp*(b: Button) =
