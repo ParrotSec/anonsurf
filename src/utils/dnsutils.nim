@@ -1,6 +1,5 @@
 import osproc
 import os
-import osproc
 import strutils
 import status
 
