@@ -1,6 +1,7 @@
-anonsurf (2.13.2+parrot0) UNRELEASED; urgency=medium
+anonsurf (2.13.3+parrot0) rolling-testing; urgency=medium
 
-  * Test new behavior of tor unit
+  * Replace torrc by make-torrc
+  * Create test package
 
  -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Fri, 22 May 2020 11:04:27 +0700
 
