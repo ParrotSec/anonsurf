@@ -1,3 +1,11 @@
+anonsurf (2.13.4+parrot0) rolling-testing; urgency=medium
+
+  * Fix typo in msg
+  * More small terminal friendly for help banner
+  * Fix empty resolv.conf bug
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Thu, 18 Jun 2020 03:31:42 +0700
+
 anonsurf (2.13.3+parrot0) rolling-testing; urgency=medium
 
   * Replace torrc by make-torrc
