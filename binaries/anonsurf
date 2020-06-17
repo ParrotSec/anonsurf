@@ -109,6 +109,15 @@ function stop {
 }
 
 
+function status-boot {
+	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
+		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf is enabled!$RESETCOLOR\n"
+	else
+		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf is disabled!$RESETCOLOR\n"
+	fi
+}
+
+
 function enable-boot {
 	# if [ "$(systemctl list-unit-files | grep anonsurfd | awk '{print $2}')" = "disabled" ]; then
 	# New method: Check if symlink file at /lib/systemd/system/anonsurfd.service is there
