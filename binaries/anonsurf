@@ -121,7 +121,7 @@ function enable-boot {
 
 function disable-boot {
 	if [ "$(systemctl list-unit-files | grep anonsurfd | awk '{print $2}')" = "enabled" ]; then
-		systemctl enable anonsurfd;
+		systemctl disable anonsurfd;
 		notify "Disabling AnonSurf at boot"
 	else
 		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf wasn't enabled. Nothing to disable!$RESETCOLOR\n"
