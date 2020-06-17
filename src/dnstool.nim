@@ -280,14 +280,14 @@ proc main() =
     elif paramStr(1) == "status":
       status()
       return
-    elif paramStr(1) != "static" and paramStr(1) != "dynamic":
-      # If we can't define command, interrupt here
-      help()
-      stderr.write("[x] Err: Unknow option\n")
     elif paramStr(1) == "create-backup":
       makeBackUp()
     elif paramStr(1) == "restore-backup":
       restoreBackup()
+    elif paramStr(1) != "static" and paramStr(1) != "dynamic":
+      # If we can't define command, interrupt here
+      help()
+      stderr.write("[x] Err: Unknow option\n")
   
   # We clean all base files for new settings
   doBasicMake(paramStr(1))
