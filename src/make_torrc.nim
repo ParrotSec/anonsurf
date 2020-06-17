@@ -39,7 +39,7 @@ proc replaceTorrc() =
     if torrcInfo.kind == pcFile:
       stdout.write("[+] Creating tor's torrc backup\n")
       moveFile(torTorrc, torTorrcBak)
-      stdout.write("[+] Using AnonSurf's torrc confing\n")
+      stdout.write("[+] Using AnonSurf's torrc config\n")
       createSymlink(anonTorrc, torTorrc)
     # else we remove file and create symlink
     else:
@@ -50,7 +50,7 @@ proc replaceTorrc() =
         stderr.write("[x] Can not remove " & torTorrc & "\n")
   else:
     stderr.write("[x] Can not find " & torTorrc & "\n")
-    stdout.write("[+] Force using AnonSurf's torrc confing\n")
+    stdout.write("[+] Force using AnonSurf's torrc config\n")
     createSymlink(anonTorrc, torTorrc)
 
 
