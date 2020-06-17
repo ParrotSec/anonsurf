@@ -97,7 +97,7 @@ function start {
 	/usr/sbin/iptables -F
 	/usr/sbin/iptables -t nat -F
 
-	/usr/bin/dnstool make-backup
+	/usr/bin/dnstool create-backup
 	/usr/bin/dnstool static 127.0.0.1
 	# mv /etc/resolv.conf /etc/resolv.conf.bak
 	# echo -e 'nameserver 127.0.0.1' > /etc/resolv.conf
