@@ -236,28 +236,28 @@ case "$1" in
    *)
 echo -e "
 Parrot AnonSurf Module (v 2.13)
-	Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
-		     Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
-		     Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
-	Maintained by Nong Hoang \"DmKnght\" Tu <dmknght@parrotsec.org>
-		and a huge amount of Caffeine, Mountain Dew + some GNU/GPL v3 stuff
-	Obfs4 Bridges: M. \"meu\" Emrah Ünsür
-	Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
+  Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
+    Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
+    Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
+  Maintained by Nong Hoang \"DmKnght\" Tu <dmknght@parrotsec.org>
+    and a huge amount of Caffeine, Mountain Dew + some GNU/GPL v3 stuff
+  Obfs4 Bridges: M. \"meu\" Emrah Ünsür
+  Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
 
-	Usage:
-	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
-	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
+  Usage:
+  $RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
+  $RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
 
-	$RED start$BLUE -$GREEN Start system-wide TOR tunnel
-	$RED start-bridge$BLUE -$GREEN Start system-wide TOR tunnel with Obfs4 Bridge support
-	$RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
-	$RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
-	$RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
-	$RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
-	$RED changeid$BLUE -$GREEN Restart TOR to change identity
-	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
-	$RED myip$BLUE -$GREEN Check your ip and verify your tor connection
-	$RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.
+  $RED start$BLUE -$GREEN Start system-wide TOR tunnel
+  $RED start-bridge$BLUE -$GREEN Start system-wide TOR tunnel with Obfs4 Bridge support
+  $RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
+  $RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
+  $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
+  $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
+  $RED changeid$BLUE -$GREEN Restart TOR to change identity
+  $RED status$BLUE -$GREEN Check if AnonSurf is working properly
+  $RED myip$BLUE -$GREEN Check your ip and verify your tor connection
+  $RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.
 $RESETCOLOR
 Dance like no one's watching. Encrypt like everyone is.
 " >&2
