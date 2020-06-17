@@ -234,10 +234,11 @@ proc freshResolv(resolvType: string) =
   else:
     try:
       if resolvType == "static":
-        # Dynamic
+        # Static domain name. We write after remove old file
         writeFile(resolvConf, "")
       else:
-        # Static
+        # Dynamic domain name. We create symlink so it can take
+        # settings from DHCP service
         createSymlink(runResolvConf, resolvConf)
     except:
       stderr.write("Error while making new resolv.conf\n")
