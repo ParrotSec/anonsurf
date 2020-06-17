@@ -45,7 +45,11 @@ proc replaceTorrc() =
     else:
       stdout.write("[+] Torrc is a symlink. We don't create a backup\n")
       if tryRemoveFile(torTorrc):
-        createSymlink(anonTorrc, torTorrc)
+        # createSymlink(anonTorrc, torTorrc)
+        try:
+          copyFile(anonTorrc, torTorrc)
+        except:
+          stderr.write("[x] Can not replace torrc\n")
       else:
         stderr.write("[x] Can not remove " & torTorrc & "\n")
   else:
