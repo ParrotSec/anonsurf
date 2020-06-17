@@ -110,17 +110,28 @@ function stop {
 
 
 function enable-boot {
-	if [ "$(systemctl list-unit-files | grep anonsurfd | awk '{print $2}')" = "disabled" ]; then
+	# if [ "$(systemctl list-unit-files | grep anonsurfd | awk '{print $2}')" = "disabled" ]; then
+	# New method: Check if symlink file at /lib/systemd/system/anonsurfd.service is there
+	# If file is there -> systemctl enabled anonsurf at boot
+	
+	# BUG: The folder default.target.wants is defined by target in sys unit file
+	# Any change of that section creates bug in this condition
+
+	# Check if symlink doesn't exists -> we enable it
+	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
+		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf already enabled!$RESETCOLOR\n"
+	else
 		systemctl enable anonsurfd;
 		notify "Enabling AnonSurf at boot"
-	else
-		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf already enabled!$RESETCOLOR\n"
 	fi
 }
 
 
 function disable-boot {
-	if [ "$(systemctl list-unit-files | grep anonsurfd | awk '{print $2}')" = "enabled" ]; then
+	# New method: Check if symlink file at /lib/systemd/system/anonsurfd.service is there
+	# If file is there -> systemctl enabled anonsurf at boot
+	# if [ "$(systemctl list-unit-files | grep anonsurfd | awk '{print $2}')" = "enabled" ]; then
+	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
 		systemctl disable anonsurfd;
 		notify "Disabling AnonSurf at boot"
 	else
