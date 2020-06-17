@@ -1,3 +1,17 @@
+anonsurf (2.13.5+parrot1) rolling-testing; urgency=medium
+
+  * Add status-boot to check status of enable at boot
+  * Reduce delay time of stop function
+  * Try copyFile instead of createSymlink for make-torrc
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Thu, 18 Jun 2020 04:20:56 +0700
+
+anonsurf (2.13.5+parrot0) rolling-testing; urgency=medium
+
+  * Change the way to check boot status
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Thu, 18 Jun 2020 03:46:10 +0700
+
 anonsurf (2.13.4+parrot0) rolling-testing; urgency=medium
 
   * Fix typo in msg
