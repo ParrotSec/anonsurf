@@ -111,7 +111,7 @@ function stop {
 
 function status-boot {
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf is enabled!$RESETCOLOR\n"
+		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf is$GREEN enabled$RED!$RESETCOLOR\n"
 	else
 		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf is disabled!$RESETCOLOR\n"
 	fi
