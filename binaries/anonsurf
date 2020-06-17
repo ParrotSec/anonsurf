@@ -253,6 +253,9 @@ case "$1" in
 		checkuid
 		disable-boot
 	;;
+	status-boot)
+		status-boot
+	;;
    *)
 echo -e "
 Parrot AnonSurf Module (v 2.13)
@@ -274,6 +277,7 @@ Parrot AnonSurf Module (v 2.13)
   $RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
   $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
   $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
+	$RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
   $RED changeid$BLUE -$GREEN Restart TOR to change identity
   $RED status$BLUE -$GREEN Check if AnonSurf is working properly
   $RED myip$BLUE -$GREEN Check your ip and verify your tor connection
