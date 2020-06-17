@@ -1,3 +1,10 @@
+anonsurf (2.13.5+parrot2) rolling-testing; urgency=medium
+
+  * Fix a logic bug in check valid commands
+  * Fix the way to call create-backup
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Thu, 18 Jun 2020 04:47:09 +0700
+
 anonsurf (2.13.5+parrot1) rolling-testing; urgency=medium
 
   * Add status-boot to check status of enable at boot
