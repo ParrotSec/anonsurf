@@ -168,7 +168,7 @@ function stop {
 	then
 		/usr/sbin/service tor stop
 	fi
-	sleep 1
+	# sleep 1
 	killall tor
 	/etc/anonsurf/make-torrc restore
 	# rm /etc/anonsurf/torrc
