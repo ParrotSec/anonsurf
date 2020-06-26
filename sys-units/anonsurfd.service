@@ -10,5 +10,14 @@ ExecReload=/etc/anonsurf/anondaemon restart
 ExecStop=/etc/anonsurf/anondaemon stop
 RemainAfterExit=yes
 
+# Hardening
+AppArmorProfile=-system_tor
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+
 [Install]
 WantedBy=default.target
