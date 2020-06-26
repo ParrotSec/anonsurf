@@ -87,7 +87,6 @@ function start {
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
 	/usr/sbin/service tor start
-	# TODO terminate if tor failed to start
 	/usr/sbin/service anonsurfd start
 
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
@@ -174,7 +173,6 @@ function dns {
 case "$1" in
 	start)
 	# Only start if anonsurfd is not running
-	# TODO try to run if the service status is failed?
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
@@ -191,7 +189,6 @@ case "$1" in
 
 	start-bridge)
 	# Only start if anonsurfd is not running
-	# TODO try to run if the service status is failed?
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
