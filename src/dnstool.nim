@@ -155,28 +155,39 @@ proc restoreBackup() =
   # Don't overwrite current settings when AnonSurf is running
   if dnsStatusCheck() == 0:
     stderr.write("[x] AnonSurf is running. Aborted!\n")
-  # No DNS file is found
+  # No backup of DNS file is found
   elif not fileExists(backupFile):
     stderr.write("[x] No backup file founnd\n")
+    # There is no resolv.conf + no backup. Use dynamic setting
+    if not fileExists(resolvConf):
+      stdout.write("[-] No resolv.conf file found. Using dynamic DNS settings\n")
+      createSymlink(runResolvConf, resolvConf)
+  elif not fileExists(resolvConf):
+    # There is no resolv.conf
+    # After else if so backup should be here
+    copyFile(backupFile, resolvConf)
   else:
     # Don't overwrite when it has the same data
     if readFile(resolvConf) == readFile(backupFile):
       stderr.write("[-] You are having same configurations. Aborted!\n")
     # If we backed up symlink of /run/resolvconf/resolv.conf, it should have the same data
-    elif readFile(runResolvConf) == readFile(backupFile):
-      if tryRemoveFile(resolvConf):
-        stdout.write("[-] Backup file has same DHCP configurations. Use DHCP settings\n")
-        createSymlink(runResolvConf, resolvConf)
-        stdout.write("[*] Restored from " & backupFile & "\n")
-      else:
-        stderr.write("[x] Error while removing /etc/resolv.conf\n")
-    # It seems good. We restore the data
     else:
-      if tryRemoveFile(resolvConf):
-        copyFile(backupFile, resolvConf)
-        stdout.write("[*] Restored from " & backupFile & "\n")
+      if readFile(runResolvConf) == readFile(backupFile):
+      # FIXME always use DHCP
+        if tryRemoveFile(resolvConf):
+          stdout.write("[-] Backup file has same DHCP configurations. Use DHCP settings\n")
+          createSymlink(runResolvConf, resolvConf)
+          stdout.write("[*] Restored from " & backupFile & "\n")
+        else:
+          stderr.write("[x] Error while removing /etc/resolv.conf\n")
+      # It seems good. We restore the data
       else:
-        stderr.write("[x] Error while removing /etc/resolv.conf\n")
+        if tryRemoveFile(resolvConf):
+          echo "copying from " & backupFile & " to " & resolvConf
+          copyFile(backupFile, resolvConf)
+          stdout.write("[*] Restored from " & backupFile & "\n")
+        else:
+          stderr.write("[x] Error while removing /etc/resolv.conf\n")
 
 
 proc writeDNSToTail(data: string) = 
