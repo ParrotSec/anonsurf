@@ -165,6 +165,7 @@ proc restoreBackup() =
   elif not fileExists(resolvConf):
     # There is no resolv.conf
     # After else if so backup should be here
+    stdout.write("[-] Missing resolv.conf. Restoring backup file\n")
     copyFile(backupFile, resolvConf)
   else:
     # Don't overwrite when it has the same data
@@ -173,7 +174,7 @@ proc restoreBackup() =
     # If we backed up symlink of /run/resolvconf/resolv.conf, it should have the same data
     else:
       if readFile(runResolvConf) == readFile(backupFile):
-      # FIXME always use DHCP
+        # FIXME always use DHCP
         if tryRemoveFile(resolvConf):
           stdout.write("[-] Backup file has same DHCP configurations. Use DHCP settings\n")
           createSymlink(runResolvConf, resolvConf)
@@ -293,12 +294,15 @@ proc main() =
       return
     elif paramStr(1) == "create-backup":
       makeBackUp()
+      return
     elif paramStr(1) == "restore-backup":
       restoreBackup()
+      return
     elif paramStr(1) != "static" and paramStr(1) != "dynamic":
       # If we can't define command, interrupt here
       help()
       stderr.write("[x] Err: Unknow option\n")
+      return
   
   # We clean all base files for new settings
   doBasicMake(paramStr(1))
