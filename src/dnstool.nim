@@ -297,6 +297,7 @@ proc main() =
       return
     elif paramStr(1) == "restore-backup":
       restoreBackup()
+      status()
       return
     elif paramStr(1) != "static" and paramStr(1) != "dynamic":
       # If we can't define command, interrupt here
