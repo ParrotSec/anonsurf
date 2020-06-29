@@ -258,10 +258,10 @@ case "$1" in
    *)
 echo -e "
 Parrot AnonSurf Module (v 2.13)
-  Developed by Lorenzo \"Palinuro\" Faletra <palinuro@parrotsec.org>
-    Lisetta \"Sheireen\" Ferrero <sheireen@parrotsec.org>
-    Francesco \"Mibofra\" Bonanno <mibofra@parrotsec.org>
-  Maintained by Nong Hoang \"DmKnght\" Tu <dmknght@parrotsec.org>
+ $RED Developed$RESETCOLOR by$GREEN Lorenzo \"Palinuro\" Faletra$BLUE <palinuro@parrotsec.org>$RESETCOLOR
+   $GREEN Lisetta \"Sheireen\" Ferrero$BLUE <sheireen@parrotsec.org>$RESETCOLOR
+   $GREEN Francesco \"Mibofra\" Bonanno$BLUE <mibofra@parrotsec.org>$RESETCOLOR
+ $RED Maintained$RESETCOLOR by$GREEN Nong Hoang \"DmKnght\" Tu$BLUE <dmknght@parrotsec.org>$RESETCOLOR
     and a huge amount of Caffeine, Mountain Dew + some GNU/GPL v3 stuff
   Obfs4 Bridges: M. \"meu\" Emrah Ünsür
   Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
