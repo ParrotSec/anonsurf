@@ -4,5 +4,5 @@
 	dh $@ --with bash-completion
 # override_dh_auto_configure:
 # 	nimble install gintro
-# override_dh_installsystemd:
-# 	dh_installsystemd --no-enable
+override_dh_installsystemd:
+	dh_installsystemd --no-enable
