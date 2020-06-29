@@ -257,7 +257,8 @@ case "$1" in
 	;;
    *)
 echo -e "
-Parrot AnonSurf Module (v 2.13)
+AnonSurf [v2.13.6] -$BLUE Command Line Interface$RESETCOLOR
+
  $RED Developed$RESETCOLOR by$GREEN Lorenzo \"Palinuro\" Faletra$BLUE <palinuro@parrotsec.org>$RESETCOLOR
    $GREEN Lisetta \"Sheireen\" Ferrero$BLUE <sheireen@parrotsec.org>$RESETCOLOR
    $GREEN Francesco \"Mibofra\" Bonanno$BLUE <mibofra@parrotsec.org>$RESETCOLOR
