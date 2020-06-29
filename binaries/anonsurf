@@ -183,6 +183,7 @@ case "$1" in
 			echo -e "$GREEN *$BLUE Making firewall rules"
 			start
 		else
+			# TODO check "failed" service here
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
 		fi
 	;;
@@ -200,6 +201,7 @@ case "$1" in
 			echo -e "$GREEN *$BLUE Making firewall rules"
 			start
 		else
+			# TODO check "failed" service here
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
 		fi
 	;;
@@ -274,7 +276,7 @@ Parrot AnonSurf Module (v 2.13)
   $RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
   $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
   $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
-	$RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
+  $RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
   $RED changeid$BLUE -$GREEN Restart TOR to change identity
   $RED status$BLUE -$GREEN Check if AnonSurf is working properly
   $RED myip$BLUE -$GREEN Check your ip and verify your tor connection
