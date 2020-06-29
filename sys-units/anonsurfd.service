@@ -10,21 +10,5 @@ ExecReload=/etc/anonsurf/anondaemon restart
 ExecStop=/etc/anonsurf/anondaemon stop
 RemainAfterExit=yes
 
-# Hardening
-#PrivateDevices=true
-#ProtectControlGroups=true
-#ProtectHome=true
-#ProtectKernelTunables=true
-#ProtectSystem=strict
-#PrivateTmp=yes
-
-# Whitelist paths for dnstool and make-torrc
-#ReadWritePaths=/etc/resolv.conf
-#ReadWritePaths=/etc/resolv.conf.bak
-#ReadWritePaths=/etc/anonsurf/torrc
-#ReadWritePaths=/etc/tor/torrc
-#SystemCallFilter=stat close open mmap fstat rt_sigaction read munmap mprotect readlink getdents write lstat poll lseek brk rt_sigprocmask ioctl access dup getpid socket connect sendto recvmsg bind listen getsockname getpeername setsockopt execve uname fcntl getrlimit sysinfo getuid getgid geteuid getegid sigaltstack statfs arch_prctl futex set_tid_address set_robust_list getrandomSystemCallArchitectures=native
-#CapabilityBoundingSet=~CAP_SYS_ADMIN
-
 [Install]
 WantedBy=default.target
