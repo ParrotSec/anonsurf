@@ -1,3 +1,11 @@
+anonsurf (2.13.6+parrot0) rolling-testing; urgency=medium
+
+  * Handle missing resolv.conf file
+  * make-torrc now create torrc directly
+  * Fix a bug in restore backup of DNS settings
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Mon, 29 Jun 2020 16:22:16 +0700
+
 anonsurf (2.13.5+parrot2) rolling-testing; urgency=medium
 
   * Fix a logic bug in check valid commands
