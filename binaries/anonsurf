@@ -73,8 +73,8 @@ function ip {
 		notify "You are connecting to Tor network\nYour IP is $IP"
 	else
 		IP=`curl -s https://check.torproject.org/ | grep -E -o "<strong>(\S+)</strong>" | sed -e 's/<[^>]*>//g'`
-		echo -e "You are not connecting to TOR network\nYour IP is $IP"
-		notify "You are not connecting to TOR network\nYour IP is $IP"
+		echo -e "You are not connecting to Tor network\nYour IP is $IP"
+		notify "You are not connecting to Tor network\nYour IP is $IP"
 	fi
 }
 
