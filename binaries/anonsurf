@@ -67,12 +67,13 @@ function kill-apps {
 function ip {
 	# Get current public IP address and isConnectToTor status
 	DATA=`curl --socks5 localhost:9050 --socks5-hostname localhost:9050 -s https://check.torproject.org/`
-	if [ data != "" ]; then
+	if [ "$DATA" != "" ]; then
 		IP=`echo $DATA | grep strong | sed -e 's/<[^>]*>//g' | cut -d : -f 2`
 		echo -e "You are connecting to Tor network\nYour IP is$IP"
 	else
 		IP=`curl -s https://check.torproject.org/ | grep strong | sed -e 's/<[^>]*>//g' | cut -d : -f 2`
 		echo -e "You are not connecting to TOR network\nYour IP is$IP"
+	fi
 }
 
 
