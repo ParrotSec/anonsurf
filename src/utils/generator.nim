@@ -1,6 +1,6 @@
 import random
 import strutils
-# import osproc
+import osproc
 
 randomize()
 
@@ -17,6 +17,18 @@ proc generatePassword*(): string =
   return password
 
 
+proc generateHash*(password: string): string =
+  #[
+    Generate tor hash by calling tor command
+  ]#
+  let output = execProcess("tor --hash-password " & password)
+  # The hash is usually at the end of list
+  # all other lines are comments
+  # We do for loop to make sure there is no mistake
+  for line in output.split("\n"):
+    if line.startsWith("16:"):
+      return line
+
 proc genBridgeAddr*(): string =
   #[
     Read the list from official list
@@ -24,7 +36,6 @@ proc genBridgeAddr*(): string =
   ]#
   const
     basePath = "/etc/anonsurf/obfs4bridge.list" # TODO change here. Development only
-    # basePath = "/home/dmknght/Parrot_Projects/anonsurf/obfs4bridge.list"
 
   var
     allBridgeAddr: seq[string]
@@ -36,7 +47,7 @@ proc genBridgeAddr*(): string =
   return sample(allBridgeAddr)
 
 
-proc genTorrc*(isTorBridge: bool = false): string =
+proc genTorrc*(hashed: string, isTorBridge: bool = false): string =
   const
     basePath = "/etc/anonsurf/torrc.base" # TODO change here. Development only
     # basePath = "/home/dmknght/Parrot_Projects/anonsurf/torrc.base"
@@ -47,7 +58,8 @@ proc genTorrc*(isTorBridge: bool = false): string =
   result = readFile(basePath)
   # BUG: must generate password by tor tor --hash-password bullshit
   # Use old config temp
-  result &= "\nHashedControlPassword 16:FDE8ED505C45C8BA602385E2CA5B3250ED00AC0920FEC1230813A1F86F\n"
+  result &= "\n" & hashed & "\n"
+  # result &= "\nHashedControlPassword 16:FDE8ED505C45C8BA602385E2CA5B3250ED00AC0920FEC1230813A1F86F\n"
 
   # echo randPasswd
   # result &= "\nHashedControlPassword " & torHashedPasswd & "\n\n"
