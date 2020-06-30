@@ -109,9 +109,6 @@ proc main() =
     txtPasswd = generatePassword()
     encPasswd = generateHash(txtPasswd)
 
-  echo "password: " & txtPasswd
-  echo "hash: " & encPasswd # DEBUG remove after debug
-
   if paramCount() == 0:
     makeNyxrc(txtPasswd)
     replaceTorrc(encPasswd)
