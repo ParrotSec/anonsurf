@@ -65,11 +65,14 @@ function kill-apps {
 
 
 function ip {
-	MYIP=`wget -qO- https://start.parrotsec.org/ip/`
-	echo -e "\nMy ip is:\n"
-	echo $MYIP
-	echo -e "\n"
-	notify "My IP is:\n\n$MYIP"
+	# Get current public IP address and isConnectToTor status
+	DATA=`curl --socks5 localhost:9050 --socks5-hostname localhost:9050 -s https://check.torproject.org/`
+	if [ data != "" ]; then
+		IP=`echo $DATA | grep strong | sed -e 's/<[^>]*>//g' | cut -d : -f 2`
+		echo -e "You are connecting to Tor network\nYour IP is$IP"
+	else
+		IP=`curl -s https://check.torproject.org/ | grep strong | sed -e 's/<[^>]*>//g' | cut -d : -f 2`
+		echo -e "You are not connecting to TOR network\nYour IP is$IP"
 }
 
 
