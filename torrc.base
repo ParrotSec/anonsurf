@@ -40,4 +40,4 @@ UseEntryGuards 1
 EnforceDistinctSubnets 1
 
 # Use cookie authentication
-CookieAuthentication 1
+# CookieAuthentication 1

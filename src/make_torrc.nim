@@ -44,7 +44,7 @@ proc cleanNyxrc() =
     stdout.write("[*] Nyxrc is removed\n")
 
 
-proc makeTorrc*(isTorBridge: bool = false) =
+proc makeTorrc*(hased: string, isTorBridge: bool = false) =
   #[
     Create torrc file with random password
       and the settings for bridge / normal
@@ -53,18 +53,19 @@ proc makeTorrc*(isTorBridge: bool = false) =
   var
     torData = ""
   
-  if not tryRemoveFile(torTorrc):
-    stderr.write("[x] Error while removing torrc\n")
-    return
+  if fileExists(torTorrc):
+    if not tryRemoveFile(torTorrc):
+      stderr.write("[x] Error while removing old torrc\n")
+      return
 
-  torData = genTorrc(isTorBridge)
+  torData = genTorrc(hased, isTorBridge)
   try:
     writeFile(torTorrc, torData)
   except:
     stderr.write("[x] Error while making new Torrc file\n")
 
 
-proc replaceTorrc(isOptionBridge: bool = false) =
+proc replaceTorrc(hashed: string, isOptionBridge: bool = false) =
   #[
     We replace torrc's setting by our anonsurf settings then call tor
     1. Make a backup for current torrc (which should be from tor side)
@@ -83,7 +84,7 @@ proc replaceTorrc(isOptionBridge: bool = false) =
       moveFile(torTorrc, torTorrcBak)
       stdout.write("[+] Using AnonSurf's torrc config\n")
       # createSymlink(anonTorrc, torTorrc)
-      makeTorrc(isOptionBridge)
+      makeTorrc(hashed, isOptionBridge)
     # else we remove file and create symlink
     else:
       stdout.write("[+] Torrc is a symlink. We don't create a backup\n")
@@ -91,7 +92,7 @@ proc replaceTorrc(isOptionBridge: bool = false) =
         # createSymlink(anonTorrc, torTorrc)
         try:
           # copyFile(anonTorrc, torTorrc)
-          makeTorrc(isOptionBridge)
+          makeTorrc(hashed, isOptionBridge)
           # discard chown(torTorrc, 109, 115) # debian-tor:x:109:115::/var/lib/tor:/bin/false
         except:
           stderr.write("[x] Can not replace torrc\n")
@@ -101,21 +102,21 @@ proc replaceTorrc(isOptionBridge: bool = false) =
     stderr.write("[x] Can not find " & torTorrc & "\n")
     stdout.write("[+] Force using AnonSurf's torrc config\n")
     # createSymlink(anonTorrc, torTorrc)
-    makeTorrc(isOptionBridge)
+    makeTorrc(hashed, isOptionBridge)
 
 
 proc main() =
-  # let
-  #   txtPasswd = generatePassword()
-  #   encPasswd = generateHash(txtPasswd)
+  let
+    txtPasswd = generatePassword()
+    encPasswd = generateHash(txtPasswd)
 
   if paramCount() == 0:
-    # makeNyxrc(txtPasswd)
-    replaceTorrc()
+    makeNyxrc(txtPasswd)
+    replaceTorrc(encPasswd)
   elif paramCount() == 1:
     if paramStr(1) == "bridge":
       # makeNyxrc(txtPasswd)
-      replaceTorrc(true)
+      replaceTorrc(encPasswd, true)
     elif paramStr(1) == "restore":
       restoreTorrc()
       cleanNyxrc()
