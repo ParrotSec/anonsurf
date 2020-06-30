@@ -70,9 +70,11 @@ function ip {
 	if [ "$DATA" != "" ]; then
 		IP=`echo $DATA | grep strong | sed -e 's/<[^>]*>//g' | cut -d : -f 2`
 		echo -e "You are connecting to Tor network\nYour IP is$IP"
+		notify "You are connecting to Tor network\nYour IP is$IP"
 	else
 		IP=`curl -s https://check.torproject.org/ | grep strong | sed -e 's/<[^>]*>//g' | cut -d : -f 2`
 		echo -e "You are not connecting to TOR network\nYour IP is$IP"
+		notify "You are not connecting to TOR network\nYour IP is$IP"
 	fi
 }
 
