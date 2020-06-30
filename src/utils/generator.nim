@@ -47,7 +47,7 @@ proc genBridgeAddr*(): string =
   return sample(allBridgeAddr)
 
 
-proc genTorrc*(hashed: string, isTorBridge: bool = false): string =
+proc genTorrc*(isTorBridge: bool = false): string =
   const
     basePath = "/etc/anonsurf/torrc.base" # TODO change here. Development only
     # basePath = "/home/dmknght/Parrot_Projects/anonsurf/torrc.base"
@@ -58,7 +58,7 @@ proc genTorrc*(hashed: string, isTorBridge: bool = false): string =
   result = readFile(basePath)
   # BUG: must generate password by tor tor --hash-password bullshit
   # Use old config temp
-  result &= "\n" & hashed & "\n"
+  # result &= "\n" & hashed & "\n"
   # result &= "\nHashedControlPassword 16:FDE8ED505C45C8BA602385E2CA5B3250ED00AC0920FEC1230813A1F86F\n"
 
   # echo randPasswd
