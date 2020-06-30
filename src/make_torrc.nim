@@ -31,7 +31,7 @@ proc makeNyxrc(passwd: string) =
     stderr.write("[x] Error while removing nyxrc\n")
   else:
     try:
-      writeFile(nyxrc, "password " & passwd)
+      writeFile(nyxrc, "password " & passwd & "\n")
       stdout.write("[*] Make new nyxrc\n")
     except:
       stderr.write("[x] Error while writing new nyxrc\n")
@@ -108,6 +108,9 @@ proc main() =
   let
     txtPasswd = generatePassword()
     encPasswd = generateHash(txtPasswd)
+
+  echo "password: " & txtPasswd
+  echo "hash: " & encPasswd # DEBUG remove after debug
 
   if paramCount() == 0:
     makeNyxrc(txtPasswd)
