@@ -195,17 +195,6 @@ function change {
 }
 
 
-# function change {
-# 	# TOD change authenticate here
-# 	echo -e "authenticate \"kuhNygbtfu76fFUbgv\"\nsignal newnym\nquit" | nc localhost -q 1 9051
-# 	/usr/sbin/service tor restart
-# 	sleep 1
-# 	echo -e " $GREEN*$BLUE Tor daemon reloaded and forced to change nodes\n"
-# 	notify "Identity changed - let's dance again!"
-# 	sleep 1
-# }
-
-
 function status {
 	if [ -f /etc/anonsurf/nyxrc ]; then
 		/usr/bin/nyx --config /etc/anonsurf/nyxrc
