@@ -27,6 +27,9 @@ proc makeNyxrc(passwd: string) =
   #[
     Create nyxRC for status command
   ]#
+
+  stdout.write("[*] Random password: " & passwd & "\n")
+
   if not tryRemoveFile(nyxrc):
     stderr.write("[x] Error while removing nyxrc\n")
   else:
@@ -115,7 +118,7 @@ proc main() =
     replaceTorrc(encPasswd)
   elif paramCount() == 1:
     if paramStr(1) == "bridge":
-      # makeNyxrc(txtPasswd)
+      makeNyxrc(txtPasswd)
       replaceTorrc(encPasswd, true)
     elif paramStr(1) == "restore":
       restoreTorrc()
