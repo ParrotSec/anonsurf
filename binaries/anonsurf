@@ -308,8 +308,8 @@ AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
   $RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
   $RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
 
-  $RED start$BLUE -$GREEN Start system-wide TOR tunnel
-  $RED start-bridge$BLUE -$GREEN Start system-wide TOR tunnel with Obfs4 Bridge support
+  $RED start$BLUE -$GREEN Start system-wide Tor tunnel
+  $RED start-bridge$BLUE -$GREEN Start system-wide Tor tunnel with Obfs4 Bridge support
   $RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
   $RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
   $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
@@ -317,7 +317,7 @@ AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
   $RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
   $RED changeid$BLUE -$GREEN Auto change your identify on Tor network
   $RED status$BLUE -$GREEN Check if AnonSurf is working properly
-  $RED myip$BLUE -$GREEN Check your ip and verify your tor connection
+  $RED myip$BLUE -$GREEN Check your IP address and verify your Tor connection
   $RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.
 $RESETCOLOR
 Dance like no one's watching. Encrypt like everyone is.
