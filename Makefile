@@ -48,4 +48,4 @@ install:
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
 	chmod 775 $(DESTDIR)/etc/anonsurf/anondaemon
 	chmod 775 $(DESTDIR)/usr/bin/dnstool
-	chmod 775 $(DESTDIR)/etc/anonsurf/make-torrc
+	chmod 775 $(DESTDIR)/usr/share/anonsurf/make-torrc

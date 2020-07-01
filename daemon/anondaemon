@@ -170,7 +170,7 @@ function stop {
 	fi
 	# sleep 1
 	killall tor
-	/etc/anonsurf/make-torrc restore
+	/usr/share/anonsurf/make-torrc restore
 	# rm /etc/anonsurf/torrc
 	# sleep 1
 }
