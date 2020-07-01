@@ -49,3 +49,7 @@ install:
 	chmod 775 $(DESTDIR)/etc/anonsurf/anondaemon
 	chmod 775 $(DESTDIR)/usr/bin/dnstool
 	chmod 775 $(DESTDIR)/usr/share/anonsurf/make-torrc
+
+	chmod 644 $(DESTDIR)/etc/anonsurf/obfs4bridge.list
+	chmod 644 $(DESTDIR)/etc/anonsurf/onion.pac
+	chmod 644 $(DESTDIR)/etc/anonsurf/torrc.base
