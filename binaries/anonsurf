@@ -105,7 +105,7 @@ function start {
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
 	notify "Global Anonymous Proxy Activated"
-	sleep 1
+	# sleep 1
 }
 
 
@@ -118,7 +118,7 @@ function stop {
 
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
 	notify "Global Anonymous Proxy Closed - Stop dancing :("
-	sleep 1
+	# sleep 1
 }
 
 
@@ -273,7 +273,7 @@ case "$1" in
 		checkuid
 		if [ "$(service anonsurfd status | grep Active | awk '{print $2}')" = "active" ]; then
 			$0 stop
-			sleep 1
+			# sleep 1
 			$0 start
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't restart service!$RESETCOLOR\n" >&2

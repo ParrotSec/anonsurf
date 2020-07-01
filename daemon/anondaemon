@@ -63,7 +63,7 @@ function disableService {
 		echo -e -n "\n $GREEN*$BLUE Stopping service dnsmasq"
 		/usr/sbin/service dnsmasq stop 2>/dev/null || echo " (already stopped)"
 		killall dnsmasq nscd resolvconf 2>/dev/null || true
-		sleep 1
+		# sleep 1
 		killall -9 dnsmasq 2>/dev/null || true
 	fi
 }
@@ -75,7 +75,7 @@ function enableService {
 	/usr/sbin/service dnsmasq start || true
 	/usr/sbin/service nscd start || true
 	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed or started already."
-	sleep 1
+	# sleep 1
 }
 
 
@@ -188,7 +188,7 @@ case "$1" in
 	;;
 	restart)
 		$0 stop
-		sleep 1
+		# sleep 1
 		$0 start
 	;;
 	*)
