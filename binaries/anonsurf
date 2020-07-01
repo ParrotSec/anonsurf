@@ -315,7 +315,7 @@ AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
   $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
   $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
   $RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
-  $RED changeid$BLUE -$GREEN Restart Tor to change identity
+  $RED changeid$BLUE -$GREEN Auto change your identify on Tor network
   $RED status$BLUE -$GREEN Check if AnonSurf is working properly
   $RED myip$BLUE -$GREEN Check your ip and verify your tor connection
   $RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.
