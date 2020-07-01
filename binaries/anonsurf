@@ -73,6 +73,7 @@ function ip {
 		notify "You are connecting to Tor network\nYour IP is $IP"
 	else
 		IP=`curl -s https://check.torproject.org/ | grep -E -o "<strong>(\S+)</strong>" | sed -e 's/<[^>]*>//g'`
+		# TODO check empty IP here
 		echo -e "You are not connecting to Tor network\nYour IP is $IP"
 		notify "You are not connecting to Tor network\nYour IP is $IP"
 	fi
@@ -154,6 +155,20 @@ function disable-boot {
 }
 
 
+function auto-change {
+	# Change Tor node automatically
+	# Use Tor control port
+	if [ -f /etc/anonsurf/nyxrc ]; then
+		passwd=`cat /etc/anonsurf/nyxrc | cut -d " " -f 2`
+		echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+	else
+		echo -n "Enter Tor control port password: "
+		read -s passwd
+		echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+	fi
+}
+
+
 function change {
 	# TOD change authenticate here
 	echo -e "authenticate \"kuhNygbtfu76fFUbgv\"\nsignal newnym\nquit" | nc localhost -q 1 9051
@@ -230,6 +245,9 @@ case "$1" in
 		checkuid
 		change
 	;;
+	changeid-auto)
+		auto-change
+	;;
 	status)
 		if [ "$(service anonsurfd status | grep Active | awk '{print $2}')" = "active" ]; then
 			status
@@ -288,7 +306,8 @@ AnonSurf [v2.13.6] -$BLUE Command Line Interface$RESETCOLOR
   $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
   $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
   $RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
-  $RED changeid$BLUE -$GREEN Restart TOR to change identity
+  $RED changeid$BLUE -$GREEN Restart Tor to change identity
+	$RED changeid-auto$BLUE -$GREEN Use Tor control port to change ID automatically
   $RED status$BLUE -$GREEN Check if AnonSurf is working properly
   $RED myip$BLUE -$GREEN Check your ip and verify your tor connection
   $RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.
