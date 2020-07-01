@@ -41,7 +41,7 @@ install:
 
 	# Init permission for folders
 	chown root:root $(DESTDIR)/etc/anonsurf -R
-	chmod 644 $(DESTDIR)/etc/anonsurf -R
+	chmod 755 $(DESTDIR)/etc/anonsurf -R
 
 	# Init permission for files
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
