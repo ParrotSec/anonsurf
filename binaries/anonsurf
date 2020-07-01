@@ -44,6 +44,7 @@ export RESETCOLOR='\033[1;00m'
 
 
 function notify {
+	# Use system notification to show popup and let user know latest changes
 	if [ -e /usr/bin/notify-send ]; then
 		/usr/bin/notify-send "AnonSurf" "$1"
 	fi
@@ -52,6 +53,7 @@ export notify
 
 
 function kill-apps {
+	# Kill some network app that can have sensitive data
 	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
 	sudo killall -q chrome dropbox skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail
 	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed\n"
@@ -94,6 +96,7 @@ function checkuid {
 
 
 function start {
+	# Start Tor and then AnonSurf daemon
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
 	/usr/sbin/service tor start
@@ -107,6 +110,7 @@ function start {
 
 
 function stop {
+	# Stop Tor and AnonSurf daemon
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
 
 	/usr/sbin/service tor stop
@@ -119,6 +123,9 @@ function stop {
 
 
 function status-boot {
+	# Show if AnonSurf is enabled at boot
+	# Systemd makes a symlink to start it on boot
+	# we simple check symlink instead of calling sysctl to checks
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
 		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf is$GREEN enabled$RED!$RESETCOLOR\n"
 	else
@@ -178,7 +185,11 @@ function change {
 
 
 function status {
+	# Show current Tor status by calling nyx
 	if [ -f /etc/anonsurf/nyxrc ]; then
+		# When AnonSurf is enabled, we create a nyxrc which contains
+		# our random cleartext password
+		# So we can call nyx without adding password
 		/usr/bin/nyx --config /etc/anonsurf/nyxrc
 	else
 		/usr/bin/nyx
@@ -187,11 +198,13 @@ function status {
 
 
 function dns {
-		echo "Please use /usr/bin/dnstool instead"
-		/usr/bin/dnstool help
+	# DNSTool suggestion
+	echo "Please use /usr/bin/dnstool instead"
+	/usr/bin/dnstool help
 }
 
 
+# Start checking user options from cli
 case "$1" in
 	start)
 	# Only start if anonsurfd is not running
@@ -278,6 +291,8 @@ case "$1" in
 		status-boot
 	;;
    *)
+
+# This is help banner
 echo -e "
 AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
 
