@@ -158,27 +158,9 @@ function disable-boot {
 }
 
 
-function auto-change {
+function change {
 	# Change Tor node automatically
 	# Use Tor control port
-	if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't stop service!$RESETCOLOR\n" >&2
-	else
-		if [ -f /etc/anonsurf/nyxrc ]; then
-			passwd=`cat /etc/anonsurf/nyxrc | cut -d " " -f 2`
-			echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
-			# TODO ask password if failed here
-		else
-			echo -n "Enter Tor control port password: "
-			read -s passwd
-			echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
-		fi
-	fi
-}
-
-
-function change {
-	# Change current node by id country user type
 	if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't stop service!$RESETCOLOR\n" >&2
 	else
@@ -260,9 +242,6 @@ case "$1" in
 		checkuid
 		change
 	;;
-	changeid-auto)
-		auto-change
-	;;
 	status)
 		if [ "$(service anonsurfd status | grep Active | awk '{print $2}')" = "active" ]; then
 			status
@@ -300,7 +279,7 @@ case "$1" in
 	;;
    *)
 echo -e "
-AnonSurf [v2.13.6] -$BLUE Command Line Interface$RESETCOLOR
+AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
 
  $RED Developed$RESETCOLOR by$GREEN Lorenzo \"Palinuro\" Faletra$BLUE <palinuro@parrotsec.org>$RESETCOLOR
    $GREEN Lisetta \"Sheireen\" Ferrero$BLUE <sheireen@parrotsec.org>$RESETCOLOR
@@ -322,7 +301,6 @@ AnonSurf [v2.13.6] -$BLUE Command Line Interface$RESETCOLOR
   $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
   $RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
   $RED changeid$BLUE -$GREEN Restart Tor to change identity
-	$RED changeid-auto$BLUE -$GREEN Use Tor control port to change ID automatically
   $RED status$BLUE -$GREEN Check if AnonSurf is working properly
   $RED myip$BLUE -$GREEN Check your ip and verify your tor connection
   $RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.
