@@ -73,9 +73,12 @@ function ip {
 		notify "You are connecting to Tor network\nYour IP is $IP"
 	else
 		IP=`curl -s https://check.torproject.org/ | grep -E -o "<strong>(\S+)</strong>" | sed -e 's/<[^>]*>//g'`
-		# TODO check empty IP here
-		echo -e "You are not connecting to Tor network\nYour IP is $IP"
-		notify "You are not connecting to Tor network\nYour IP is $IP"
+		if [ "$IP" == "" ]; then
+			echo -e "Can't connect to internet\nPlease check your settings"
+		else
+			echo -e "You are not connecting to Tor network\nYour IP is $IP"
+			notify "You are not connecting to Tor network\nYour IP is $IP"
+		fi
 	fi
 }
 
@@ -161,6 +164,7 @@ function auto-change {
 	if [ -f /etc/anonsurf/nyxrc ]; then
 		passwd=`cat /etc/anonsurf/nyxrc | cut -d " " -f 2`
 		echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+		# TODO ask password if failed here
 	else
 		echo -n "Enter Tor control port password: "
 		read -s passwd
