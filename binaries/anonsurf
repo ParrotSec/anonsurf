@@ -161,27 +161,49 @@ function disable-boot {
 function auto-change {
 	# Change Tor node automatically
 	# Use Tor control port
-	if [ -f /etc/anonsurf/nyxrc ]; then
-		passwd=`cat /etc/anonsurf/nyxrc | cut -d " " -f 2`
-		echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
-		# TODO ask password if failed here
+	if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
+		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't stop service!$RESETCOLOR\n" >&2
 	else
-		echo -n "Enter Tor control port password: "
-		read -s passwd
-		echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+		if [ -f /etc/anonsurf/nyxrc ]; then
+			passwd=`cat /etc/anonsurf/nyxrc | cut -d " " -f 2`
+			echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+			# TODO ask password if failed here
+		else
+			echo -n "Enter Tor control port password: "
+			read -s passwd
+			echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+		fi
 	fi
 }
 
 
 function change {
-	# TOD change authenticate here
-	echo -e "authenticate \"kuhNygbtfu76fFUbgv\"\nsignal newnym\nquit" | nc localhost -q 1 9051
-	/usr/sbin/service tor restart
-	sleep 1
-	echo -e " $GREEN*$BLUE Tor daemon reloaded and forced to change nodes\n"
-	notify "Identity changed - let's dance again!"
-	sleep 1
+	# Change current node by id country user type
+	if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
+		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't stop service!$RESETCOLOR\n" >&2
+	else
+		if [ -f /etc/anonsurf/nyxrc ]; then
+			passwd=`cat /etc/anonsurf/nyxrc | cut -d " " -f 2`
+			echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+			# TODO ask password if failed here
+		else
+			echo -n "Enter Tor control port password: "
+			read -s passwd
+			echo -e "authenticate \"$passwd\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+		fi
+	fi
 }
+
+
+# function change {
+# 	# TOD change authenticate here
+# 	echo -e "authenticate \"kuhNygbtfu76fFUbgv\"\nsignal newnym\nquit" | nc localhost -q 1 9051
+# 	/usr/sbin/service tor restart
+# 	sleep 1
+# 	echo -e " $GREEN*$BLUE Tor daemon reloaded and forced to change nodes\n"
+# 	notify "Identity changed - let's dance again!"
+# 	sleep 1
+# }
 
 
 function status {
