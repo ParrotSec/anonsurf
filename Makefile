@@ -10,6 +10,7 @@ install:
 	# Make dest folders for Deb packaging
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/etc/tor/
+	mkdir -p $(DESTDIR)/usr/share/anonsurf/
 	# mkdir -p $(DESTDIR)/etc/init.d/
 	mkdir -p $(DESTDIR)/usr/bin/
 	mkdir -p $(DESTDIR)/usr/share/applications/
@@ -30,7 +31,7 @@ install:
 	# Add custom binaries from nim sources
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp src/dnstool $(DESTDIR)/usr/bin/
-	cp src/make_torrc $(DESTDIR)/etc/anonsurf/make-torrc
+	cp src/make_torrc $(DESTDIR)/usr/share/anonsurf/make-torrc
 
 	# Add system units
 	cp daemon/anondaemon $(DESTDIR)/etc/anonsurf/

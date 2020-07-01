@@ -212,7 +212,7 @@ case "$1" in
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			echo -e "$GREEN *$BLUE Generating torrc"
-			/etc/anonsurf/make-torrc
+			/usr/share/anonsurf/make-torrc
 			echo -e "$GREEN *$BLUE Starting tor service"
 			/usr/sbin/service tor start
 			echo -e "$GREEN *$BLUE Making firewall rules"
@@ -229,7 +229,7 @@ case "$1" in
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			echo -e "$GREEN *$BLUE Generating torrc"
-			/etc/anonsurf/make-torrc bridge
+			/usr/share/anonsurf/make-torrc bridge
 			echo -e "$GREEN *$BLUE Starting tor service"
 			/usr/sbin/service tor start
 			# start-bridge
