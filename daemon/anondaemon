@@ -179,7 +179,7 @@ function stop {
 case "$1" in
 	start)
 		disableService
-		/etc/anonsurf/make-torrc
+		# /etc/anonsurf/make-torrc
 		start
 	;;
 	stop)
