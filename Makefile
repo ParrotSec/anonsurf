@@ -21,7 +21,6 @@ install:
 	cp onion.pac $(DESTDIR)/etc/anonsurf/onion.pac
 	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
 	cp torrc.base $(DESTDIR)/etc/anonsurf/torrc.base
-	cp obfs4bridge.list $(DESTDIR)/etc/anonsurf/obfs4bridge.list
 
 	# Add core files
 	cp binaries/anonsurf $(DESTDIR)/usr/bin/
@@ -50,6 +49,5 @@ install:
 	chmod 775 $(DESTDIR)/usr/bin/dnstool
 	chmod 775 $(DESTDIR)/usr/share/anonsurf/make-torrc
 
-	chmod 644 $(DESTDIR)/etc/anonsurf/obfs4bridge.list
 	chmod 644 $(DESTDIR)/etc/anonsurf/onion.pac
 	chmod 644 $(DESTDIR)/etc/anonsurf/torrc.base
