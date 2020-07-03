@@ -146,7 +146,7 @@ function enable-boot {
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
 		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf already enabled!$RESETCOLOR\n"
 	else
-		systemctl enable anonsurfd;
+		/usr/bin/systemctl enable anonsurfd;
 		notify "Enabling AnonSurf at boot"
 	fi
 }
@@ -157,7 +157,7 @@ function disable-boot {
 	# If file is there -> systemctl enabled anonsurf at boot
 	# if [ "$(systemctl list-unit-files | grep anonsurfd | awk '{print $2}')" = "enabled" ]; then
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
-		systemctl disable anonsurfd;
+		/usr/bin/systemctl disable anonsurfd;
 		notify "Disabling AnonSurf at boot"
 	else
 		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf wasn't enabled. Nothing to disable!$RESETCOLOR\n"
