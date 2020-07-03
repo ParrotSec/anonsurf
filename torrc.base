@@ -38,6 +38,3 @@ MaxCircuitDirtiness 600
 MaxClientCircuitsPending 48
 UseEntryGuards 1
 EnforceDistinctSubnets 1
-
-# Use cookie authentication
-# CookieAuthentication 1
