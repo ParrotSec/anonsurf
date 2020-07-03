@@ -66,7 +66,7 @@ function kill-apps {
 }
 
 
-function ip {
+function checkIP {
 	# Get current public IP address and isConnectToTor status
 	DATA=`curl --socks5 localhost:9050 --socks5-hostname localhost:9050 -s https://check.torproject.org/`
 	if [ "$DATA" != "" ]; then
@@ -263,7 +263,7 @@ case "$1" in
 		fi
 	;;
 	myip|ip)
-		ip
+		checkIP
 	;;
 	dns)
 		dns
