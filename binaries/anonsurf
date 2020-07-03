@@ -99,8 +99,11 @@ function start {
 	# Start Tor and then AnonSurf daemon
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
+	echo -e "$GREEN *$BLUE Generating AnonSurf session"
 	/usr/sbin/service anonsurfd start
-	# /usr/sbin/service tor start
+
+	echo -e "$GREEN *$BLUE Starting tor service"
+	/usr/sbin/service tor start
 
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
@@ -211,29 +214,6 @@ case "$1" in
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
-			echo -e "$GREEN *$BLUE Generating torrc"
-			/usr/share/anonsurf/make-torrc
-			echo -e "$GREEN *$BLUE Starting tor service"
-			/usr/sbin/service tor start
-			echo -e "$GREEN *$BLUE Making firewall rules"
-			start
-		else
-			# TODO check "failed" service here
-			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
-		fi
-	;;
-
-	start-bridge)
-	# Only start if anonsurfd is not running
-		checkuid
-		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
-			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
-			echo -e "$GREEN *$BLUE Generating torrc"
-			/usr/share/anonsurf/make-torrc bridge
-			echo -e "$GREEN *$BLUE Starting tor service"
-			/usr/sbin/service tor start
-			# start-bridge
-			echo -e "$GREEN *$BLUE Making firewall rules"
 			start
 		else
 			# TODO check "failed" service here
@@ -299,7 +279,6 @@ AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
    $GREEN Francesco \"Mibofra\" Bonanno$BLUE <mibofra@parrotsec.org>$RESETCOLOR
  $RED Maintained$RESETCOLOR by$GREEN Nong Hoang \"DmKnght\" Tu$BLUE <dmknght@parrotsec.org>$RESETCOLOR
     and a huge amount of Caffeine, Mountain Dew + some GNU/GPL v3 stuff
-  Obfs4 Bridges: M. \"meu\" Emrah Ünsür
   Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
 
   Usage:
@@ -307,7 +286,6 @@ AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
   $RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
 
   $RED start$BLUE -$GREEN Start system-wide Tor tunnel
-  $RED start-bridge$BLUE -$GREEN Start system-wide Tor tunnel with Obfs4 Bridge support
   $RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
   $RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
   $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot

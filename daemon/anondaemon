@@ -51,7 +51,6 @@ TOR_UID="debian-tor"
 
 # Tor's TransPort
 TOR_PORT="9040"
-# BRIDGE_PORT="9443"
 
 
 function disableService {
@@ -82,10 +81,6 @@ function enableService {
 function start {
 	# If tor didn't start, we start it
 	# It is used for startup
-	if [ `systemctl is-active tor` != "active" ]
-	then
-		/usr/sbin/service tor start
-	fi
 
 	# sleep 3
 	# Init DNS
@@ -169,19 +164,19 @@ function stop {
 	fi
 	# sleep 1
 	killall tor
-	/usr/share/anonsurf/make-torrc restore
 }
 
 
 case "$1" in
 	start)
 		disableService
-		# /etc/anonsurf/make-torrc
+		/etc/anonsurf/make-torrc
 		start
 	;;
 	stop)
 		stop
 		enableService
+		/usr/share/anonsurf/make-torrc restore
 	;;
 	restart)
 		$0 stop
