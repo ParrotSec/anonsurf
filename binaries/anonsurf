@@ -271,9 +271,8 @@ case "$1" in
 		# Restart if the daemon is running onnly
 		checkuid
 		if [ "$(service anonsurfd status | grep Active | awk '{print $2}')" = "active" ]; then
-			$0 stop
-			# sleep 1
-			$0 start
+			/usr/sbin/service anonsurfd restart
+			/usr/sbin/service tor restart
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't restart service!$RESETCOLOR\n" >&2
 		fi
