@@ -99,8 +99,8 @@ function start {
 	# Start Tor and then AnonSurf daemon
 	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
 
-	/usr/sbin/service tor start
 	/usr/sbin/service anonsurfd start
+	# /usr/sbin/service tor start
 
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
