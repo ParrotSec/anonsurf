@@ -117,10 +117,11 @@ proc main() =
     makeNyxrc(txtPasswd)
     replaceTorrc(encPasswd)
   elif paramCount() == 1:
-    if paramStr(1) == "bridge":
-      makeNyxrc(txtPasswd)
-      replaceTorrc(encPasswd, true)
-    elif paramStr(1) == "restore":
+    # if paramStr(1) == "bridge":
+    #  makeNyxrc(txtPasswd)
+    #  replaceTorrc(encPasswd, true)
+    #elif paramStr(1) == "restore":
+    if paramStr(1) == "restore":
       restoreTorrc()
       cleanNyxrc()
     else:
