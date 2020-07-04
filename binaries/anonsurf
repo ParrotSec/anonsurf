@@ -76,9 +76,9 @@ function checkIP {
 	else
 		IP=`curl -s https://check.torproject.org/ | grep -E -o "<strong>(\S+)</strong>" | sed -e 's/<[^>]*>//g'`
 		if [ "$IP" == "" ]; then
-			echo -e "Can't connect to internet\nPlease check your settings"
+			echo -e "${RED}Can't connect to internet\nPlease check your settings${RESETCOLOR}"
 		else
-			echo -e "${RED}You are not connecting to Tor network\nYour IP is $IP${RESETCOLOR}"
+			echo -e "${BLUE}You are not connecting to Tor network\nYour IP is $IP${RESETCOLOR}"
 			notify "You are not connecting to Tor network\nYour IP is $IP"
 		fi
 	fi
