@@ -89,7 +89,7 @@ proc status() =
   stdout.write("Your system is: ")
   let statusResult = dnsStatusCheck()
   if statusResult == 0:
-    stdout.write("under AnonSurf connection\n")
+    stdout.write("using AnonSurf DNS\n")
   elif statusResult == -1:
     stderr.write("[x] using localhost only. This might be an error\n")
   elif statusResult == -2:
