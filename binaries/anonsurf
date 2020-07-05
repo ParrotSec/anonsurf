@@ -130,9 +130,9 @@ function status-boot {
 	# Systemd makes a symlink to start it on boot
 	# we simple check symlink instead of calling sysctl to checks
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf is$GREEN enabled$RED!$RESETCOLOR\n"
+		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is$GREEN enabled$RED!$RESETCOLOR\n"
 	else
-		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf is disabled!$RESETCOLOR\n"
+		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is disabled!$RESETCOLOR\n"
 	fi
 }
 
@@ -147,7 +147,7 @@ function enable-boot {
 
 	# Check if symlink doesn't exists -> we enable it
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED Anonsurf already enabled!$RESETCOLOR\n"
+		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf already enabled!$RESETCOLOR\n"
 	else
 		/usr/bin/systemctl enable anonsurfd;
 		notify "Enabling AnonSurf at boot"
@@ -213,7 +213,7 @@ case "$1" in
 	# Only start if anonsurfd is not running
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
-			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
+			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			start
 		else
 			# TODO check "failed" service here
@@ -225,7 +225,7 @@ case "$1" in
 	# Only stop if the anonsurfd is running
 		checkuid
 		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
-			zenity --question --text="Do you want anonsurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
+			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			stop
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't stop service!$RESETCOLOR\n" >&2
@@ -272,7 +272,7 @@ case "$1" in
 
 # This is help banner
 echo -e "
-AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
+AnonSurf [v2.13.9] -$BLUE Command Line Interface$RESETCOLOR
 
  $RED Developed$RESETCOLOR by$GREEN Lorenzo \"Palinuro\" Faletra$BLUE <palinuro@parrotsec.org>$RESETCOLOR
    $GREEN Lisetta \"Sheireen\" Ferrero$BLUE <sheireen@parrotsec.org>$RESETCOLOR
@@ -286,8 +286,8 @@ AnonSurf [v2.13.8] -$BLUE Command Line Interface$RESETCOLOR
   $RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
 
   $RED start$BLUE -$GREEN Start system-wide Tor tunnel
-  $RED stop$BLUE -$GREEN Stop anonsurf and return to clearnet
-  $RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
+  $RED stop$BLUE -$GREEN Stop AnonSurf and return to clearnet
+  $RED restart$BLUE -$GREEN Restart AnonSurf daemon and Tor service
   $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
   $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
   $RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
