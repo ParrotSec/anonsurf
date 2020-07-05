@@ -3,7 +3,6 @@ import os
 
 
 const
-  # anonTorrc = "/etc/anonsurf/torrc"
   nyxrc = "/etc/anonsurf/nyxrc"
   torTorrc = "/etc/tor/torrc"
   torTorrcBak = "/etc/tor/torrc.bak"
@@ -86,17 +85,13 @@ proc replaceTorrc(hashed: string, isOptionBridge: bool = false) =
       stdout.write("[+] Creating tor's torrc backup\n")
       moveFile(torTorrc, torTorrcBak)
       stdout.write("[+] Using AnonSurf's torrc config\n")
-      # createSymlink(anonTorrc, torTorrc)
       makeTorrc(hashed, isOptionBridge)
     # else we remove file and create symlink
     else:
       stdout.write("[+] Torrc is a symlink. We don't create a backup\n")
       if tryRemoveFile(torTorrc):
-        # createSymlink(anonTorrc, torTorrc)
         try:
-          # copyFile(anonTorrc, torTorrc)
           makeTorrc(hashed, isOptionBridge)
-          # discard chown(torTorrc, 109, 115) # debian-tor:x:109:115::/var/lib/tor:/bin/false
         except:
           stderr.write("[x] Can not replace torrc\n")
       else:
@@ -104,7 +99,6 @@ proc replaceTorrc(hashed: string, isOptionBridge: bool = false) =
   else:
     stderr.write("[x] Can not find " & torTorrc & "\n")
     stdout.write("[+] Force using AnonSurf's torrc config\n")
-    # createSymlink(anonTorrc, torTorrc)
     makeTorrc(hashed, isOptionBridge)
 
 
