@@ -1,3 +1,9 @@
+anonsurf (2.13.9+parrot1) rolling-testing; urgency=medium
+
+  * Change the logic of restart and start tor
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sun, 05 Jul 2020 13:46:42 +0700
+
 anonsurf (2.13.9+parrot0) rolling-testing; urgency=medium
 
   * Disable bridge support
