@@ -172,6 +172,7 @@ case "$1" in
 		disableService
 		/usr/share/anonsurf/make-torrc
 		start
+		/usr/sbin/service tor start
 	;;
 	stop)
 		stop
