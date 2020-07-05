@@ -1,11 +1,3 @@
-anonsurf (2.13.9+parrot0+nmu1) UNRELEASED; urgency=medium
-
-  * Non-maintainer upload.
-  * select-editor
-  * select-editor
-
- -- dmknght <dmknght@localhost.localdomain>  Sun, 05 Jul 2020 08:29:20 +0700
-
 anonsurf (2.13.9+parrot0) rolling-testing; urgency=medium
 
   * Disable bridge support
