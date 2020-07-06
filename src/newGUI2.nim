@@ -1,53 +1,65 @@
 import gintro / [gtk, glib, gobject]
+import gui / display / [widgets, details]
+import gui / actions / cores
+
+
+proc createDetailWidget(labelDNS: Label): Box =
+  #[
+    Create a page to display current detail of AnonSurf
+  ]#
+  let
+    boxServices = makeServiceDetails(labelDNS)
+    boxDetailWidget = newBox(Orientation.vertical, 3)
+  
+  boxDetailWidget.add(boxServices)
+  return boxDetailWidget
+
+
+proc createMainWidget(labelTest: Label, bStart, bDetail, bStatus, bID, bIP: Button): Box =
+  #[
+    Create the page for main widget
+  ]#
+  let
+    boxPanel = makeDetailPanel(labelTest, bDetail, bStatus)
+    boxToolBar = makeToolBar(bStart, bID, bIP)
+    bottomBar = makeBottomBar()
+    mainWidget = newBox(Orientation.vertical, 3)
+  
+  mainWidget.add(boxPanel)
+  mainWidget.add(boxToolBar)
+  mainWidget.add(bottomBar)
+  return mainWidget
+
+
+proc refreshStatus(): bool =
+  return SOURCE_CONTINUE
 
 
 proc createArea(boxMainWindow: Box) =
+  #[
+    Create everything for the program
+  ]#
   let
-    widgetStatus = newBox(Orientation.horizontal, 3)
-    # TODO image
-    tmpLabel = newLabel("Nothing here")
-    boxStatusButtons = newBox(Orientation.vertical, 3)
-    btnDetails = newButton("AnonSurf is running")
-    btnStatus = newButton("Show status") # call nyx
-  
-  widgetStatus.add(tmpLabel)
-
-  boxStatusButtons.add(btnDetails)
-  boxStatusButtons.add(btnStatus)
-
-  widgetStatus.add(boxStatusButtons)
-
-  boxMainWindow.add(widgetStatus)
-
-  let
-    widgetToolbar = newBox(Orientation.horizontal, 3)
+    labelTest = newLabel("Not running")
     btnStart = newButton("Start")
+    btnDetail = newButton("AnonSurf is not running")
+    btnStatus = newButton("Monitor shit")
     btnChangeID = newButton("Change ID")
-    btnMyIP = newButton("My IP")
-  
-  widgetToolbar.add(btnStart)
-  btnStart.setSizeRequest(80, 80)
-  widgetToolbar.add(btnChangeID)
-  btnChangeID.setSizeRequest(80, 80)
-  widgetToolbar.add(btnMyIP)
-  btnMyIp.setSizeRequest(80, 80)
+    btnCheckIP = newButton("My IP")
 
-  boxMainWindow.add(widgetToolBar)
+    labelDNS = newLabel("Localhost")
 
   let
-    bottomBar = newBox(Orientation.horizontal, 3)
-    btnAbout = newButton("About")
-    btnExit = newButton("Exit")
+    mainStack = newStack()
+    mainWidget = createMainWidget(labelTest, btnStart, btnDetail, btnStatus, btnChangeID, btnCheckIP)
+    detailWidget = createDetailWidget(labelDNS)
   
-  bottomBar.add(btnAbout)
-  bottomBar.add(btnExit)
+  btnDetail.connect("Clicked", onClickDetail, mainStack)
 
-  boxMainWindow.add(bottomBar)
-
+  mainStack.addNamed(mainWidget, "main")
+  mainStack.addNamed(detailWidget, "detail")
+  boxMainWindow.add(mainStack)
   boxMainWindow.showAll()
-
-proc stop(w: Window) =
-  mainQuit()
 
 
 proc main =
@@ -68,7 +80,7 @@ proc main =
   mainBoard.setBorderWidth(3)
 
   mainBoard.show()
-  mainBoard.connect("destroy", stop)
+  mainBoard.connect("destroy", onClickStop)
   gtk.main()
 
 main()
