@@ -56,7 +56,7 @@ proc makeToolBar*(btnStart, btnID, btnIP: Button): Frame =
   return fmTool
 
 
-proc makeBottomBar*(): Box =
+proc makeBottomBarForMain*(): Box =
   #[
     Create bottom bar
     It has About and Exit button

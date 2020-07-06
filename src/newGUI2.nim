@@ -3,15 +3,17 @@ import gui / display / [widgets, details]
 import gui / actions / cores
 
 
-proc createDetailWidget(labelDNS: Label): Box =
+proc createDetailWidget(labelDNS: Label, btnBack: Button): Box =
   #[
     Create a page to display current detail of AnonSurf
   ]#
   let
     boxServices = makeServiceDetails(labelDNS)
     boxDetailWidget = newBox(Orientation.vertical, 3)
+    boxBottomBar = makeBottomBarForDetail(btnBack)
   
   boxDetailWidget.add(boxServices)
+  boxDetailWidget.packEnd(boxBottomBar, false, true, 3)
   return boxDetailWidget
 
 
@@ -22,12 +24,12 @@ proc createMainWidget(labelTest: Label, bStart, bDetail, bStatus, bID, bIP: Butt
   let
     boxPanel = makeDetailPanel(labelTest, bDetail, bStatus)
     boxToolBar = makeToolBar(bStart, bID, bIP)
-    bottomBar = makeBottomBar()
+    bottomBar = makeBottomBarForMain()
     mainWidget = newBox(Orientation.vertical, 3)
   
   mainWidget.add(boxPanel)
   mainWidget.add(boxToolBar)
-  mainWidget.add(bottomBar)
+  mainWidget.packEnd(bottomBar, false, true, 3)
   return mainWidget
 
 
@@ -49,12 +51,15 @@ proc createArea(boxMainWindow: Box) =
 
     labelDNS = newLabel("Localhost")
 
+  let btnBack = newButton("Back")
+  
   let
     mainStack = newStack()
     mainWidget = createMainWidget(labelTest, btnStart, btnDetail, btnStatus, btnChangeID, btnCheckIP)
-    detailWidget = createDetailWidget(labelDNS)
+    detailWidget = createDetailWidget(labelDNS, btnBack)
   
   btnDetail.connect("Clicked", onClickDetail, mainStack)
+  btnBack.connect("clicked", onClickBack, mainStack)
 
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
