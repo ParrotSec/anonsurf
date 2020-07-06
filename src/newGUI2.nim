@@ -1,6 +1,6 @@
 import gintro / [gtk, glib, gobject]
 import gui / display / [widgets, details]
-import gui / actions / cores
+import gui / actions / [cores, toolbar]
 
 
 proc createDetailWidget(labelDNS: Label, btnBack: Button): Box =
@@ -51,6 +51,7 @@ proc createArea(boxMainWindow: Box) =
 
     labelDNS = newLabel("Localhost")
 
+  btnCheckIP.connect("clicked", onClickCheckIP)
   let btnBack = newButton("Back")
   
   let
@@ -58,7 +59,7 @@ proc createArea(boxMainWindow: Box) =
     mainWidget = createMainWidget(labelTest, btnStart, btnDetail, btnStatus, btnChangeID, btnCheckIP)
     detailWidget = createDetailWidget(labelDNS, btnBack)
   
-  btnDetail.connect("Clicked", onClickDetail, mainStack)
+  btnDetail.connect("clicked", onClickDetail, mainStack)
   btnBack.connect("clicked", onClickBack, mainStack)
 
   mainStack.addNamed(mainWidget, "main")
