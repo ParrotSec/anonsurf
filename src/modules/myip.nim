@@ -22,5 +22,9 @@ proc checkIPwTorServer*(): string =
   var
     client = newHttpClient()
   
-  let resp = client.get(target)
-  return parseIPbyTorServer(resp.body)
+  try:
+    let resp = client.get(target)
+    return parseIPbyTorServer(resp.body)
+  except Exception:
+    stderr.write("[x] Get IP by Tor server error! Reason:\n" & getCurrentExceptionMsg() & "\n")
+    return "Error while getting IP information"
