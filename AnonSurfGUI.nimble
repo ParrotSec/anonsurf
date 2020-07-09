@@ -3,7 +3,7 @@
 version       = "0.1.0"
 author        = "DmKnght"
 description   = "A GUI for AnonSurf"
-license       = "MIT"
+license       = "LGPL-3.0"
 srcDir        = "src"
 bin           = @["AnonSurfGUI"]
 
