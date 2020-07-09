@@ -11,5 +11,5 @@ bin           = @["AnonSurfGUI"]
 
 # Dependencies
 
-requires "nim >= 1.0.6"
-requires "gintro >= 0.7.2"
+requires "nim >= 1.2.2"
+requires "gintro >= 0.7.8"
