@@ -4,16 +4,18 @@ import xmltree
 import htmlparser
 
 
-proc parseIPbyTorServer(data: string): string =
+proc parseIPbyTorServer(data: string): array[2, string] =
   #[
     Get IP address and current status from Tor server
   ]#
 
   let ipAddr = parseHtml(data).findAll("strong")[0].innerText
   let status = parseHtml(data).findAll("title")[0].innerText
-  return "Your address is: " & ipAddr & "\n" & status.replace("\n", "").replace("  ", "")
+  return [status.replace("\n", "").replace("  ", ""), "Your address is: " & ipAddr]
+  # return "Your address is: " & ipAddr & "\n" & status.replace("\n", "").replace("  ", "")
 
-proc checkIPwTorServer*(): string =
+
+proc checkIPwTorServer*(): array[2, string] =
   #[
     Check current public IP using https://check.torproject.org/ 
   ]#
@@ -24,7 +26,8 @@ proc checkIPwTorServer*(): string =
   
   try:
     let resp = client.get(target)
-    return parseIPbyTorServer(resp.body)
+    let info = parseIPbyTorServer(resp.body)
+    return info
   except Exception:
     stderr.write("[x] Get IP by Tor server error! Reason:\n" & getCurrentExceptionMsg() & "\n")
-    return "Error while getting IP information"
+    return ["Error while getting IP information", getCurrentExceptionMsg()]
