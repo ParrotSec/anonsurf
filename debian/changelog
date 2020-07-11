@@ -1,3 +1,10 @@
+anonsurf (2.13.9+parrot2) rolling-testing; urgency=medium
+
+  * Remove start-bridge from completion
+  * Update nim minimum version and license for nim src
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sat, 11 Jul 2020 09:53:02 +0700
+
 anonsurf (2.13.9+parrot1) rolling-testing; urgency=medium
 
   * Change the logic of restart and start tor
