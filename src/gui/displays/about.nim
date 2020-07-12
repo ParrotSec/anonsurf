@@ -22,7 +22,9 @@ proc onClickAbout*(b: Button) =
     "Francesco \"Mibofra\" Bonanno",
   ])
   dlgAbout.setComments("Anonymous Toolkit for Parrot OS")
-  dlgAbout.setCopyright("2020 Palinuro") # Fix me: Correct information here
+  dlgAbout.setCopyright(
+    "Copyright © 2013 - 2020 Lorenzo \"Palinuro\" Faletra\nCopyright © 2020 Parrot Security CIC"
+  )
   dlgAbout.setLicenseType(gpl_3_0)
   dlgAbout.setWebsite("https://nest.parrot.sh/packages/tools/anonsurf")
   dlgAbout.setWebsiteLabel("Source")
