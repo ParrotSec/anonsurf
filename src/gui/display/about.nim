@@ -9,7 +9,7 @@ proc onClickAbout*(b: Button) =
     dlgAbout = newAboutDialog()
   
   discard dlgAbout.setIconFromFile("/usr/share/icons/anonsurf.png")
-  dlgAbout.setLogoIconName("/usr/share/icons/anonsurf.png")
+  dlgAbout.setLogoIconName("security-high")
   dlgAbout.setProgramName("AnonSurf")
   dlgAbout.setVersion("2.13.9")
   # dlgAbout.setArtists([]) # Artwork by
