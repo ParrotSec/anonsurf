@@ -80,7 +80,7 @@ proc createArea(boxMainWindow: Box) =
     btnStart = newButton("Start")
     btnShowDetail = newButton("AnonSurf is not running")
     btnShowStatus = newButton("Show Tor information")
-    btnChangeID = newButton("Change ID")
+    btnChangeID = newButton("Change\nIdentify")
     btnCheckIP = newButton("My IP")
 
     labelDNS = newLabel("Localhost")
