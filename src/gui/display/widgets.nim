@@ -65,8 +65,12 @@ proc makeBottomBarForMain*(): Box =
     boxBottomBar = newBox(Orientation.horizontal, 3)
     btnExit = newButton("Exit")
     btnAbout = newButton("About")
+    imgAbout = newImageFromIconName("help-about", 3)
+    imgExit = newImageFromIconName("exit", 3)
 
+  btnExit.setImage(imgExit)
   btnExit.connect("clicked", onClickExit)
+  btnAbout.setImage(imgAbout)
   btnAbout.connect("clicked", onClickAbout)
   boxBottomBar.add(btnExit)
   boxBottomBar.packEnd(btnAbout, false, true, 3)
