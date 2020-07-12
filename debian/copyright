@@ -9,7 +9,7 @@ Files:
   debian/*
   launchers/*
 Copyright:
-  2020, Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>
+  2013 - 2020, Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>
   2020, Lisetta "Sheireen" Ferrero <sheireen@parrotsec.org>
   2020, Francesco "Mibofra" Bonanno <mibofra@parrotsec.org>
 License: GPL-3.0+
