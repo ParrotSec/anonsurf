@@ -1,4 +1,4 @@
-import gintro / [gtk]
+import gintro / gtk
 
 
 proc onClickAbout*(b: Button) =
@@ -8,12 +8,22 @@ proc onClickAbout*(b: Button) =
   let
     dlgAbout = newAboutDialog()
   
+  discard dlgAbout.setIconFromFile("/usr/share/icons/anonsurf.png")
+  dlgAbout.setLogoIconName("/usr/share/icons/anonsurf.png")
   dlgAbout.setProgramName("AnonSurf")
-  dlgAbout.setVersion("2.13.0")
-  dlgAbout.setAuthors(["Nong Hoang Tu", "Palinuro"])
+  dlgAbout.setVersion("2.13.9")
+  # dlgAbout.setArtists([]) # Artwork by
+  # dlgAbout.setDocumenters([]) # Documented by
+  # dlgAbout.setTranslatorCredits([]) # Translated by
+  dlgAbout.setAuthors([
+    "Lorenzo \"Palinuro\" Faletra",
+    "Nong Hoang \"DmKnght\" Tu",
+    "Lisetta \"Sheireen\" Ferrero",
+    "Francesco \"Mibofra\" Bonanno",
+  ])
   dlgAbout.setComments("Anonymous Toolkit for Parrot OS")
-  dlgAbout.setCopyright("2020 Palinuro")
-  dlgAbout.setLicense("GPL-3.0")
+  dlgAbout.setCopyright("2020 Palinuro") # Fix me: Correct information here
+  dlgAbout.setLicenseType(gpl_3_0)
   dlgAbout.setWebsite("https://nest.parrot.sh/packages/tools/anonsurf")
   dlgAbout.setWebsiteLabel("Source")
 
