@@ -15,7 +15,7 @@ proc onClickTorStatus*(b: Button) =
   nyxTerm.spawnAsync(
     {noLastlog}, # pty flags
     nil, # working directory
-    ["/usr/bin/nyx --config /etc/anonsurf/nyxrc"], # args
+    ["/usr/bin/nyx", "--config", "/etc/anonsurf/nyxrc"], # args
     [], # envv
     {doNotReapChild}, # spawn flag
     nil, # Child setup
