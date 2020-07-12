@@ -1,6 +1,10 @@
-import gintro / [gtk, notify]
-import ../../ modules / myip
+import gintro / gtk
+import .. / .. / modules / myip
+import .. / display / noti
 import strutils
+import osproc
+import net
+import strscans
 
 
 proc onClickCheckIP*(b: Button) =
@@ -9,38 +13,66 @@ proc onClickCheckIP*(b: Button) =
     Show the information in system's notification
   ]#
 
-  # let
-  #   labelIP = newLabel(checkIPwTorServer())
-  #   ipDialog = newdialog()
-  #   area = ipDialog.getContentArea()
-  
-  # ipDialog.setTitle("My IP Address")
-  # area.add(labelIP)
-
-  # ipDialog.showAll()
-  discard init("My IP Address")
-  let
-    ipInfo = checkIPwTorServer()
+  let ipInfo = checkIPwTorServer()
+  var iconName: string
   
   # If program has error while getting IP address
   if ipInfo[0].startsWith("Error"):
-    let ipNotify = newNotification(ipInfo[0], ipInfo[1], "error") # security-low
-    discard ipNotify.show()
+    iconName = "error"
   # If program runs but user didn't connect to tor
   elif ipInfo[0].startsWith("Sorry"):
-    let ipNotify = newNotification(ipInfo[0], ipInfo[1], "security-medium")
-    discard ipNotify.show()
+    iconName = "security-medium"
   # Connected to tor
   else:
-    let ipNotify = newNotification(ipInfo[0], ipInfo[1], "security-high")
-    discard ipNotify.show()
+    iconName = "security-high"
+
+  sendNotify(ipInfo[0], ipInfo[1], iconName)
 
 
-proc onClickStart*(b: Button) =
+proc onClickRun*(b: Button) =
   if b.label == "Start":
+    discard execCmd("gksudo /usr/bin/anonsurf start")
     b.label = "Stop"
-    # call run_start
   else:
+    discard execCmd("gksudo /usr/bin/anonsurf stop")
     b.label = "Start"
-    # call run_stop
 
+
+proc onClickChangeID*(b: Button) =
+  var
+    tmp, passwd: string
+    sock = net.newSocket()
+  
+  if scanf(readFile("/etc/anonsurf/nyxrc"), "$w $w", tmp, passwd):
+    sock.connect("127.0.0.1", Port(9051))
+    sock.send("authenticate \"" & passwd & "\"\nsignal newnym\nquit\n")
+    let recvData = sock.recv(256).split("\n")
+    sock.close()
+    # Check authentication status
+    if recvData[0] != "250 OK\c":
+      sendNotify(
+        "Change Identify Error",
+        recvData[0],
+        "error"
+      )
+      return
+    # Check command status
+    if recvData[1] != "250 OK\c":
+      sendNotify(
+        "Change Identify Error",
+        recvData[1],
+        "error"
+      )
+      return
+    # Success. Show okay
+    sendNotify(
+      "Change Identify Success",
+      "You have a new identify",
+      "security-high"
+    )
+  else:
+    sendNotify(
+      "Change Identify Error",
+      "Can parse settings",
+      "error"
+    )
