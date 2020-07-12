@@ -56,13 +56,13 @@ proc refreshStatus(args: RefreshObj): bool =
     args.btnID.setSensitive(true)
     args.btnDetail.label= "AnonSurf is running"
     args.btnStatus.setSensitive(true)
-    # args.imgStatus.setFromIconName("security-high", 64) # TODO check actual status
+    args.imgStatus.setFromIconName("security-high", 6) # TODO check actual status
   else:
     args.btnRun.label = "Start"
     args.btnID.setSensitive(false)
     args.btnDetail.label= "AnonSurf is not running"
     args.btnStatus.setSensitive(false)
-    # args.imgStatus.setFromIconName("security-medium", 64) # TODO check actual status
+    args.imgStatus.setFromIconName("security-medium", 6) # TODO check actual status
   
   return SOURCE_CONTINUE
 
@@ -84,7 +84,7 @@ proc createArea(boxMainWindow: Box) =
     btnCheckIP = newButton("My IP")
 
     labelDNS = newLabel("Localhost")
-    imgStatus = newImageFromIconName("security-medium", 64) #FIXME gtk-warning invalid icon size
+    imgStatus = newImageFromIconName("security-medium", 6)
 
   btnStart.connect("clicked", onClickRun)
   btnCheckIP.connect("clicked", onClickCheckIP)
