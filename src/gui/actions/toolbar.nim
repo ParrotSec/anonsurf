@@ -1,6 +1,6 @@
 import gintro / gtk
 import .. / .. / modules / myip
-import .. / display / noti
+import .. / displays / noti
 import strutils
 import osproc
 import net

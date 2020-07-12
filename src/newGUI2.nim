@@ -1,7 +1,7 @@
 import gintro / [gtk, glib, gobject]
 # import gintro / gdk
-import gui / display / [main, details]
-import gui / actions / [cores, toolbar, detail]
+import gui / displays / pages / [main, detail]
+import gui / actions / [cores, toolbar, details]
 import utils / status
 # import system
 # TODO first check status all then do check again if file changed
@@ -86,8 +86,6 @@ proc createArea(boxMainWindow: Box) =
     labelDNS = newLabel("Localhost")
     imgStatus = newImageFromIconName("security-medium", 64) #FIXME gtk-warning invalid icon size
 
-  btnShowDetail.setSizeRequest(80, 30)
-  btnShowStatus.setSizeRequest(80, 30)
   btnStart.connect("clicked", onClickRun)
   btnCheckIP.connect("clicked", onClickCheckIP)
   btnChangeID.connect("clicked", onClickChangeID)

@@ -1,5 +1,5 @@
 import gintro / [gtk, gobject]
-import ../ actions / cores
+import .. / .. / actions / cores
 
 
 proc makeBottomBarForDetail*(bBack: Button): Box =

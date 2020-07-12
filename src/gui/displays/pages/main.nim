@@ -1,16 +1,6 @@
 import gintro / [gtk, gobject]
-import ../actions/cores
-import about
-
-
-# type
-#   mWidgetObjects = ref object
-#     labelTest: Label
-#     btnAnonSurf: Button
-#     btnRestart: Button
-#     btnShowDetails: Button
-#     btnShowStatus: Button
-#     btnChangeID: Button
+import .. / .. / actions / cores
+import .. / about
 
 
 proc makeDetailPanel*(imgStatus: Image, btnDetail, btnStatus: Button): Frame =
@@ -25,7 +15,8 @@ proc makeDetailPanel*(imgStatus: Image, btnDetail, btnStatus: Button): Frame =
     bxButtons = newBox(Orientation.vertical, 3)
     bxDetailPanel = newBox(Orientation.horizontal, 6)
 
-  
+  btnDetail.setSizeRequest(180, 30)
+  btnStatus.setSizeRequest(180, 30)
   bxDetailPanel.add(imgStatus)
   bxButtons.add(btnDetail)
   bxButtons.add(btnStatus)
