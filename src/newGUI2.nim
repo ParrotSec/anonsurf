@@ -1,7 +1,7 @@
 import gintro / [gtk, glib, gobject]
 # import gintro / gdk
-import gui / display / [widgets, details]
-import gui / actions / [cores, toolbar]
+import gui / display / [main, details]
+import gui / actions / [cores, toolbar, detail]
 import utils / status
 # import system
 # TODO first check status all then do check again if file changed
@@ -88,7 +88,10 @@ proc createArea(boxMainWindow: Box) =
 
   btnShowDetail.setSizeRequest(80, 30)
   btnShowStatus.setSizeRequest(80, 30)
+  btnStart.connect("clicked", onClickRun)
   btnCheckIP.connect("clicked", onClickCheckIP)
+  btnChangeID.connect("clicked", onClickChangeID)
+  btnShowStatus.connect("clicked", onClickTorStatus)
   let btnBack = newButton("Back")
   
   let

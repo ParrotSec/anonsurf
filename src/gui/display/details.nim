@@ -17,6 +17,7 @@ proc makeBottomBarForDetail*(bBack: Button): Box =
 
   return boxBottomBar
 
+
 proc makeServiceDetails*(lDNS: Label): Box =
   #[
     Display information about all services
