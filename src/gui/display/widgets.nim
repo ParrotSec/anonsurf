@@ -13,7 +13,7 @@ import about
 #     btnChangeID: Button
 
 
-proc makeDetailPanel*(labelTest: Label, btnDetail, btnStatus: Button): Frame =
+proc makeDetailPanel*(imgStatus: Image, btnDetail, btnStatus: Button): Frame =
   #[
     Create the area Detail in main page
     it has image of current AnonSurf
@@ -25,10 +25,10 @@ proc makeDetailPanel*(labelTest: Label, btnDetail, btnStatus: Button): Frame =
     bxButtons = newBox(Orientation.vertical, 3)
     bxDetailPanel = newBox(Orientation.horizontal, 6)
 
+  
+  bxDetailPanel.add(imgStatus)
   bxButtons.add(btnDetail)
   bxButtons.add(btnStatus)
-  
-  bxDetailPanel.add(labelTest)
   bxDetailPanel.add(bxButtons)
 
   fmDetail.add(bxDetailPanel)

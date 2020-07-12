@@ -34,4 +34,13 @@ proc onClickCheckIP*(b: Button) =
   else:
     let ipNotify = newNotification(ipInfo[0], ipInfo[1], "security-high")
     discard ipNotify.show()
-  
+
+
+proc onClickStart*(b: Button) =
+  if b.label == "Start":
+    b.label = "Stop"
+    # call run_start
+  else:
+    b.label = "Start"
+    # call run_stop
+
