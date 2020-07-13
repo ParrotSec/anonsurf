@@ -47,8 +47,8 @@ proc makeBootFrame(labelBoot: Label, btnBoot: Button, imgBoot: Image): Frame =
   field.add(labelBoot)
   field.add(btnBoot)
 
-  areaBoot.add(imgBoot)
-  areaBoot.add(field)
+  areaBoot.packStart(imgBoot, false, true, 10)
+  areaBoot.packStart(field, false, true, 14)
   let
     bootFrame = newFrame()
   

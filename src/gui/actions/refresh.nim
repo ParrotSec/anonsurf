@@ -28,6 +28,8 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     args.btnBoot.label = "Enable"
     args.lblBoot.setLabel("Not Enabled at boot")
     args.imgBoot.setFromIconName("security-low", 6)
+  
+  # TODO refresh for the sevices
 
 
 proc updateMain*(args: MainObjs, myStatus: Status) =
@@ -35,6 +37,7 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
     Always check status of current widget
       to show correct state of buttons
   ]#
+  # TODO complex analysis for AnonSurf status and image
   if myStatus.isAnonSurfService == 1:
     args.btnRun.label = "Stop"
     args.btnID.setSensitive(true)

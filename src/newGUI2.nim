@@ -132,9 +132,10 @@ proc createArea(boxMainWindow: Box) =
   updateMain(mainArgs, atStartStatus)
   updateDetail(detailArgs, atStartStatus)
 
+  # Do the refresh
   if mainStack.getVisibleChildName == "main":
     discard timeoutAdd(200, refreshMain, mainArgs)
-  else:
+  elif mainStack.getVisibleChildName == "detail": # Fix me can not refresh only 1 widget
     discard timeoutAdd(200, refreshDetail, detailArgs)
 
 proc main =
