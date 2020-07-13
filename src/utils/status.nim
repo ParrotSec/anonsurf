@@ -41,6 +41,8 @@ proc getEnableService*(serviceName: string): bool =
   #   return true
   if fileExists("/etc/systemd/system/multi-user.target.wants/" & serviceName):
     return true
+  elif fileExists("/etc/systemd/system/default.target.wants/" & serviceName):
+    return true
   else:
     return false
 
@@ -52,7 +54,7 @@ proc getSurfStatus*(): Status =
   let
     surfStatus = getStatusService("anonsurfd")
     torStatus = getStatusService("tor")
-    surfEnable = getEnableService("anonsurfd")
+    surfEnable = getEnableService("anonsurfd.service")
 
   var
     finalStatus: Status
