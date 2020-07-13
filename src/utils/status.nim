@@ -1,4 +1,5 @@
 import osproc
+import os
 
 type
   Status* = ref object
@@ -26,19 +27,22 @@ proc getStatusService*(serviceName: string): int =
     return -1
 
 
-proc getEnableService(serviceName: string): bool =
+proc getEnableService*(serviceName: string): bool =
   #[
     Check if service is enabled at boot by systemd
     Todo: use native check instead of subprocess
       Enable service: Created symlink /etc/systemd/system/multi-user.target.wants/tor.service → /lib/systemd/system/tor.service.
       Disable service: Removed /etc/systemd/system/multi-user.target.wants/tor.service.
   ]#
-  let serviceResult = execProcess("systemctl is-enabled " & serviceName)
-  if serviceResult == "disabled":
-    return false
-  elif serviceResult == "enabled":
+  # let serviceResult = execProcess("systemctl is-enabled " & serviceName)
+  # if serviceResult == "disabled":
+  #   return false
+  # elif serviceResult == "enabled":
+  #   return true
+  if fileExists("/etc/systemd/system/multi-user.target.wants/" & serviceName):
     return true
-
+  else:
+    return false
 
 proc getSurfStatus*(): Status =
   #[

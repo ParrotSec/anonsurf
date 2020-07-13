@@ -1,27 +1,25 @@
 import gintro / [gtk, glib, gobject]
-# import gintro / gdk
 import gui / displays / pages / [main, detail]
-import gui / actions / [cores, toolbar, details]
+import gui / actions / [cores, toolbar, details, refresh]
 import utils / status
 # import system
-# TODO first check status all then do check again if file changed
-# save performance
-
-type
-  RefreshObj = ref object
-    btnRun: Button
-    btnID: Button
-    btnDetail: Button
-    btnStatus: Button
-    imgStatus: Image
+# TODO best performance for refresh
+# TODO handle gksudo when click cancel
+# TODO threading for myip
 
 
-proc createDetailWidget(labelDNS: Label, btnBack: Button): Box =
+proc createDetailWidget(
+  labelAnon, labelTor, labelDNS, labelBoot: Label,
+  btnBoot, btnBack, btnRestart: Button,
+  imgBoot: Image,
+  ): Box =
   #[
     Create a page to display current detail of AnonSurf
   ]#
   let
-    boxServices = makeServiceDetails(labelDNS)
+    boxServices = makeServiceDetails(
+      labelAnon, labelTor, labelDNS, labelBoot, btnBoot, btnRestart, imgBoot
+    )
     boxDetailWidget = newBox(Orientation.vertical, 3)
     boxBottomBar = makeBottomBarForDetail(btnBack)
   
@@ -46,23 +44,19 @@ proc createMainWidget(imgStatus: Image, bStart, bDetail, bStatus, bID, bIP: Butt
   return mainWidget
 
 
-proc refreshStatus(args: RefreshObj): bool =
+proc refreshDetail(args: DetailObjs): bool =
+  let freshStatus = getSurfStatus()
+  updateDetail(args, freshStatus)
+  return SOURCE_CONTINUE
+
+
+proc refreshMain(args: MainObjs): bool =
   #[
     Always check status of current widget
       to show correct state of buttons
   ]#
-  if getStatusService("anonsurfd") == 1:
-    args.btnRun.label = "Stop"
-    args.btnID.setSensitive(true)
-    args.btnDetail.label= "AnonSurf is running"
-    args.btnStatus.setSensitive(true)
-    args.imgStatus.setFromIconName("security-high", 6) # TODO check actual status
-  else:
-    args.btnRun.label = "Start"
-    args.btnID.setSensitive(false)
-    args.btnDetail.label= "AnonSurf is not running"
-    args.btnStatus.setSensitive(false)
-    args.imgStatus.setFromIconName("security-medium", 6) # TODO check actual status
+  let freshStatus = getSurfStatus()
+  updateMain(args, freshStatus)
   
   return SOURCE_CONTINUE
 
@@ -82,20 +76,30 @@ proc createArea(boxMainWindow: Box) =
     btnShowStatus = newButton("Show Tor information")
     btnChangeID = newButton("Change\nIdentify")
     btnCheckIP = newButton("My IP")
-
-    labelDNS = newLabel("Localhost")
     imgStatus = newImageFromIconName("security-medium", 6)
+    mainWidget = createMainWidget(imgStatus, btnStart, btnShowDetail, btnShowStatus, btnChangeID, btnCheckIP)
 
   btnStart.connect("clicked", onClickRun)
   btnCheckIP.connect("clicked", onClickCheckIP)
   btnChangeID.connect("clicked", onClickChangeID)
   btnShowStatus.connect("clicked", onClickTorStatus)
-  let btnBack = newButton("Back")
+
+  let
+    labelAnonDaemon = newLabel("Anon Daemon: Inactivated")
+    labelTor = newLabel("Tor Daemon: Inactivated")
+    labelDNS = newLabel("DNS: LocalHost")
+    imgStatusBoot = newImageFromIconName("security-low", 6)
+    labelStatusBoot = newLabel("Not enabled at boot")
+    btnBoot = newButton("Enable")
+    btnBack = newButton("Back")
+    btnRestart = newButton("Restart")
+    detailWidget = createDetailWidget(
+      labelAnonDaemon, labelTor, labelDNS, labelStatusBoot,
+      btnBoot, btnBack, btnRestart, imgStatusBoot
+    )
   
   let
     mainStack = newStack()
-    mainWidget = createMainWidget(imgStatus, btnStart, btnShowDetail, btnShowStatus, btnChangeID, btnCheckIP)
-    detailWidget = createDetailWidget(labelDNS, btnBack)
   
   btnShowDetail.connect("clicked", onClickDetail, mainStack)
   btnBack.connect("clicked", onClickBack, mainStack)
@@ -105,15 +109,33 @@ proc createArea(boxMainWindow: Box) =
   boxMainWindow.add(mainStack)
   boxMainWindow.showAll()
   
-  var args = RefreshObj(
-    btnRun: btnStart,
-    btnID: btnChangeID,
-    btnDetail: btnShowDetail,
-    btnStatus: btnShowStatus,
-    imgStatus: imgStatus,
-  )
-  discard timeoutAdd(200, refreshStatus, args)
+  var
+    mainArgs = MainObjs(
+      btnRun: btnStart,
+      btnID: btnChangeID,
+      btnDetail: btnShowDetail,
+      btnStatus: btnShowStatus,
+      imgStatus: imgStatus,
+    )
+    detailArgs = DetailObjs(
+      lblAnon: labelAnonDaemon,
+      lblTor: labelTor,
+      lblDns: labelDNS,
+      lblBoot: labelStatusBoot,
+      btnBoot: btnBoot,
+      btnRestart: btnRestart,
+      imgBoot: imgStatusBoot
+    )
 
+  # Load latest status when start program
+  let atStartStatus = getSurfStatus()
+  updateMain(mainArgs, atStartStatus)
+  updateDetail(detailArgs, atStartStatus)
+
+  if mainStack.getVisibleChildName == "main":
+    discard timeoutAdd(200, refreshMain, mainArgs)
+  else:
+    discard timeoutAdd(200, refreshDetail, detailArgs)
 
 proc main =
   #[
