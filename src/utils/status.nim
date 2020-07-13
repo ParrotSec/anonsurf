@@ -34,11 +34,6 @@ proc getEnableService*(serviceName: string): bool =
       Enable service: Created symlink /etc/systemd/system/multi-user.target.wants/tor.service → /lib/systemd/system/tor.service.
       Disable service: Removed /etc/systemd/system/multi-user.target.wants/tor.service.
   ]#
-  # let serviceResult = execProcess("systemctl is-enabled " & serviceName)
-  # if serviceResult == "disabled":
-  #   return false
-  # elif serviceResult == "enabled":
-  #   return true
   if fileExists("/etc/systemd/system/multi-user.target.wants/" & serviceName):
     return true
   elif fileExists("/etc/systemd/system/default.target.wants/" & serviceName):
