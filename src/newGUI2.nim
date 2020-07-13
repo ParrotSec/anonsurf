@@ -6,7 +6,11 @@ import utils / status
 # TODO best performance for refresh
 # TODO handle gksudo when click cancel
 # TODO threading for myip
-
+type
+  RefreshObj = ref object
+    mainObjs: MainObjs
+    detailObjs: DetailObjs
+    stackObjs: Stack
 
 proc createDetailWidget(
   labelAnon, labelTor, labelDNS, labelBoot: Label,
@@ -44,20 +48,14 @@ proc createMainWidget(imgStatus: Image, bStart, bDetail, bStatus, bID, bIP: Butt
   return mainWidget
 
 
-proc refreshDetail(args: DetailObjs): bool =
+proc handleRefresh(args: RefreshObj): bool =
   let freshStatus = getSurfStatus()
-  updateDetail(args, freshStatus)
-  return SOURCE_CONTINUE
 
+  if args.stackObjs.getVisibleChildName == "main":
+    updateMain(args.mainObjs, freshStatus)
+  else:
+    updateDetail(args.detailObjs, freshStatus)
 
-proc refreshMain(args: MainObjs): bool =
-  #[
-    Always check status of current widget
-      to show correct state of buttons
-  ]#
-  let freshStatus = getSurfStatus()
-  updateMain(args, freshStatus)
-  
   return SOURCE_CONTINUE
 
 
@@ -126,17 +124,19 @@ proc createArea(boxMainWindow: Box) =
       btnRestart: btnRestart,
       imgBoot: imgStatusBoot
     )
+    refresher = RefreshObj(
+      mainObjs: mainArgs,
+      detailObjs: detailArgs,
+      stackObjs: mainStack,
+    )
 
   # Load latest status when start program
   let atStartStatus = getSurfStatus()
   updateMain(mainArgs, atStartStatus)
   updateDetail(detailArgs, atStartStatus)
 
-  # Do the refresh
-  if mainStack.getVisibleChildName == "main":
-    discard timeoutAdd(200, refreshMain, mainArgs)
-  elif mainStack.getVisibleChildName == "detail": # Fix me can not refresh only 1 widget
-    discard timeoutAdd(200, refreshDetail, detailArgs)
+  discard timeoutAdd(200, handleRefresh, refresher)
+
 
 proc main =
   #[
