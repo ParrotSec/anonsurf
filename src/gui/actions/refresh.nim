@@ -19,6 +19,7 @@ type
 
 
 proc updateDetail*(args: DetailObjs, myStatus: Status) =
+  args.btnRestart.label = "Restart"
   # AnonSurf is Enabled at boot
   if myStatus.isAnonSurfBoot:
     args.btnBoot.label = "Disable"
@@ -29,6 +30,10 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     args.lblBoot.setLabel("Not Enabled at boot")
     args.imgBoot.setFromIconName("security-low", 6)
   
+  if myStatus.isAnonSurfService == 1:
+    args.btnRestart.setSensitive(true)
+  else:
+    args.btnRestart.setSensitive(false)
   # TODO refresh for the sevices
 
 
