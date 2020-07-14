@@ -96,6 +96,7 @@ proc createArea(boxMainWindow: Box) =
       btnBoot, btnBack, btnRestart, imgStatusBoot
     )
   
+  btnRestart.connect("clicked", onClickRestart)
   btnBoot.connect("clicked", onClickBoot)
 
   let

@@ -42,3 +42,10 @@ proc onClickBoot*(b: Button) =
       b.label = "Disabling"
     else:
       discard
+
+
+proc onClickRestart*(b: Button) =
+  if spawnCommandLineAsync("gksudo /usr/bin/anonsurf restart"):
+    b.label = "Wait"
+  else:
+    discard
