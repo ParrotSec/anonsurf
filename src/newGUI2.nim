@@ -4,8 +4,8 @@ import gui / actions / [cores, toolbar, details, refresh]
 import utils / status
 # import system
 # TODO best performance for refresh
-# TODO handle gksudo when click cancel
 # TODO threading for myip
+
 type
   RefreshObj = ref object
     mainObjs: MainObjs

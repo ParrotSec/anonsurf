@@ -1,8 +1,7 @@
-import gintro / gtk
+import gintro / [gtk, glib]
 import .. / .. / modules / myip
 import .. / displays / noti
 import strutils
-import osproc
 import net
 import strscans
 
@@ -31,11 +30,17 @@ proc onClickCheckIP*(b: Button) =
 
 proc onClickRun*(b: Button) =
   if b.label == "Start":
-    discard execCmd("gksudo /usr/bin/anonsurf start")
-    b.label = "Stop"
+    if spawnCommandLineAsync("gksudo /usr/bin/anonsurf start"):
+    # discard execCmd("gksudo /usr/bin/anonsurf start")
+      b.label = "Starting"
+    else:
+      discard
   else:
-    discard execCmd("gksudo /usr/bin/anonsurf stop")
-    b.label = "Start"
+    # discard execCmd("gksudo /usr/bin/anonsurf stop")
+    if spawnCommandLineAsync("gksudo /usr/bin/anonsurf stop"):
+      b.label = "Stopping"
+    else:
+      discard
 
 
 proc onClickChangeID*(b: Button) =
