@@ -29,3 +29,16 @@ proc onClickTorStatus*(b: Button) =
 
   statusArea.packStart(nyxTerm, false, true, 3)
   statusDialog.showAll()
+
+
+proc onClickBoot*(b: Button) =
+  if b.label == "Enable":
+    if spawnCommandLineAsync("gksudo /usr/bin/anonsurf enable-boot"):
+      b.label = "Enabling"
+    else:
+      discard
+  else:
+    if spawnCommandLineAsync("gksudo /usr/bin/anonsurf disable-boot"):
+      b.label = "Disabling"
+    else:
+      discard
