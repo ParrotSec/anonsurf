@@ -46,7 +46,7 @@ export RESETCOLOR='\033[1;00m'
 function notify {
 	# Use system notification to show popup and let user know latest changes
 	if [ -e /usr/bin/notify-send ]; then
-		/usr/bin/notify-send "AnonSurf" "$1"
+		/usr/bin/notify-send "AnonSurf" "$1" -i $2
 	fi
 }
 export notify
@@ -57,12 +57,12 @@ function kill-apps {
 	echo -e -n "$BLUE[$GREEN*$BLUE] killing dangerous applications\n"
 	sudo killall -q chrome dropbox skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail
 	echo -e -n "$BLUE[$GREEN*$BLUE] Dangerous applications killed\n"
-	notify "Dangerous applications killed"
+	notify "Dangerous applications killed" "dialog-error"
 
 	echo -e -n "$BLUE[$GREEN*$BLUE] cleaning some dangerous cache elements\n"
 	bleachbit -c adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history &> /dev/null
 	echo -e -n "$BLUE[$GREEN*$BLUE] Cache cleaned\n"
-	notify "Cache cleaned"
+	notify "Cache cleaned" "dialog-error"
 }
 
 
@@ -72,14 +72,14 @@ function checkIP {
 	if [ "$DATA" != "" ]; then
 		IP=`echo $DATA | grep -E -o "<strong>(\S+)</strong>" | sed -e 's/<[^>]*>//g'`
 		echo -e "${GREEN}You are connecting to Tor network\nYour IP is $IP${RESETCOLOR}"
-		notify "You are connecting to Tor network\nYour IP is $IP"
+		notify "You are connecting to Tor network\nYour IP is $IP" "security-high"
 	else
 		IP=`curl -s https://check.torproject.org/ | grep -E -o "<strong>(\S+)</strong>" | sed -e 's/<[^>]*>//g'`
 		if [ "$IP" == "" ]; then
 			echo -e "${RED}Can't connect to internet\nPlease check your settings${RESETCOLOR}"
 		else
 			echo -e "${BLUE}You are not connecting to Tor network\nYour IP is $IP${RESETCOLOR}"
-			notify "You are not connecting to Tor network\nYour IP is $IP"
+			notify "You are not connecting to Tor network\nYour IP is $IP" "security-medium"
 		fi
 	fi
 }
@@ -107,7 +107,7 @@ function start {
 
 	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
 	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
-	notify "Global Anonymous Proxy Activated"
+	notify "Global Anonymous Proxy Activated" "security-high"
 	# sleep 1
 }
 
@@ -120,7 +120,7 @@ function stop {
 	/usr/sbin/service anonsurfd stop
 
 	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
-	notify "Global Anonymous Proxy Closed - Stop dancing :("
+	notify "Global Anonymous Proxy Closed - Stop dancing :(" "security-low"
 	# sleep 1
 }
 
@@ -150,7 +150,7 @@ function enable-boot {
 		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf already enabled!$RESETCOLOR\n"
 	else
 		/usr/bin/systemctl enable anonsurfd;
-		notify "Enabling AnonSurf at boot"
+		notify "AnonSurf at boot is enabled" "security-high"
 	fi
 }
 
@@ -161,7 +161,7 @@ function disable-boot {
 	# if [ "$(systemctl list-unit-files | grep anonsurfd | awk '{print $2}')" = "enabled" ]; then
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
 		/usr/bin/systemctl disable anonsurfd;
-		notify "Disabling AnonSurf at boot"
+		notify "AnonSurf at boot is disabled" "security-low"
 	else
 		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf wasn't enabled. Nothing to disable!$RESETCOLOR\n"
 	fi
