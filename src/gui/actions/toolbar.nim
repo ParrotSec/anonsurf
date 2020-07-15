@@ -6,12 +6,7 @@ import net
 import strscans
 
 
-proc onClickCheckIP*(b: Button) =
-  #[
-    Display IP when user click on CheckIP button
-    Show the information in system's notification
-  ]#
-
+proc doCheckIP(userData: pointer): gboolean {.cdecl.} =
   let ipInfo = checkIPwTorServer()
   var iconName: string
   
@@ -28,19 +23,32 @@ proc onClickCheckIP*(b: Button) =
   sendNotify(ipInfo[0], ipInfo[1], iconName)
 
 
+proc onClickCheckIP*(b: Button) =
+  #[
+    Display IP when user click on CheckIP button
+    Show the information in system's notification
+  ]#
+
+  # doCheckIP()
+  # idleAdd ( priority: 0 = default, function?, pointer, notify: DestroyNotify)
+  discard glib.idleAdd(0, doCheckIP, nil, nil)
+
+
 proc onClickRun*(b: Button) =
   if b.label == "Start":
-    if spawnCommandLineAsync("gksudo /usr/bin/anonsurf start"):
-    # discard execCmd("gksudo /usr/bin/anonsurf start")
-      b.label = "Starting"
-    else:
-      discard
+    discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf start")
+    # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf start"):
+    # # discard execCmd("gksudo /usr/bin/anonsurf start")
+    #   b.label = "Starting"
+    # else:
+    #   discard
   else:
+    discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf start")
     # discard execCmd("gksudo /usr/bin/anonsurf stop")
-    if spawnCommandLineAsync("gksudo /usr/bin/anonsurf stop"):
-      b.label = "Stopping"
-    else:
-      discard
+    # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf stop"):
+    #   b.label = "Stopping"
+    # else:
+    #   discard
 
 
 proc onClickChangeID*(b: Button) =
