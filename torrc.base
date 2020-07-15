@@ -10,7 +10,7 @@ AutomapHostsSuffixes .exit,.onion
 #define tor ports and explicitly declare some security flags
 TransPort 127.0.0.1:9040 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtocol IsolateDestPort IsolateDestAddr
 SocksPort 127.0.0.1:9050 IsolateClientAddr IsolateSOCKSAuth IsolateClientProtocol IsolateDestPort IsolateDestAddr
-ControlPort 9051
+ControlPort 127.0.0.1:9051
 
 #use tor to resolve domain names
 DNSPort 127.0.0.1:53
