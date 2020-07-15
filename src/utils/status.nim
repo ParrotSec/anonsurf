@@ -1,5 +1,6 @@
 import osproc
 import os
+import .. / modules / parser
 
 type
   Status* = ref object
@@ -61,3 +62,8 @@ proc getSurfStatus*(): Status =
   )
 
   return finalStatus
+
+
+proc getStatusPorts*() =
+  let openedAddr = getTorrcPorts()
+  
