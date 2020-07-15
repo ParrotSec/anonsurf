@@ -12,6 +12,7 @@ type
     detailObjs: DetailObjs
     stackObjs: Stack
 
+
 proc createDetailWidget(
   labelAnon, labelTor, labelDNS, labelBoot: Label,
   btnBoot, btnBack, btnRestart: Button,
