@@ -43,7 +43,7 @@ proc onClickRun*(b: Button) =
     # else:
     #   discard
   else:
-    discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf start")
+    discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf stop")
     # discard execCmd("gksudo /usr/bin/anonsurf stop")
     # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf stop"):
     #   b.label = "Stopping"
