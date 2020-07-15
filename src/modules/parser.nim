@@ -6,8 +6,8 @@ import os
 import strutils
 
 type
-  TorConfig = object
-    fileErr: bool # Error while reading file
+  TorConfig* = object
+    fileErr*: bool # Error while reading file
     controlPort*: string
     transPort*: string
     socksPort*: string
