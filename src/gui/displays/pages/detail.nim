@@ -2,7 +2,7 @@ import gintro / [gtk, gobject]
 import .. / .. / actions / cores
 
 
-proc makeBottomBarForDetail*(bBack: Button): Box =
+proc makeBottomBarForDetail(bBack: Button): Box =
   #[
     Display bottom bar that has btnExit and btnBack
   ]#
@@ -58,7 +58,7 @@ proc makeBootFrame(labelBoot: Label, btnBoot: Button, imgBoot: Image): Frame =
   return bootFrame
 
 
-proc makeServiceDetails*(
+proc makeServiceDetails(
   labelAnon, labelTor, labelDNS, labelBoot: Label,
   btnBoot, btnRestart: Button, imgBoot: Image): Box =
   #[
@@ -75,3 +75,23 @@ proc makeServiceDetails*(
   boxDetail.add(areaBoot)
 
   return boxDetail
+
+
+proc createDetailWidget*(
+  labelAnon, labelTor, labelDNS, labelBoot: Label,
+  btnBoot, btnBack, btnRestart: Button,
+  imgBoot: Image,
+  ): Box =
+  #[
+    Create a page to display current detail of AnonSurf
+  ]#
+  let
+    boxServices = makeServiceDetails(
+      labelAnon, labelTor, labelDNS, labelBoot, btnBoot, btnRestart, imgBoot
+    )
+    boxDetailWidget = newBox(Orientation.vertical, 3)
+    boxBottomBar = makeBottomBarForDetail(btnBack)
+  
+  boxDetailWidget.add(boxServices)
+  boxDetailWidget.packEnd(boxBottomBar, false, true, 3)
+  return boxDetailWidget

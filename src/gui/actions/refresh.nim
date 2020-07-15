@@ -7,6 +7,7 @@ type
     btnID*: Button
     btnDetail*: Button
     btnStatus*: Button
+    lDetails*: Label
     imgStatus*: Image
   DetailObjs* = ref object
     lblAnon*: Label
@@ -46,12 +47,14 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
   if myStatus.isAnonSurfService == 1:
     args.btnRun.label = "Stop"
     args.btnID.setSensitive(true)
-    args.btnDetail.label= "AnonSurf is running"
+    # args.btnDetail.label= "AnonSurf is running"
+    args.lDetails.setText("AnonSurf is running")
     args.btnStatus.setSensitive(true)
     args.imgStatus.setFromIconName("security-high", 6) # TODO check actual status
   else:
     args.btnRun.label = "Start"
     args.btnID.setSensitive(false)
-    args.btnDetail.label= "AnonSurf is not running"
+    # args.btnDetail.label= "AnonSurf is not running"
+    args.lDetails.setText("AnonSurf is not running")
     args.btnStatus.setSensitive(false)
     args.imgStatus.setFromIconName("security-medium", 6) # TODO check actual status

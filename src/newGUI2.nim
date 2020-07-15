@@ -13,42 +13,6 @@ type
     stackObjs: Stack
 
 
-proc createDetailWidget(
-  labelAnon, labelTor, labelDNS, labelBoot: Label,
-  btnBoot, btnBack, btnRestart: Button,
-  imgBoot: Image,
-  ): Box =
-  #[
-    Create a page to display current detail of AnonSurf
-  ]#
-  let
-    boxServices = makeServiceDetails(
-      labelAnon, labelTor, labelDNS, labelBoot, btnBoot, btnRestart, imgBoot
-    )
-    boxDetailWidget = newBox(Orientation.vertical, 3)
-    boxBottomBar = makeBottomBarForDetail(btnBack)
-  
-  boxDetailWidget.add(boxServices)
-  boxDetailWidget.packEnd(boxBottomBar, false, true, 3)
-  return boxDetailWidget
-
-
-proc createMainWidget(imgStatus: Image, bStart, bDetail, bStatus, bID, bIP: Button): Box =
-  #[
-    Create the page for main widget
-  ]#
-  let
-    boxPanel = makeDetailPanel(imgStatus, bDetail, bStatus)
-    boxToolBar = makeToolBar(bStart, bID, bIP)
-    bottomBar = makeBottomBarForMain()
-    mainWidget = newBox(Orientation.vertical, 3)
-  
-  mainWidget.add(boxPanel)
-  mainWidget.add(boxToolBar)
-  mainWidget.packEnd(bottomBar, false, true, 3)
-  return mainWidget
-
-
 proc handleRefresh(args: RefreshObj): bool =
   let freshStatus = getSurfStatus()
 
@@ -71,12 +35,13 @@ proc createArea(boxMainWindow: Box) =
 
   let
     btnStart = newButton("Start")
-    btnShowDetail = newButton("AnonSurf is not running")
-    btnShowStatus = newButton("Show Tor information")
+    labelDetails = newLabel("AnonSurf is not running")
+    btnShowDetails = newButton("Details")
+    btnShowStatus = newButton("Tor Stats")
     btnChangeID = newButton("Change\nIdentify")
     btnCheckIP = newButton("My IP")
     imgStatus = newImageFromIconName("security-medium", 6)
-    mainWidget = createMainWidget(imgStatus, btnStart, btnShowDetail, btnShowStatus, btnChangeID, btnCheckIP)
+    mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowDetails, btnShowStatus, btnChangeID, btnCheckIP)
 
   btnStart.connect("clicked", onClickRun)
   btnCheckIP.connect("clicked", onClickCheckIP)
@@ -103,7 +68,7 @@ proc createArea(boxMainWindow: Box) =
   let
     mainStack = newStack()
   
-  btnShowDetail.connect("clicked", onClickDetail, mainStack)
+  btnShowDetails.connect("clicked", onClickDetail, mainStack)
   btnBack.connect("clicked", onClickBack, mainStack)
 
   mainStack.addNamed(mainWidget, "main")
@@ -115,8 +80,9 @@ proc createArea(boxMainWindow: Box) =
     mainArgs = MainObjs(
       btnRun: btnStart,
       btnID: btnChangeID,
-      btnDetail: btnShowDetail,
+      btnDetail: btnShowDetails,
       btnStatus: btnShowStatus,
+      lDetails: labelDetails,
       imgStatus: imgStatus,
     )
     detailArgs = DetailObjs(

@@ -3,7 +3,7 @@ import .. / .. / actions / cores
 import .. / about
 
 
-proc makeDetailPanel*(imgStatus: Image, btnDetail, btnStatus: Button): Frame =
+proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: Button): Frame =
   #[
     Create the area Detail in main page
     it has image of current AnonSurf
@@ -12,21 +12,25 @@ proc makeDetailPanel*(imgStatus: Image, btnDetail, btnStatus: Button): Frame =
   ]#
   let
     fmDetail = newFrame()
-    bxButtons = newBox(Orientation.vertical, 3)
+    areaInfo = newBox(Orientation.vertical, 3)
+    bxButtons = newBox(Orientation.horizontal, 3)
     bxDetailPanel = newBox(Orientation.horizontal, 6)
 
-  btnDetail.setSizeRequest(180, 30)
-  btnStatus.setSizeRequest(180, 30)
+  # btnDetail.setSizeRequest(180, 30)
+  # btnStatus.setSizeRequest(180, 30)
   bxDetailPanel.add(imgStatus)
   bxButtons.add(btnDetail)
   bxButtons.add(btnStatus)
-  bxDetailPanel.add(bxButtons)
+
+  areaInfo.add(labDetails)
+  areaInfo.packEnd(bxButtons, false, true, 3)
+  bxDetailPanel.add(areaInfo)
 
   fmDetail.add(bxDetailPanel)
   return fmDetail
 
 
-proc makeToolBar*(btnStart, btnID, btnIP: Button): Frame =
+proc makeToolBar(btnStart, btnID, btnIP: Button): Frame =
   #[
     Create Tool Panel which has buttons
   ]#
@@ -47,7 +51,7 @@ proc makeToolBar*(btnStart, btnID, btnIP: Button): Frame =
   return fmTool
 
 
-proc makeBottomBarForMain*(): Box =
+proc makeBottomBarForMain(): Box =
   #[
     Create bottom bar
     It has About and Exit button
@@ -67,3 +71,19 @@ proc makeBottomBarForMain*(): Box =
   boxBottomBar.packEnd(btnAbout, false, true, 3)
 
   return boxBottomBar
+
+
+proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bDetail, bStatus, bID, bIP: Button): Box =
+  #[
+    Create the page for main widget
+  ]#
+  let
+    boxPanel = makeDetailPanel(imgStatus, lDetails, bDetail, bStatus)
+    boxToolBar = makeToolBar(bStart, bID, bIP)
+    bottomBar = makeBottomBarForMain()
+    mainWidget = newBox(Orientation.vertical, 3)
+  
+  mainWidget.add(boxPanel)
+  mainWidget.add(boxToolBar)
+  mainWidget.packEnd(bottomBar, false, true, 3)
+  return mainWidget
