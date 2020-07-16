@@ -1,12 +1,18 @@
 import osproc
 import os
-import .. / modules / parser
+import .. / modules / [parser, encoder]
+import strutils
 
 type
   Status* = ref object
     isAnonSurfService*: int
     isTorService*: int
     isAnonSurfBoot*: bool
+  PortStatus* = ref object
+    isControlPort*: bool
+    isDNSPort*: bool
+    isSocksPort*: bool
+    isTransPort*: bool
 
 
 proc getStatusService*(serviceName: string): int =
@@ -42,6 +48,7 @@ proc getEnableService*(serviceName: string): bool =
   else:
     return false
 
+
 proc getSurfStatus*(): Status =
   #[
     Get status of services (activated / inactivated)
@@ -64,6 +71,15 @@ proc getSurfStatus*(): Status =
   return finalStatus
 
 
-proc getStatusPorts*() =
-  let openedAddr = getTorrcPorts()
-  
+proc getStatusPorts*(): PortStatus =
+  let
+    openedAddr = toNixHex(getTorrcPorts())
+  if not openedAddr.fileErr:
+    const
+      path = "/proc/net/tcp"
+    let
+      netstat = readFile(path)
+    result.isControlPort = openedAddr.controlPort in netstat
+    result.isDNSPort = openedAddr.dnsPort in netstat
+    result.isSocksPort = openedAddr.socksPort in netstat
+    result.isTransPort = openedAddr.transPort in netstat

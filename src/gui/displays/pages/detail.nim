@@ -1,5 +1,5 @@
-import gintro / [gtk, gobject]
-import .. / .. / actions / cores
+import gintro / gtk
+# import .. / .. / actions / cores
 
 
 proc makeBottomBarForDetail(bBack: Button): Box =
@@ -8,12 +8,12 @@ proc makeBottomBarForDetail(bBack: Button): Box =
   ]#
   let
     boxBottomBar = newBox(Orientation.horizontal, 3)
-    btnExit = newButton("Exit")
+    # btnExit = newButton("Exit")
   
   boxBottomBar.add(bBack)
 
-  btnExit.connect("clicked", onclickExit)
-  boxBottomBar.packEnd(btnExit, false, true, 3)
+  # btnExit.connect("clicked", onclickExit)
+  # boxBottomBar.packEnd(btnExit, false, true, 3)
 
   return boxBottomBar
 
