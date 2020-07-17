@@ -8,7 +8,8 @@ type
     isAnonSurfService*: int
     isTorService*: int
     isAnonSurfBoot*: bool
-  PortStatus* = ref object
+  PortStatus* = object
+    isReadError*: bool
     isControlPort*: bool
     isDNSPort*: bool
     isSocksPort*: bool
@@ -74,12 +75,15 @@ proc getSurfStatus*(): Status =
 proc getStatusPorts*(): PortStatus =
   let
     openedAddr = toNixHex(getTorrcPorts())
+
+  result.isReadError = openedAddr.fileErr
+
   if not openedAddr.fileErr:
     const
       path = "/proc/net/tcp"
     let
       netstat = readFile(path)
-    result.isControlPort = openedAddr.controlPort in netstat
-    result.isDNSPort = openedAddr.dnsPort in netstat
-    result.isSocksPort = openedAddr.socksPort in netstat
-    result.isTransPort = openedAddr.transPort in netstat
+    result.isControlPort = netstat.contains(openedAddr.controlPort)
+    result.isDNSPort = netstat.contains(openedAddr.dnsPort)
+    result.isSocksPort = netstat.contains(openedAddr.socksPort)
+    result.isTransPort = netstat.contains(openedAddr.transPort)

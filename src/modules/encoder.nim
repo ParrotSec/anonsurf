@@ -13,12 +13,15 @@ proc parsePortToHex(port: string): string =
 
 proc handleParse(txt: string): string =
   if ":" in txt:
+    # 127.0.0.1:8080
     return parseAddrToHex(txt.split(":")[0]) & ":" & parsePortTOHex(txt.split(":")[1])
   else:
     if "." in txt:
-      return parseAddrToHex(txt.split(":")[0])
+      # 127.0.0.1
+      return parseAddrToHex(txt)
     else:
-      return parsePortTOHex(txt.split(":")[1])
+      # 8080
+      return parsePortTOHex(txt)
 
 
 proc toNixHex*(conf: TorConfig): TorConfig =

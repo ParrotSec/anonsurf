@@ -3,7 +3,6 @@ import gui / displays / pages / [main, detail]
 import gui / actions / [cores, toolbar, details, refresh]
 import utils / status
 # import system
-# TODO best performance for refresh
 # TODO threading for myip
 
 type
@@ -14,12 +13,14 @@ type
 
 
 proc handleRefresh(args: RefreshObj): bool =
-  let freshStatus = getSurfStatus()
+  let
+    freshStatus = getSurfStatus()
+    portStatus = getStatusPorts()
 
   if args.stackObjs.getVisibleChildName == "main":
-    updateMain(args.mainObjs, freshStatus)
+    updateMain(args.mainObjs, freshStatus, portStatus)
   else:
-    updateDetail(args.detailObjs, freshStatus)
+    updateDetail(args.detailObjs, freshStatus, portStatus)
 
   return SOURCE_CONTINUE
 
@@ -49,16 +50,16 @@ proc createArea(boxMainWindow: Box) =
   btnShowStatus.connect("clicked", onClickTorStatus)
 
   let
-    labelAnonDaemon = newLabel("Anon Daemon: Inactivated")
-    labelTor = newLabel("Tor Daemon: Inactivated")
-    labelDNS = newLabel("DNS: LocalHost")
+    labelDaemons = newLabel("Services: Checking")
+    labelPorts = newLabel("Ports: Checking")
+    labelDNS = newLabel("DNS: Checking")
     imgStatusBoot = newImageFromIconName("security-low", 6)
     labelStatusBoot = newLabel("Not enabled at boot")
     btnBoot = newButton("Enable")
     btnBack = newButton("Back")
     btnRestart = newButton("Restart")
     detailWidget = createDetailWidget(
-      labelAnonDaemon, labelTor, labelDNS, labelStatusBoot,
+      labelDaemons, labelPorts, labelDNS, labelStatusBoot,
       btnBoot, btnBack, btnRestart, imgStatusBoot
     )
   
@@ -86,8 +87,8 @@ proc createArea(boxMainWindow: Box) =
       imgStatus: imgStatus,
     )
     detailArgs = DetailObjs(
-      lblAnon: labelAnonDaemon,
-      lblTor: labelTor,
+      lblServices: labelDaemons,
+      lblPorts: labelPorts,
       lblDns: labelDNS,
       lblBoot: labelStatusBoot,
       btnBoot: btnBoot,
@@ -101,9 +102,11 @@ proc createArea(boxMainWindow: Box) =
     )
 
   # Load latest status when start program
-  let atStartStatus = getSurfStatus()
-  updateMain(mainArgs, atStartStatus)
-  updateDetail(detailArgs, atStartStatus)
+  let
+    atStartStatus = getSurfStatus()
+    atStartPorts = getStatusPorts()
+  updateMain(mainArgs, atStartStatus, atStartPorts)
+  updateDetail(detailArgs, atStartStatus, atStartPorts)
 
   discard timeoutAdd(200, handleRefresh, refresher)
 
