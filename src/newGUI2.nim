@@ -3,7 +3,6 @@ import gui / displays / pages / [main, detail]
 import gui / actions / [cores, toolbar, details, refresh]
 import utils / status
 # import system
-# TODO threading for myip
 # TODO better analysis
 
 type
@@ -84,6 +83,7 @@ proc createArea(boxMainWindow: Box) =
       btnID: btnChangeID,
       btnDetail: btnShowDetails,
       btnStatus: btnShowStatus,
+      btnIP: btnCheckIP,
       lDetails: labelDetails,
       imgStatus: imgStatus,
     )

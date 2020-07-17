@@ -4,10 +4,13 @@ import .. / displays / noti
 import strutils
 import net
 import strscans
+import system
+
+var worker*: system.Thread[void]
 
 
-proc doCheckIP(userData: pointer): gboolean {.cdecl.} =
-  let ipInfo = checkIPwTorServer()
+proc doCheckIP(ipInfo: array[2, string]) =
+  # let ipInfo = checkIPFromTorServer()
   var iconName: string
   
   # If program has error while getting IP address
@@ -23,15 +26,20 @@ proc doCheckIP(userData: pointer): gboolean {.cdecl.} =
   sendNotify(ipInfo[0], ipInfo[1], iconName)
 
 
+proc work() =
+  let ipAddr = checkIPFromTorServer()
+  # idleAdd(doCheckIP, ipAddr)
+  doCheckIP(ipAddr)
+  worker.joinThread()
+
+
 proc onClickCheckIP*(b: Button) =
   #[
     Display IP when user click on CheckIP button
     Show the information in system's notification
   ]#
 
-  # doCheckIP()
-  # idleAdd ( priority: 0 = default, function?, pointer, notify: DestroyNotify)
-  discard glib.idleAdd(0, doCheckIP, nil, nil)
+  createThread(worker, work)
 
 
 proc onClickRun*(b: Button) =

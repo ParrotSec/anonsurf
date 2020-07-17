@@ -15,7 +15,7 @@ proc parseIPbyTorServer(data: string): array[2, string] =
   # return "Your address is: " & ipAddr & "\n" & status.replace("\n", "").replace("  ", "")
 
 
-proc checkIPwTorServer*(): array[2, string] =
+proc checkIPFromTorServer*(): array[2, string] =
   #[
     Check current public IP using https://check.torproject.org/ 
   ]#

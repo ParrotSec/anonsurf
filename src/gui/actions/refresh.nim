@@ -1,5 +1,6 @@
 import gintro / gtk
 import .. / .. / utils / [status, dnsutils]
+import toolbar
 
 type
   MainObjs* = ref object
@@ -7,6 +8,7 @@ type
     btnID*: Button
     btnDetail*: Button
     btnStatus*: Button
+    btnIP*: Button
     lDetails*: Label
     imgStatus*: Image
   DetailObjs* = ref object
@@ -126,3 +128,8 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
     args.btnRun.label = "Start"
     args.btnID.setSensitive(false)
     args.btnStatus.setSensitive(false)
+
+  if worker.running:
+    args.btnIP.setSensitive(false)
+  else:
+    args.btnIP.setSensitive(true)
