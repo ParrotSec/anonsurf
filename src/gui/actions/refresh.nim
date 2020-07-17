@@ -42,18 +42,18 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
     elif myStatus.isTorService == -1:
       args.lblServices.setText("Services: Start Tor failed")
     # Check status of Port
-    # var failedPort = ""
     if myPorts.isReadError:
       args.lblPorts.setText("Ports: Parse torrc failed")
     elif not myPorts.isControlPort and not myPorts.isSocksPort and
       not myPorts.isTransPort:
       args.lblPorts.setText("Ports: Tor Ports failed") # FIXME
     elif myPorts.isControlPort and myPorts.isTransPort and
-      myPorts.isSocksPort and myPorts.isDNSPort:
+      myPorts.isSocksPort:
         args.lblPorts.setText("Ports: Activated")
     else:
-      discard # TODO do analysis here
-    
+      # TODO complex check here
+      args.lblPorts.setText("Ports: Some port are not opened") # Fix Me
+
   elif myStatus.isAnonsurfSErvice == 0:
     args.btnRestart.setSensitive(false)
     args.lblServices.setText("Services: Inactivated")
@@ -89,18 +89,40 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
     Always check status of current widget
       to show correct state of buttons
   ]#
-  # TODO complex analysis for AnonSurf status and image
   if myStatus.isAnonSurfService == 1:
+    # Check status of tor service
+    if myStatus.isTorService == 1:
+      # If everything (except DNS port) is okay
+      if myPorts.isControlPort and myPorts.isSocksPort and myPorts.isTransPort and
+        not myPorts.isReadError:
+        args.btnID.setSensitive(true)
+        args.btnStatus.setSensitive(true)
+        # Check DNS
+        if myPorts.isDNSPort:
+          args.imgStatus.setFromIconName("security-high", 6)
+          args.lDetails.setText("AnonSurf is running") # Fix me
+        else:
+          args.imgStatus.setFromIconName("security-medium", 6)
+          args.lDetails.setText("Error with DNS port") # Fix me
+      else:
+        args.imgStatus.setFromIconName("security-low", 6)
+        args.lDetails.setText("Error with tor ports") # Fix me
+        args.btnID.setSensitive(false)
+        args.btnStatus.setSensitive(false)
+    else:
+      args.imgStatus.setFromIconName("security-low", 6)
+      args.lDetails.setText("Tor service doesn't start") # Fix me
+      args.btnID.setSensitive(false)
+      args.btnStatus.setSensitive(false)
+    
     args.btnRun.label = "Stop"
-    args.btnID.setSensitive(true)
-    # args.btnDetail.label= "AnonSurf is running"
-    args.lDetails.setText("AnonSurf is running")
-    args.btnStatus.setSensitive(true)
-    args.imgStatus.setFromIconName("security-high", 6) # TODO check actual status
   else:
+    if myStatus.isAnonSurfService == -1:
+      args.lDetails.setText("Start AnonSurf failed") # Fix me
+      args.imgStatus.setFromIconName("security-low", 6)
+    else:
+      args.lDetails.setText("AnonSurf is not running")
+      args.imgStatus.setFromIconName("security-medium", 6)
     args.btnRun.label = "Start"
     args.btnID.setSensitive(false)
-    # args.btnDetail.label= "AnonSurf is not running"
-    args.lDetails.setText("AnonSurf is not running")
     args.btnStatus.setSensitive(false)
-    args.imgStatus.setFromIconName("security-medium", 6) # TODO check actual status

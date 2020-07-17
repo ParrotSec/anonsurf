@@ -4,6 +4,7 @@ import gui / actions / [cores, toolbar, details, refresh]
 import utils / status
 # import system
 # TODO threading for myip
+# TODO better analysis
 
 type
   RefreshObj = ref object
