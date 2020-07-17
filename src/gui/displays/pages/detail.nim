@@ -2,7 +2,7 @@ import gintro / gtk
 # import .. / .. / actions / cores
 
 
-proc makeBottomBarForDetail(bBack: Button): Box =
+proc makeBottomBarForDetail(bBack, bRestart: Button): Box =
   #[
     Display bottom bar that has btnExit and btnBack
   ]#
@@ -11,6 +11,7 @@ proc makeBottomBarForDetail(bBack: Button): Box =
     # btnExit = newButton("Exit")
   
   boxBottomBar.add(bBack)
+  boxBottomBar.packEnd(bRestart, false, true, 3)
 
   # btnExit.connect("clicked", onclickExit)
   # boxBottomBar.packEnd(btnExit, false, true, 3)
@@ -18,21 +19,23 @@ proc makeBottomBarForDetail(bBack: Button): Box =
   return boxBottomBar
 
 
-proc makeServiceFrame(labelAnon, labelTor, labelDNS: Label, btnRestart: Button): Frame =
+proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label): Frame =
   let
-    areaServices = newBox(Orientation.horizontal, 3)
-    boxDetail = newBox(Orientation.vertical, 3)
+    areaServices = newBox(Orientation.vertical, 3)
+    # boxDetail = newBox(Orientation.vertical, 3)
     frameServices = newFrame()
   
-  labelAnon.setXalign(0.0)
-  labelTor.setXalign(0.0)
+  labelServices.setXalign(0.0)
+  labelPorts.setXalign(0.0)
   labelDNS.setXalign(0.0)
-  boxDetail.add(labelAnon)
-  boxDetail.add(labelTor)
-  boxDetail.add(labelDNS)
+  # boxDetail.add(labelAnon)
+  # boxDetail.add(labelTor)
+  # boxDetail.add(labelDNS)
 
-  areaServices.add(boxDetail)
-  areaServices.packEnd(btnRestart, false, true, 3)
+  # areaServices.add(boxDetail)
+  areaServices.add(labelServices)
+  areaServices.add(labelPorts)
+  areaServices.add(labelDNS)
   
   frameServices.add(areaServices)
 
@@ -59,13 +62,13 @@ proc makeBootFrame(labelBoot: Label, btnBoot: Button, imgBoot: Image): Frame =
 
 
 proc makeServiceDetails(
-  labelAnon, labelTor, labelDNS, labelBoot: Label,
-  btnBoot, btnRestart: Button, imgBoot: Image): Box =
+  labelServices, labelPorts, labelDNS, labelBoot: Label,
+  btnBoot: Button, imgBoot: Image): Box =
   #[
     Display information about all services
   ]#
   let
-    areaService = makeServiceFrame(labelAnon, labelTor, labelDNS, btnRestart)
+    areaService = makeServiceFrame(labelServices, labelPorts, labelDNS)
     areaBoot = makeBootFrame(labelBoot, btnBoot, imgBoot)
 
   let
@@ -78,7 +81,7 @@ proc makeServiceDetails(
 
 
 proc createDetailWidget*(
-  labelAnon, labelTor, labelDNS, labelBoot: Label,
+  labelServices, labelPorts, labelDNS, labelBoot: Label,
   btnBoot, btnBack, btnRestart: Button,
   imgBoot: Image,
   ): Box =
@@ -87,10 +90,10 @@ proc createDetailWidget*(
   ]#
   let
     boxServices = makeServiceDetails(
-      labelAnon, labelTor, labelDNS, labelBoot, btnBoot, btnRestart, imgBoot
+      labelServices, labelPorts, labelDNS, labelBoot, btnBoot, imgBoot
     )
     boxDetailWidget = newBox(Orientation.vertical, 3)
-    boxBottomBar = makeBottomBarForDetail(btnBack)
+    boxBottomBar = makeBottomBarForDetail(btnBack, btnRestart)
   
   boxDetailWidget.add(boxServices)
   boxDetailWidget.packEnd(boxBottomBar, false, true, 3)

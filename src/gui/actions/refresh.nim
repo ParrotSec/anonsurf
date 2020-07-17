@@ -47,10 +47,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
       args.lblPorts.setText("Ports: Parse torrc failed")
     elif not myPorts.isControlPort and not myPorts.isSocksPort and
       not myPorts.isTransPort:
-      if not myPorts.isDNSPort:
-        args.lblPorts.setText("Ports: Doesn't open") # FIXME
-      else:
-        args.lblPorts.setText("Ports: Tor Ports failed") # FIXME
+      args.lblPorts.setText("Ports: Tor Ports failed") # FIXME
     elif myPorts.isControlPort and myPorts.isTransPort and
       myPorts.isSocksPort and myPorts.isDNSPort:
         args.lblPorts.setText("Ports: Activated")
@@ -69,7 +66,12 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
   # Update DNS status
   let dns = dnsStatusCheck()
   if dns == 0:
-    args.lblDns.setText("DNS: Tor") # FIXME
+    if myPorts.isReadError:
+      args.lblDns.setText("DNS: Read config failed") # Fixme
+    elif myPorts.isDNSPort:
+      args.lblDns.setText("DNS: Tor") # FIXME
+    else:
+      args.lblDns.setText("DNS: Port failed") # FIX ME
   elif dns == 1:
     args.lblDns.setText("DNS: LocalHost")
   elif dns == -2:
