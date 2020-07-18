@@ -11,7 +11,7 @@ proc onClickAbout*(b: Button) =
   discard dlgAbout.setIconFromFile("/usr/share/icons/anonsurf.png")
   dlgAbout.setLogoIconName("security-high")
   dlgAbout.setProgramName("AnonSurf")
-  dlgAbout.setVersion("2.13.9")
+  dlgAbout.setVersion("3.0.0")
   # dlgAbout.setArtists([]) # Artwork by
   # dlgAbout.setDocumenters([]) # Documented by
   # dlgAbout.setTranslatorCredits([]) # Translated by
