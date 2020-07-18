@@ -18,7 +18,10 @@ proc onClickAbout*(b: Button) =
   dlgAbout.setLogo(imgLogo)
   dlgAbout.setProgramName("AnonSurf")
   dlgAbout.setVersion("3.0.0")
-  # dlgAbout.setArtists([]) # Artwork by
+  dlgAbout.setArtists([
+    "Federica \"marafed\" Marasà",
+    "Manuel \"Serverket\" Hernandez",
+  ]) # Artwork by
   # dlgAbout.setDocumenters([]) # Documented by
   # dlgAbout.setTranslatorCredits([]) # Translated by
   dlgAbout.setAuthors([
