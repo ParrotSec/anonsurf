@@ -1,5 +1,6 @@
 import gintro / [gtk, glib, gobject]
 import gui / displays / pages / [main, detail]
+import gui / displays / images
 import gui / actions / [cores, toolbar, details, refresh]
 import utils / status
 # import system
@@ -41,7 +42,7 @@ proc createArea(boxMainWindow: Box) =
     btnShowStatus = newButton("Tor Stats")
     btnChangeID = newButton("Change\nIdentity")
     btnCheckIP = newButton("My IP")
-    imgStatus = newImageFromIconName("security-medium", 6)
+    imgStatus = newImageFromPixbuf(surfImages.imgSecMed)
     mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowDetails, btnShowStatus, btnChangeID, btnCheckIP)
 
   btnStart.connect("clicked", onClickRun)

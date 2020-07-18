@@ -1,6 +1,7 @@
 import gintro / gtk
 import .. / .. / utils / [status, dnsutils]
 import toolbar
+import .. / displays / images
 
 type
   MainObjs* = ref object
@@ -27,11 +28,13 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
   if myStatus.isAnonSurfBoot:
     args.btnBoot.label = "Disable"
     args.lblBoot.setLabel("Enabled at boot")
-    args.imgBoot.setFromIconName("security-high", 6)
+    # args.imgBoot.setFromIconName("security-high", 6)
+    args.imgBoot.setFromPixbuf(surfImages.imgBootOn)
   else:
     args.btnBoot.label = "Enable"
     args.lblBoot.setLabel("Not Enabled at boot")
-    args.imgBoot.setFromIconName("security-low", 6)
+    # args.imgBoot.setFromIconName("security-low", 6)
+    args.imgBoot.setFromPixbuf(surfImages.imgBootOff)
   
   # Check current status of daemon services and control ports
   if myStatus.isAnonSurfService == 1:
@@ -101,18 +104,22 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
         args.btnStatus.setSensitive(true)
         # Check DNS
         if myPorts.isDNSPort:
-          args.imgStatus.setFromIconName("security-high", 6)
+          # args.imgStatus.setFromIconName("security-high", 6)
+          args.imgStatus.setFromPixBuf(surfImages.imgSecHigh)
           args.lDetails.setText("AnonSurf is running") # Fix me
         else:
-          args.imgStatus.setFromIconName("security-medium", 6)
+          # args.imgStatus.setFromIconName("security-medium", 6)
+          args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
           args.lDetails.setText("Error with DNS port") # Fix me
       else:
-        args.imgStatus.setFromIconName("security-low", 6)
+        # args.imgStatus.setFromIconName("security-low", 6)
+        args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
         args.lDetails.setText("Error with Tor ports") # Fix me
         args.btnID.setSensitive(false)
         args.btnStatus.setSensitive(false)
     else:
-      args.imgStatus.setFromIconName("security-low", 6)
+      # args.imgStatus.setFromIconName("security-low", 6)
+      args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
       args.lDetails.setText("Tor service doesn't start") # Fix me
       args.btnID.setSensitive(false)
       args.btnStatus.setSensitive(false)
@@ -121,10 +128,12 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
   else:
     if myStatus.isAnonSurfService == -1:
       args.lDetails.setText("AnonSurf start failed") # Fix me
-      args.imgStatus.setFromIconName("security-low", 6)
+      # args.imgStatus.setFromIconName("security-low", 6)
+      args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
     else:
       args.lDetails.setText("AnonSurf is not running")
-      args.imgStatus.setFromIconName("security-medium", 6)
+      # args.imgStatus.setFromIconName("security-medium", 6)
+      args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
     args.btnRun.label = "Start"
     args.btnID.setSensitive(false)
     args.btnStatus.setSensitive(false)
