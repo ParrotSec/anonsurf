@@ -31,7 +31,7 @@ install:
 	# Add custom binaries from nim sources
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp src/dnstool $(DESTDIR)/usr/bin/
-	cp src/dnstool $(DESTDIR)/usr/bin/anonsurf-gtk
+	cp src/AnonSurfGTK $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp src/make_torrc $(DESTDIR)/usr/share/anonsurf/make-torrc
 
 	# Add system units
