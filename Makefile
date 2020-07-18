@@ -6,6 +6,7 @@ install:
 	#nim c src/AnonSurfGUI.nim
 	nim c --nimcache:/tmp src/dnstool.nim
 	nim c --nimcache:/tmp src/make_torrc.nim
+	nim c --nimcache:/tmp src/AnonSurfGTK.nim
 
 	# Make dest folders for Deb packaging
 	mkdir -p $(DESTDIR)/etc/anonsurf/
@@ -30,6 +31,7 @@ install:
 	# Add custom binaries from nim sources
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp src/dnstool $(DESTDIR)/usr/bin/
+	cp src/dnstool $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp src/make_torrc $(DESTDIR)/usr/share/anonsurf/make-torrc
 
 	# Add system units
@@ -45,6 +47,7 @@ install:
 	# Init permission for files
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
+	chmod 775 $(DESTDIR)/usr/bin/anonsurf-gtk
 	chmod 775 $(DESTDIR)/etc/anonsurf/anondaemon
 	chmod 775 $(DESTDIR)/usr/bin/dnstool
 	chmod 775 $(DESTDIR)/usr/share/anonsurf/make-torrc
