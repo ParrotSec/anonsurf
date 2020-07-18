@@ -40,9 +40,9 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
     if myStatus.isTorService == 1:
       args.lblServices.setText("Services: Activated")
     elif myStatus.isTorService == 0:
-      args.lblServices.setText("Services: Tor is Inactivated")
+      args.lblServices.setText("Services: Tor is Deactivated")
     elif myStatus.isTorService == -1:
-      args.lblServices.setText("Services: Start Tor failed")
+      args.lblServices.setText("Services: Tor failed to start")
     # Check status of Port
     if myPorts.isReadError:
       args.lblPorts.setText("Ports: Parse torrc failed")
@@ -54,22 +54,22 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
         args.lblPorts.setText("Ports: Activated")
     else:
       # TODO complex check here
-      args.lblPorts.setText("Ports: Some port are not opened") # Fix Me
+      args.lblPorts.setText("Ports: Some ports didn't open") # Fix Me
 
   elif myStatus.isAnonsurfSErvice == 0:
     args.btnRestart.setSensitive(false)
-    args.lblServices.setText("Services: Inactivated")
-    args.lblPorts.setText("Ports: Inactivated")
+    args.lblServices.setText("Services: Deactivated")
+    args.lblPorts.setText("Ports: Deactivated")
   else:
     args.btnRestart.setSensitive(false)
-    args.lblServices.setText("Services: Start AnonSurf failed")
-    args.lblPorts.setText("Ports: Inactivated")
+    args.lblServices.setText("Services: AnonSurf failed to start")
+    args.lblPorts.setText("Ports: Deactivated")
 
   # Update DNS status
   let dns = dnsStatusCheck()
   if dns == 0:
     if myPorts.isReadError:
-      args.lblDns.setText("DNS: Read config failed") # Fixme
+      args.lblDns.setText("DNS: Config read failed") # Fixme
     elif myPorts.isDNSPort:
       args.lblDns.setText("DNS: Tor") # FIXME
     else:
@@ -108,7 +108,7 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
           args.lDetails.setText("Error with DNS port") # Fix me
       else:
         args.imgStatus.setFromIconName("security-low", 6)
-        args.lDetails.setText("Error with tor ports") # Fix me
+        args.lDetails.setText("Error with Tor ports") # Fix me
         args.btnID.setSensitive(false)
         args.btnStatus.setSensitive(false)
     else:
@@ -120,7 +120,7 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
     args.btnRun.label = "Stop"
   else:
     if myStatus.isAnonSurfService == -1:
-      args.lDetails.setText("Start AnonSurf failed") # Fix me
+      args.lDetails.setText("AnonSurf start failed") # Fix me
       args.imgStatus.setFromIconName("security-low", 6)
     else:
       args.lDetails.setText("AnonSurf is not running")

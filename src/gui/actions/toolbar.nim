@@ -72,7 +72,7 @@ proc onClickChangeID*(b: Button) =
     # Check authentication status
     if recvData[0] != "250 OK\c":
       sendNotify(
-        "Change Identify Error",
+        "Identity Change Error",
         recvData[0],
         "error"
       )
@@ -80,20 +80,20 @@ proc onClickChangeID*(b: Button) =
     # Check command status
     if recvData[1] != "250 OK\c":
       sendNotify(
-        "Change Identify Error",
+        "Identity Change Error",
         recvData[1],
         "error"
       )
       return
     # Success. Show okay
     sendNotify(
-      "Change Identify Success",
-      "You have a new identify",
+      "Identity Change Success",
+      "You have a new identity",
       "security-high"
     )
   else:
     sendNotify(
-      "Change Identify Error",
+      "Identity Change Error",
       "Can parse settings",
       "error"
     )
