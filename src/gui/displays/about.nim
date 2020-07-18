@@ -1,15 +1,21 @@
-import gintro / gtk
+import gintro / [gtk, gdkpixbuf]
+import system
 
 
 proc onClickAbout*(b: Button) =
   #[
     Show help for main and credit in new dialog
   ]#
+  const readImgLogo = staticRead("../../../icons/anon-about.svg")
   let
     dlgAbout = newAboutDialog()
+    bufLoader = newPixbufLoader()
   
-  discard dlgAbout.setIconFromFile("/usr/share/icons/anonsurf.png")
-  dlgAbout.setLogoIconName("security-high")
+  discard bufLoader.write(readImgLogo)
+  discard bufLoader.close()
+  let imgLogo: Pixbuf = bufLoader.getPixbuf()
+  # discard dlgAbout.setIconFromFile("/usr/share/icons/anonsurf.png")
+  dlgAbout.setLogo(imgLogo)
   dlgAbout.setProgramName("AnonSurf")
   dlgAbout.setVersion("3.0.0")
   # dlgAbout.setArtists([]) # Artwork by
