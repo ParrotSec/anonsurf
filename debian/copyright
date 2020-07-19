@@ -34,6 +34,22 @@ Copyright:
   2020, John "RightToPrivacy" Meagher <righttoprivacy@tutanota.com>
 License: GPL-3.0+
 
+Files:
+  icons/boot-on.svg
+  icons/sec-low.svg
+  icons/sec-warn.svg
+  icons/boot-off.svg
+  icons/sec-high.svg
+  icons/sec-med.svg
+Copyright:
+  2015 - 2020, David "mcder3" Linares
+License: LGPL-3.0
+
+Files:
+  icons/anon-about.svg
+Copyright: 2020, Federica "marafed" Marasà
+License: GPL-3.0+
+
 License: GPL-3.0+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

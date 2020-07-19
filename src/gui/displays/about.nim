@@ -20,7 +20,8 @@ proc onClickAbout*(b: Button) =
   dlgAbout.setVersion("3.0.0")
   dlgAbout.setArtists([
     "Federica \"marafed\" Marasà",
-    "Manuel \"Serverket\" Hernandez",
+    # "Manuel \"Serverket\" Hernandez",
+    "David \"mcder3\" Linares",
   ]) # Artwork by
   # dlgAbout.setDocumenters([]) # Documented by
   # dlgAbout.setTranslatorCredits([]) # Translated by
@@ -29,6 +30,7 @@ proc onClickAbout*(b: Button) =
     "Nong Hoang \"DmKnght\" Tu",
     "Lisetta \"Sheireen\" Ferrero",
     "Francesco \"Mibofra\" Bonanno",
+    "Manuel \"Serverket\" Hernandez",
   ])
   dlgAbout.setComments("Anonymous Toolkit for Parrot OS")
   dlgAbout.setCopyright(
@@ -36,7 +38,7 @@ proc onClickAbout*(b: Button) =
   )
   dlgAbout.setLicenseType(gpl_3_0)
   dlgAbout.setWebsite("https://nest.parrot.sh/packages/tools/anonsurf")
-  dlgAbout.setWebsiteLabel("Source")
+  dlgAbout.setWebsiteLabel("Gitlab Source")
 
   discard dlgAbout.run()
   dlgAbout.destroy()
