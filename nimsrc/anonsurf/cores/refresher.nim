@@ -1,7 +1,8 @@
 import gintro / gtk
-import .. / .. / utils / [status, dnsutils]
-import toolbar
-import .. / displays / images
+import .. / .. / utils / [services, dnsutils]
+import status
+import ../ actions / actMainPage
+import images
 
 type
   MainObjs* = ref object

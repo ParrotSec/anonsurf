@@ -1,4 +1,4 @@
-import utils / generator
+import .. / utils / generator
 import os
 
 

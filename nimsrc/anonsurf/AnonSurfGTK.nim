@@ -1,9 +1,7 @@
 import gintro / [gtk, glib, gobject]
-import gui / displays / pages / [main, detail]
-import gui / displays / images
-import gui / actions / [cores, toolbar, details, refresh]
-import utils / status
-# import system
+import displays / [detailPage, mainPage]
+import cores / [status, refresher, images]
+import actions / [actDetailPage, actMainPage, gtkClick]
 # TODO better analysis
 
 type

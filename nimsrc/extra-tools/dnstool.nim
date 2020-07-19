@@ -4,7 +4,7 @@
 
 import os
 import net
-import utils / dnsutils
+import .. / utils / dnsutils
 
 const
   openNICAddr ="nameserver 185.121.177.177\nnameserver 169.239.202.202\nnameserver 198.251.90.108\nnameserver 198.251.90.109\nnameserver 198.251.90.110\n"

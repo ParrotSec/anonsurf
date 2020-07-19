@@ -1,6 +1,6 @@
 import gintro / [gtk, gobject]
-import .. / .. / actions / cores
-import .. / about
+import .. / actions / gtkClick
+import about
 
 
 proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: Button): Frame =

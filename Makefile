@@ -4,9 +4,9 @@ clean:
 
 install:
 	#nim c src/AnonSurfGUI.nim
-	nim c --nimcache:/tmp src/dnstool.nim
-	nim c --nimcache:/tmp src/make_torrc.nim
-	nim c --nimcache:/tmp src/AnonSurfGTK.nim
+	nim c --nimcache:/tmp nimsrc/extra-tools/dnstool.nim
+	nim c --nimcache:/tmp nimsrc/extra-tools/make_torrc.nim
+	nim c --nimcache:/tmp nimsrc/anonsurf/AnonSurfGTK.nim
 
 	# Make dest folders for Deb packaging
 	mkdir -p $(DESTDIR)/etc/anonsurf/
@@ -24,15 +24,15 @@ install:
 	cp torrc.base $(DESTDIR)/etc/anonsurf/torrc.base
 
 	# Add core files
-	cp binaries/anonsurf $(DESTDIR)/usr/bin/
+	cp cli/anonsurf $(DESTDIR)/usr/bin/
 	cp -rf launchers/* $(DESTDIR)/usr/share/applications/
 	ln -s /usr/bin/anonsurf $(DESTDIR)/usr/bin/anon
 
-	# Add custom binaries from nim sources
+	# Add custom cli from nim sources
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
-	cp src/dnstool $(DESTDIR)/usr/bin/
-	cp src/AnonSurfGTK $(DESTDIR)/usr/bin/anonsurf-gtk
-	cp src/make_torrc $(DESTDIR)/usr/share/anonsurf/make-torrc
+	cp nimsrc/extra-tools/dnstool $(DESTDIR)/usr/bin/
+	cp nimsrc/anonsurf/AnonSurfGTK $(DESTDIR)/usr/bin/anonsurf-gtk
+	cp nimsrc/extra-tools/make_torrc $(DESTDIR)/usr/share/anonsurf/make-torrc
 
 	# Add system units
 	cp daemon/anondaemon $(DESTDIR)/etc/anonsurf/

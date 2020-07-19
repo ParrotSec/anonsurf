@@ -1,5 +1,5 @@
 import gintro / [gtk, glib]
-import .. / .. / modules / myip
+import .. / modules / myip
 import .. / displays / noti
 import strutils
 import net

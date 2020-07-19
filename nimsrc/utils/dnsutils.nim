@@ -1,7 +1,7 @@
 import osproc
 import os
 import strutils
-import status
+import services
 
 
 proc checkDNSServers(path: string): int =
@@ -82,7 +82,7 @@ proc dnsStatusCheck*(): int =
       1. If anonsurf is running, return AnonSurf and disable buttons
       2. If anonsurf is not running, return localhost, red text
     ]#
-    let anonsurfStatus = getStatusService("anonsurfd")
+    let anonsurfStatus = getServStatus("anonsurfd")
     if anonsurfStatus == 1:
       return 0
     else:
