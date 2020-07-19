@@ -89,7 +89,7 @@ function checkuid {
 	# Make sure only root can run this script
 	ME=$(whoami | tr [:lower:] [:upper:])
 	if [ $(id -u) -ne 0 ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED $ME R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
+		echo -e "\n$GREEN[$RED!$GREEN] ${RED}${ME} R U DRUNK?? This script must be run as root$RESETCOLOR\n" >&2
 		exit 1
 	fi
 }
@@ -97,16 +97,16 @@ function checkuid {
 
 function start {
 	# Start Tor and then AnonSurf daemon
-	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Starting anonymous mode:$RESETCOLOR\n"
+	echo -e "\n$GREEN[${BLUE}i${GREEN}]${BLUE} Starting anonymous mode:$RESETCOLOR\n"
 
-	echo -e "$GREEN *$BLUE Generating AnonSurf session"
+	echo -e "  ${GREEN}*${BLUE} Generating AnonSurf session"
 	/usr/sbin/service anonsurfd start
 
-	echo -e "$GREEN *$BLUE Starting tor service"
+	echo -e "  ${GREEN}*${BLUE} Starting tor service"
 	# /usr/sbin/service tor start
 
-	echo -e "$GREEN *$BLUE All traffic was redirected throught Tor\n"
-	echo -e "$GREEN[$BLUE i$GREEN ]$BLUE You are under AnonSurf tunnel$RESETCOLOR\n"
+	echo -e "  ${GREEN}*${BLUE} All traffic was redirected throught Tor\n"
+	echo -e "$GREEN[${BLUE}i${GREEN}]${BLUE} You are under AnonSurf tunnel$RESETCOLOR\n"
 	notify "Global Anonymous Proxy Activated" "security-high"
 	# sleep 1
 }
@@ -114,12 +114,12 @@ function start {
 
 function stop {
 	# Stop Tor and AnonSurf daemon
-	echo -e "\n$GREEN[$BLUE i$GREEN ]$BLUE Stopping anonymous mode:$RESETCOLOR\n"
+	echo -e "\n$GREEN[${BLUE}i${GREEN}]${BLUE} Stopping anonymous mode:$RESETCOLOR\n"
 
 	# /usr/sbin/service tor stop
 	/usr/sbin/service anonsurfd stop
 
-	echo -e " $GREEN*$BLUE Anonymous mode stopped\n"
+	echo -e "  $GREEN*${BLUE} Anonymous mode stopped\n"
 	notify "Global Anonymous Proxy Closed - Stop dancing :(" "security-low"
 	# sleep 1
 }
@@ -130,9 +130,9 @@ function status-boot {
 	# Systemd makes a symlink to start it on boot
 	# we simple check symlink instead of calling sysctl to checks
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is$GREEN enabled$RED!$RESETCOLOR\n"
+		echo -e "\n$GREEN[$RED!$GREEN] ${BLUE}AnonSurf is ${GREEN}enabled${BLUE}}!$RESETCOLOR\n"
 	else
-		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is disabled!$RESETCOLOR\n"
+		echo -e "\n$GREEN[$RED!$GREEN] ${BLUE}AnonSurf is ${RED}disabled${BLUE}!$RESETCOLOR\n"
 	fi
 }
 
@@ -147,7 +147,7 @@ function enable-boot {
 
 	# Check if symlink doesn't exists -> we enable it
 	if [ -f /etc/systemd/system/default.target.wants/anonsurfd.service ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf already enabled!$RESETCOLOR\n"
+		echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is already enabled!$RESETCOLOR\n"
 	else
 		/usr/bin/systemctl enable anonsurfd;
 		notify "AnonSurf at boot is enabled" "security-high"
@@ -163,7 +163,7 @@ function disable-boot {
 		/usr/bin/systemctl disable anonsurfd;
 		notify "AnonSurf at boot is disabled" "security-low"
 	else
-		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf wasn't enabled. Nothing to disable!$RESETCOLOR\n"
+		echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf wasn't enabled. Nothing to disable!$RESETCOLOR\n"
 	fi
 }
 
@@ -172,7 +172,7 @@ function change {
 	# Change Tor node automatically
 	# Use Tor control port
 	if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
-		echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't get new ID!$RESETCOLOR\n" >&2
+		echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running! Can't get new ID!$RESETCOLOR\n" >&2
 	else
 		if [ -f /etc/anonsurf/nyxrc ]; then
 			passwd=`cat /etc/anonsurf/nyxrc | cut -d " " -f 2`
@@ -240,7 +240,7 @@ case "$1" in
 		if [ "$(service anonsurfd status | grep Active | awk '{print $2}')" = "active" ]; then
 			status
 		else
-			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running!$RESETCOLOR\n"
+			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running!$RESETCOLOR\n"
 		fi
 	;;
 	myip|ip)
@@ -257,7 +257,7 @@ case "$1" in
 			# Should restart with anonsurfd
 			# /usr/sbin/service tor restart
 		else
-			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't restart service!$RESETCOLOR\n" >&2
+			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running! Can't restart service!$RESETCOLOR\n" >&2
 		fi
 	;;
 	enable-boot)
