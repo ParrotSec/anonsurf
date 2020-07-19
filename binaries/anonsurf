@@ -217,7 +217,8 @@ case "$1" in
 			start
 		else
 			# TODO check "failed" service here
-			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is running! Can't start service!$RESETCOLOR\n" >&2
+			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is running! Can't start it again!$RESETCOLOR\n" >&2
+			notify "AnonSurf is running! Can't start it again!" "dialog-error"
 		fi
 	;;
 	
@@ -228,7 +229,8 @@ case "$1" in
 			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			stop
 		else
-			echo -e "\n$GREEN[$RED!$GREEN] $RED AnonSurf is not running! Can't stop service!$RESETCOLOR\n" >&2
+			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running! Can't stop nothing!$RESETCOLOR\n" >&2
+			notify "AnonSurf is not running! Can't stop nothing!" "dialog-error"
 		fi
 	;;
 	changeid|change-id|change)
