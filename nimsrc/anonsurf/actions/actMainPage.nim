@@ -35,7 +35,6 @@ proc work() =
   ]#
   let ipAddr = checkIPFromTorServer()
   doCheckIP(ipAddr)
-  worker.joinThread()
 
 
 proc onClickCheckIP*(b: Button) =
@@ -45,6 +44,7 @@ proc onClickCheckIP*(b: Button) =
   ]#
 
   createThread(worker, work)
+  worker.joinThread()
 
 
 proc onClickRun*(b: Button) =
