@@ -20,6 +20,7 @@ ReadOnlyDirectories=/
 ReadWritePaths=/etc/resolv.conf
 ReadWritePaths=/etc/resolv.conf.bak
 ReadWritePaths=/etc/anonsurf/torrc.base
+ReadWritePaths=/etc/anonsurf/nyxrc
 ReadWritePaths=/etc/tor/torrc
 ReadWritePaths=/usr/lib/anonsurf/make-torrc
 
