@@ -11,7 +11,7 @@ install:
 	# Make dest folders for Deb packaging
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/etc/tor/
-	mkdir -p $(DESTDIR)/usr/share/anonsurf/
+	mkdir -p $(DESTDIR)/usr/lib/anonsurf/
 	# mkdir -p $(DESTDIR)/etc/init.d/
 	mkdir -p $(DESTDIR)/usr/bin/
 	mkdir -p $(DESTDIR)/usr/share/applications/
@@ -32,7 +32,7 @@ install:
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp nimsrc/extra-tools/dnstool $(DESTDIR)/usr/bin/
 	cp nimsrc/anonsurf/AnonSurfGTK $(DESTDIR)/usr/bin/anonsurf-gtk
-	cp nimsrc/extra-tools/make_torrc $(DESTDIR)/usr/share/anonsurf/make-torrc
+	cp nimsrc/extra-tools/make_torrc $(DESTDIR)/usr/lib/anonsurf/make-torrc
 
 	# Add system units
 	cp daemon/anondaemon $(DESTDIR)/etc/anonsurf/
@@ -50,7 +50,7 @@ install:
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf-gtk
 	chmod 775 $(DESTDIR)/etc/anonsurf/anondaemon
 	chmod 775 $(DESTDIR)/usr/bin/dnstool
-	chmod 775 $(DESTDIR)/usr/share/anonsurf/make-torrc
+	chmod 775 $(DESTDIR)/usr/lib/anonsurf/make-torrc
 
 	chmod 644 $(DESTDIR)/etc/anonsurf/onion.pac
 	chmod 644 $(DESTDIR)/etc/anonsurf/torrc.base
