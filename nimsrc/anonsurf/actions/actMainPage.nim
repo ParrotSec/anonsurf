@@ -5,6 +5,7 @@ import strutils
 import net
 import strscans
 import system
+import os
 
 var worker*: system.Thread[void]
 
@@ -64,45 +65,53 @@ proc onClickChangeID*(b: Button) =
     2. Get ControlPort from Torrc
     3. Send authentication request + NewNYM command
   ]#
-  var
-    tmp, passwd: string
-    sock = net.newSocket()
-  
-  if scanf(readFile("/etc/anonsurf/nyxrc"), "$w $w", tmp, passwd):
-    let controlPort = getTorrcPorts().controlPort
-    # sock.connect("127.0.0.1", Port(9051))
-    if ":" in controlPort:
-      sock.connect("127.0.0.1", Port(parseInt(controlPort.split(":")[1])))
+  let conf = "/etc/anonsurf/nyxrc"
+  if fileExists(conf):
+    var
+      tmp, passwd: string
+      sock = net.newSocket()
+    
+    if scanf(readFile(conf), "$w $w", tmp, passwd):
+      let controlPort = getTorrcPorts().controlPort
+      # sock.connect("127.0.0.1", Port(9051))
+      if ":" in controlPort:
+        sock.connect("127.0.0.1", Port(parseInt(controlPort.split(":")[1])))
+      else:
+        sock.connect("127.0.0.1", Port(parseInt(controlPort)))
+      sock.send("authenticate \"" & passwd & "\"\nsignal newnym\nquit\n")
+      let recvData = sock.recv(256).split("\n")
+      sock.close()
+      # Check authentication status
+      if recvData[0] != "250 OK\c":
+        sendNotify(
+          "Identity Change Error",
+          recvData[0],
+          "error"
+        )
+        return
+      # Check command status
+      if recvData[1] != "250 OK\c":
+        sendNotify(
+          "Identity Change Error",
+          recvData[1],
+          "error"
+        )
+        return
+      # Success. Show okay
+      sendNotify(
+        "Identity Change Success",
+        "You have a new identity",
+        "security-high"
+      )
     else:
-      sock.connect("127.0.0.1", Port(parseInt(controlPort)))
-    sock.send("authenticate \"" & passwd & "\"\nsignal newnym\nquit\n")
-    let recvData = sock.recv(256).split("\n")
-    sock.close()
-    # Check authentication status
-    if recvData[0] != "250 OK\c":
       sendNotify(
         "Identity Change Error",
-        recvData[0],
+        "Can parse settings",
         "error"
       )
-      return
-    # Check command status
-    if recvData[1] != "250 OK\c":
-      sendNotify(
-        "Identity Change Error",
-        recvData[1],
-        "error"
-      )
-      return
-    # Success. Show okay
-    sendNotify(
-      "Identity Change Success",
-      "You have a new identity",
-      "security-high"
-    )
   else:
     sendNotify(
-      "Identity Change Error",
-      "Can parse settings",
-      "error"
-    )
+        "Identity Change Error",
+        "File not found",
+        "error"
+      )
