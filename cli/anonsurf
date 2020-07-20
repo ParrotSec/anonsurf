@@ -221,14 +221,20 @@ case "$1" in
 	start)
 	# Only start if anonsurfd is not running
 		checkuid
-		if [ ! "$(systemctl is-active anonsurfd)" = "active" ]; then
+		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
+			notify "AnonSurf is running! Can't start it again!" "dialog-error"
+			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is running! Can't start it again!$RESETCOLOR\n" >&2
+		else
 			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			start
-		else
-			# TODO check "failed" service here
-			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is running! Can't start it again!$RESETCOLOR\n" >&2
-			notify "AnonSurf is running! Can't start it again!" "dialog-error"
 		fi
+		# if [ ! "$(systemctl is-active anonsurfd)" = "active" ]; then
+		# 	zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
+		# 	start
+		# elif [ "$(systemctl is-active anonsurfd)" = "active" ]; then
+		# 	echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is running! Can't start it again!$RESETCOLOR\n" >&2
+		# 	notify "AnonSurf is running! Can't start it again!" "dialog-error"
+		# fi
 	;;
 	
 	stop)
@@ -238,15 +244,15 @@ case "$1" in
 			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			stop
 		else
-			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running! Can't stop nothing!$RESETCOLOR\n" >&2
 			notify "AnonSurf is not running! Can't stop nothing!" "dialog-error"
+			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running! Can't stop nothing!$RESETCOLOR\n" >&2
 		fi
 	;;
 	changeid|change-id|change)
 		change
 	;;
 	status)
-		if [ "$(service anonsurfd status | grep Active | awk '{print $2}')" = "active" ]; then
+		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
 			status
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running!$RESETCOLOR\n"
@@ -261,7 +267,7 @@ case "$1" in
 	restart)
 		# Restart if the daemon is running onnly
 		checkuid
-		if [ "$(service anonsurfd status | grep Active | awk '{print $2}')" = "active" ]; then
+		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
 			/usr/sbin/service anonsurfd restart
 			# Should restart with anonsurfd
 			# /usr/sbin/service tor restart
