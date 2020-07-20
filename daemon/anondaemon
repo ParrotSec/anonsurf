@@ -170,14 +170,14 @@ function stop {
 case "$1" in
 	start)
 		# disableService
-		/usr/share/anonsurf/make-torrc
+		/usr/lib/anonsurf/make-torrc
 		start
 		/usr/sbin/service tor start
 	;;
 	stop)
 		stop
 		# enableService
-		/usr/share/anonsurf/make-torrc restore
+		/usr/lib/anonsurf/make-torrc restore
 	;;
 	restart)
 		$0 stop
