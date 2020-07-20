@@ -22,6 +22,7 @@ ReadWritePaths=/etc/resolv.conf.bak
 ReadWritePaths=/etc/anonsurf/torrc.base
 ReadWritePaths=/etc/anonsurf/nyxrc
 ReadWritePaths=/etc/tor/torrc
+ReadWritePaths=/etc/tor/torrc.bak
 ReadWritePaths=/usr/lib/anonsurf/make-torrc
 
 [Install]
