@@ -13,7 +13,7 @@ Homepage: https://www.parrotsec.org/
 Package: anonsurf
 Architecture: any
 Priority: optional
-Depends: bash (>= 5.0), iptables, nftables, tor, libc6
+Depends: bash (>= 5.0), iptables, nftables, tor, libc6, libnim-gintro-dev
 Recommends: libnotify-bin, i2p, onioncircuits, connect-proxy, onionshare, torsocks, tor-geoipdb, parrot-menu, bleachbit
 Suggests: gnunet-gtk, gnunet, vidalia
 Description: Anonymization toolkit for Parrot Security OS
