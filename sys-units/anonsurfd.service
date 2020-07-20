@@ -9,17 +9,28 @@ ExecReload=/usr/lib/anonsurf/anondaemon restart
 ExecStop=/usr/lib/anonsurf/anondaemon stop
 RemainAfterExit=yes
 
-ConfigurationDirectory=/etc/
-LogsDirectory=/var/log/
-
 # Hardening
 NoNewPrivileges=yes
 PrivateTmp=yes
 PrivateDevices=yes
 ProtectHome=yes
-ProtectSystem=full
+ProtectSystem=strict
 ReadOnlyDirectories=/
+
+# White list
 ReadOnlyPaths=/etc/anonsurf/torrc.base
+
+# Whitelist for make-torrc
+ReadWritePaths=/etc/tor/torrc
+ReadWritePaths=/etc/tor/torrc.bak
+ReadWritePaths=/etc/anonsurf/nyxrc
+
+# Whitelist for dnstool
+ReadWritePaths=/etc/resolv.conf
+ReadWritePaths=/etc/resolv.conf.bak
+ReadWritePaths=/etc/resolvconf/resolv.conf.d/
+ReadWritePaths=/run/resolvconf/
+#ReadWritePaths=/etc/network/iptables.rules
 
 [Install]
 WantedBy=default.target
