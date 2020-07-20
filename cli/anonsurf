@@ -173,6 +173,7 @@ function change {
 	# Use Tor control port
 	if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
 		echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running! Can't get new ID!$RESETCOLOR\n" >&2
+		notify "AnonSurf is not running! Can't change your ID!" "dialog-error"
 	else
 		if [ -f /etc/anonsurf/nyxrc ]; then
 			passwd=`cat /etc/anonsurf/nyxrc | cut -d " " -f 2`
