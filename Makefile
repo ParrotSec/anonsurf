@@ -35,7 +35,7 @@ install:
 	cp nimsrc/extra-tools/make_torrc $(DESTDIR)/usr/lib/anonsurf/make-torrc
 
 	# Add system units
-	cp daemon/anondaemon $(DESTDIR)/etc/anonsurf/
+	cp daemon/anondaemon $(DESTDIR)/usr/lib/anonsurf/
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anontor.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anonsurfd $(DESTDIR)/etc/init.d/
@@ -48,7 +48,7 @@ install:
 	chown root:root $(DESTDIR)/usr/bin/anonsurf
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf
 	chmod 775 $(DESTDIR)/usr/bin/anonsurf-gtk
-	chmod 775 $(DESTDIR)/etc/anonsurf/anondaemon
+	chmod 775 $(DESTDIR)/usr/lib/anonsurf/anondaemon
 	chmod 775 $(DESTDIR)/usr/bin/dnstool
 	chmod 775 $(DESTDIR)/usr/lib/anonsurf/make-torrc
 

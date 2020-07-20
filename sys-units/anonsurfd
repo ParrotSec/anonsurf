@@ -39,13 +39,13 @@
 
 case "$1" in
 	start)
-		/etc/anonsurf/anondaemon start
+		/usr/lib/anonsurf/anondaemon start
 	;;
 	stop)
-		/etc/anonsurf/anondaemon stop
+		/usr/lib/anonsurf/anondaemon stop
 	;;
 	restart)
-		/etc/anonsurf/anondaemon restart
+		/usr/lib/anonsurf/anondaemon restart
 	;;
   # TODO do the status
 	*)
