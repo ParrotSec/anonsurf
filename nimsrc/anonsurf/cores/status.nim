@@ -1,4 +1,4 @@
-import .. / modules / [parser, encoder]
+import .. / modules / [torPorts, encoder]
 import strutils
 import .. / .. / utils / services
 
@@ -38,6 +38,11 @@ proc getSurfStatus*(): Status =
 
 
 proc getStatusPorts*(): PortStatus =
+  #[
+    Get current status of all tor Ports
+    1. Get ports from torrc. We call function here
+      just in case Torrc is changed or tor is restarted
+  ]#
   let
     openedAddr = toNixHex(getTorrcPorts())
 

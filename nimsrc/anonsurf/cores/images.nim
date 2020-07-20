@@ -1,5 +1,9 @@
 import gintro / gdkpixbuf
 
+#[
+  Load image from icons make to "embedded" icons
+]#
+
 type
   AnonImgBuf* = object
     imgSecLow*: Pixbuf

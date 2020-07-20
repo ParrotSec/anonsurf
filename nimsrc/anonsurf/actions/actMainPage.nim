@@ -1,5 +1,5 @@
 import gintro / [gtk, glib]
-import .. / modules / myip
+import .. / modules / [myip, torPorts]
 import .. / displays / noti
 import strutils
 import net
@@ -10,7 +10,10 @@ var worker*: system.Thread[void]
 
 
 proc doCheckIP(ipInfo: array[2, string]) =
-  # let ipInfo = checkIPFromTorServer()
+  #[
+    Actual IP check for AnonSurf
+    It parses data from server and show notification
+  ]#
   var iconName: string
   
   # If program has error while getting IP address
@@ -27,8 +30,10 @@ proc doCheckIP(ipInfo: array[2, string]) =
 
 
 proc work() =
+  #[
+    Create backgroud thread to check IP
+  ]#
   let ipAddr = checkIPFromTorServer()
-  # idleAdd(doCheckIP, ipAddr)
   doCheckIP(ipAddr)
   worker.joinThread()
 
@@ -43,29 +48,33 @@ proc onClickCheckIP*(b: Button) =
 
 
 proc onClickRun*(b: Button) =
+  #[
+    Create condition to Start / Stop AnonSurf when click on btn1
+  ]#
   if b.label == "Start":
     discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf start")
-    # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf start"):
-    # # discard execCmd("gksudo /usr/bin/anonsurf start")
-    #   b.label = "Starting"
-    # else:
-    #   discard
   else:
     discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf stop")
-    # discard execCmd("gksudo /usr/bin/anonsurf stop")
-    # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf stop"):
-    #   b.label = "Stopping"
-    # else:
-    #   discard
 
 
 proc onClickChangeID*(b: Button) =
+  #[
+    Use control port to change ID of Tor network
+    1. Read password from nyxrc
+    2. Get ControlPort from Torrc
+    3. Send authentication request + NewNYM command
+  ]#
   var
     tmp, passwd: string
     sock = net.newSocket()
   
   if scanf(readFile("/etc/anonsurf/nyxrc"), "$w $w", tmp, passwd):
-    sock.connect("127.0.0.1", Port(9051))
+    let controlPort = getTorrcPorts().controlPort
+    # sock.connect("127.0.0.1", Port(9051))
+    if ":" in controlPort:
+      sock.connect("127.0.0.1", Port(parseInt(controlPort.split(":")[1])))
+    else:
+      sock.connect("127.0.0.1", Port(parseInt(controlPort)))
     sock.send("authenticate \"" & passwd & "\"\nsignal newnym\nquit\n")
     let recvData = sock.recv(256).split("\n")
     sock.close()

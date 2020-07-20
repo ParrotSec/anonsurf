@@ -8,37 +8,37 @@ proc onClickAbout*(b: Button) =
   ]#
   const readImgLogo = staticRead("../../../icons/anon-about.svg")
   let
-    dlgAbout = newAboutDialog()
+    showAbout = newAboutDialog()
     bufLoader = newPixbufLoader()
   
   discard bufLoader.write(readImgLogo)
   discard bufLoader.close()
   let imgLogo: Pixbuf = bufLoader.getPixbuf()
-  # discard dlgAbout.setIconFromFile("/usr/share/icons/anonsurf.png")
-  dlgAbout.setLogo(imgLogo)
-  dlgAbout.setProgramName("AnonSurf")
-  dlgAbout.setVersion("3.0.0")
-  dlgAbout.setArtists([
+  # discard showAbout.setIconFromFile("/usr/share/icons/anonsurf.png")
+  showAbout.setLogo(imgLogo)
+  showAbout.setProgramName("AnonSurf")
+  showAbout.setVersion("3.0.0")
+  showAbout.setArtists([
     "Federica \"marafed\" Marasà",
     # "Manuel \"Serverket\" Hernandez",
     "David \"mcder3\" Linares",
   ]) # Artwork by
-  # dlgAbout.setDocumenters([]) # Documented by
-  # dlgAbout.setTranslatorCredits([]) # Translated by
-  dlgAbout.setAuthors([
+  # showAbout.setDocumenters([]) # Documented by
+  # showAbout.setTranslatorCredits([]) # Translated by
+  showAbout.setAuthors([
     "Lorenzo \"Palinuro\" Faletra",
     "Nong Hoang \"DmKnght\" Tu",
     "Lisetta \"Sheireen\" Ferrero",
     "Francesco \"Mibofra\" Bonanno",
     "Manuel \"Serverket\" Hernandez",
   ])
-  dlgAbout.setComments("Anonymous Toolkit for Parrot OS")
-  dlgAbout.setCopyright(
+  showAbout.setComments("Anonymous Toolkit for Parrot OS")
+  showAbout.setCopyright(
     "Copyright © 2013 - 2020 Lorenzo \"Palinuro\" Faletra\nCopyright © 2020 Parrot Security CIC"
   )
-  dlgAbout.setLicenseType(gpl_3_0)
-  dlgAbout.setWebsite("https://nest.parrot.sh/packages/tools/anonsurf")
-  dlgAbout.setWebsiteLabel("Gitlab Source")
+  showAbout.setLicenseType(gpl_3_0)
+  showAbout.setWebsite("https://nest.parrot.sh/packages/tools/anonsurf")
+  showAbout.setWebsiteLabel("Gitlab Source")
 
-  discard dlgAbout.run()
-  dlgAbout.destroy()
+  discard showAbout.run()
+  showAbout.destroy()

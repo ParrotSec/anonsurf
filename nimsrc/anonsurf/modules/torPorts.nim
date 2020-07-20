@@ -14,7 +14,7 @@ type
     dnsPort*: string
 
 
-proc getTorrcPorts*: TorConfig =
+proc getTorrcPorts*(): TorConfig =
   const
     path = "/etc/tor/torrc"
 

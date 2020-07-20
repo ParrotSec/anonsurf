@@ -16,8 +16,6 @@ proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: 
     bxButtons = newBox(Orientation.horizontal, 3)
     bxDetailPanel = newBox(Orientation.horizontal, 6)
 
-  # btnDetail.setSizeRequest(180, 30)
-  # btnStatus.setSizeRequest(180, 30)
   bxDetailPanel.add(imgStatus)
   bxButtons.add(btnDetail)
   bxButtons.add(btnStatus)

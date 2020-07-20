@@ -1,5 +1,5 @@
 import gintro / gtk
-import .. / .. / utils / [services, dnsutils]
+import .. / .. / utils / dnsutils
 import status
 import ../ actions / actMainPage
 import images

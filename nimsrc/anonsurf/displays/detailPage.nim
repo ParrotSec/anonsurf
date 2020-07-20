@@ -13,26 +13,21 @@ proc makeBottomBarForDetail(bBack, bRestart: Button): Box =
   boxBottomBar.add(bBack)
   boxBottomBar.packEnd(bRestart, false, true, 3)
 
-  # btnExit.connect("clicked", onclickExit)
-  # boxBottomBar.packEnd(btnExit, false, true, 3)
-
   return boxBottomBar
 
 
 proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label): Frame =
+  #[
+    Create a Frame for service status
+  ]#
   let
     areaServices = newBox(Orientation.vertical, 3)
-    # boxDetail = newBox(Orientation.vertical, 3)
     frameServices = newFrame()
   
   labelServices.setXalign(0.0)
   labelPorts.setXalign(0.0)
   labelDNS.setXalign(0.0)
-  # boxDetail.add(labelAnon)
-  # boxDetail.add(labelTor)
-  # boxDetail.add(labelDNS)
 
-  # areaServices.add(boxDetail)
   areaServices.add(labelServices)
   areaServices.add(labelPorts)
   areaServices.add(labelDNS)
@@ -43,6 +38,9 @@ proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label): Frame =
 
 
 proc makeBootFrame(labelBoot: Label, btnBoot: Button, imgBoot: Image): Frame =
+  #[
+    Create frame for boot status
+  ]#
   let
     areaBoot = newBox(Orientation.horizontal, 3)
     field = newBox(Orientation.vertical, 3)
@@ -63,7 +61,8 @@ proc makeBootFrame(labelBoot: Label, btnBoot: Button, imgBoot: Image): Frame =
 
 proc makeServiceDetails(
   labelServices, labelPorts, labelDNS, labelBoot: Label,
-  btnBoot: Button, imgBoot: Image): Box =
+  btnBoot: Button,
+  imgBoot: Image): Box =
   #[
     Display information about all services
   ]#

@@ -12,6 +12,11 @@ type
 
 
 proc handleRefresh(args: RefreshObj): bool =
+  #[
+    Program is having 2 pages: main and detail
+    This handleRefresh check which page is using
+    so it update only 1 page for better performance
+  ]#
   let
     freshStatus = getSurfStatus()
     portStatus = getStatusPorts()
@@ -28,10 +33,6 @@ proc createArea(boxMainWindow: Box) =
   #[
     Create everything for the program
   ]#
-  # const
-  #   imgAnonFail = staticRead("../icons/50px/anon_50px_failed.png")
-  #   imgAnonProtected = staticRead("../icons/50px/anon_50px_protected.png")
-  #   imgAnonUnprotected = staticRead("../icons/50px/anon_50px_unprotected.png")
 
   let
     btnStart = newButton("Start")
