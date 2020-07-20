@@ -9,5 +9,19 @@ ExecReload=/etc/anonsurf/anondaemon restart
 ExecStop=/etc/anonsurf/anondaemon stop
 RemainAfterExit=yes
 
+# Hardening
+AppArmorProfile=-system_tor
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWritePaths=/etc/resolv.conf
+ReadWritePaths=/etc/resolv.conf.bak
+ReadWritePaths=/etc/anonsurf/torrc.base
+ReadWritePaths=/etc/tor/torrc
+ReadWritePaths=/usr/lib/anonsurf/make-torrc
+
 [Install]
 WantedBy=default.target
