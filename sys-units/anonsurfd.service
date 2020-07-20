@@ -17,14 +17,9 @@ NoNewPrivileges=yes
 PrivateTmp=yes
 PrivateDevices=yes
 ProtectHome=yes
-ProtectSystem=strict
+ProtectSystem=full
 ReadOnlyDirectories=/
-ReadWritePaths=/etc/resolv.conf
-ReadWritePaths=/etc/resolv.conf.bak
 ReadOnlyPaths=/etc/anonsurf/torrc.base
-ReadWritePaths=/etc/anonsurf/nyxrc
-ReadWritePaths=/etc/tor/torrc
-ReadWritePaths=/etc/tor/torrc.bak
 
 [Install]
 WantedBy=default.target
