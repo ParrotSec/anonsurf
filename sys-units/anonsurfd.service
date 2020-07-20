@@ -4,13 +4,15 @@ Before=poweroff.target reboot.target
 After=network.target
 
 [Service]
-ExecStart=/etc/anonsurf/anondaemon start
-ExecReload=/etc/anonsurf/anondaemon restart
-ExecStop=/etc/anonsurf/anondaemon stop
+ExecStart=/usr/lib/anonsurf/anondaemon start
+ExecReload=/usr/lib/anonsurf/anondaemon restart
+ExecStop=/usr/lib/anonsurf/anondaemon stop
 RemainAfterExit=yes
 
+ConfigurationDirectory=/etc/
+LogsDirectory=/var/log/
+
 # Hardening
-AppArmorProfile=-system_tor
 NoNewPrivileges=yes
 PrivateTmp=yes
 PrivateDevices=yes
@@ -19,11 +21,10 @@ ProtectSystem=strict
 ReadOnlyDirectories=/
 ReadWritePaths=/etc/resolv.conf
 ReadWritePaths=/etc/resolv.conf.bak
-ReadWritePaths=/etc/anonsurf/torrc.base
+ReadOnlyPaths=/etc/anonsurf/torrc.base
 ReadWritePaths=/etc/anonsurf/nyxrc
 ReadWritePaths=/etc/tor/torrc
 ReadWritePaths=/etc/tor/torrc.bak
-ReadWritePaths=/usr/lib/anonsurf/make-torrc
 
 [Install]
 WantedBy=default.target
