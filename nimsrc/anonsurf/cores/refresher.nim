@@ -28,18 +28,21 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
   # AnonSurf is Enabled at boot
   if myStatus.isAnonSurfBoot:
     args.btnBoot.label = "Disable"
+    args.btnBoot.setTooltipText("Do not allow system starts AnonSurf at boot")
     args.lblBoot.setLabel("Enabled at boot")
     # args.imgBoot.setFromIconName("security-high", 6)
     args.imgBoot.setFromPixbuf(surfImages.imgBootOn)
   else:
     args.btnBoot.label = "Enable"
-    args.lblBoot.setLabel("Not Enabled at boot")
+    args.lblBoot.setLabel("Not enabled at boot")
+    args.btnBoot.setTooltipText("Allow system starts AnonSurf at boot")
     # args.imgBoot.setFromIconName("security-low", 6)
     args.imgBoot.setFromPixbuf(surfImages.imgBootOff)
   
   # Check current status of daemon services and control ports
   if myStatus.isAnonSurfService == 1:
     args.btnRestart.setSensitive(true)
+    args.btnRestart.setTooltipText("Restart AnonSurf and Tor daemon")
     # Check status of Tor
     if myStatus.isTorService == 1:
       args.lblServices.setText("Services: Activated")
@@ -62,10 +65,12 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
 
   elif myStatus.isAnonsurfSErvice == 0:
     args.btnRestart.setSensitive(false)
+    args.btnRestart.setTooltipText("AnonSurf is not running. Can not restart.")
     args.lblServices.setText("Services: Deactivated")
     args.lblPorts.setText("Ports: Deactivated")
   else:
     args.btnRestart.setSensitive(false)
+    args.btnRestart.setTooltipText("AnonSurf failed to start. Can not restart.")
     args.lblServices.setText("Services: AnonSurf failed to start")
     args.lblPorts.setText("Ports: Deactivated")
 
@@ -102,30 +107,37 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
       if myPorts.isControlPort and myPorts.isSocksPort and myPorts.isTransPort and
         not myPorts.isReadError:
         args.btnID.setSensitive(true)
+        args.btnID.setTooltipText("Change your Tor nodes")
         args.btnStatus.setSensitive(true)
+        args.btnStatus.setTooltipText("Show Tor bandwidth and other information using Nyx")
         # Check DNS
         if myPorts.isDNSPort:
           # args.imgStatus.setFromIconName("security-high", 6)
           args.imgStatus.setFromPixBuf(surfImages.imgSecHigh)
-          args.lDetails.setText("AnonSurf is running") # Fix me
+          args.lDetails.setText("AnonSurf is running")
         else:
           # args.imgStatus.setFromIconName("security-medium", 6)
           args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
-          args.lDetails.setText("Error with DNS port") # Fix me
+          args.lDetails.setText("Error with DNS port")
       else:
         # args.imgStatus.setFromIconName("security-low", 6)
         args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
-        args.lDetails.setText("Error with Tor ports") # Fix me
+        args.lDetails.setText("Error with Tor ports")
         args.btnID.setSensitive(false)
+        args.btnID.setTooltipText("AnonSurf is not running. Nothing to change")
         args.btnStatus.setSensitive(false)
+        args.btnStatus.setTooltipText("Tor is not running")
     else:
       # args.imgStatus.setFromIconName("security-low", 6)
       args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
-      args.lDetails.setText("Tor service doesn't start") # Fix me
+      args.lDetails.setText("Tor service doesn't start")
       args.btnID.setSensitive(false)
+      args.btnID.setTooltipText("AnonSurf is not running. Nothing to change")
       args.btnStatus.setSensitive(false)
+      args.btnStatus.setTooltipText("Tor is not running")
     
     args.btnRun.label = "Stop"
+    args.btnRun.setTooltipText("Stop using Tor network")
   else:
     if myStatus.isAnonSurfService == -1:
       args.lDetails.setText("AnonSurf start failed") # Fix me
@@ -136,8 +148,11 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
       # args.imgStatus.setFromIconName("security-medium", 6)
       args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
     args.btnRun.label = "Start"
+    args.btnRun.setTooltipText("Start using Tor network")
     args.btnID.setSensitive(false)
+    args.btnID.setTooltipText("AnonSurf is not running. Nothing to change")
     args.btnStatus.setSensitive(false)
+    args.btnStatus.setTooltipText("Tor is not running")
 
   if worker.running:
     args.btnIP.setSensitive(false)
