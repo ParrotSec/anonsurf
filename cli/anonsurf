@@ -213,7 +213,7 @@ case "$1" in
 	start)
 	# Only start if anonsurfd is not running
 		checkuid
-		if [ "$(systemctl is-active anonsurfd)" = "inactive" ]; then
+		if [ ! "$(systemctl is-active anonsurfd)" = "active" ]; then
 			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			start
 		else
