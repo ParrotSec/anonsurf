@@ -6,7 +6,6 @@ install:
 	#nim c src/AnonSurfGUI.nim
 	nim c --nimcache:/tmp nimsrc/extra-tools/dnstool.nim
 	nim c --nimcache:/tmp nimsrc/extra-tools/make_torrc.nim
-	# nim c --nimcache:/tmp --path:/usr/include/nim/ nimsrc/anonsurf/AnonSurfGTK.nim
 	nim c --nimcache:/tmp nimsrc/anonsurf/AnonSurfGTK.nim
 
 	# Make dest folders for Deb packaging
