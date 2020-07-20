@@ -110,7 +110,7 @@ function start {
 		echo -e "$GREEN[${BLUE}i${GREEN}]${GREEN} You are under AnonSurf tunnel$RESETCOLOR\n"
 		notify "Global Anonymous Proxy Activated" "security-high"
 	elif [ "$(systemctl is-active anonsurfd)" = "failed" ]; then
-		echo -e "$GREEN[${BLUE}i${GREEN}]${RED} AnonSurf failed to start$RESETCOLOR\n"
+		echo -e "$GREEN[${RED}x${GREEN}]${RED} AnonSurf failed to start$RESETCOLOR\n"
 		notify "AnonSurf failed to start" "security-low"
 	else
 		echo -e "$GREEN[${BLUE}i${GREEN}]${BLUE} Unknown problem$RESETCOLOR\n"
