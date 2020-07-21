@@ -11,9 +11,9 @@ RemainAfterExit=yes
 
 # Hardening
 AppArmorProfile=-usr.lib.anonsurf.anondaemon
-#NoNewPrivileges=yes
-#PrivateTmp=yes
-#PrivateDevices=yes
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
 #ProtectHome=yes
 #ProtectSystem=strict
 #ReadOnlyDirectories=/
