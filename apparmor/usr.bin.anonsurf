@@ -26,7 +26,7 @@
   /usr/sbin/service mrix,
   # Custom settings
   owner /etc/anonsurf/* rw,
-  owner /usr/lib/anonsurf/* rwx,
+  #owner /usr/lib/anonsurf/* rwx,
 
   # Read and write torrc config and its backup
   /etc/tor/torrc rw,
