@@ -7,7 +7,23 @@
 
   /usr/bin/anonsurf r,
   /usr/bin/bash ix,
-
+  # Add excutable files
+  /usr/bin/basename mrix, # Added by aa-genprof
+  /usr/bin/curl mrix,
+  #/usr/bin/dash ix,
+  /usr/bin/grep mrix,
+  /usr/bin/id mrix,
+  /usr/bin/notify-send ix,
+  /usr/bin/nyx mrix,
+  /usr/bin/sed mrix,
+  /usr/bin/sudo mrix,
+  /usr/bin/systemctl mrix,
+  /usr/bin/tr mrix,
+  /usr/bin/uname mrix,
+  /usr/bin/users mrix,
+  /usr/bin/whoami mrix,
+  /usr/bin/zentity mrix,
+  /usr/sbin/service mrix,
   # Custom settings
   owner /etc/anonsurf/* rw,
   owner /usr/lib/anonsurf/* rwx,
