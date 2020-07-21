@@ -18,18 +18,18 @@ ProtectSystem=strict
 ReadOnlyDirectories=/
 
 # White list
-ReadOnlyPaths=/etc/anonsurf/torrc.base
+#ReadOnlyPaths=/etc/anonsurf/torrc.base
 
 # Whitelist for make-torrc
-ReadWritePaths=/etc/tor/torrc
-ReadWritePaths=/etc/tor/torrc.bak
-ReadWritePaths=/etc/anonsurf/nyxrc
+#ReadWritePaths=/etc/tor/torrc
+#ReadWritePaths=/etc/tor/torrc.bak
+#ReadWritePaths=/etc/anonsurf/nyxrc
 
 # Whitelist for dnstool
-ReadWritePaths=/etc/resolv.conf
-ReadWritePaths=/etc/resolv.conf.bak
-ReadWritePaths=/etc/resolvconf/resolv.conf.d/
-ReadWritePaths=/run/resolvconf/
+#ReadWritePaths=/etc/resolv.conf
+#ReadWritePaths=/etc/resolv.conf.bak
+#ReadWritePaths=/etc/resolvconf/resolv.conf.d/
+#ReadWritePaths=/run/resolvconf/
 #ReadWritePaths=/etc/network/iptables.rules
 
 [Install]
