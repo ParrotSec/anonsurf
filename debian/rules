@@ -6,3 +6,7 @@
 # 	nimble install gintro
 override_dh_installsystemd:
 	dh_installsystemd --no-enable
+# Install apparmor
+# Learned from Tor rule
+override_dh_install-arch:
+	dh_apparmor --profile-name=usr.bin.anonsurf -panonsurf
