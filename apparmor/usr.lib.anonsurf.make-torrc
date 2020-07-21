@@ -1,0 +1,13 @@
+#include <tunables/global>
+
+/usr/lib/anonsurf/make-torrc {
+  #include <abstractions/base>
+  #include <abstractions/lightdm>
+  #include <abstractions/tor>
+
+  capability dac_override,
+  owner /etc/anonsurf/nyxrc w,
+  owner /etc/anonsurf/torrc.base r,
+  owner /etc/tor/torrc rw,
+  owner /etc/tor/torrc.bak rw,
+}
