@@ -31,7 +31,7 @@ install:
 	ln -s /usr/bin/anonsurf $(DESTDIR)/usr/bin/anon
 
 	# Install apparmor
-	cp apparmor/usr.bin.anonsurf $(DESTDIR)/etc/apparmor.d/
+	cp apparmor/* $(DESTDIR)/etc/apparmor.d/
 	
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp nimsrc/extra-tools/dnstool $(DESTDIR)/usr/bin/
