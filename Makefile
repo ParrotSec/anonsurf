@@ -36,7 +36,7 @@ install:
 
 	# Add system units
 	cp daemon/anondaemon $(DESTDIR)/usr/lib/anonsurf/
-	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/
+	#cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anontor.service $(DESTDIR)/lib/systemd/system/
 	# cp sys-units/anonsurfd $(DESTDIR)/etc/init.d/
 
