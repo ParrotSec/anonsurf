@@ -1,0 +1,27 @@
+#include <tunables/global>
+
+
+profile /usr/bin/anonsurf flags=(attach_disconnected) {
+  #include <abstractions/base>
+
+  owner /etc/anonsurf/* rw,
+  owner /usr/lib/anonsurf/* rwk,
+
+  # Read and write torrc config and its backup
+  /etc/tor/torrc rw,
+  /etc/tor/torrc.bak rw,
+  # Read and write resolv.conf and its backup
+  /etc/resolv.conf rw,
+  /etc/resolv.conf.bak rw,
+  # Read and write iptables rules
+  /etc/network/iptables.rules
+  # Custom read for DNS status
+  /etc/resolvconf/resolv.conf.d/tail r,
+  /run/resolvconf/resolv.conf r,
+  /run/resolvconf/interface/NetworkManager r,
+
+  # Enable / disable IPv6
+  /proc/sys/net/ipv6/conf/all/disable_ipv6 rw,
+  /proc/sys/net/ipv6/conf/default/disable_ipv6
+
+}
