@@ -10,6 +10,7 @@ ExecStop=/usr/lib/anonsurf/anondaemon stop
 RemainAfterExit=yes
 
 # Hardening
+AppArmorProfile=-usr.bin.anonsurf
 NoNewPrivileges=yes
 PrivateTmp=yes
 PrivateDevices=yes
