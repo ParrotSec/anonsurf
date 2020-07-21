@@ -10,13 +10,13 @@ ExecStop=/usr/lib/anonsurf/anondaemon stop
 RemainAfterExit=yes
 
 # Hardening
-AppArmorProfile=-usr.bin.anonsurf
-NoNewPrivileges=yes
-PrivateTmp=yes
-PrivateDevices=yes
-ProtectHome=yes
-ProtectSystem=strict
-ReadOnlyDirectories=/
+AppArmorProfile=-usr.lib.anonsurf.anondaemon
+#NoNewPrivileges=yes
+#PrivateTmp=yes
+#PrivateDevices=yes
+#ProtectHome=yes
+#ProtectSystem=strict
+#ReadOnlyDirectories=/
 
 # White list
 #ReadOnlyPaths=/etc/anonsurf/torrc.base
