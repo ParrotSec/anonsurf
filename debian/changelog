@@ -1,3 +1,9 @@
+anonsurf (3.0.0) rolling-testing; urgency=medium
+
+  * Promote previous version to 3.0.0.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Tue, 21 Jul 2020 16:07:01 +0200
+
 anonsurf (2.14.0) rolling-testing; urgency=medium
 
   * Add test version for GTK GUI
