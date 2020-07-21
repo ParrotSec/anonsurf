@@ -15,7 +15,7 @@ proc restoreTorrc() =
   if fileExists(torTorrcBak):
     if tryRemoveFile(torTorrc):
       moveFile(torTorrcBak, torTorrc)
-      stdout.write("[+] Restored backup for torrc")
+      stdout.write("[+] Restored backup for torrc\n")
     else:
       stderr.write("[x] Can not remove AnonSurf's torrc\n")
   else:
