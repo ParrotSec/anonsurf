@@ -18,6 +18,8 @@ install:
 	mkdir -p $(DESTDIR)/usr/share/parrot-menu/applications/
 	mkdir -p $(DESTDIR)/lib/systemd/system/
 
+	# Make apparmor profile folder
+	mkdir -p $(DESTDIR)/etc/apparmor.d/
 	# Add basfiles to /etc
 	cp onion.pac $(DESTDIR)/etc/anonsurf/onion.pac
 	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
@@ -28,7 +30,9 @@ install:
 	cp -rf launchers/* $(DESTDIR)/usr/share/applications/
 	ln -s /usr/bin/anonsurf $(DESTDIR)/usr/bin/anon
 
-	# Add custom cli from nim sources
+	# Install apparmor
+	cp apparmor/usr.bin.anonsurf $(DESTDIR)/etc/apparmor.d/
+	
 	# cp src/AnonSurfGUI $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp nimsrc/extra-tools/dnstool $(DESTDIR)/usr/bin/
 	cp nimsrc/anonsurf/AnonSurfGTK $(DESTDIR)/usr/bin/anonsurf-gtk
