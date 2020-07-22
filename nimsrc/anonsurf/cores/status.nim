@@ -50,10 +50,11 @@ proc getStatusPorts*(): PortStatus =
 
   if not openedAddr.fileErr:
     const
-      path = "/proc/net/tcp"
+      tcpPath = "/proc/net/tcp"
+      udpPath = "/proc/net/udp"
     let
-      netstat = readFile(path)
+      netstat = readFile(tcpPath)
     result.isControlPort = netstat.contains(openedAddr.controlPort)
-    result.isDNSPort = netstat.contains(openedAddr.dnsPort)
     result.isSocksPort = netstat.contains(openedAddr.socksPort)
     result.isTransPort = netstat.contains(openedAddr.transPort)
+    result.isDNSPort = readFile(udpPath).contains(openedAddr.dnsPort)
