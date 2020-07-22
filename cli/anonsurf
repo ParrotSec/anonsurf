@@ -228,6 +228,7 @@ case "$1" in
 	start)
 	# Only start if anonsurfd is not running
 		checkuid
+		notify "AnonSurf is starting" "dialog-information"
 		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
 			notify "AnonSurf is running! Can't start it again!" "dialog-error"
 			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is running! Can't start it again!$RESETCOLOR\n" >&2
@@ -247,6 +248,7 @@ case "$1" in
 	stop)
 	# Only stop if the anonsurfd is running
 		checkuid
+		notify "AnonSurf is stopping" "dialog-information"
 		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
 			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			stop
@@ -266,6 +268,7 @@ case "$1" in
 		fi
 	;;
 	myip|ip)
+		notify "Getting IP information from server" "dialog-information"
 		checkIP
 	;;
 	dns)
@@ -274,6 +277,7 @@ case "$1" in
 	restart)
 		# Restart if the daemon is running onnly
 		checkuid
+		notify "AnonSurf is restarting" "dialog-information"
 		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
 			/usr/sbin/service anonsurfd restart
 			# Should restart with anonsurfd
