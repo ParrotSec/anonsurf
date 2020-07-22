@@ -44,7 +44,7 @@ proc onClickCheckIP*(b: Button) =
     Display IP when user click on CheckIP button
     Show the information in system's notification
   ]#
-
+  sendNotify("My IP", "Getting data from server", "dialog-information")
   createThread(worker, work)
   # worker.joinThread()
 
