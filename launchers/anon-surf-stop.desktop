@@ -1,8 +1,8 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Terminal=true
-Exec=menuexecg "anonsurf stop"
+Terminal=false
+Exec=gksudo "/usr/bin/anonsurf stop"
 Comment=Stop routing all internet packets/traffic through Tor
 Name=Anonsurf Stop
 Icon=player_stop
