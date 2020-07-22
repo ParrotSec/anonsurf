@@ -1,8 +1,9 @@
 import gintro / gtk
 import .. / .. / utils / dnsutils
 import status
-import ../ actions / actMainPage
+import .. / actions / actMainPage
 import images
+import .. / displays / noti
 
 type
   MainObjs* = ref object
@@ -142,4 +143,9 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
   if worker.running:
     args.btnIP.setSensitive(false)
   else:
+    let finalAddr = channel.tryRecv()
+    if finalAddr.dataAvailable:
+      channel.close()
+      worker.joinThread()
+      sendNotify($finalAddr.msg.thisAddr, $finalAddr.msg.isUnderTor, $finalAddr.msg.iconName)
     args.btnIP.setSensitive(true)

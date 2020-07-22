@@ -7,36 +7,37 @@ import strscans
 import system
 import os
 
-var worker*: system.Thread[void]
+type
+  MyIP = object
+    thisAddr*: string
+    isUnderTor*: string
+    iconName*: string
 
+var
+  worker*: system.Thread[void]
+  channel*: Channel[MyIP]
 
-proc doCheckIP(ipInfo: array[2, string]) =
+proc doCheckIP() =
   #[
     Actual IP check for AnonSurf
     It parses data from server and show notification
   ]#
-  var iconName: string
-  
+
+  var finalResult: MyIP
+  let ipInfo = checkIPFromTorServer()
   # If program has error while getting IP address
   if ipInfo[0].startsWith("Error"):
-    iconName = "error"
+    finalResult.iconName = "error"
   # If program runs but user didn't connect to tor
   elif ipInfo[0].startsWith("Sorry"):
-    iconName = "security-medium"
+    finalResult.iconName = "security-medium"
   # Connected to tor
   else:
-    iconName = "security-high"
+    finalResult.iconName = "security-high"
 
-  sendNotify(ipInfo[0], ipInfo[1], iconName)
-
-
-proc work() =
-  #[
-    Create backgroud thread to check IP
-  ]#
-  let ipAddr = checkIPFromTorServer()
-  doCheckIP(ipAddr)
-  worker.joinThread()
+  finalResult.isUnderTor = ipInfo[0]
+  finalResult.thisAddr = ipInfo[1]
+  channel.send(finalResult)
 
 
 proc onClickCheckIP*(b: Button) =
@@ -45,8 +46,8 @@ proc onClickCheckIP*(b: Button) =
     Show the information in system's notification
   ]#
   sendNotify("My IP", "Getting data from server", "dialog-information")
-  createThread(worker, work)
-  # worker.joinThread()
+  channel.open()
+  createThread(worker, doCheckIP)
 
 
 proc onClickRun*(b: Button) =
