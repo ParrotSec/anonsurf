@@ -21,7 +21,8 @@ proc handleParse(txt: string): string =
       return parseAddrToHex(txt)
     else:
       # 8080
-      return parsePortTOHex(txt)
+      echo txt
+      return parsePortToHex(txt)
 
 
 proc toNixHex*(conf: TorConfig): TorConfig =
