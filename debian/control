@@ -6,14 +6,14 @@ Uploaders: Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>,
            Lisetta "Sheireen" Ferrero <sheireen@autistiche.org>
            Nong Hoang "Dmknght" Tu <dmknght@parrotsec.org>
 Standards-Version: 4.5.0
-Build-Depends: debhelper-compat (= 12), nim, gcc, bash-completion
+Build-Depends: debhelper-compat (= 12), nim, gcc, bash-completion, libnim-gintro-dev
 Build-Depends-Indep: pkg-config
 Homepage: https://www.parrotsec.org/
 
 Package: anonsurf
 Architecture: any
 Priority: optional
-Depends: bash (>= 5.0), iptables, nftables, tor, libc6, libnim-gintro-dev
+Depends: bash (>= 5.0), iptables, nftables, tor, libc6
 Recommends: libnotify-bin, i2p, onioncircuits, connect-proxy, onionshare, torsocks, tor-geoipdb, parrot-menu, bleachbit
 Suggests: gnunet-gtk, gnunet, vidalia
 Description: Anonymization toolkit for Parrot Security OS
@@ -22,3 +22,20 @@ Description: Anonymization toolkit for Parrot Security OS
  transparent proxy and use iptables to forward all traffic through Tor
  network. It also disables IPv6, clear applications's cache to prevent
  data leak.
+
+Package: anonsurf-gtk
+Architecture: any
+Priority: optional
+Depends: anonsurf
+Description: Anonymization toolkit for Parrot Security OS
+ This package contains AnonSurf's graphic user interface
+ and its menu's launcher which was written in Nim and
+ gintro library (a binding of GTK framework).
+
+Package: anonsurf-apparmor
+Architecture: any
+Priority: optional
+Depends: anonsurf, apparmor
+Description: Anonymization toolkit for Parrot Security OS
+ This package contains apparmor's of AnonSurf. All profiles will be
+ installed in /etc/apparmor.d/

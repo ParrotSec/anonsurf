@@ -1,0 +1,14 @@
+configs/onion.pac /etc/anonsurf/
+configs/torrc.base /etc/anonsurf/
+
+cli/anonsurf /usr/bin/
+nimsrc/extra-tools/make_torrc /usr/lib/anonsurf/make-torrc
+nimsrc/extra-tools/dnstool /usr/lib/anonsurf/dnstool
+
+daemon/anondaemon /usr/lib/anonsurf/
+sys-units/anonsurfd.service /lib/systemd/system/
+
+launchers/anon-change-identity.desktop /usr/share/applications/
+launchers/anon-surf-start.desktop /usr/share/applications/
+launchers/anon-surf-stop.desktop /usr/share/applications/
+launchers/anon-check-ip.desktop /usr/share/applications/
