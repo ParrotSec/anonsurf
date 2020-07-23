@@ -24,7 +24,7 @@ type
     imgBoot*: Image
 
 
-proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
+proc updateDetail*(args: DetailObjs, myStatus: Status) =
   args.btnRestart.label = "Restart"
   # AnonSurf is Enabled at boot
   if myStatus.isAnonSurfBoot:
@@ -49,6 +49,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
     elif myStatus.isTorService == -1:
       args.lblServices.setText("Services: Tor failed to start")
     # Check status of Port
+    let myPorts = getStatusPorts()
     if myPorts.isReadError:
       args.lblPorts.setText("Ports: Parse torrc failed")
     elif not myPorts.isControlPort and not myPorts.isSocksPort and
@@ -73,6 +74,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
   # Update DNS status
   let dns = dnsStatusCheck()
   if dns == 0:
+    let myPorts = getStatusPorts()
     if myPorts.isReadError:
       args.lblDns.setText("DNS: Config read failed") # Fixme
     elif myPorts.isDNSPort:
@@ -91,7 +93,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status, myPorts: PortStatus) =
     args.lblDns.setText("DNS: Custom setting")
 
 
-proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
+proc updateMain*(args: MainObjs, myStatus: Status) =
   #[
     Always check status of current widget
       to show correct state of buttons
@@ -99,6 +101,7 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
   if myStatus.isAnonSurfService == 1:
     # Check status of tor service
     if myStatus.isTorService == 1:
+      let myPorts = getStatusPorts()
       # If everything (except DNS port) is okay
       if myPorts.isControlPort and myPorts.isSocksPort and myPorts.isTransPort and
         not myPorts.isReadError:

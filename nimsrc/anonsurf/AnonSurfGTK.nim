@@ -19,12 +19,12 @@ proc handleRefresh(args: RefreshObj): bool =
   ]#
   let
     freshStatus = getSurfStatus()
-    portStatus = getStatusPorts()
+    # portStatus = getStatusPorts()
 
   if args.stackObjs.getVisibleChildName == "main":
-    updateMain(args.mainObjs, freshStatus, portStatus)
+    updateMain(args.mainObjs, freshStatus)
   else:
-    updateDetail(args.detailObjs, freshStatus, portStatus)
+    updateDetail(args.detailObjs, freshStatus)
 
   return SOURCE_CONTINUE
 
@@ -105,9 +105,9 @@ proc createArea(boxMainWindow: Box) =
   # Load latest status when start program
   let
     atStartStatus = getSurfStatus()
-    atStartPorts = getStatusPorts()
-  updateMain(mainArgs, atStartStatus, atStartPorts)
-  updateDetail(detailArgs, atStartStatus, atStartPorts)
+    # atStartPorts = getStatusPorts()
+  updateMain(mainArgs, atStartStatus)
+  updateDetail(detailArgs, atStartStatus)
 
   discard timeoutAdd(200, handleRefresh, refresher)
 
