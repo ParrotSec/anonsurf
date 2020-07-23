@@ -21,9 +21,9 @@ install:
 	# Make apparmor profile folder
 	mkdir -p $(DESTDIR)/etc/apparmor.d/
 	# Add basfiles to /etc
-	cp onion.pac $(DESTDIR)/etc/anonsurf/onion.pac
+	cp configs/onion.pac $(DESTDIR)/etc/anonsurf/onion.pac
 	ln -s /etc/anonsurf/onion.pac $(DESTDIR)/etc/tor/onion.pac
-	cp torrc.base $(DESTDIR)/etc/anonsurf/torrc.base
+	cp configs/torrc.base $(DESTDIR)/etc/anonsurf/torrc.base
 
 	# Add core files
 	cp cli/anonsurf $(DESTDIR)/usr/bin/
