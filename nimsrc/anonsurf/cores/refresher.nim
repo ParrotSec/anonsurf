@@ -46,7 +46,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     if myStatus.isTorService == 1:
       args.lblServices.setText("Services: Activated")
     elif myStatus.isTorService == 0:
-      args.lblServices.setText("Services: Tor is Deactivated")
+      args.lblServices.setText("Services: Tor is not running")
     elif myStatus.isTorService == -1:
       args.lblServices.setText("Services: Tor failed to start")
     # Check status of Port
@@ -70,7 +70,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
       if szErr == 0:
         args.lblPorts.setText("Ports: Activated")
       elif szErr == 3:
-        args.lblPorts.setText("Ports: All port are not open")
+        args.lblPorts.setText("Ports: All ports are not opened")
       elif szErr == 2:
         args.lblPorts.setText("Ports: Error on " & join(onErrPorts, ", "))
       else:
@@ -90,17 +90,17 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   if dns == 0:
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
-      args.lblDns.setText("DNS: Config read failed") # Fixme
+      args.lblDns.setText("DNS: [Err] Failed to read config")
     elif myPorts.isDNSPort:
-      args.lblDns.setText("DNS: Tor") # FIXME
+      args.lblDns.setText("DNS: Using Tor DNS servers")
     else:
-      args.lblDns.setText("DNS: Port failed") # FIX ME
+      args.lblDns.setText("DNS: [Err] Failed to bind DNS port")
   elif dns == 1:
-    args.lblDns.setText("DNS: LocalHost")
+    args.lblDns.setText("DNS: [Warn] LocalHost")
   elif dns == -2:
-    args.lblDns.setText("DNS: resolv.conf not found")
+    args.lblDns.setText("DNS: [Err] resolv.conf not found")
   elif dns == -3:
-    args.lblDns.setText("DNS: resolv.conf is empty")
+    args.lblDns.setText("DNS: [Err] resolv.conf is empty")
   elif dns == 21 or dns == 11:
     args.lblDns.setText("DNS: OpenNIC server")
   else:
