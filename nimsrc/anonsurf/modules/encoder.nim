@@ -21,7 +21,6 @@ proc handleParse(txt: string): string =
       return parseAddrToHex(txt)
     else:
       # 8080
-      echo txt
       return parsePortToHex(txt)
 
 
