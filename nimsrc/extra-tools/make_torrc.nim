@@ -1,11 +1,12 @@
 import .. / utils / generator
 import os
 
-
 const
   nyxrc = "/etc/anonsurf/nyxrc"
   torTorrc = "/etc/tor/torrc"
   torTorrcBak = "/etc/tor/torrc.bak"
+  srcOnionPac = "/etc/anonsurf/onion.pac"
+  dstOnionPac = "/etc/tor/onion.pac"
 
 
 proc restoreTorrc() =
@@ -20,7 +21,11 @@ proc restoreTorrc() =
       stderr.write("[x] Can not remove AnonSurf's torrc\n")
   else:
     stderr.write("[x] Can not find backup file. Ignored...\n")
-
+  
+  if fileExists(dstOnionPac):
+    discard tryRemoveFile(dstOnionPac):
+  else:
+    stderr.write("[x] Error while removing " & dstOnionPac & "\n")
 
 proc makeNyxrc(passwd: string) =
   #[
@@ -65,6 +70,14 @@ proc makeTorrc*(hased: string, isTorBridge: bool = false) =
     writeFile(torTorrc, torData)
   except:
     stderr.write("[x] Error while making new Torrc file\n")
+  
+  if not fileExists(srcOnionPac):
+    stderr.write("[x] Error: " & srcOnionPac & " not found\n")
+  else:
+    try:
+      copyFile(srcOnionPac, dstOnionPac)
+    except:
+      stderr.write("[x] Error while copying onion.pac\n")
 
 
 proc replaceTorrc(hashed: string, isOptionBridge: bool = false) =
