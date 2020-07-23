@@ -26,7 +26,7 @@ Description: Anonymization toolkit for Parrot Security OS
 Package: anonsurf-gtk
 Architecture: any
 Priority: optional
-Depends: anonsurf
+Depends: anonsurf, libc6
 Description: Anonymization toolkit for Parrot Security OS
  This package contains AnonSurf's graphic user interface
  and its menu's launcher which was written in Nim and
