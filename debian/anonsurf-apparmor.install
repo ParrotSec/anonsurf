@@ -1,1 +1,1 @@
-cp apparmor/* $(DESTDIR)/etc/apparmor.d/
+apparmor/* /etc/apparmor.d/
