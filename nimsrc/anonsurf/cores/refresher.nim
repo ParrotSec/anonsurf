@@ -4,6 +4,7 @@ import status
 import .. / actions / actMainPage
 import images
 import .. / displays / noti
+import strutils
 
 type
   MainObjs* = ref object
@@ -52,15 +53,28 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
       args.lblPorts.setText("Ports: Parse torrc failed")
-    elif not myPorts.isControlPort and not myPorts.isSocksPort and
-      not myPorts.isTransPort:
-      args.lblPorts.setText("Ports: Tor Ports failed") # FIXME
-    elif myPorts.isControlPort and myPorts.isTransPort and
-      myPorts.isSocksPort:
-        args.lblPorts.setText("Ports: Activated")
     else:
-      # TODO complex check here
-      args.lblPorts.setText("Ports: Some ports didn't open") # Fix Me
+      var
+        onErrPorts: seq[string]
+        szErr = 0
+      if not myPorts.isControlPort:
+        onErrPorts.add("Control")
+        szErr += 1
+      if not myPorts.isSocksPort:
+        onErrPorts.add("Socks")
+        szErr += 1
+      if not myPorts.isTransPort:
+        onErrPorts.add("Trans")
+        szErr += 1
+    
+      if szErr == 0:
+        args.lblPorts.setText("Ports: Activated")
+      elif szErr == 3:
+        args.lblPorts.setText("Ports: All port are not open")
+      elif szErr == 2:
+        args.lblPorts.setText("Ports: Error on " & join(onErrPorts, ", "))
+      else:
+        args.lblPorts.setText("Ports: Error on " & onErrPorts[0])
 
   elif myStatus.isAnonsurfSErvice == 0:
     args.btnRestart.setSensitive(false)
