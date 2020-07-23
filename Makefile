@@ -4,9 +4,10 @@ clean:
 
 install:
 	#nim c src/AnonSurfGUI.nim
-	nim c --nimcache:/tmp nimsrc/extra-tools/dnstool.nim
-	nim c --nimcache:/tmp nimsrc/extra-tools/make_torrc.nim
-	nim c --nimcache:/tmp nimsrc/anonsurf/AnonSurfGTK.nim
+	mkdir bin/
+	nim c --nimcache:/tmp --out:bin/dnstool nimsrc/extra-tools/dnstool.nim
+	nim c --nimcache:/tmp --out:bin/make-torrc nimsrc/extra-tools/make_torrc.nim
+	nim c --nimcache:/tmp --out:bin/anonsurf-gtk nimsrc/anonsurf/AnonSurfGTK.nim
 
 	# Make dest folders for Deb packaging
 	# mkdir -p $(DESTDIR)/etc/anonsurf/

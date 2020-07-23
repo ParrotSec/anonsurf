@@ -1,2 +1,2 @@
-nimsrc/anonsurf/AnonSurfGTK /usr/bin/
+bin/anonsurf-gtk /usr/bin/
 launchers/anon-gui.desktop /usr/share/applications/

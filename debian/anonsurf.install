@@ -2,8 +2,8 @@ configs/onion.pac /etc/anonsurf/
 configs/torrc.base /etc/anonsurf/
 
 cli/anonsurf /usr/bin/
-nimsrc/extra-tools/make_torrc /usr/lib/anonsurf/
-nimsrc/extra-tools/dnstool /usr/bin/dnstool
+bin/make-torrc /usr/lib/anonsurf/
+bin/dnstool /usr/bin/dnstool
 
 daemon/anondaemon /usr/lib/anonsurf/
 sys-units/anonsurfd.service /lib/systemd/system/
