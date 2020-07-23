@@ -145,7 +145,7 @@ proc updateMain*(args: MainObjs, myStatus: Status, myPorts: PortStatus) =
   else:
     let finalAddr = channel.tryRecv()
     if finalAddr.dataAvailable:
-      channel.close()
+      # channel.close()
       worker.joinThread()
       sendNotify($finalAddr.msg.thisAddr, $finalAddr.msg.isUnderTor, $finalAddr.msg.iconName)
     args.btnIP.setSensitive(true)

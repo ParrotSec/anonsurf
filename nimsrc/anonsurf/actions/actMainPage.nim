@@ -17,6 +17,8 @@ var
   worker*: system.Thread[void]
   channel*: Channel[MyIP]
 
+channel.open()
+
 proc doCheckIP() =
   #[
     Actual IP check for AnonSurf
@@ -37,7 +39,7 @@ proc doCheckIP() =
 
   finalResult.isUnderTor = ipInfo[0]
   finalResult.thisAddr = ipInfo[1]
-  channel.send(finalResult)
+  channel.send(finalResult) # Crash second time
 
 
 proc onClickCheckIP*(b: Button) =
@@ -46,7 +48,7 @@ proc onClickCheckIP*(b: Button) =
     Show the information in system's notification
   ]#
   sendNotify("My IP", "Getting data from server", "dialog-information")
-  channel.open()
+  # channel.open()
   createThread(worker, doCheckIP)
 
 
