@@ -1,4 +1,5 @@
 import gintro / gtk
+import actMainPage
 
 
 proc onClickBack*(b: Button, s: Stack) =
@@ -19,6 +20,7 @@ proc onClickExit*(b: Button) =
   #[
     Close program by click on exit button
   ]#
+  channel.close()
   mainQuit()
 
 
@@ -26,4 +28,5 @@ proc onClickStop*(w: Window) =
   #[
     Close program by click on title bar
   ]#
+  channel.close()
   mainQuit()
