@@ -18,10 +18,11 @@ proc handleParse(txt: string): string =
   else:
     if "." in txt:
       # 127.0.0.1
+      # Only address here, no port. Could be a bug
       return parseAddrToHex(txt)
     else:
       # 8080
-      return parsePortToHex(txt)
+      return parseAddrToHex("127.0.0.1") & ":" & parsePortToHex(txt)
 
 
 proc toNixHex*(conf: TorConfig): TorConfig =
