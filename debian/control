@@ -31,11 +31,3 @@ Description: Anonymization toolkit for Parrot Security OS
  This package contains AnonSurf's graphic user interface
  and its menu's launcher which was written in Nim and
  gintro library (a binding of GTK framework).
-
-Package: anonsurf-apparmor
-Architecture: any
-Priority: optional
-Depends: anonsurf, apparmor
-Description: Anonymization toolkit for Parrot Security OS
- This package contains apparmor's of AnonSurf. All profiles will be
- installed in /etc/apparmor.d/
