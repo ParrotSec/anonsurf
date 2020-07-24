@@ -44,15 +44,15 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     args.btnRestart.setSensitive(true)
     # Check status of Tor
     if myStatus.isTorService == 1:
-      args.lblServices.setMarkup("Services: <b>Activated</b>")
+      args.lblServices.setMarkup("Servc:  <b>Activated</b>")
     elif myStatus.isTorService == 0:
-      args.lblServices.setMarkup("Services: <b>Tor is not running</b>")
+      args.lblServices.setMarkup("Servc:  <b>Tor is not running</b>")
     elif myStatus.isTorService == -1:
-      args.lblServices.setMarkup("Services: <b>Tor failed to start</b>")
+      args.lblServices.setMarkup("Servc:  <b>Tor failed to start</b>")
     # Check status of Port
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
-      args.lblPorts.setMarkup("Ports:         <b>Parse torrc failed</b>")
+      args.lblPorts.setMarkup("Ports:  <b>Parse torrc failed</b>")
     else:
       var
         onErrPorts: seq[string]
@@ -68,43 +68,43 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         szErr += 1
     
       if szErr == 0:
-        args.lblPorts.setMarkup("Ports:         <b>Activated</b>")
+        args.lblPorts.setMarkup("Ports:  <b>Activated</b>")
       elif szErr == 3:
-        args.lblPorts.setMarkup("Ports:         <b>All ports are not opened</b>")
+        args.lblPorts.setMarkup("Ports:  <b>All ports are not opened</b>")
       elif szErr == 2:
-        args.lblPorts.setMarkup("Ports:         <b>Error on " & join(onErrPorts, ", ") & "</b>")
+        args.lblPorts.setMarkup("Ports:  <b>Error on " & join(onErrPorts, ", ") & "</b>")
       else:
-        args.lblPorts.setMarkup("Ports:         <b>Error on " & onErrPorts[0] & "</b>")
+        args.lblPorts.setMarkup("Ports:  <b>Error on " & onErrPorts[0] & "</b>")
 
   elif myStatus.isAnonsurfSErvice == 0:
     args.btnRestart.setSensitive(false)
-    args.lblServices.setMarkup("Services: <b>Deactivated</b>")
+    args.lblServices.setMarkup("Servc:  <b>Deactivated</b>")
     args.lblPorts.setMarkup("Ports:        <b>Deactivated</b>")
   else:
     args.btnRestart.setSensitive(false)
-    args.lblServices.setMarkup("Services: <b>AnonSurf failed to start</b>")
-    args.lblPorts.setMarkup("Ports:         <b>Deactivated</b>")
+    args.lblServices.setMarkup("Servc:  <b>AnonSurf failed to start</b>")
+    args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
 
   # Update DNS status
   let dns = dnsStatusCheck()
   if dns == 0:
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
-      args.lblDns.setMarkup("DNS:         <b>[Err] Failed to read config</b>")
+      args.lblDns.setMarkup("DNS:   <b>[Err] Failed to read config</b>")
     elif myPorts.isDNSPort:
-      args.lblDns.setMarkup("DNS:         <b>Using Tor DNS servers</b>")
+      args.lblDns.setMarkup("DNS:   <b>Using Tor DNS servers</b>")
     else:
-      args.lblDns.setMarkup("DNS:         <b>[Err] Failed to bind DNS port</b>")
+      args.lblDns.setMarkup("DNS:   <b>[Err] Failed to bind DNS port</b>")
   elif dns == 1:
-    args.lblDns.setMarkup("DNS:         <b>[Warn] LocalHost</b>")
+    args.lblDns.setMarkup("DNS:   <b>[Warn] LocalHost</b>")
   elif dns == -2:
-    args.lblDns.setMarkup("DNS:         <b>[Err] resolv.conf not found</b>")
+    args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf not found</b>")
   elif dns == -3:
-    args.lblDns.setMarkup("DNS:         <b>[Err] resolv.conf is empty</b>")
+    args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf is empty</b>")
   elif dns == 21 or dns == 11:
-    args.lblDns.setMarkup("DNS:                 <b>OpenNIC server</b>")
+    args.lblDns.setMarkup("DNS:   <b>OpenNIC server</b>")
   else:
-    args.lblDns.setMarkup("DNS:         <b>Custom setting</b>")
+    args.lblDns.setMarkup("DNS:   <b>Custom setting</b>")
 
 
 proc updateMain*(args: MainObjs, myStatus: Status) =
