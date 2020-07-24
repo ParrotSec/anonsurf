@@ -1,4 +1,4 @@
-import gintro / gtk
+import gintro / [gtk, pango]
 import .. / .. / utils / dnsutils
 import status
 import .. / actions / actMainPage
@@ -44,15 +44,15 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     args.btnRestart.setSensitive(true)
     # Check status of Tor
     if myStatus.isTorService == 1:
-      args.lblServices.setText("Services: Activated")
+      args.lblServices.setMarkup("Services: <b>Activated</b>")
     elif myStatus.isTorService == 0:
-      args.lblServices.setText("Services: Tor is not running")
+      args.lblServices.setMarkup("Services: <b>Tor is not running</b>")
     elif myStatus.isTorService == -1:
-      args.lblServices.setText("Services: Tor failed to start")
+      args.lblServices.setMarkup("Services: <b>Tor failed to start</b>")
     # Check status of Port
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
-      args.lblPorts.setText("Ports: Parse torrc failed")
+      args.lblPorts.setMarkup("Ports:         <b>Parse torrc failed</b>")
     else:
       var
         onErrPorts: seq[string]
@@ -68,43 +68,43 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         szErr += 1
     
       if szErr == 0:
-        args.lblPorts.setText("Ports: Activated")
+        args.lblPorts.setMarkup("Ports:         <b>Activated</b>")
       elif szErr == 3:
-        args.lblPorts.setText("Ports: All ports are not opened")
+        args.lblPorts.setMarkup("Ports:         <b>All ports are not opened</b>")
       elif szErr == 2:
-        args.lblPorts.setText("Ports: Error on " & join(onErrPorts, ", "))
+        args.lblPorts.setMarkup("Ports:         <b>Error on " & join(onErrPorts, ", ") & "</b>")
       else:
-        args.lblPorts.setText("Ports: Error on " & onErrPorts[0])
+        args.lblPorts.setMarkup("Ports:         <b>Error on " & onErrPorts[0] & "</b>")
 
   elif myStatus.isAnonsurfSErvice == 0:
     args.btnRestart.setSensitive(false)
-    args.lblServices.setText("Services: Deactivated")
-    args.lblPorts.setText("Ports: Deactivated")
+    args.lblServices.setMarkup("Services: <b>Deactivated</b>")
+    args.lblPorts.setMarkup("Ports:        <b>Deactivated</b>")
   else:
     args.btnRestart.setSensitive(false)
-    args.lblServices.setText("Services: AnonSurf failed to start")
-    args.lblPorts.setText("Ports: Deactivated")
+    args.lblServices.setMarkup("Services: <b>AnonSurf failed to start</b>")
+    args.lblPorts.setMarkup("Ports:         <b>Deactivated</b>")
 
   # Update DNS status
   let dns = dnsStatusCheck()
   if dns == 0:
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
-      args.lblDns.setText("DNS: [Err] Failed to read config")
+      args.lblDns.setMarkup("DNS:         <b>[Err] Failed to read config</b>")
     elif myPorts.isDNSPort:
-      args.lblDns.setText("DNS: Using Tor DNS servers")
+      args.lblDns.setMarkup("DNS:         <b>Using Tor DNS servers</b>")
     else:
-      args.lblDns.setText("DNS: [Err] Failed to bind DNS port")
+      args.lblDns.setMarkup("DNS:         <b>[Err] Failed to bind DNS port</b>")
   elif dns == 1:
-    args.lblDns.setText("DNS: [Warn] LocalHost")
+    args.lblDns.setMarkup("DNS:         <b>[Warn] LocalHost</b>")
   elif dns == -2:
-    args.lblDns.setText("DNS: [Err] resolv.conf not found")
+    args.lblDns.setMarkup("DNS:         <b>[Err] resolv.conf not found</b>")
   elif dns == -3:
-    args.lblDns.setText("DNS: [Err] resolv.conf is empty")
+    args.lblDns.setMarkup("DNS:         <b>[Err] resolv.conf is empty</b>")
   elif dns == 21 or dns == 11:
-    args.lblDns.setText("DNS: OpenNIC server")
+    args.lblDns.setMarkup("DNS:                 <b>OpenNIC server</b>")
   else:
-    args.lblDns.setText("DNS: Custom setting")
+    args.lblDns.setMarkup("DNS:         <b>Custom setting</b>")
 
 
 proc updateMain*(args: MainObjs, myStatus: Status) =
