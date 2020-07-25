@@ -86,33 +86,32 @@ proc status() =
   #[
     Get current settings of DNS on system
   ]#
-  stdout.write("Your system is: ")
   let statusResult = dnsStatusCheck()
   if statusResult == 0:
-    stdout.write("using AnonSurf DNS\n")
+    stdout.write("[INFO] AnonSurf DNS\n")
   elif statusResult == -1:
-    stderr.write("[x] using localhost only. This might be an error\n")
+    stderr.write("[Warn] Local host\n")
   elif statusResult == -2:
-    stderr.write("[x] having error: resolf.conf not found\n")
+    stderr.write("[ERROR] resolf.conf not found\n")
   elif statusResult == -3:
-    stderr.write("[x] having error: resolv.conf is empty\n")
+    stderr.write("[ERROR] resolv.conf is empty\n")
   else:
     if statusResult == 20:
-      stdout.write("using dynamic setting\n")
+      stdout.write("[Dynamic] DHCP\n")
     elif statusResult == 21:
-      stdout.write("using dynamic + OpenNIC addresses\n")
+      stdout.write("[Dynamic] DHCP and OpenNIC\n")
     elif statusResult == 22:
-      stdout.write("using dynamic + custom addresses\n")
+      stdout.write("[Dynamic] DHCP and custom DNS\n")
     elif statusResult == 23:
-      stdout.write("using dynamic + OpenNIC + Custom addresses\n")
+      stdout.write("[Dynamic] DHCP, OpenNIC and custom DNS\n")
     elif statusResult == 10:
-      stdout.write("using static settings\n")
+      stdout.write("[Static] DHCP. Becareful if you are using laptop\n")
     elif statusResult == 11:
-      stdout.write("using static + OpenNIC addresses\n")
+      stdout.write("[Static] OpenNIC DNS\n")
     elif statusResult == 12:
-      stdout.write("using static + custom addresses\n")
+      stdout.write("[Static] Custom DNS\n")
     elif statusResult == 13:
-      stdout.write("using static + OpenNIC + Custom addresses\n")
+      stdout.write("[Static] OpenNIC and Custom DNS\n")
 
 
 proc makeBackUp() =
