@@ -1,4 +1,4 @@
-import gintro / [gtk, pango]
+import gintro / gtk
 import .. / .. / utils / dnsutils
 import status
 import .. / actions / actMainPage
@@ -79,7 +79,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   elif myStatus.isAnonsurfSErvice == 0:
     args.btnRestart.setSensitive(false)
     args.lblServices.setMarkup("Servc:  <b>Deactivated</b>")
-    args.lblPorts.setMarkup("Ports:        <b>Deactivated</b>")
+    args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
   else:
     args.btnRestart.setSensitive(false)
     args.lblServices.setMarkup("Servc:  <b>AnonSurf failed to start</b>")
