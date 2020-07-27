@@ -1,3 +1,11 @@
+anonsurf (3.0.1+parrot0) rolling-testing; urgency=medium
+
+  * Improve output of dnstool
+  * Fix spacing in GUI when showing deactivated ports
+  * New icon for boot status
+
+ -- Nong Hoang "dmknght" Tu <dmknght@parrotsec.org>  Mon, 27 Jul 2020 15:14:54 +0700
+
 anonsurf (3.0.0) rolling-testing; urgency=medium
 
   * Promote previous version to 3.0.0.
