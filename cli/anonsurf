@@ -301,7 +301,7 @@ case "$1" in
 
 # This is help banner
 echo -e "
-AnonSurf [v3.0.0] -$BLUE Command Line Interface$RESETCOLOR
+AnonSurf [v3.0.1] -$BLUE Command Line Interface$RESETCOLOR
 
  $RED Developed$RESETCOLOR by$GREEN Lorenzo \"Palinuro\" Faletra$BLUE <palinuro@parrotsec.org>$RESETCOLOR
    $GREEN Lisetta \"Sheireen\" Ferrero$BLUE <sheireen@parrotsec.org>$RESETCOLOR
