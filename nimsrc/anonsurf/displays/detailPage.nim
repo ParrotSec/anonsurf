@@ -2,7 +2,7 @@ import gintro / gtk
 # import .. / .. / actions / cores
 
 
-proc makeBottomBarForDetail(bBack, bRestart: Button): Box =
+proc makeBottomBarForDetail(bBack: Button): Box =
   #[
     Display bottom bar that has btnExit and btnBack
   ]#
@@ -11,7 +11,7 @@ proc makeBottomBarForDetail(bBack, bRestart: Button): Box =
     # btnExit = newButton("Exit")
   
   boxBottomBar.add(bBack)
-  boxBottomBar.packEnd(bRestart, false, true, 3)
+  # boxBottomBar.packEnd(bRestart, false, true, 3)
 
   return boxBottomBar
 
@@ -81,7 +81,7 @@ proc makeServiceDetails(
 
 proc createDetailWidget*(
   labelServices, labelPorts, labelDNS, labelBoot: Label,
-  btnBoot, btnBack, btnRestart: Button,
+  btnBoot, btnBack: Button,
   imgBoot: Image,
   ): Box =
   #[
@@ -92,7 +92,7 @@ proc createDetailWidget*(
       labelServices, labelPorts, labelDNS, labelBoot, btnBoot, imgBoot
     )
     boxDetailWidget = newBox(Orientation.vertical, 3)
-    boxBottomBar = makeBottomBarForDetail(btnBack, btnRestart)
+    boxBottomBar = makeBottomBarForDetail(btnBack)
   
   boxDetailWidget.add(boxServices)
   boxDetailWidget.packEnd(boxBottomBar, false, true, 3)

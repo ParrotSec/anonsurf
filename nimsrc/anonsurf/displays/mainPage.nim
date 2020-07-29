@@ -1,6 +1,4 @@
-import gintro / [gtk, gobject]
-import .. / actions / gtkClick
-import about
+import gintro / gtk
 
 
 proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: Button): Frame =
@@ -49,36 +47,28 @@ proc makeToolBar(btnStart, btnID, btnIP: Button): Frame =
   return fmTool
 
 
-proc makeBottomBarForMain(): Box =
+proc makeBottomBarForMain(btnRestart: Button): Box =
   #[
     Create bottom bar
     It has About and Exit button
   ]#
   let
     boxBottomBar = newBox(Orientation.horizontal, 3)
-    btnExit = newButton("Exit")
-    btnAbout = newButton("About")
-    imgAbout = newImageFromIconName("help-about", 3)
-    imgExit = newImageFromIconName("exit", 3)
-
-  btnExit.setImage(imgExit)
-  btnExit.connect("clicked", onClickExit)
-  btnAbout.setImage(imgAbout)
-  btnAbout.connect("clicked", onClickAbout)
-  boxBottomBar.add(btnExit)
-  boxBottomBar.packEnd(btnAbout, false, true, 3)
+    imgRestart = newImageFromIconName("reload", 3)
+  btnRestart.setImage(imgRestart)
+  boxBottomBar.add(btnRestart)
 
   return boxBottomBar
 
 
-proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bDetail, bStatus, bID, bIP: Button): Box =
+proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bDetail, bStatus, bID, bIP, bRestart: Button): Box =
   #[
     Create the page for main widget
   ]#
   let
     boxPanel = makeDetailPanel(imgStatus, lDetails, bDetail, bStatus)
     boxToolBar = makeToolBar(bStart, bID, bIP)
-    bottomBar = makeBottomBarForMain()
+    bottomBar = makeBottomBarForMain(bRestart)
     mainWidget = newBox(Orientation.vertical, 3)
   
   mainWidget.add(boxPanel)

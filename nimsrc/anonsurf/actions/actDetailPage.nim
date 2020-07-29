@@ -22,7 +22,9 @@ proc onClickRestart*(b: Button) =
   #[
     Run anonsurf restart
   ]#
-  if spawnCommandLineAsync("gksudo /usr/bin/anonsurf restart"):
-    b.label = "Wait"
-  else:
-    discard
+  # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf restart"):
+  #   let imgStatus = newImageFromIconName("system-restart-panel", 3)
+  #   b.setImage(imgStatus)
+  # else:
+  #   discard
+  discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf restart")

@@ -40,9 +40,11 @@ proc createArea(boxMainWindow: Box) =
     btnShowStatus = newButton("Tor Stats")
     btnChangeID = newButton("Change\nIdentity")
     btnCheckIP = newButton("My IP")
+    btnRestart = newButton("")
     imgStatus = newImageFromPixbuf(surfImages.imgSecMed)
-    mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowDetails, btnShowStatus, btnChangeID, btnCheckIP)
+    mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowDetails, btnShowStatus, btnChangeID, btnCheckIP, btnRestart)
 
+  btnRestart.connect("clicked", onClickRestart)
   btnStart.connect("clicked", onClickRun)
   btnCheckIP.connect("clicked", onClickCheckIP)
   btnChangeID.connect("clicked", onClickChangeID)
@@ -56,13 +58,11 @@ proc createArea(boxMainWindow: Box) =
     labelStatusBoot = newLabel("Not enabled at boot")
     btnBoot = newButton("Enable")
     btnBack = newButton("Back")
-    btnRestart = newButton("Restart")
     detailWidget = createDetailWidget(
       labelDaemons, labelPorts, labelDNS, labelStatusBoot,
-      btnBoot, btnBack, btnRestart, imgStatusBoot
+      btnBoot, btnBack, imgStatusBoot
     )
   
-  btnRestart.connect("clicked", onClickRestart)
   btnBoot.connect("clicked", onClickBoot)
 
   let
@@ -73,6 +73,7 @@ proc createArea(boxMainWindow: Box) =
 
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
+  boxMainWindow.add(makeTitleBar())
   boxMainWindow.add(mainStack)
   boxMainWindow.showAll()
   
@@ -84,6 +85,7 @@ proc createArea(boxMainWindow: Box) =
       btnStatus: btnShowStatus,
       btnIP: btnCheckIP,
       lDetails: labelDetails,
+      btnRestart: btnRestart,
       imgStatus: imgStatus,
     )
     detailArgs = DetailObjs(
@@ -92,7 +94,6 @@ proc createArea(boxMainWindow: Box) =
       lblDns: labelDNS,
       lblBoot: labelStatusBoot,
       btnBoot: btnBoot,
-      btnRestart: btnRestart,
       imgBoot: imgStatusBoot
     )
     refresher = RefreshObj(
@@ -122,10 +123,10 @@ proc main =
     mainBoard = newWindow()
     boxMainWindow = newBox(Orientation.vertical, 3)
   
-  mainBoard.setTitlebar(makeTitleBar())
+  # mainBoard.setTitlebar(makeTitleBar())
   mainBoard.title = "AnonSurf GUI"
   discard mainBoard.setIconFromFile("/usr/share/icons/anonsurf.png")
-  # mainBoard.setDecorated(false)
+  mainBoard.setDecorated(false)
   mainBoard.setPosition(WindowPosition.center)
 
   createArea(boxMainWindow)

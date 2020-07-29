@@ -15,18 +15,17 @@ type
     btnIP*: Button
     lDetails*: Label
     imgStatus*: Image
+    btnRestart*: Button
   DetailObjs* = ref object
     lblServices*: Label
     lblPorts*: Label
     lblDns*: Label
     lblBoot*: Label
     btnBoot*: Button
-    btnRestart*: Button
     imgBoot*: Image
 
 
 proc updateDetail*(args: DetailObjs, myStatus: Status) =
-  args.btnRestart.label = "Restart"
   # AnonSurf is Enabled at boot
   if myStatus.isAnonSurfBoot:
     args.btnBoot.label = "Disable"
@@ -41,7 +40,6 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   
   # Check current status of daemon services and control ports
   if myStatus.isAnonSurfService == 1:
-    args.btnRestart.setSensitive(true)
     # Check status of Tor
     if myStatus.isTorService == 1:
       args.lblServices.setMarkup("Servc:  <b>Activated</b>")
@@ -77,11 +75,9 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         args.lblPorts.setMarkup("Ports:  <b>Error on " & onErrPorts[0] & "</b>")
 
   elif myStatus.isAnonsurfSErvice == 0:
-    args.btnRestart.setSensitive(false)
     args.lblServices.setMarkup("Servc:  <b>Deactivated</b>")
     args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
   else:
-    args.btnRestart.setSensitive(false)
     args.lblServices.setMarkup("Servc:  <b>AnonSurf failed to start</b>")
     args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
 
@@ -112,7 +108,10 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
     Always check status of current widget
       to show correct state of buttons
   ]#
+  # args.btnRestart.label = "Restart"
   if myStatus.isAnonSurfService == 1:
+    # Idea: Restart when AnonSurf is failed
+    args.btnRestart.setSensitive(true)
     # Check status of tor service
     if myStatus.isTorService == 1:
       let myPorts = getStatusPorts()
@@ -146,10 +145,12 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
     args.btnRun.label = "Stop"
   else:
     if myStatus.isAnonSurfService == -1:
+      args.btnRestart.setSensitive(false)
       args.lDetails.setText("AnonSurf start failed") # Fix me
       # args.imgStatus.setFromIconName("security-low", 6)
       args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
     else:
+      args.btnRestart.setSensitive(false)
       args.lDetails.setText("AnonSurf is not running")
       # args.imgStatus.setFromIconName("security-medium", 6)
       args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
