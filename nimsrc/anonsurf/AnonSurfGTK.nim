@@ -1,8 +1,7 @@
 import gintro / [gtk, glib, gobject]
-import displays / [detailPage, mainPage]
+import displays / [detailPage, mainPage, title]
 import cores / [status, refresher, images]
 import actions / [actDetailPage, actMainPage, gtkClick]
-# TODO better analysis
 
 type
   RefreshObj = ref object
@@ -123,8 +122,11 @@ proc main =
     mainBoard = newWindow()
     boxMainWindow = newBox(Orientation.vertical, 3)
   
+  mainBoard.setTitlebar(makeTitleBar())
   mainBoard.title = "AnonSurf GUI"
   discard mainBoard.setIconFromFile("/usr/share/icons/anonsurf.png")
+  # mainBoard.setDecorated(false)
+  mainBoard.setPosition(WindowPosition.center)
 
   createArea(boxMainWindow)
 
