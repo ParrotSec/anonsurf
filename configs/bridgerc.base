@@ -1,0 +1,3 @@
+ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
+ORPort 9001
+ServerTransportListenAddr obfs4 127.0.0.1:9443
