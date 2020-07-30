@@ -1,5 +1,6 @@
-import .. / utils / generator
+import cores / generator
 import os
+import cores / options
 
 const
   nyxrc = "/etc/anonsurf/nyxrc"
@@ -52,7 +53,7 @@ proc cleanNyxrc() =
     stdout.write("[*] Nyxrc is removed\n")
 
 
-proc makeTorrc*(hased: string, isTorBridge: bool = false) =
+proc makeTorrc*(hased: string) =
   #[
     Create torrc file with random password
       and the settings for bridge / normal
@@ -66,7 +67,7 @@ proc makeTorrc*(hased: string, isTorBridge: bool = false) =
       stderr.write("[x] Error while removing old torrc\n")
       return
 
-  torData = genTorrc(hased, isTorBridge)
+  torData = genTorrc(hased)
   try:
     writeFile(torTorrc, torData)
   except:
@@ -81,7 +82,7 @@ proc makeTorrc*(hased: string, isTorBridge: bool = false) =
       stderr.write("[x] Error while copying onion.pac\n")
 
 
-proc replaceTorrc(hashed: string, isOptionBridge: bool = false) =
+proc replaceTorrc(hashed: string) =
   #[
     We replace torrc's setting by our anonsurf settings then call tor
     1. Make a backup for current torrc (which should be from tor side)
@@ -99,13 +100,13 @@ proc replaceTorrc(hashed: string, isOptionBridge: bool = false) =
       stdout.write("[+] Creating tor's torrc backup\n")
       moveFile(torTorrc, torTorrcBak)
       stdout.write("[+] Using AnonSurf's torrc config\n")
-      makeTorrc(hashed, isOptionBridge)
+      makeTorrc(hashed)
     # else we remove file and create symlink
     else:
       stdout.write("[+] Torrc is a symlink. We don't create a backup\n")
       if tryRemoveFile(torTorrc):
         try:
-          makeTorrc(hashed, isOptionBridge)
+          makeTorrc(hashed)
         except:
           stderr.write("[x] Can not replace torrc\n")
       else:
@@ -113,7 +114,7 @@ proc replaceTorrc(hashed: string, isOptionBridge: bool = false) =
   else:
     stderr.write("[x] Can not find " & torTorrc & "\n")
     stdout.write("[+] Force using AnonSurf's torrc config\n")
-    makeTorrc(hashed, isOptionBridge)
+    makeTorrc(hashed)
 
 
 proc main() =
@@ -125,10 +126,6 @@ proc main() =
     makeNyxrc(txtPasswd)
     replaceTorrc(encPasswd)
   elif paramCount() == 1:
-    # if paramStr(1) == "bridge":
-    #  makeNyxrc(txtPasswd)
-    #  replaceTorrc(encPasswd, true)
-    #elif paramStr(1) == "restore":
     if paramStr(1) == "restore":
       restoreTorrc()
       cleanNyxrc()

@@ -49,7 +49,7 @@ proc genBridgeAddr*(): string =
   return sample(allBridgeAddr)
 
 
-proc genTorrc*(hashed: string, isTorBridge: bool = false): string =
+proc genTorrc*(hashed: string): string =
   #[
     Generate final torrc file
   ]#
@@ -59,9 +59,11 @@ proc genTorrc*(hashed: string, isTorBridge: bool = false): string =
   result = readFile(basePath)
   result &= "\nHashedControlPassword " & hashed & "\n"
 
-  if isTorBridge == true:
-    # https://sigvids.gitlab.io/create-tor-private-obfs4-bridges.html
-    # https://community.torproject.org/relay/setup/bridge/debian-ubuntu/
-    result &= "#Bridge config\nUseBridges 1\nBridgeRelay 1\nExtORPort auto\n"
-    result &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 127.0.0.1:9443\n" # TODO check here Security reason
-    result &= "Bridge " & genBridgeAddr() & "\n"
+
+proc genBridgeConf*(bAddr: string): string =
+  # https://sigvids.gitlab.io/create-tor-private-obfs4-bridges.html
+  # https://community.torproject.org/relay/setup/bridge/debian-ubuntu/
+  result &= "#Bridge config\nUseBridges 1\nBridgeRelay 1\nExtORPort auto\n"
+  result &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 127.0.0.1:9443\n" # TODO check here Security reason
+  # result &= "Bridge " & genBridgeAddr() & "\n"
+  result &= "Bridge " & bAddr & "\n"
