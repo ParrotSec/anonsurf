@@ -1,5 +1,5 @@
 import gintro / [gtk, gobject]
-import opts
+# import opts
 
 
 proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: Button): Frame =
@@ -61,7 +61,7 @@ proc makeBottomBarForMain(btnRestart: Button): Box =
   btnRestart.setImage(imgRestart)
 
   btnOptions.setImage(imgOptions)
-  btnOptions.connect("clicked", makeOptionsDialog)
+  # btnOptions.connect("clicked", makeOptionsDialog)
 
   boxBottomBar.packStart(btnRestart, false, true, 3)
   # boxBottomBar.packEnd(btnOptions, false, true, 3)
