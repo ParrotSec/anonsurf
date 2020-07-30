@@ -55,7 +55,6 @@ proc genBridgeConf*(bAddr: string): string =
   # https://community.torproject.org/relay/setup/bridge/debian-ubuntu/
   result &= "#Bridge config\nBridgeRelay 1\nExtORPort auto\n"
   result &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 127.0.0.1:9443\n" # TODO check here Security reason
-  # result &= "Bridge " & genBridgeAddr() & "\n"
   result &= "Bridge " & bAddr & "\n"
 
 
@@ -68,7 +67,7 @@ proc genTorrc*(hashed: string): string =
 
   result = readFile(basePath)
   result &= "\nHashedControlPassword " & hashed & "\n"
-  let conf = readDefaultConfig() # TODO user config
+  let conf = readDefaultConfig() # TODO user's config at home
   if conf.use_bridge == false:
     result &= "# Enable sandbox\nSandbox 1"
   else:
