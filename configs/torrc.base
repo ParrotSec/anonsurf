@@ -18,9 +18,6 @@ DNSPort 127.0.0.1:53
 #daemonize
 RunAsDaemon 1
 
-# Enable sandbox
-Sandbox 1
-
 #use hardware accaleration when possible for crypto
 HardwareAccel 1
 
