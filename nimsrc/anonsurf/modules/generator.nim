@@ -56,8 +56,8 @@ proc genBridgeConf*(bAddr: string): string =
   const
     basePath = "/etc/anonsurf/bridgerc.base"
   result = readFile(basePath)
-  result &= "BridgeRelay 1"
-  result &= "ExtORPort auto"
+  result &= "\nBridgeRelay 1\n"
+  result &= "ExtORPort auto\n"
   # result &= "#Bridge config\nBridgeRelay 1\nExtORPort auto\n"
   # result &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 127.0.0.1:9443\n"
   result &= "Bridge " & bAddr & "\n"
