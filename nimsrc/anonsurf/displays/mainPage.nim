@@ -16,11 +16,11 @@ proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: 
     bxDetailPanel = newBox(Orientation.horizontal, 6)
 
   bxDetailPanel.add(imgStatus)
-  bxButtons.add(btnDetail)
-  bxButtons.add(btnStatus)
+  bxButtons.packStart(btnDetail, false, true, 4)
+  bxButtons.packStart(btnStatus, false, true, 2)
 
-  areaInfo.add(labDetails)
-  areaInfo.packEnd(bxButtons, false, true, 3)
+  areaInfo.packStart(labDetails, false, true, 3)
+  areaInfo.packEnd(bxButtons, false, true, 5)
   bxDetailPanel.add(areaInfo)
 
   fmDetail.add(bxDetailPanel)
@@ -79,7 +79,7 @@ proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bDetail, bStat
     bottomBar = makeBottomBarForMain(bRestart)
     mainWidget = newBox(Orientation.vertical, 3)
   
-  mainWidget.add(boxPanel)
-  mainWidget.add(boxToolBar)
-  mainWidget.packEnd(bottomBar, false, true, 3)
+  mainWidget.packStart(boxPanel, false, true, 2)
+  mainWidget.packStart(boxToolBar, false, true, 1)
+  mainWidget.packEnd(bottomBar, false, true, 2)
   return mainWidget
