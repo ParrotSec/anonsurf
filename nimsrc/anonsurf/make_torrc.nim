@@ -52,7 +52,7 @@ proc cleanNyxrc() =
     stdout.write("[*] Nyxrc is removed\n")
 
 
-proc makeTorrc*(hased: string) =
+proc makeTorrc*(hashed: string) =
   #[
     Create torrc file with random password
       and the settings for bridge / normal
@@ -66,7 +66,7 @@ proc makeTorrc*(hased: string) =
       stderr.write("[x] Error while removing old torrc\n")
       return
 
-  torData = genTorrc(hased)
+  torData = genTorrc(hashed)
   try:
     writeFile(torTorrc, torData)
   except:

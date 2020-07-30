@@ -1,6 +1,7 @@
 import random
 import strutils
 import osproc
+import .. / cores / options
 
 randomize()
 
@@ -49,6 +50,15 @@ proc genBridgeAddr*(): string =
   return sample(allBridgeAddr)
 
 
+proc genBridgeConf*(bAddr: string): string =
+  # https://sigvids.gitlab.io/create-tor-private-obfs4-bridges.html
+  # https://community.torproject.org/relay/setup/bridge/debian-ubuntu/
+  result &= "#Bridge config\nUseBridges 1\nBridgeRelay 1\nExtORPort auto\n"
+  result &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 127.0.0.1:9443\n" # TODO check here Security reason
+  # result &= "Bridge " & genBridgeAddr() & "\n"
+  result &= "Bridge " & bAddr & "\n"
+
+
 proc genTorrc*(hashed: string): string =
   #[
     Generate final torrc file
@@ -58,12 +68,14 @@ proc genTorrc*(hashed: string): string =
 
   result = readFile(basePath)
   result &= "\nHashedControlPassword " & hashed & "\n"
-
-
-proc genBridgeConf*(bAddr: string): string =
-  # https://sigvids.gitlab.io/create-tor-private-obfs4-bridges.html
-  # https://community.torproject.org/relay/setup/bridge/debian-ubuntu/
-  result &= "#Bridge config\nUseBridges 1\nBridgeRelay 1\nExtORPort auto\n"
-  result &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 127.0.0.1:9443\n" # TODO check here Security reason
-  # result &= "Bridge " & genBridgeAddr() & "\n"
-  result &= "Bridge " & bAddr & "\n"
+  let conf = readDefaultConfig() # TODO user config
+  if conf.use_bridge == false:
+    discard
+  else:
+    if conf.custom_bridge == true:
+      if conf.bridge_addr == "":
+        stderr.write("[x] Empty address\n")
+      else:
+        result &= genBridgeConf(conf.bridge_addr)
+    else:
+      result &= genBridgeConf(genBridgeAddr())
