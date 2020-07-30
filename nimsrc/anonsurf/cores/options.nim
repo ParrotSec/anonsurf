@@ -27,8 +27,8 @@ proc readConf*(p: string): AnonOptions =
     return defConfVal
 
 
-proc readDefaultConfig*() =
-  discard readConf(defConfPath)
+proc readDefaultConfig*(): AnonOptions =
+  return readConf(defConfPath)
 
 
 proc writeConf*(p: string, op: AnonOptions) =
