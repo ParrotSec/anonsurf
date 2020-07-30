@@ -24,9 +24,9 @@ proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label): Frame =
     areaServices = newBox(Orientation.vertical, 3)
     frameServices = newFrame()
   
-  labelServices.setXalign(0.08)
-  labelPorts.setXalign(0.08)
-  labelDNS.setXalign(0.08)
+  # labelServices.setXalign(0.08)
+  # labelPorts.setXalign(0.08)
+  # labelDNS.setXalign(0.08)
 
   areaServices.add(labelServices)
   areaServices.add(labelPorts)
