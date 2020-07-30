@@ -1,3 +1,11 @@
+anonsurf (3.0.2+parrot0) rolling-testing; urgency=medium
+
+  * Add bridge mode
+  * Add new firefox name to kill
+  * New GUI layout
+
+ -- Nong Hoang "dmknght" Tu <dmknght@parrotsec.org>  Fri, 31 Jul 2020 04:46:48 +0700
+
 anonsurf (3.0.1+parrot0) rolling-testing; urgency=medium
 
   * Improve output of dnstool
