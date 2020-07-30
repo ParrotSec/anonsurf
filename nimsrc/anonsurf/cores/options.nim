@@ -6,7 +6,7 @@ type
   AnonOptions* = object
     use_bridge*: bool
     custom_bridge*: bool
-    bridge_addr: string
+    bridge_addr*: string
 
 let
   bridgePath* = "/etc/anonsurf/bridges.txt"
