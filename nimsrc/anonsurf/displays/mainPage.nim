@@ -64,7 +64,7 @@ proc makeBottomBarForMain(btnRestart: Button): Box =
   btnOptions.connect("clicked", makeOptionsDialog)
 
   boxBottomBar.packStart(btnRestart, false, true, 3)
-  boxBottomBar.packEnd(btnOPtions, false, true, 3)
+  # boxBottomBar.packEnd(btnOptions, false, true, 3)
 
   return boxBottomBar
 

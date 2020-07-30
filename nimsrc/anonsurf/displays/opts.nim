@@ -22,22 +22,22 @@ proc makeOptionsDialog*(b: Button) =
   txtFingerPrint.setPlaceholderText("Fingerprint")
   txtParameters.setPlaceholderText("Parameters")
 
-  let
-    boxTypes = newBox(Orientation.horizontal, 3)
-    labelTypes = newLabel("Type")
-    cmbTypes = newComboBoxText()
-  cmbTypes.appendText("obfs4")
-  cmbTypes.appendText("meek_lite")
-  cmbTypes.appendText("snowflake")
-  cmbTypes.setActive(0)
+  # let
+  #   boxTypes = newBox(Orientation.horizontal, 3)
+  #   labelTypes = newLabel("Type")
+  #   cmbTypes = newComboBoxText()
+  # cmbTypes.appendText("obfs4")
+  # cmbTypes.appendText("meek_lite")
+  # cmbTypes.appendText("snowflake")
+  # cmbTypes.setActive(0)
 
-  boxTypes.packStart(labelTypes, false, true, 3)
-  boxTypes.packstart(cmbTypes, false, true, 3)
+  # boxTypes.packStart(labelTypes, false, true, 5)
+  # boxTypes.packstart(cmbTypes, false, true, 3)
 
   # btnBridge.connect("toggled", test)
   bxBridges.add(btnBridge)
   bxBridges.add(btnCustomAddr)
-  bxBridges.add(boxTypes)
+  # bxBridges.add(boxTypes)
   bxBridges.add(txtAddr)
   bxBridges.add(txtFingerPrint)
   bxBridges.add(txtParameters)

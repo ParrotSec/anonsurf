@@ -27,6 +27,7 @@ proc restoreTorrc() =
   else:
     stderr.write("[x] Error while removing " & dstOnionPac & "\n")
 
+
 proc makeNyxrc(passwd: string) =
   #[
     Create nyxRC for status command

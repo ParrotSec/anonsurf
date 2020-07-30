@@ -29,13 +29,15 @@ proc generateHash*(password: string): string =
     if line.startsWith("16:"):
       return line
 
+
 proc genBridgeAddr*(): string =
   #[
     Read the list from official list
     Random selecting from the list
   ]#
+  # New list from https://trac.torproject.org/projects/tor/wiki/doc/TorBrowser/DefaultBridges
   const
-    basePath = "/etc/anonsurf/obfs4bridge.list" # TODO change here. Development only
+    basePath = "/etc/anonsurf/bridges.list"
 
   var
     allBridgeAddr: seq[string]
@@ -63,5 +65,3 @@ proc genTorrc*(hashed: string, isTorBridge: bool = false): string =
     result &= "#Bridge config\nUseBridges 1\nBridgeRelay 1\nExtORPort auto\n"
     result &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\nORPort 9001\nServerTransportListenAddr obfs4 127.0.0.1:9443\n" # TODO check here Security reason
     result &= "Bridge " & genBridgeAddr() & "\n"
-    # result &= "ServerTransportListenAddr obfs4 0.0.0.0:9443\n" # TODO check here. Security reason
-    # TODO ServerTransportListenAddr obfs4 0.0.0.0:TODO2
