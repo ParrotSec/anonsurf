@@ -1,5 +1,5 @@
 import gintro / [gtk, gobject]
-import options
+import opts
 
 
 proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: Button): Frame =
