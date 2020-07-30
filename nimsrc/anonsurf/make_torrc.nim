@@ -1,6 +1,5 @@
-import cores / generator
+import modules / generator
 import os
-import cores / options
 
 const
   nyxrc = "/etc/anonsurf/nyxrc"
