@@ -10,12 +10,13 @@ proc makeTitleBar*(): Box =
   ]#
   let
     boxTitle = newBox(Orientation.horizontal, 3)
-    labelTitle = newLabel("AnonSurf GTK")
+    labelTitle = newLabel("")
     btnExit = newButton("")
     imgExit = newImageFromIconName("exit", 3)
     btnAbout = newButton("")
     imgAbout = newImageFromIconName("help-about", 3)
   
+  labelTitle.setMarkUp("<b>AnonSurf GTK</b>")
   btnExit.setImage(imgExit)
   btnExit.connect("clicked", onClickExit)
 
