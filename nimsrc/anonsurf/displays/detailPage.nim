@@ -24,9 +24,9 @@ proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label): Frame =
     areaServices = newBox(Orientation.vertical, 3)
     frameServices = newFrame()
   
-  labelServices.setXalign(0.0)
-  labelPorts.setXalign(0.0)
-  labelDNS.setXalign(0.0)
+  labelServices.setXalign(0.08)
+  labelPorts.setXalign(0.08)
+  labelDNS.setXalign(0.08)
 
   areaServices.add(labelServices)
   areaServices.add(labelPorts)
@@ -45,7 +45,7 @@ proc makeBootFrame(labelBoot: Label, btnBoot: Button, imgBoot: Image): Frame =
     areaBoot = newBox(Orientation.horizontal, 3)
     field = newBox(Orientation.vertical, 3)
   
-  field.add(labelBoot)
+  field.packStart(labelBoot, false, true, 3)
   field.add(btnBoot)
 
   areaBoot.packStart(imgBoot, false, true, 10)
