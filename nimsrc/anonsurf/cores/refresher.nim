@@ -46,7 +46,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     elif myStatus.isTorService == 0:
       args.lblServices.setMarkup("Servc:  <b>Tor is not running</b>")
     elif myStatus.isTorService == -1:
-      args.lblServices.setMarkup("Servc:  <b>Tor failed to start</b>")
+      args.lblServices.setMarkup("Servc:  <b>Can't start Tor</b>")
     # Check status of Port
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
@@ -68,7 +68,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
       if szErr == 0:
         args.lblPorts.setMarkup("Ports:  <b>Activated</b>")
       elif szErr == 3:
-        args.lblPorts.setMarkup("Ports:  <b>All ports are not opened</b>")
+        args.lblPorts.setMarkup("Ports:  <b>Can't bind ports</b>")
       elif szErr == 2:
         args.lblPorts.setMarkup("Ports:  <b>Error on " & join(onErrPorts, ", ") & "</b>")
       else:
@@ -78,7 +78,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     args.lblServices.setMarkup("Servc:  <b>Deactivated</b>")
     args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
   else:
-    args.lblServices.setMarkup("Servc:  <b>AnonSurf failed to start</b>")
+    args.lblServices.setMarkup("Servc:  <b>Can't start AnonSurf</b>")
     args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
 
   # Update DNS status
@@ -86,17 +86,17 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   if dns == 0:
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
-      args.lblDns.setMarkup("DNS:   <b>[Err] Failed to read config</b>")
+      args.lblDns.setMarkup("DNS:   <b>[Err] Can't read config</b>")
     elif myPorts.isDNSPort:
-      args.lblDns.setMarkup("DNS:   <b>Using Tor DNS servers</b>")
+      args.lblDns.setMarkup("DNS:   <b>Activated</b>")
     else:
-      args.lblDns.setMarkup("DNS:   <b>[Err] Failed to bind DNS port</b>")
+      args.lblDns.setMarkup("DNS:   <b>[Err] Can't bind port</b>")
   elif dns == 1:
     args.lblDns.setMarkup("DNS:   <b>[Warn] LocalHost</b>")
   elif dns == -2:
-    args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf not found</b>")
+    args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf N/A</b>")
   elif dns == -3:
-    args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf is empty</b>")
+    args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf EOF</b>")
   elif dns == 21 or dns == 11:
     args.lblDns.setMarkup("DNS:   <b>OpenNIC server</b>")
   else:
