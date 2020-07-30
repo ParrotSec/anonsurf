@@ -1,6 +1,13 @@
+#[
+  https://nim-lang.org/docs/json.html
+  str -> json: parseJson()
+  json -> str: $
+  obj -> json: %
+  json -> obj: to()
+]#
+
 import json
 import os
-import marshal
 
 type
   AnonOptions* = object
@@ -33,6 +40,6 @@ proc readDefaultConfig*(): AnonOptions =
 
 proc writeConf*(p: string, op: AnonOptions) =
   try:
-    writeFile(p, $$op)
+    writeFile(p, pretty(%op))
   except:
     stderr.write("[x] Error while writing config at " & p & "\n")
