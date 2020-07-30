@@ -38,7 +38,7 @@ proc genBridgeAddr*(): string =
   ]#
   # New list from https://trac.torproject.org/projects/tor/wiki/doc/TorBrowser/DefaultBridges
   const
-    basePath = "/etc/anonsurf/bridges"
+    basePath = "/etc/anonsurf/bridges.txt"
 
   var
     allBridgeAddr: seq[string]
