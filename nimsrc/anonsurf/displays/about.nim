@@ -17,7 +17,7 @@ proc onClickAbout*(b: Button) =
   # discard showAbout.setIconFromFile("/usr/share/icons/anonsurf.png")
   showAbout.setLogo(imgLogo)
   showAbout.setProgramName("AnonSurf")
-  showAbout.setVersion("3.0.1")
+  showAbout.setVersion("3.0.2")
   showAbout.setArtists([
     "Federica \"marafed\" Marasà",
     # "Manuel \"Serverket\" Hernandez",
