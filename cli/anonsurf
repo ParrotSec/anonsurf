@@ -56,7 +56,41 @@ function notify {
 		fi
 	fi
 }
-# export notify
+
+
+function dev-banner {
+	echo -e "
+AnonSurf [v3.0.2] -$BLUE Command Line Interface$RESETCOLOR
+
+ $RED Developed$RESETCOLOR by$GREEN Lorenzo \"Palinuro\" Faletra$BLUE <palinuro@parrotsec.org>$RESETCOLOR
+   $GREEN Lisetta \"Sheireen\" Ferrero$BLUE <sheireen@parrotsec.org>$RESETCOLOR
+   $GREEN Francesco \"Mibofra\" Bonanno$BLUE <mibofra@parrotsec.org>$RESETCOLOR
+ $RED Maintained$RESETCOLOR by$GREEN Nong Hoang \"DmKnght\" Tu$BLUE <dmknght@parrotsec.org>$RESETCOLOR
+    and a huge amount of Caffeine, Mountain Dew + some GNU/GPL v3 stuff
+  Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
+	
+	Dance like no one's watching. Encrypt like everyone is."
+}
+
+
+function help-banner {
+	echo -e "
+  Usage:
+  $RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
+  $RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
+
+  $RED start$BLUE -$GREEN Start system-wide Tor tunnel
+  $RED stop$BLUE -$GREEN Stop AnonSurf and return to clearnet
+  $RED restart$BLUE -$GREEN Restart AnonSurf daemon and Tor service
+  $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
+  $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
+  $RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
+  $RED changeid$BLUE -$GREEN Auto change your identify on Tor network
+  $RED status$BLUE -$GREEN Check if AnonSurf is working properly
+  $RED myip$BLUE -$GREEN Check your IP address and verify your Tor connection
+  $RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.$RESETCOLOR
+	"
+}
 
 
 function kill-apps {
@@ -110,7 +144,6 @@ function start {
 	/usr/sbin/service anonsurfd start
 
 	echo -e "  ${GREEN}*${BLUE} Starting tor service"
-	# /usr/sbin/service tor start
 
 	echo -e "  ${GREEN}*${BLUE} All traffic was redirected throught Tor\n"
 	if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
@@ -136,7 +169,6 @@ function stop {
 
 	echo -e "$GREEN[${BLUE}i${GREEN}]${BLUE} Anonymous mode stopped"
 	notify "Global Anonymous Proxy Closed - Stop dancing :(" "security-low"
-	# sleep 1
 }
 
 
@@ -224,6 +256,7 @@ function dns {
 
 
 # Start checking user options from cli
+dev-banner
 case "$1" in
 	start)
 	# Only start if anonsurfd is not running
@@ -236,13 +269,6 @@ case "$1" in
 			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			start
 		fi
-		# if [ ! "$(systemctl is-active anonsurfd)" = "active" ]; then
-		# 	zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
-		# 	start
-		# elif [ "$(systemctl is-active anonsurfd)" = "active" ]; then
-		# 	echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is running! Can't start it again!$RESETCOLOR\n" >&2
-		# 	notify "AnonSurf is running! Can't start it again!" "dialog-error"
-		# fi
 	;;
 	
 	stop)
@@ -280,8 +306,6 @@ case "$1" in
 		notify "AnonSurf is restarting" "dialog-information"
 		if [ "$(systemctl is-active anonsurfd)" = "active" ]; then
 			/usr/sbin/service anonsurfd restart
-			# Should restart with anonsurfd
-			# /usr/sbin/service tor restart
 		else
 			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running! Can't restart service!$RESETCOLOR\n" >&2
 		fi
@@ -299,34 +323,7 @@ case "$1" in
 	;;
    *)
 
-# This is help banner
-echo -e "
-AnonSurf [v3.0.2] -$BLUE Command Line Interface$RESETCOLOR
-
- $RED Developed$RESETCOLOR by$GREEN Lorenzo \"Palinuro\" Faletra$BLUE <palinuro@parrotsec.org>$RESETCOLOR
-   $GREEN Lisetta \"Sheireen\" Ferrero$BLUE <sheireen@parrotsec.org>$RESETCOLOR
-   $GREEN Francesco \"Mibofra\" Bonanno$BLUE <mibofra@parrotsec.org>$RESETCOLOR
- $RED Maintained$RESETCOLOR by$GREEN Nong Hoang \"DmKnght\" Tu$BLUE <dmknght@parrotsec.org>$RESETCOLOR
-    and a huge amount of Caffeine, Mountain Dew + some GNU/GPL v3 stuff
-  Extended by Daniel \"Sawyer\" Garcia <dagaba13@gmail.com>
-
-  Usage:
-  $RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
-  $RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""enable-boot$RED|$GREEN""disable-boot$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
-
-  $RED start$BLUE -$GREEN Start system-wide Tor tunnel
-  $RED stop$BLUE -$GREEN Stop AnonSurf and return to clearnet
-  $RED restart$BLUE -$GREEN Restart AnonSurf daemon and Tor service
-  $RED enable-boot$BLUE -$GREEN Enable AnonSurf at boot
-  $RED disable-boot$BLUE -$GREEN Disable AnonSurf at boot
-  $RED status-boot$BLUE -$GREEN Show if AnonSurf is enabled at boot
-  $RED changeid$BLUE -$GREEN Auto change your identify on Tor network
-  $RED status$BLUE -$GREEN Check if AnonSurf is working properly
-  $RED myip$BLUE -$GREEN Check your IP address and verify your Tor connection
-  $RED dns$BLUE -$GREEN Fast set / fix DNS. Please use /usr/bin/dnstool.
-$RESETCOLOR
-Dance like no one's watching. Encrypt like everyone is.
-" >&2
+help-banner
 
 exit 1
 ;;
