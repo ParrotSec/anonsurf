@@ -23,7 +23,8 @@ Files:
   sys-units/anonsurfd.service
   AnonSurfGUI.nimble
   launcher/anon-gui.desktop
-  src/*
+  nimsrc/*
+  configs/*
 Copyright: 2020, Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>
 License: GPL-3.0+
 
