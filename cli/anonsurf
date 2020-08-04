@@ -256,7 +256,6 @@ function dns {
 
 
 # Start checking user options from cli
-dev-banner
 case "$1" in
 	start)
 	# Only start if anonsurfd is not running
@@ -266,6 +265,7 @@ case "$1" in
 			notify "AnonSurf is running! Can't start it again!" "dialog-error"
 			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is running! Can't start it again!$RESETCOLOR\n" >&2
 		else
+			dev-banner
 			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			start
 		fi
@@ -279,6 +279,7 @@ case "$1" in
 			zenity --question --text="Do you want AnonSurf to kill dangerous applications and clean some application caches?" --width 400 && kill-apps
 			stop
 		else
+			dev-banner
 			notify "AnonSurf is not running! Can't stop nothing!" "dialog-error"
 			echo -e "\n$GREEN[$RED!$GREEN] ${RED}AnonSurf is not running! Can't stop nothing!$RESETCOLOR\n" >&2
 		fi
