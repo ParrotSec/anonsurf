@@ -87,31 +87,42 @@ proc status() =
     Get current settings of DNS on system
   ]#
   let statusResult = dnsStatusCheck()
-  if statusResult == 0:
+  var
+    dnsType = ""
+    dnsAddr = ""
+
+  case statusResult
+  of 0:
     stdout.write("[INFO] AnonSurf DNS\n")
-  elif statusResult == -1:
+  of -1:
     stderr.write("[Warn] Local host\n")
-  elif statusResult == -2:
+  of -2:
     stderr.write("[ERROR] resolf.conf not found\n")
-  elif statusResult == -3:
+  of -3:
     stderr.write("[ERROR] resolv.conf is empty\n")
+  of 10 .. 13:
+    dnsType = "Static"
+  of 20 .. 23:
+    dnsType = "Dynamic"
   else:
-    if statusResult == 20:
-      stdout.write("[Dynamic] DHCP\n")
-    elif statusResult == 21:
-      stdout.write("[Dynamic] DHCP and OpenNIC\n")
-    elif statusResult == 22:
-      stdout.write("[Dynamic] DHCP and custom DNS\n")
-    elif statusResult == 23:
-      stdout.write("[Dynamic] DHCP, OpenNIC and custom DNS\n")
-    elif statusResult == 10:
-      stdout.write("[Static] DHCP. Becareful if you are using laptop\n")
-    elif statusResult == 11:
-      stdout.write("[Static] OpenNIC DNS\n")
-    elif statusResult == 12:
-      stdout.write("[Static] Custom DNS\n")
-    elif statusResult == 13:
-      stdout.write("[Static] OpenNIC and Custom DNS\n")
+    discard
+  
+  case statusResult mod 10
+  of 0:
+    dnsAddr = "DHCP only"
+  of 1:
+    dnsAddr = "OpenNIC"
+  of 2:
+    dnsAddr = "Custom"
+  of 3:
+    dnsAddr = "OpenNIC + Custom"
+  else:
+    discard
+
+  if dnsType != "":
+    echo "[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[34m" & dnsType & "\e[0m\n- \e[31mAddress\e[0m: \e[34m" & dnsAddr & "\e[0m"
+    # if dnsType == "Dynamic":
+    #   stdout.write("[INFO] Your system uses DCHP DNS by default\n")
 
 
 proc makeBackUp() =
