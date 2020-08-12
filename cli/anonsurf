@@ -47,10 +47,9 @@ function notify {
 	# Use system notification to show popup and let user know latest changes
 	if [ -e /usr/bin/notify-send ]; then
 		if [ "$(id -u)" = "0" ]; then
-			currentUser=$(users)
-			if [ ! "$currentUser" = "" ]; then
-				sudo -u $(users) -s /usr/bin/notify-send "AnonSurf" "$1" -i $2
-			fi
+			for U in $(users | sed -e "s/ /\n/g | uniq); do
+				sudo -u $U -s /usr/bin/notify-send "AnonSurf" "$1" -i $2
+			done
 		else
 			/usr/bin/notify-send "AnonSurf" "$1" -i $2
 		fi

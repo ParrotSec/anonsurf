@@ -1,3 +1,10 @@
+anonsurf (3.0.3+parrot1) rolling-testig; urgency=medium
+
+  * Fix syntax error in anondaemon.
+  * Better handle logged users detection.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 13 Aug 2020 00:31:50 +0200
+
 anonsurf (3.0.2+parrot0) rolling-testing; urgency=medium
 
   * Add bridge mode
