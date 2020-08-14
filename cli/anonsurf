@@ -59,7 +59,7 @@ function notify {
 
 function dev-banner {
 	echo -e "
-AnonSurf [v3.0.2] -$BLUE Command Line Interface$RESETCOLOR
+AnonSurf [v3.0.4] -$BLUE Command Line Interface$RESETCOLOR
 
  $RED Developed$RESETCOLOR by$GREEN Lorenzo \"Palinuro\" Faletra$BLUE <palinuro@parrotsec.org>$RESETCOLOR
    $GREEN Lisetta \"Sheireen\" Ferrero$BLUE <sheireen@parrotsec.org>$RESETCOLOR
