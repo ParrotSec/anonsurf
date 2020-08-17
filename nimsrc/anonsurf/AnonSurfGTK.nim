@@ -124,6 +124,7 @@ proc main =
     boxMainWindow = newBox(Orientation.vertical, 3)
   
   # mainBoard.setTitlebar(makeTitleBar())
+  mainBoard.setResizable(false)
   mainBoard.title = "AnonSurf GUI"
   discard mainBoard.setIconFromFile("/usr/share/icons/anonsurf.png")
   mainBoard.setDecorated(false)
