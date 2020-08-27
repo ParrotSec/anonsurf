@@ -93,13 +93,13 @@ proc status() =
 
   case statusResult
   of 0:
-    stdout.write("[INFO] AnonSurf DNS\n")
+    stdout.write("[\e[32mSTATUS\e[0m] AnonSurf DNS\n")
   of -1:
-    stderr.write("[Warn] Local host\n")
+    stderr.write("[\e[31mERROR\e[0m] Local host\n")
   of -2:
-    stderr.write("[ERROR] resolf.conf not found\n")
+    stderr.write("[\e[31mERROR\e[0m] resolf.conf not found\n")
   of -3:
-    stderr.write("[ERROR] resolv.conf is empty\n")
+    stderr.write("[\e[31mERROR\e[0m] resolv.conf is empty\n")
   of 10 .. 13:
     dnsType = "Static"
   of 20 .. 23:
@@ -120,9 +120,7 @@ proc status() =
     discard
 
   if dnsType != "":
-    echo "[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[34m" & dnsType & "\e[0m\n- \e[31mAddress\e[0m: \e[34m" & dnsAddr & "\e[0m"
-    # if dnsType == "Dynamic":
-    #   stdout.write("[INFO] Your system uses DCHP DNS by default\n")
+    echo "[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & dnsType & "\e[0m\n- \e[31mAddress\e[0m: \e[36m" & dnsAddr & "\e[0m"
 
 
 proc makeBackUp() =
