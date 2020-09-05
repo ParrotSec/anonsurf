@@ -126,7 +126,7 @@ proc main =
   # mainBoard.setTitlebar(makeTitleBar())
   mainBoard.setResizable(false)
   mainBoard.title = "AnonSurf GUI"
-  discard mainBoard.setIconFromFile("/usr/share/icons/common/anonsurf.png")
+  discard mainBoard.setIconFromFile("/usr/share/icons/parrot-common/anonsurf.png")
   mainBoard.setDecorated(false)
   mainBoard.setPosition(WindowPosition.center)
 
