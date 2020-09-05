@@ -1,3 +1,11 @@
+anonsurf (3.0.4+parrot0) rolling-testing; urgency=medium
+
+  * Disable resize in GUI
+  * Fix icon path for new parrot-menu update
+  * Better color display for dnstool
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sat, 05 Sep 2020 14:29:58 +0700
+
 anonsurf (3.0.3+parrot2) rolling-testing; urgency=medium
 
   * Sorry guys (fixing typo).
