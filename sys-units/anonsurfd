@@ -47,6 +47,6 @@ case "$1" in
 	restart)
 		/usr/lib/anonsurf/anondaemon restart
 	;;
-  # TODO do the status
 	*)
-	esac
+esac
+exit $?
