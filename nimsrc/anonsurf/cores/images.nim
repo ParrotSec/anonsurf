@@ -53,7 +53,6 @@ proc surfIconPixbuf(): Pixbuf =
   let loadData = newPixbufLoader()
   discard loadData.write(imgData)
   discard loadData.close()
-  # result.imgBootOff = loadData.getPixbuf()
   result = loadData.getPixbuf()
 
 
@@ -63,7 +62,6 @@ proc reloadIconPixbuf(): Pixbuf =
   let loadData = newPixbufLoader()
   discard loadData.write(imgData)
   discard loadData.close()
-  # result.imgBootOff = loadData.getPixbuf()
   result = loadData.getPixbuf()
 
 let
