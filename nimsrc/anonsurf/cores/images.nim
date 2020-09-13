@@ -56,6 +56,17 @@ proc surfIconPixbuf(): Pixbuf =
   # result.imgBootOff = loadData.getPixbuf()
   result = loadData.getPixbuf()
 
+
+proc reloadIconPixbuf(): Pixbuf =
+  const
+    imgData = staticRead("../../../icons/reload.png")
+  let loadData = newPixbufLoader()
+  discard loadData.write(imgData)
+  discard loadData.close()
+  # result.imgBootOff = loadData.getPixbuf()
+  result = loadData.getPixbuf()
+
 let
   surfImages* = initImgs()
   surfIcon* = surfIconPixbuf()
+  reloadIcon* = reloadIconPixbuf()
