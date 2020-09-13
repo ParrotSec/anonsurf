@@ -238,7 +238,10 @@ proc cleanTail() =
     We clean tail in /etc/resolvconf/resolv.conf.d
     Maybe we should clean base, head, original?
   ]#
-  writeFile(resolvTail, "")
+  try:
+    writeFile(resolvTail, "")
+  except:
+    stderr.write("[x] Error while clearing tail")
 
 
 proc freshResolv(resolvType: string) =
