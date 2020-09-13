@@ -154,7 +154,7 @@ function stop {
 		rm /etc/network/iptables.rules
 		echo -e "\n $GREEN*$BLUE Iptables rules restored"
 	fi
-	echo -e -n "\n $GREEN*$BLUE Restore DNS service"
+	echo -e -n "\n $GREEN*$BLUE Restore DNS service\n$RESETCOLOR"
 
 	if [ `systemctl is-active tor` == "active" ]
 	then
