@@ -46,4 +46,16 @@ proc initImgs(): AnonImgBuf =
   discard loadOn.close()
   result.imgBootOn = loadOn.getPixbuf()
 
-let surfImages* = initImgs()
+
+proc surfIconPixbuf(): Pixbuf =
+  const
+    imgData = staticRead("../../../icons/anonsurf.png")
+  let loadData = newPixbufLoader()
+  discard loadData.write(imgData)
+  discard loadData.close()
+  # result.imgBootOff = loadData.getPixbuf()
+  result = loadData.getPixbuf()
+
+let
+  surfImages* = initImgs()
+  surfIcon* = surfIconPixbuf()
