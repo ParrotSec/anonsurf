@@ -15,7 +15,7 @@ proc makeTitleBar*(): Box =
     btnExit = newButton("")
     imgExit = newImageFromPixbuf(exitIcon)
     btnAbout = newButton("")
-    imgAbout = newImageFromPixbuf(aboutIconPixbuf)
+    imgAbout = newImageFromPixbuf(aboutIcon)
   
   labelTitle.setMarkUp("<b>AnonSurf GTK</b>")
   btnExit.setImage(imgExit)
