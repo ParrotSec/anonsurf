@@ -1,6 +1,7 @@
 import gintro / [gtk, gobject]
 import .. / actions / gtkClick
 import about
+import .. / cores / images
 
 
 proc makeTitleBar*(): Box =
@@ -12,9 +13,9 @@ proc makeTitleBar*(): Box =
     boxTitle = newBox(Orientation.horizontal, 3)
     labelTitle = newLabel("")
     btnExit = newButton("")
-    imgExit = newImageFromIconName("exit", 3)
+    imgExit = newImageFromPixbuf(exitIcon)
     btnAbout = newButton("")
-    imgAbout = newImageFromIconName("help-about", 3)
+    imgAbout = newImageFromPixbuf(aboutIconPixbuf)
   
   labelTitle.setMarkUp("<b>AnonSurf GTK</b>")
   btnExit.setImage(imgExit)
