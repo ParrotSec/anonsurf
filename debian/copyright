@@ -42,6 +42,9 @@ Files:
   icons/sec-warn.svg
   icons/sec-high.svg
   icons/sec-med.svg
+  icons/exit.png
+  icons/reload.png
+  icons/help-about.png
 Copyright:
   2015 - 2020, David "mcder3" Linares
 License: LGPL-3.0
@@ -56,6 +59,11 @@ License: GPL-3.0+
 Files:
   icons/anon-about.svg
 Copyright: 2020, Federica "marafed" Marasà
+License: GPL-3.0+
+
+Files:
+  icons/anonsurf.png
+Copyright: 2013 - 2020, Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>
 License: GPL-3.0+
 
 License: GPL-3.0+
