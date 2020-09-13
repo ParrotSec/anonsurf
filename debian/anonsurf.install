@@ -10,6 +10,7 @@ bin/dnstool /usr/bin/
 
 daemon/anondaemon /usr/lib/anonsurf/
 sys-units/anonsurfd.service /lib/systemd/system/
+sys-units/anonsurfd /etc/init.d/
 
 launchers/anon-change-identity.desktop /usr/share/applications/
 launchers/anon-surf-start.desktop /usr/share/applications/
