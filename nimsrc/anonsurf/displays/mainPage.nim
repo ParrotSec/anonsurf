@@ -56,11 +56,11 @@ proc makeBottomBarForMain(btnRestart: Button): Box =
   let
     boxBottomBar = newBox(Orientation.horizontal, 3)
     imgRestart = newImageFromPixbuf(reloadIcon)
-    btnOptions = newButton("")
-    imgOptions = newImageFromIconName("system-run", 3)
+    # btnOptions = newButton("")
+    # imgOptions = newImageFromIconName("system-run", 3)
   btnRestart.setImage(imgRestart)
 
-  btnOptions.setImage(imgOptions)
+  # btnOptions.setImage(imgOptions)
   # btnOptions.connect("clicked", makeOptionsDialog)
 
   boxBottomBar.packStart(btnRestart, false, true, 3)
