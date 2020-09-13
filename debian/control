@@ -14,7 +14,7 @@ Package: anonsurf
 Architecture: any
 Priority: optional
 Depends: bash (>= 5.0), iptables, nftables, tor, libc6
-Recommends: libnotify-bin, i2p, onioncircuits, connect-proxy, onionshare, torsocks, tor-geoipdb, parrot-menu, bleachbit, sudo, zenity
+Recommends: libnotify-bin, i2p, onioncircuits, connect-proxy, onionshare, torsocks, tor-geoipdb, parrot-menu, bleachbit, sudo, zenity, systemctl
 Suggests: gnunet-gtk, gnunet, vidalia
 Description: Anonymization toolkit for Parrot Security OS
  AnonSurf is an anonymization toolkit that applies configurations and toolkits
