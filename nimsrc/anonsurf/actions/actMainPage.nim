@@ -3,6 +3,7 @@ import .. / modules / [myip, changeid]
 import .. / displays / noti
 import strutils
 import system
+import os
 
 type
   MyIP = object
@@ -66,7 +67,25 @@ proc onClickChangeID*(b: Button) =
     2. Get ControlPort from Torrc
     3. Send authentication request + NewNYM command
   ]#
-  doChangeID()
+  let conf = "/etc/anonsurf/nyxrc"
+  if fileExists(conf):
+    try:
+      let recvData = doChangeID(conf)
+      if recvData[0] != "250 OK\c":
+        sendNotify("Identity Change Error", recvData[0], "error")
+      else:
+        if recvData[1] != "250 OK\c":
+          sendNotify("Identity Change Error", recvData[1], "error")
+        else:
+          # Success. Show okay
+          sendNotify("Identity Change Success", "You have a new identity", "security-high")
+      # else:
+      #   sendNotify("Identity Change Error", "Can parse settings", "error")
+    except:
+      sendNotify("Identity Change Error", "Error while connecting to control port", "security-low")
+      echo getCurrentExceptionMsg()
+  else:
+    sendNotify("Identity Change Error", "File not found", "error")
 
 
 proc onClickTorStatus*(b: Button) =
