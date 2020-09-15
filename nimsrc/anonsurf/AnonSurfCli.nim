@@ -134,6 +134,18 @@ proc stop() =
   killApps()
 
 
+proc restart() =
+  const
+    command = "/usr/sbin/service anonsurfd restart"
+  if getServStatus("anonsurfd") != 1:
+    if isDesktop:
+      sendNotify("AnonSurf", "AnonSurf is not running. Can't restart it", "security-low")
+    else:
+      echo "[x] AnonSurf is not running. Can't restart it."
+    return
+  runOSCommand(command, "Restart AnonSurf Daemon")
+
+
 proc checkBoot() =
   # completed
   # no launcher. No send notify
@@ -251,7 +263,7 @@ proc checkOptions() =
     of "stop":
       stop()
     of "restart":
-      discard #TODO fix here
+      restart()
     of "status":
       status()
     of "enable-boot":
