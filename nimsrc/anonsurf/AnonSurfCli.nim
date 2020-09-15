@@ -217,8 +217,8 @@ proc dns() =
 
 
 proc checkOptions() =
-  devBanner()
   if paramCount() != 1:
+    devBanner()
     helpBanner()
   else:
     case paramStr(1)
@@ -243,6 +243,7 @@ proc checkOptions() =
     of "dns":
       dns()
     of "help":
+      devBanner()
       helpBanner()
     else:
       if isDesktop:
