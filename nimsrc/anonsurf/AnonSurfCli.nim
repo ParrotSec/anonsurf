@@ -9,7 +9,6 @@ let isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
 
 # scope: click on launcher: normal
 # cli: headless or normal
-# TODO restart command
 
 
 proc askUser(): bool =
@@ -28,7 +27,6 @@ proc askUser(): bool =
 
 
 proc runOSCommand(command, commandName: string) =
-  # completed
   var cmdResult: int
   if isDesktop:
     cmdResult = execCmd("gksudo " & command)
@@ -66,7 +64,6 @@ proc killApps() =
 
 
 proc checkIP() =
-  # Completed
   sendNotify("My IP", "Getting data from server", "dialog-information")
   let info = checkIPFromTorServer()
   # Error
@@ -119,7 +116,6 @@ proc start() =
 
 
 proc stop() =
-  # completed
   # stop daemon
   # show notifi
   const
@@ -147,7 +143,6 @@ proc restart() =
 
 
 proc checkBoot() =
-  # completed
   # no launcher. No send notify
   # check if it is started with boot and show popup
   let bootResult = isServEnabled("anonsurfd.service")
@@ -164,12 +159,10 @@ proc checkBoot() =
 
 
 proc enableBoot() =
-  # complete
   # no launcher. No send notify
   const
     command = "/usr/bin/systemctl enable anonsurfd"
   # enable anosnurf at boot (systemd only for now)
-  # TODO check if it is enabled before turn on
   if isServEnabled("anonsurfd.service"):
     echo "[x] AnonSurf is already enabled!"
   else:
@@ -177,7 +170,6 @@ proc enableBoot() =
 
 
 proc disableBoot() =
-  # complete
   # disable anonsurf at boot (systemd only for now)
   # no launcher. No send notify
   const
@@ -189,7 +181,6 @@ proc disableBoot() =
 
 
 proc changeID() =
-  # complete
   # change id just like gui
   if getServStatus("anonsurfd") != 1:
     if isDesktop:
@@ -233,7 +224,6 @@ proc changeID() =
 
 
 proc status() =
-  # complete
   # Show nyx
   if getServStatus("anonsurfd") != 1:
     if isDesktop:
@@ -249,10 +239,11 @@ proc status() =
     else:
       discard execCmd("/usr/bin/nyx --config /etc/anonsurf/nyxrc")
 
-# todo proc dns
+
+proc dns() =
+  echo "[!] Please use DNS tool instead"
 # TODO show banner
 
-# TODO check user's options
 proc checkOptions() =
   if paramCount() != 1:
     discard # TODO help here
@@ -276,7 +267,8 @@ proc checkOptions() =
       changeID()
     of "myip":
       checkIP()
-    # TODO dns?
+    of "dns":
+      dns()
     else:
       if isDesktop:
         sendNotify("AnonSurf", "Invalid option " & paramStr(1), "error")
