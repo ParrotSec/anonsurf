@@ -2,36 +2,9 @@ import strutils
 import osproc
 import os
 import displays / noti
-import modules / [myip, changeid]
+import modules / [myip, changeid, cleaner]
 import .. / utils / services
 import cli / [cores, help]
-
-
-proc askUser(): bool =
-  if not isDesktop:
-    return cliUserAsk()
-  else:
-    discard # TODO use select box of question here
-
-
-proc killApps() =
-  const
-    killCommand = "killall -q chrome dropbox skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail /usr/lib/firefox/firefox"
-    cacheCommand = "bleachbit -c adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history &> /dev/null"
-  if askUser():
-    let
-      killResult = execCmd(killCommand)
-      cacheResult = execCmd(cacheCommand)
-    if killResult == 0 and cacheResult == 0:
-      if isDesktop:
-        sendNotify("AnonSurf", "Killed dangerous application", "security-high")
-      else:
-        echo "[*] Killed dangerous applications"
-    else:
-      if isDesktop:
-        sendNotify("AnonSurf", "Error while trying to kill applications", "security-medium")
-      else:
-        echo "[!] Error while trying to kill dangerous applications"
 
 
 proc checkIP() =
@@ -55,6 +28,20 @@ proc checkIP() =
       sendNotify("You are under Tor network", info[1], "security-high")
     else:
       echo "[!] You are under Tor network\n" & info[1]
+
+
+proc killApps() =
+  let killResult = doKillApps()
+  if killResult == 0:
+    if isDesktop:
+      sendNotify("AnonSurf", "Killed dangerous application", "security-high")
+    else:
+      echo "[*] Killed dangerous applications"
+  else:
+    if isDesktop:
+      sendNotify("AnonSurf", "Error while trying to kill applications", "security-medium")
+    else:
+      echo "[!] Error while trying to kill dangerous applications"
 
 
 proc start() =
