@@ -2,9 +2,9 @@ import strutils
 import osproc
 import os
 import displays / noti
-import modules / [myip, changeid, cleaner]
+import modules / [myip, changeid]
 import .. / utils / services
-import cli / [cores, help]
+import cli / [cores, help, killapp]
 
 
 proc checkIP() =
@@ -37,7 +37,7 @@ proc killApps() =
       sendNotify("AnonSurf", "Killed dangerous application", "security-high")
     else:
       echo "[*] Killed dangerous applications"
-  else:
+  elif killResult != -1:
     if isDesktop:
       sendNotify("AnonSurf", "Error while trying to kill applications", "security-medium")
     else:
