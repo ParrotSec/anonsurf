@@ -31,7 +31,7 @@ proc checkIP() =
 
 
 proc killApps() =
-  let killResult = doKillApps()
+  let killResult = doKillAppsFromCli()
   if killResult == 0:
     if isDesktop:
       sendNotify("AnonSurf", "Killed dangerous application", "security-high")
