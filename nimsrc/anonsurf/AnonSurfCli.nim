@@ -4,42 +4,14 @@ import os
 import displays / noti
 import modules / [myip, changeid]
 import .. / utils / services
-
-let isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
-
-# scope: click on launcher: normal
-# cli: headless or normal
+import cli / [cores, help]
 
 
 proc askUser(): bool =
   if not isDesktop:
-    while true:
-      echo "[?] Do you want to kill dangerous applications? (Y/n)"
-      let input = readLine(stdin)
-      if input == "y" or input == "Y":
-        return true
-      elif input == "n" or input == "N":
-        return false
-      else:
-        echo "[!] Invalid option. Please use Y / n"
+    return cliUserAsk()
   else:
     discard # TODO use select box of question here
-
-
-proc runOSCommand(command, commandName: string) =
-  var cmdResult: int
-  if isDesktop:
-    cmdResult = execCmd("gksudo " & command)
-    if cmdResult == 0:
-      sendNotify("AnonSurf", commandName & " success", "security-high")
-    else:
-      sendNotify("AnonSurf", commandName & " failed", "error")
-  else:
-    cmdResult = execCmd("sudo " & command)
-    if cmdResult == 0:
-      echo "[*] " & commandName & " success"
-    else:
-      echo "[x] " & commandName & " failed"
 
 
 proc killApps() =
@@ -242,11 +214,12 @@ proc status() =
 
 proc dns() =
   echo "[!] Please use DNS tool instead"
-# TODO show banner
+
 
 proc checkOptions() =
+  devBanner()
   if paramCount() != 1:
-    discard # TODO help here
+    helpBanner()
   else:
     case paramStr(1)
     of "start":
@@ -269,11 +242,12 @@ proc checkOptions() =
       checkIP()
     of "dns":
       dns()
+    of "help":
+      helpBanner()
     else:
       if isDesktop:
         sendNotify("AnonSurf", "Invalid option " & paramStr(1), "error")
       else:
         echo "[x] Invalid option " & paramStr(1)
-
 
 checkOptions()
