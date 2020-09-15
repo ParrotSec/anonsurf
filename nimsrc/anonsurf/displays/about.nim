@@ -1,5 +1,6 @@
 import gintro / [gtk, gdkpixbuf]
 import system
+import .. / cores / status
 
 
 proc onClickAbout*(b: Button) =
@@ -16,7 +17,7 @@ proc onClickAbout*(b: Button) =
   let imgLogo: Pixbuf = bufLoader.getPixbuf()
   showAbout.setLogo(imgLogo)
   showAbout.setProgramName("AnonSurf")
-  showAbout.setVersion("3.0.4")
+  showAbout.setVersion(surfVersion)
   showAbout.setArtists([
     "Federica \"marafed\" Marasà",
     # "Manuel \"Serverket\" Hernandez",
