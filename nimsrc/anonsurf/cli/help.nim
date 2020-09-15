@@ -15,10 +15,11 @@ proc helpCommand(command, description: string) =
 
 
 proc helpBanner*() =
-  echo "\nUsage: ", B_CYAN, "anonsurf ", RESET, "<", B_BLUE, "options", RESET, ">"
-  echo(B_BLUE, "  -----------------------------------------------------------------", RESET)
+  echo "\nUsage: ", B_CYAN, "anonsurf ", B_BLUE, "<options>", RESET
+  echo(B_BLUE, "  -------------------------------------------------------------------", RESET)
   helpCommand("option", "Description")
-  echo(B_BLUE, "  --------------|--------------------------------------------------", RESET)
+  echo(B_BLUE, "  --------------|----------------------------------------------------", RESET)
+  helpCommand("help", "Show help table. Try `man anonsurf` for more info")
   helpCommand("start", "Start system-wide Tor transparent proxy")
   helpCommand("stop", "Stop Tor proxy and return to clearnet")
   helpCommand("restart", "Restart Tor proxy daemon")
@@ -28,7 +29,7 @@ proc helpBanner*() =
   helpCommand("status-boot", "Check if AnonSurf is enabled at boot")
   helpCommand("enable-boot", "Enable AnonSurf at boot")
   helpCommand("disable-boot", "Disable AnonSurf at boot")
-  echo(B_BLUE, "  -----------------------------------------------------------------", RESET)
+  echo(B_BLUE, "  -------------------------------------------------------------------", RESET)
 
 
 proc devBanner*() =
