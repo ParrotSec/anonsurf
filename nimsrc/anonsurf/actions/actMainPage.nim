@@ -39,7 +39,7 @@ proc doCheckIP() =
 
   finalResult.isUnderTor = ipInfo[0]
   finalResult.thisAddr = ipInfo[1]
-  channel.send(finalResult) # Crash second time
+  channel.send(finalResult)
 
 
 proc onClickCheckIP*(b: Button) =
