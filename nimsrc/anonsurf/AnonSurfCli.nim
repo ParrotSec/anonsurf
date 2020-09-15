@@ -7,13 +7,28 @@ import .. / utils / services
 
 let isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
 
-# TODO support headless and cli mode by checking XDG_CURRENT_DESKTOP or user args
-# TODO select notification and cli only by headless
 # scope: click on launcher: normal
 # cli: headless or normal
+# TODO restart command
+
+
+proc askUser(): bool =
+  if not isDesktop:
+    while true:
+      echo "[?] Do you want to kill dangerous applications? (Y/n)"
+      let input = readLine(stdin)
+      if input == "y" or input == "Y":
+        return true
+      elif input == "n" or input == "N":
+        return false
+      else:
+        echo "[!] Invalid option. Please use Y / n"
+  else:
+    discard # TODO use select box of question here
 
 
 proc runOSCommand(command, commandName: string) =
+  # completed
   var cmdResult: int
   if isDesktop:
     cmdResult = execCmd("gksudo " & command)
@@ -30,16 +45,28 @@ proc runOSCommand(command, commandName: string) =
 
 
 proc killApps() =
+  # TODO better msg
   const
     killCommand = "killall -q chrome dropbox skype icedove thunderbird firefox firefox-esr chromium xchat hexchat transmission steam firejail /usr/lib/firefox/firefox"
     cacheCommand = "bleachbit -c adobe_reader.cache chromium.cache chromium.current_session chromium.history elinks.history emesene.cache epiphany.cache firefox.url_history flash.cache flash.cookies google_chrome.cache google_chrome.history  links2.history opera.cache opera.search_history opera.url_history &> /dev/null"
-  discard execCmd(killCommand)
-  discard execCmd(cacheCommand)
-  # TODO yes no question from cli or ask box
-  # TODO notification
+  if askUser():
+    let
+      killResult = execCmd(killCommand)
+      cacheResult = execCmd(cacheCommand)
+    if killResult == 0 and cacheResult == 0:
+      if isDesktop:
+        sendNotify("AnonSurf", "Killed dangerous application", "security-high")
+      else:
+        echo "[*] Killed dangerous applications"
+    else:
+      if isDesktop:
+        sendNotify("AnonSurf", "Error while trying to kill applications", "security-medium")
+      else:
+        echo "[!] Error while trying to kill dangerous applications"
 
 
 proc checkIP() =
+  # Completed
   sendNotify("My IP", "Getting data from server", "dialog-information")
   let info = checkIPFromTorServer()
   # Error
@@ -63,7 +90,6 @@ proc checkIP() =
 
 
 proc start() =
-  # TODO show start anonsurf
   # start daemon
   # Check if all services are started
   const
@@ -74,25 +100,43 @@ proc start() =
     else:
       echo "[x] AnonSurf is running. Can't start it again."
     return
+
+  killApps()
   runOSCommand(command, "Start AnonSurf Daemon")
+
+  # Check AnonSurf Daemon status after start
+  # TODO maybe better complex check
+  if getServStatus("anonsurfd") == 1:
+    if isDesktop:
+      sendNotify("AnonSurf", "You are under Tor network", "security-high")
+    else:
+      echo "[x] You are under Tor network."
+  else:
+    if isDesktop:
+      sendNotify("AnonSurf", "AnonSurf Daemon is not running", "security-low")
+    else:
+      echo "[x] AnonSurf Daemon is not running."
 
 
 proc stop() =
-  # show notifi
+  # completed
   # stop daemon
   # show notifi
   const
     command = "/usr/sbin/service anonsurfd stop"
   if getServStatus("anonsurfd") != 1:
     if isDesktop:
-      sendNotify("AnonSurf", "AnonSurf is not running. Can't stop it.", "security-low")
+      sendNotify("AnonSurf", "AnonSurf is not running. Can't stop it", "security-low")
     else:
       echo "[x] AnonSurf is not running. Can't stop it."
     return
   runOSCommand(command, "Stop AnonSurf Daemon")
+  killApps()
 
 
 proc checkBoot() =
+  # completed
+  # no launcher. No send notify
   # check if it is started with boot and show popup
   let bootResult = isServEnabled("anonsurfd.service")
   if bootResult:
@@ -108,22 +152,32 @@ proc checkBoot() =
 
 
 proc enableBoot() =
+  # complete
+  # no launcher. No send notify
   const
     command = "/usr/bin/systemctl enable anonsurfd"
   # enable anosnurf at boot (systemd only for now)
   # TODO check if it is enabled before turn on
-  runOSCommand(command, "Enable AnonSurf at boot")
+  if isServEnabled("anonsurfd.service"):
+    echo "[x] AnonSurf is already enabled!"
+  else:
+    runOSCommand(command, "Enable AnonSurf at boot")
 
 
 proc disableBoot() =
+  # complete
   # disable anonsurf at boot (systemd only for now)
+  # no launcher. No send notify
   const
     command = "/usr/bin/systemctl disable anonsurfd"
-  # TODO chekc if it is disabled before turn off
-  runOSCommand(command, "Disable AnonSurf at boot")
+  if not isServEnabled("anonsurfd.service"):
+    echo "[x] AnonSurf is already disabled!"
+  else:
+    runOSCommand(command, "Disable AnonSurf at boot")
 
 
 proc changeID() =
+  # complete
   # change id just like gui
   if getServStatus("anonsurfd") != 1:
     if isDesktop:
@@ -167,11 +221,55 @@ proc changeID() =
 
 
 proc status() =
+  # complete
   # Show nyx
-  # TODO check if path exists
-  # run /usr/bin/nyx --config /etc/anonsurf/nyxrc or /usr/bin/nyx
-  discard
+  if getServStatus("anonsurfd") != 1:
+    if isDesktop:
+      sendNotify("AnonSurf", "AnonSurf is not running", "security-low")
+    else:
+      echo "[x] AnonSurf is not running."
+  else:
+    if not fileExists("/etc/anonsurf/nyxrc"):
+      if isDesktop:
+        sendNotify("AnonSurf", "Can't find nyx configuration", "error")
+      else:
+        echo "[x] Can't find nyx configuration"
+    else:
+      discard execCmd("/usr/bin/nyx --config /etc/anonsurf/nyxrc")
 
 # todo proc dns
+# TODO show banner
 
 # TODO check user's options
+proc checkOptions() =
+  if paramCount() != 1:
+    discard # TODO help here
+  else:
+    case paramStr(1)
+    of "start":
+      start()
+    of "stop":
+      stop()
+    of "restart":
+      discard #TODO fix here
+    of "status":
+      status()
+    of "enable-boot":
+      enableBoot()
+    of "disable-boot":
+      disableBoot()
+    of "status-boot":
+      checkBoot()
+    of "changeid":
+      changeID()
+    of "myip":
+      checkIP()
+    # TODO dns?
+    else:
+      if isDesktop:
+        sendNotify("AnonSurf", "Invalid option " & paramStr(1), "error")
+      else:
+        echo "[x] Invalid option " & paramStr(1)
+
+
+checkOptions()
