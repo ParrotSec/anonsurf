@@ -1,4 +1,4 @@
-import gintro / [gtk, gobject]
+import gintro / [gtk]
 import .. / cores / images
 
 
