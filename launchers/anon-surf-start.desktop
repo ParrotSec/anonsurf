@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-Exec=gksudo "/usr/bin/anonsurf start"
+Exec=/usr/bin/anonsurf start
 Comment=Routes all internet packets/traffic through Tor
 Name=Anonsurf Start
 Icon=stock_media-play
