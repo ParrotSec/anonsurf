@@ -4,7 +4,7 @@ configs/bridges.txt /etc/anonsurf/
 configs/anonrc /etc/anonsurf/
 configs/bridgerc.base /etc/anonsurf
 
-cli/anonsurf /usr/bin/
+bin/anonsurf /usr/bin/
 bin/make-torrc /usr/lib/anonsurf/
 bin/dnstool /usr/bin/
 
