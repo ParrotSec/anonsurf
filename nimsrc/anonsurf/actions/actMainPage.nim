@@ -116,3 +116,15 @@ proc onClickTorStatus*(b: Button) =
 
   statusArea.packStart(nyxTerm, false, true, 3)
   statusDialog.showAll()
+
+
+proc onClickRestart*(b: Button) =
+  #[
+    Run anonsurf restart
+  ]#
+  # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf restart"):
+  #   let imgStatus = newImageFromIconName("system-restart-panel", 3)
+  #   b.setImage(imgStatus)
+  # else:
+  #   discard
+  discard spawnCommandLineAsync("gksudo /usr/sbin/service anonsurfd restart")
