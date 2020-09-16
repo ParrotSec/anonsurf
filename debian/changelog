@@ -1,3 +1,14 @@
+anonsurf (3.0.5+parrot0) rolling-testing; urgency=medium
+
+  * Daemon: Fix missing reset color causes cli issue
+  * GUI: Optimized ram usage
+  * GUI: Use embedded icons instead of theme icons
+  * GUI: Now use native start / stop / restart functions
+  * CLI: completely new CLI in Nim lang
+  * Fix bleachbit command (invalid module) and improve clean list
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Wed, 16 Sep 2020 13:56:50 +0700
+
 anonsurf (3.0.4+parrot0) rolling-testing; urgency=medium
 
   * Disable resize in GUI
