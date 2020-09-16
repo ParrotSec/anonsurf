@@ -14,6 +14,8 @@ proc doKillAppsFromCli*(): int =
   if not isDesktop:
     if cliUserAsk():
       return doKillApp()
+    else:
+      return -1
   else:
     initAsk()
     return -1
