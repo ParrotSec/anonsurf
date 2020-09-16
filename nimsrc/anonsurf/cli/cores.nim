@@ -1,6 +1,7 @@
 import os
 import osproc
 import .. / displays / noti
+import print
 
 let isDesktop* = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
 
@@ -16,9 +17,9 @@ proc runOSCommand*(command, commandName: string) =
   else:
     cmdResult = execCmd("sudo " & command)
     if cmdResult == 0:
-      echo "[*] " & commandName & " success"
+      msgOk(commandName & " success")
     else:
-      echo "[x] " & commandName & " failed"
+      msgErr(commandName & " failed")
 
 
 proc cliUserAsk*(): bool =
@@ -30,4 +31,4 @@ proc cliUserAsk*(): bool =
     elif input == "n" or input == "N":
       return false
     else:
-      echo "[!] Invalid option. Please use Y / n"
+      msgWarn("Invalid option. Please use Y / n")
