@@ -5,40 +5,56 @@ anonsurf \- Anonymizaton toolkit for Parrot Security OS
 AnonSurf [start | stop | restart | changeid | status | myip | dns]
 .SH DESCRIPTION
 .PP
-Setup Tor proxy to route all traffic through Tor - This is command line management system for AnonSurf (CLI)
+Setup Tor proxy to route all traffic through Tor
+
+* Modules:
+  * UX: 
+    * CLI (anonsurf): Handle user's options from command line interface.
+    * GUI (anonsurf-gtk): A new friendly GTK GUI
+  * Daemon: By now AnonSurf supports systemd only
+    * anondaemon: A bash script to setup Tor transparent proxy
+    * make_torrc: a simple script to handle configurations of session
+  * Extra tool:
+    * dnstool: Quick cli tool to change system DNS setting
 
 * Functions:
   * Start / stop / restart AnonSurf
   * Check current Tor status using Nyx
   * Change your ID by restarting to switch Tor nodes
   * Check your current public IP
-  * Change DNS settings to OpenNIC DNS service
+  * Check if AnonSurf is enabled / disbled at boot
+  * Enable / disable AnonSurf at boot (as system service)
 
 * start:
-  * Ask user to
-    * Kill dangerous applications (chrome skype thunderbird firefox...) 
-    * Clear DNS cache (clears stored websites resolved by DNS)
-  * Kill nscd, resolvconf, dnsmasq service
+  * Use bleachbit to kill dangerous applications (chrome skype thunderbird firefox...) 
   * Create system daemon starting Tor proxy gate
-    * Disable IPv6 (security/IPv6 may reveal permanent MAC address)
-    * Routes all internet packets/traffic through Tor
-    * All DNS through Tor
+  * Disable IPv6 (security/IPv6 may reveal permanent MAC address)
+  * Routes all internet packets/traffic through Tor
+  * All DNS through Tor
 
 * changeid:
-  * Changes Tor node giving us new IP address
+  * Changes Tor node giving us new IP address using control port
 
 * status:
   * Use Nyx application to display information about Tor service, bandwith, nodes...
 
 * myip:
-  * Check current IP address with Parrot OS server
+  * Check current IP address by checking response from Tor server
 
-* dns:
-  * Check "lock" file in /etc/anonsurf/opennic.lock
-  * Change DNS server settings in /etc/resolv.conf to use OpenNIC DNS addresses
-  or revert back to original DNS servers
+* status-boot: Show if AnonSurf is enabled / disabled
+* enable-boot: Use systemctl (from systemd or 3rd package) to enable at boot
+* disable-boot: Use systemctl (from systemd or 3rd package) to disable at boot
 
-* To enable anonsurf on systemd/boot, use: systemctl enable anonsurfd
+* dnstool:
+  * Check current status: Dynamic / Static setting.
+    * Dynamic: System use DCHP's settings
+    * Static: Do not use DHCP's settings. Custom settings won't change after reboot
+  * Set system DNS with Dynamic:
+    * Use only DHCP server
+    * Add more servers in tail (requires resolvconf). Extra servers won't change after reboot
+  * Set Static DNS:
+    * Repace DNS in /etc/resolv.conf
+  * This tool supports OpenNIC servers by default.
 
 .PP
 
