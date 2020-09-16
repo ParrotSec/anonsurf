@@ -59,7 +59,7 @@ function disableService {
 		/usr/sbin/service nscd stop 2>/dev/null || echo " (already stopped)"
 		echo -e -n "\n $GREEN*$BLUE Stopping service resolvconf"
 		/usr/sbin/service resolvconf stop 2>/dev/null || echo " (already stopped)"
-		echo -e -n "\n $GREEN*$BLUE Stopping service dnsmasq"
+		echo -e -n "\n $GREEN*$BLUE Stopping service dnsmasq$RESETCOLOR"
 		/usr/sbin/service dnsmasq stop 2>/dev/null || echo " (already stopped)"
 		killall dnsmasq nscd resolvconf 2>/dev/null || true
 		# sleep 1
@@ -73,7 +73,7 @@ function enableService {
 	/usr/sbin/service resolvconf start || service resolvconf restart || true
 	/usr/sbin/service dnsmasq start || true
 	/usr/sbin/service nscd start || true
-	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed or started already."
+	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed or started already.$RESETCOLOR"
 	# sleep 1
 }
 
@@ -130,7 +130,7 @@ function start {
 	/usr/sbin/iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 	#allow only tor output
-	echo -e " $GREEN*$BLUE Allowing only tor to browse in clearnet\n"
+	echo -e " $GREEN*$BLUE Allowing only tor to browse in clearnet$RESETCOLOR\n"
 	/usr/sbin/iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
 	/usr/sbin/iptables -A OUTPUT -j REJECT
 }
