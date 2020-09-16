@@ -15,5 +15,5 @@ proc doKillAppsFromCli*(): int =
     if cliUserAsk():
       return doKillApp()
   else:
-    initAskDialog()
+    initAsk()
     return -1

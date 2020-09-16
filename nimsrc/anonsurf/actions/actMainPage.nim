@@ -1,6 +1,6 @@
 import gintro / [gtk, glib, vte]
-import .. / modules / [myip, changeid]
-import .. / displays / noti
+import .. / modules / [myip, changeid, runsurf]
+import .. / displays / [noti, askKill]
 import strutils
 import system
 import os
@@ -46,7 +46,6 @@ proc onClickCheckIP*(b: Button) =
     Show the information in system's notification
   ]#
   sendNotify("My IP", "Getting data from server", "dialog-information")
-  # channel.open()
   createThread(worker, doCheckIP)
 
 
@@ -55,9 +54,24 @@ proc onClickRun*(b: Button) =
     Create condition to Start / Stop AnonSurf when click on btn1
   ]#
   if b.label == "Start":
-    discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf start")
+    initAskDialog()
+    createThread(worker, start)
   else:
-    discard spawnCommandLineAsync("gksudo /usr/bin/anonsurf stop")
+    createThread(worker, stop)
+    initAskDialog()
+
+
+proc onClickRestart*(b: Button) =
+  #[
+    Run anonsurf restart
+  ]#
+  # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf restart"):
+  #   let imgStatus = newImageFromIconName("system-restart-panel", 3)
+  #   b.setImage(imgStatus)
+  # else:
+  #   discard
+  # discard spawnCommandLineAsync("gksudo /usr/sbin/service anonsurfd restart")
+  createThread(worker, restart)
 
 
 proc onClickChangeID*(b: Button) =
@@ -116,15 +130,3 @@ proc onClickTorStatus*(b: Button) =
 
   statusArea.packStart(nyxTerm, false, true, 3)
   statusDialog.showAll()
-
-
-proc onClickRestart*(b: Button) =
-  #[
-    Run anonsurf restart
-  ]#
-  # if spawnCommandLineAsync("gksudo /usr/bin/anonsurf restart"):
-  #   let imgStatus = newImageFromIconName("system-restart-panel", 3)
-  #   b.setImage(imgStatus)
-  # else:
-  #   discard
-  discard spawnCommandLineAsync("gksudo /usr/sbin/service anonsurfd restart")

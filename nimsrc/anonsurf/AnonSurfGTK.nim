@@ -123,7 +123,6 @@ proc main =
     mainBoard = newWindow()
     boxMainWindow = newBox(Orientation.vertical, 3)
   
-  # mainBoard.setTitlebar(makeTitleBar())
   mainBoard.setResizable(false)
   mainBoard.title = "AnonSurf GUI"
   mainBoard.setIcon(surfIcon)
