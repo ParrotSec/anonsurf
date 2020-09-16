@@ -105,15 +105,17 @@ proc checkBoot() =
   # check if it is started with boot and show popup
   let bootResult = isServEnabled("anonsurfd.service")
   if bootResult:
-    if isDesktop:
-      sendNotify("AnonSurf", "AnonSurf is enabled at boot", "security-high")
-    else:
-      echo "[*] AnonSurf is enabled at boot"
+    echo "[*] AnonSurf is enabled at boot"
+    # if isDesktop:
+    #   sendNotify("AnonSurf", "AnonSurf is enabled at boot", "security-high")
+    # else:
+    #   echo "[*] AnonSurf is enabled at boot"
   else:
-    if isDesktop:
-      sendNOtify("AnonSurf", "AnonSurf is not enabled at boot", "security-medium")
-    else:
-      echo "[!] AnonSurf is not enabled at boot"
+    echo "[!] AnonSurf is not enabled at boot"
+    # if isDesktop:
+    #   sendNOtify("AnonSurf", "AnonSurf is not enabled at boot", "security-medium")
+    # else:
+    #   echo "[!] AnonSurf is not enabled at boot"
 
 
 proc enableBoot() =
