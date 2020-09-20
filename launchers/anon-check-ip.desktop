@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-Exec=anonsurf ip
+Exec=anonsurf myip
 Name=Check IP address
 Comment=Print the current IP address
 Icon=network-server
