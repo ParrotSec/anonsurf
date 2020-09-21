@@ -7,7 +7,7 @@ proc start*() =
     command = "gksudo /usr/sbin/service anonsurfd start"
   let runResult = execCmd(command)
   if runResult == 0:
-    discard # sendnotify done
+    discard # send notify done
   else:
     discard # send notify failed
 
