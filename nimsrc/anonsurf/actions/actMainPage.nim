@@ -59,6 +59,7 @@ proc onClickRun*(b: Button) =
     createThread(worker, start)
   else:
     createThread(worker, stop)
+    worker.joinThread()
     initAskDialog()
 
 
