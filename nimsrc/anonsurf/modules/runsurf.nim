@@ -5,7 +5,6 @@ import osproc
 proc start*() =
   const
     command = "gksudo /usr/sbin/service anonsurfd start"
-  # initAskDialog()
   let runResult = execCmd(command)
   if runResult == 0:
     discard # sendnotify done
@@ -28,6 +27,6 @@ proc restart*() =
     command = "gksudo /usr/sbin/service anonsurfd restart"
   let runResult = execCmd(command)
   if runResult == 0:
-    discard # send NOtify done
+    discard # send notify done
   else:
     discard # send notify failed
