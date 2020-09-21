@@ -58,9 +58,22 @@ proc onClickRun*(b: Button) =
     initAskDialog()
     createThread(worker, start)
   else:
+    retCode.open()
     createThread(worker, stop)
     worker.joinThread()
-    initAskDialog()
+    #[
+      Check return code here before ask
+      1. If user typed password (and it is correct):
+        return code == 0 -> ask
+      2. if user cancelled gksudo:
+        return code == 255. Do not ask
+      3. error or wrong password ?
+        return code == 3 for wrong password (3 times)
+    ]#
+    let stopResult = retCode.tryRecv()
+    if stopResult.dataAvailable and stopResult.msg == 0:
+      initAskDialog()
+    retcode.close()
 
 
 proc onClickRestart*(b: Button) =
