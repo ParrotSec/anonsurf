@@ -49,7 +49,7 @@ proc boxAskKillAppsCli(): Box =
   return retBox
 
 
-proc initAsk*() =
+proc initAskCli*() =
   gtk.init()
   let
     mainBoard = newWindow()

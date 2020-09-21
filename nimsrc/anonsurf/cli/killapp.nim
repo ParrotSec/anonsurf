@@ -17,5 +17,5 @@ proc doKillAppsFromCli*(): int =
     else:
       return -1
   else:
-    initAsk()
+    initAskCli()
     return -1
