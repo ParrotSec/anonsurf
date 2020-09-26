@@ -65,7 +65,7 @@ proc start() =
     if isDesktop:
       sendNotify("AnonSurf", "You are under Tor network", "security-high")
     else:
-      msgErr("You are under Tor network.")
+      msgOk("You are under Tor network.")
   else:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf Daemon is not running", "security-low")
