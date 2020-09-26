@@ -27,7 +27,7 @@ proc checkIP() =
     if isDesktop:
       sendNotify("You are under Tor network", info[1], "security-high")
     else:
-      msgWarn("You are under Tor network\n" & info[1])
+      msgOk("You are under Tor network\n" & info[1])
 
 
 proc killApps() =
