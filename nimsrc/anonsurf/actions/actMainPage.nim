@@ -117,6 +117,13 @@ proc onClickChangeID*(b: Button) =
     sendNotify("Identity Change Error", "File not found", "error")
 
 
+proc upgradeCallback(terminal: ptr Terminal00; pid: int32; error: ptr glib.Error; userData: pointer) {.cdecl.} =
+  #[
+    Dummy callback proc to fix problem of VTE
+  ]#
+  discard
+
+
 proc onClickTorStatus*(b: Button) =
   #[
     Spawn a native GTK terminal and run nyx with it to show current tor status
@@ -139,7 +146,7 @@ proc onClickTorStatus*(b: Button) =
     nil, # chlid setup data destroy
     -1, # timeout
     nil, # cancellabel
-    nil, # callback
+    upgradeCallback, # callback
     nil, # pointer
   )
 
