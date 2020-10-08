@@ -1,3 +1,9 @@
+anonsurf (3.0.6+parrot0) rolling-testing; urgency=medium
+
+  * Fix VTE problem
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Thu, 08 Oct 2020 19:24:02 +0700
+
 anonsurf (3.0.5+parrot0) rolling-testing; urgency=medium
 
   * Daemon: Fix missing reset color causes cli issue
