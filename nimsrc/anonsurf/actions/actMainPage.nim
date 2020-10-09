@@ -140,7 +140,7 @@ proc onClickTorStatus*(b: Button) =
     nil, # working directory
     ["/usr/bin/nyx", "--config", "/etc/anonsurf/nyxrc"], # args
     [], # envv
-    {doNotReapChild}, # spawn flag
+    {}, # spawn flag
     nil, # Child setup
     nil, # child setup data
     nil, # chlid setup data destroy
