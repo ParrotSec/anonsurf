@@ -1,3 +1,9 @@
+anonsurf (3.1.0+parrot0) rolling; urgency=medium
+
+  * Init the stable version
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Tue, 20 Oct 2020 04:27:12 +0700
+
 anonsurf (3.0.6+parrot0) rolling-testing; urgency=medium
 
   * Fix VTE problem
