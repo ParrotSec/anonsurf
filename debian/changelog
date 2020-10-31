@@ -1,3 +1,12 @@
+anonsurf (3.1.1+parrot0) rolling-testing; urgency=medium
+
+  * Restore GTK Decorator
+  * Remove custom static title bar
+  * Move about to bottom right
+  * AnonSurf GTK: enable / disable GUI no longer uses AnonSurf CLI
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sun, 01 Nov 2020 01:32:03 +0700
+
 anonsurf (3.1.0+parrot0) rolling; urgency=medium
 
   * Init the stable version
