@@ -1,5 +1,6 @@
-import gintro / [gtk]
+import gintro / [gtk, gobject]
 import .. / cores / images
+import about
 
 
 proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: Button): Frame =
@@ -56,15 +57,15 @@ proc makeBottomBarForMain(btnRestart: Button): Box =
   let
     boxBottomBar = newBox(Orientation.horizontal, 3)
     imgRestart = newImageFromPixbuf(reloadIcon)
-    # btnOptions = newButton("")
-    # imgOptions = newImageFromIconName("system-run", 3)
+    btnAbout = newButton("")
+    imgAbout = newImageFromPixbuf(aboutIcon)
   btnRestart.setImage(imgRestart)
 
-  # btnOptions.setImage(imgOptions)
-  # btnOptions.connect("clicked", makeOptionsDialog)
+  btnAbout.setImage(imgAbout)
+  btnAbout.connect("clicked", onClickAbout)
 
   boxBottomBar.packStart(btnRestart, false, true, 3)
-  # boxBottomBar.packEnd(btnOptions, false, true, 3)
+  boxBottomBar.packEnd(btnAbout, false, true, 3)
 
   return boxBottomBar
 

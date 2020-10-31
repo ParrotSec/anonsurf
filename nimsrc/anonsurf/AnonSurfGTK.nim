@@ -1,5 +1,5 @@
 import gintro / [gtk, glib, gobject]
-import displays / [detailPage, mainPage, title]
+import displays / [detailPage, mainPage]
 import cores / [status, refresher, images]
 import actions / [actDetailPage, actMainPage, gtkClick]
 
@@ -73,7 +73,6 @@ proc createArea(boxMainWindow: Box) =
 
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
-  boxMainWindow.add(makeTitleBar())
   boxMainWindow.add(mainStack)
   boxMainWindow.showAll()
   
@@ -126,7 +125,7 @@ proc main =
   mainBoard.setResizable(false)
   mainBoard.title = "AnonSurf GUI"
   mainBoard.setIcon(surfIcon)
-  mainBoard.setDecorated(false)
+  # mainBoard.setDecorated(false)
   mainBoard.setPosition(WindowPosition.center)
 
   createArea(boxMainWindow)

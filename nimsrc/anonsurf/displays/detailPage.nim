@@ -1,5 +1,6 @@
-import gintro / gtk
-# import .. / .. / actions / cores
+import gintro / [gtk, gobject]
+import .. / cores / images
+import about
 
 
 proc makeBottomBarForDetail(bBack: Button): Box =
@@ -9,9 +10,15 @@ proc makeBottomBarForDetail(bBack: Button): Box =
   let
     boxBottomBar = newBox(Orientation.horizontal, 3)
     # btnExit = newButton("Exit")
+    btnAbout = newButton("")
+    imgAbout = newImageFromPixbuf(aboutIcon)
   
   boxBottomBar.add(bBack)
-  # boxBottomBar.packEnd(bRestart, false, true, 3)
+
+  btnAbout.setImage(imgAbout)
+  btnAbout.connect("clicked", onClickAbout)
+
+  boxBottomBar.packEnd(btnAbout, false, true, 3)
 
   return boxBottomBar
 
