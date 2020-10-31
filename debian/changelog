@@ -1,3 +1,10 @@
+anonsurf (3.1.3+parrot0) rolling-testing; urgency=medium
+
+  * Remove backup file of resolv.conf after stop
+  * Fix DNS setting localhost when previous setting is dynamic
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sun, 01 Nov 2020 02:27:00 +0700
+
 anonsurf (3.1.2+parrot1) rolling-testing; urgency=medium
 
   * Change name anonsurf-core to anonsurf
