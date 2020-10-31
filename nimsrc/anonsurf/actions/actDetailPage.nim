@@ -7,12 +7,12 @@ proc onClickBoot*(b: Button) =
     when we click on button
   ]#
   if b.label == "Enable":
-    if spawnCommandLineAsync("gksudo /usr/bin/anonsurf enable-boot"):
+    if spawnCommandLineAsync("gksudo /usr/bin/systemctl enable anonsurfd"):
       b.label = "Enabling"
     else:
       discard
   else:
-    if spawnCommandLineAsync("gksudo /usr/bin/anonsurf disable-boot"):
+    if spawnCommandLineAsync("gksudo /usr/bin/systemctl disable anonsurfd"):
       b.label = "Disabling"
     else:
       discard
