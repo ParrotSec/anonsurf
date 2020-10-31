@@ -10,7 +10,7 @@ Build-Depends: debhelper-compat (= 12), nim, gcc, bash-completion, libnim-gintro
 Build-Depends-Indep: pkg-config
 Homepage: https://www.parrotsec.org/
 
-Package: anonsurf-core
+Package: anonsurf
 Architecture: any
 Priority: optional
 Depends: bash (>= 5.0), iptables, tor, libc6, nyx, systemd | systemctl, sudo, bleachbit
@@ -33,7 +33,7 @@ Description: Anonymization toolkit for Parrot Security OS
 Package: anonsurf-gtk
 Architecture: any
 Priority: optional
-Depends: anonsurf-core, libc6
+Depends: anonsurf, libc6
 Description: Graphic Interface for AnonSurf
  This package contains AnonSurf's graphic user interface
  and its menu's launcher which was written in Nim and
@@ -42,7 +42,7 @@ Description: Graphic Interface for AnonSurf
 Package: anonsurf-cli
 Architecture: any
 Priority: optional
-Depends: anonsurf-core, libc6
+Depends: anonsurf, libc6
 Description: Command Line Interfaced for AnonSurf
  This package contains AnonSurf's command line interface
  and its menu's launcher which was written in Nim and

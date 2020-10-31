@@ -1,3 +1,10 @@
+anonsurf (3.1.2+parrot1) rolling-testing; urgency=medium
+
+  * Change name anonsurf-core to anonsurf
+  * Fix upgrade conflict problem
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sun, 01 Nov 2020 01:54:10 +0700
+
 anonsurf (3.1.2+parrot0) rolling-testing; urgency=medium
 
   * Create anonsurf-cli, anonsurf-core and anonsurf-gtk packages
