@@ -10,7 +10,7 @@ Build-Depends: debhelper-compat (= 12), nim, gcc, bash-completion, libnim-gintro
 Build-Depends-Indep: pkg-config
 Homepage: https://www.parrotsec.org/
 
-Package: anonsurf
+Package: anonsurf-core
 Architecture: any
 Priority: optional
 Depends: bash (>= 5.0), iptables, tor, libc6, nyx, systemd | systemctl, sudo, bleachbit
@@ -22,12 +22,28 @@ Description: Anonymization toolkit for Parrot Security OS
  transparent proxy and use iptables to forward all traffic through Tor
  network. It also disables IPv6, clear applications's cache to prevent
  data leak.
+ This packages contains:
+ . AnonSurf's configurations which is installed at /etc/anonsurf
+ . dnstool which is installed at /usr/bin/
+ . make-torrc which is installed at /usr/lib/anonsurf
+ . AnonSurf's daemon at /usr/lib/anonsurf/
+ . systemd's unit at /lib/systemd/system/
+ This package requires anonsurf-gtk or anonsurf-gui to use AnonSurf
 
 Package: anonsurf-gtk
 Architecture: any
 Priority: optional
-Depends: anonsurf, libc6
-Description: Anonymization toolkit for Parrot Security OS
+Depends: anonsurf-core, libc6
+Description: Graphic Interface for AnonSurf
  This package contains AnonSurf's graphic user interface
+ and its menu's launcher which was written in Nim and
+ gintro library (a binding of GTK framework).
+
+Package: anonsurf-cli
+Architecture: any
+Priority: optional
+Depends: anonsurf-core, libc6
+Description: Command Line Interfaced for AnonSurf
+ This package contains AnonSurf's command line interface
  and its menu's launcher which was written in Nim and
  gintro library (a binding of GTK framework).

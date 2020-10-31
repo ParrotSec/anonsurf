@@ -1,0 +1,11 @@
+configs/onion.pac /etc/anonsurf/
+configs/torrc.base /etc/anonsurf/
+configs/bridges.txt /etc/anonsurf/
+configs/anonrc /etc/anonsurf/
+configs/bridgerc.base /etc/anonsurf
+
+bin/make-torrc /usr/lib/anonsurf/
+bin/dnstool /usr/bin/
+
+daemon/anondaemon /usr/lib/anonsurf/
+sys-units/anonsurfd.service /lib/systemd/system/

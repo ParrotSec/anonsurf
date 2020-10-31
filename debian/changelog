@@ -1,3 +1,9 @@
+anonsurf (3.1.2+parrot0) rolling-testing; urgency=medium
+
+  * Create anonsurf-cli, anonsurf-core and anonsurf-gtk packages
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Sun, 01 Nov 2020 01:47:56 +0700
+
 anonsurf (3.1.1+parrot0) rolling-testing; urgency=medium
 
   * Restore GTK Decorator
