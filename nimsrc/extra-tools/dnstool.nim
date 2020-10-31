@@ -169,12 +169,19 @@ proc restoreBackup() =
     # There is no resolv.conf + no backup. Use dynamic setting
     if not fileExists(resolvConf):
       stdout.write("[-] No resolv.conf file found. Using dynamic DNS settings\n")
+    else:
+      if not tryRemoveFile(resolvConf):
+        stderr.write("[x] Error while removing old resolv.conf\n")
+        return
+    try:
       createSymlink(runResolvConf, resolvConf)
+    except:
+      stderr.write("[x] Error while restoring dynamic DNS settings")
   elif not fileExists(resolvConf):
     # There is no resolv.conf
     # After else if so backup should be here
     stdout.write("[-] Missing resolv.conf. Restoring backup file\n")
-    copyFile(backupFile, resolvConf)
+    moveFile(backupFile, resolvConf)
   else:
     # Don't overwrite when it has the same data
     if readFile(resolvConf) == readFile(backupFile):
@@ -189,14 +196,15 @@ proc restoreBackup() =
           stdout.write("[*] Restored from " & backupFile & "\n")
         else:
           stderr.write("[x] Error while removing /etc/resolv.conf\n")
+        if not tryRemoveFile(backupFile):
+          stderr.write("[x] Error while removing backup file\n")
       # It seems good. We restore the data
       else:
         if tryRemoveFile(resolvConf):
-          echo "copying from " & backupFile & " to " & resolvConf
-          copyFile(backupFile, resolvConf)
+          moveFile(backupFile, resolvConf)
           stdout.write("[*] Restored from " & backupFile & "\n")
         else:
-          stderr.write("[x] Error while removing /etc/resolv.conf\n")
+          stderr.write("[x] Error while restoring /etc/resolv.conf\n")
 
 
 proc writeDNSToTail(data: string) = 
