@@ -82,6 +82,7 @@ function start {
 	# If tor didn't start, we start it
 	# It is used for startup
 	TOR_PORT=`cat /etc/tor/torrc | grep TransPort | cut -d " " -f 2 | cut -d ":" -f 2`
+	DNS_PORT=`cat /etc/tor/torrc | grep DNSPort | cut -d " " -f 2 | cut -d ":" -f 2`
 	# Init DNS
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor\n"
 	/usr/bin/dnstool create-backup
@@ -107,9 +108,9 @@ function start {
 
 	#set dns redirect
 	echo -e " $GREEN*$BLUE Redirecting DNS traffic through tor\n"
-	/usr/sbin/iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
-	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --dport 53 -j REDIRECT --to-ports 53
-	/usr/sbin/iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport 53 -j REDIRECT --to-ports 53
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp --dport $DNS_PORT -j REDIRECT --to-ports $DNS_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --dport $DNS_PORT -j REDIRECT --to-ports $DNS_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport $DNS_PORT -j REDIRECT --to-ports $DNS_PORT
 
 	#resolve .onion domains mapping 10.192.0.0/10 address space
 	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
