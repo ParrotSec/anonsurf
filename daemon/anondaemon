@@ -108,9 +108,7 @@ function start {
 
 	#set dns redirect
 	echo -e " $GREEN*$BLUE Redirecting DNS traffic through tor\n"
-	/usr/sbin/iptables -t nat -A OUTPUT -p udp --dport $DNS_PORT -j REDIRECT --to-ports $DNS_PORT
-	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --dport $DNS_PORT -j REDIRECT --to-ports $DNS_PORT
-	/usr/sbin/iptables -t nat -A OUTPUT -p udp -m owner --uid-owner $TOR_UID -m udp --dport $DNS_PORT -j REDIRECT --to-ports $DNS_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -d 127.0.0.1/32 -p udp -m udp --dport 53 -j REDIRECT --to-ports $DNS_PORT
 
 	#resolve .onion domains mapping 10.192.0.0/10 address space
 	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
