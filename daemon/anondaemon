@@ -133,8 +133,6 @@ function start {
 	/usr/sbin/iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
 	/usr/sbin/iptables -A OUTPUT -j REJECT
 
-	# Block INPUT
-	/usr/sbin/iptables -A INPUT -j DROP
 }
 
 
