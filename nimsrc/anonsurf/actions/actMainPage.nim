@@ -1,4 +1,4 @@
-import gintro / [gtk, glib, vte]
+import gintro / [gtk, glib, vte, gobject]
 import .. / modules / [myip, changeid, runsurf]
 import .. / displays / [noti, askKill]
 import strutils
@@ -124,6 +124,10 @@ proc upgradeCallback(terminal: ptr Terminal00; pid: int32; error: ptr glib.Error
   discard
 
 
+proc onVTEExit(v: Terminal, signal: int, d: Dialog) =
+  d.destroy()
+
+
 proc onClickTorStatus*(b: Button) =
   #[
     Spawn a native GTK terminal and run nyx with it to show current tor status
@@ -135,6 +139,7 @@ proc onClickTorStatus*(b: Button) =
 
   statusDialog.setTitle("Tor bandwidth")
 
+  nyxTerm.connect("child-exited", onVTEExit, statusDialog)
   nyxTerm.spawnAsync(
     {noLastlog}, # pty flags
     nil, # working directory
