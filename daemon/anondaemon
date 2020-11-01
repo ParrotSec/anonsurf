@@ -132,6 +132,9 @@ function start {
 	echo -e " $GREEN*$BLUE Allowing only tor to browse in clearnet$RESETCOLOR\n"
 	/usr/sbin/iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
 	/usr/sbin/iptables -A OUTPUT -j REJECT
+
+	# Block INPUT
+	/usr/sbin/iptables -A INPUT -j DROP
 }
 
 
