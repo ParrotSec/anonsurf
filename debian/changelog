@@ -1,3 +1,11 @@
+anonsurf (3.1.4+parrot0) rolling-testingD; urgency=medium
+
+  * Dynamic DNS port setting from torrc.base
+  * Fix iptables rules don't work with DNS settings
+  * Drop Inbound packets when AnonSurf is enabled
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Mon, 02 Nov 2020 02:40:20 +0700
+
 anonsurf (3.1.3+parrot0) rolling-testing; urgency=medium
 
   * Remove backup file of resolv.conf after stop
