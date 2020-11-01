@@ -133,6 +133,50 @@ function start {
 	/usr/sbin/iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
 	/usr/sbin/iptables -A OUTPUT -j REJECT
 
+	# TESTING block all incoming traffics
+	# https://trac.torproject.org/projects/tor/wiki/doc/TransparentProxy
+	/usr/sbin/iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
+	/usr/sbin/iptables -A INPUT -i lo -j ACCEPT
+
+	/usr/sbin/iptables -A INPUT -j DROP
+
+	### *filter FORWARD
+	/usr/sbin/iptables -A FORWARD -j DROP
+
+	### *filter OUTPUT
+	/usr/sbin/iptables -A OUTPUT -m state --state INVALID -j DROP
+	/usr/sbin/iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
+
+	# Allow Tor process output
+	iptables -A OUTPUT -m owner --uid-owner $TOR_UID -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j ACCEPT
+
+	# Allow loopback output
+	/usr/sbin/iptables -A OUTPUT -d 127.0.0.1/32 -o lo -j ACCEPT
+	/usr/sbin/iptables -A INPUT -d 127.0.0.1/32 -o lo -j ACCEPT
+
+	# Tor transproxy magic
+	/usr/sbin/iptables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport $TOR_PORT --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
+
+	# Allow OUTPUT to lan hosts in $_non_tor
+	# Uncomment these 3 lines to enable.
+	#for _lan in $_non_tor; do
+	# iptables -A OUTPUT -d $_lan -j ACCEPT
+	#done
+
+	# Log & Drop everything else. Uncomment to enable logging
+	#iptables -A OUTPUT -j LOG --log-prefix "Dropped OUTPUT packet: " --log-level 7 --log-uid
+	# /usr/sbin/iptables -A OUTPUT -j DROP
+
+	### Set default policies to DROP
+	# /usr/sbin/iptables -P INPUT DROP
+	# /usr/sbin/iptables -P FORWARD DROP
+	# /usr/sbin/iptables -P OUTPUT DROP
+
+	### Set default policies to DROP for IPv6
+	#ip6tables -P INPUT DROP
+	#ip6tables -P FORWARD DROP
+	#ip6tables -P OUTPUT DROP
+
 }
 
 
