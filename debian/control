@@ -17,26 +17,21 @@ Depends: bash (>= 5.0), iptables, tor, libc6, nyx, systemd | systemctl, sudo, bl
 Recommends: libnotify-bin, i2p, onioncircuits, connect-proxy, onionshare, torsocks, tor-geoipdb, parrot-menu
 Suggests: gnunet-gtk, gnunet, vidalia
 Description: Anonymization toolkit for Parrot Security OS
- AnonSurf is an anonymization toolkit that applies configurations and toolkits
- to prevent tracking and surveillance on end-user. AnonSurf create a Tor
- transparent proxy and use iptables to forward all traffic through Tor
- network. It also disables IPv6, clear applications's cache to prevent
- data leak.
- This packages contains:
- . AnonSurf's configurations which is installed at /etc/anonsurf
- . dnstool which is installed at /usr/bin/
- . make-torrc which is installed at /usr/lib/anonsurf
- . AnonSurf's daemon at /usr/lib/anonsurf/
- . systemd's unit at /lib/systemd/system/
- This package requires anonsurf-gtk or anonsurf-gui to use AnonSurf
+ AnonSurf is an anonymization toolkit that helps
+ prevent tracking and surveillance of the end-user.
+ .
+ AnonSurf creates a Tor transparent proxy using iptables
+ to forward all traffic through the Tor network.
+ It also disables IPv6 and clears application caches
+ to prevent data leaks.
 
 Package: anonsurf-gtk
 Architecture: any
 Priority: optional
 Depends: anonsurf, libc6
 Description: Graphic Interface for AnonSurf
- This package contains AnonSurf's graphic user interface
- and its menu's launcher which was written in Nim and
+ AnonSurf's graphic user interface and
+ menu launcher written in Nim and
  gintro library (a binding of GTK framework).
 
 Package: anonsurf-cli
@@ -44,6 +39,6 @@ Architecture: any
 Priority: optional
 Depends: anonsurf, libc6
 Description: Command Line Interfaced for AnonSurf
- This package contains AnonSurf's command line interface
- and its menu's launcher which was written in Nim and
+ AnonSurf's command line interface and
+ menu launcher written in Nim and
  gintro library (a binding of GTK framework).
