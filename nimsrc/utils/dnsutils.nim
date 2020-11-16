@@ -71,7 +71,7 @@ proc dnsStatusCheck*(): int =
         2.3: DHCP with OpenNIC and Custom
   ]#
   const resolvPath = "/etc/resolv.conf"
-  if not existsFile(resolvPath):
+  if not fileExists(resolvPath):
     return -2
   elif isEmptyOrWhitespace(readFile(resolvPath)):
     return -3
