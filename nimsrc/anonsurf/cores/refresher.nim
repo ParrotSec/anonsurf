@@ -42,18 +42,18 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   if myStatus.isAnonSurfService == 1:
     # Check status of Tor
     if myStatus.isTorService == 1:
-      args.lblServices.setMarkup("Servc:  <b<span foreground=\"#00FF00\">>Activated</span></b>")
+      args.lblServices.setMarkup("Servc:  <b<span background=\"#333333\" foreground=\"#00FF00\">>Activated</span></b>")
     elif myStatus.isTorService == 0:
       # Give error msg with red color
-      args.lblServices.setMarkup("Servc:  <b><span foreground=\"#FF0000\">Tor is not running</span></b>")
+      args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#FF0000\">Tor is not running</span></b>")
     elif myStatus.isTorService == -1:
       # Give error msg with red color
-      args.lblServices.setMarkup("Servc:  <b><span foreground=\"#FF0000\">Can't start Tor</span></b>")
+      args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#FF0000\">Can't start Tor</span></b>")
     # Check status of Port
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
       # Give error msg with red color
-      args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#FF0000\">Parse torrc failed</span></b>")
+      args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#FF0000\">Parse torrc failed</span></b>")
     else:
       var
         onErrPorts: seq[string]
@@ -69,25 +69,25 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         szErr += 1
     
       if szErr == 0:
-        args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#00FF00\">Activated</span></b>")
+        args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FF00\">Activated</span></b>")
       elif szErr == 3:
         # Give error msg with red color
-        args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#FF0000\">Can't bind ports</span></b>")
+        args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#FF0000\">Can't bind ports</span></b>")
       elif szErr == 2:
         # Give error msg with red color
-        args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#FF0000\">Error on " & join(onErrPorts, ", ") & "</span></b>")
+        args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#FF0000\">Error on " & join(onErrPorts, ", ") & "</span></b>")
       else:
         # Give error msg with red color
-        args.lblPorts.setMarkup("Ports:  <b<span foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>")
+        args.lblPorts.setMarkup("Ports:  <b<span background=\"#333333\" foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>")
 
   elif myStatus.isAnonsurfSErvice == 0:
     # Deactivated cyan color
-    args.lblServices.setMarkup("Servc:  <b><span foreground=\"#00FFFF\">Deactivated</span></b>")
-    args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#00FFFF\">Deactivated</span></b>")
+    args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
+    args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
   else:
     # Deactivated cyan color and error red color
-    args.lblServices.setMarkup("Servc:  <b><span foreground=\"#FF0000\">Can't start AnonSurf</span></b>")
-    args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#00FFFF\">Deactivated</span></b>")
+    args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#FF0000\">Can't start AnonSurf</span></b>")
+    args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
 
   # Update DNS status
   # TODO remove all text shadow
@@ -96,25 +96,25 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
       # ERROR RED
-      args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\"> Can't read Tor config<span></b>")
+      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't read Tor config<span></b>")
     elif myPorts.isDNSPort:
       # Activated green
-      args.lblDns.setMarkup("DNS:   <b><span foreground=\"#00FF00\">Activated</span></b>")
+      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FF00\">Activated</span></b>")
     else:
       # Give error msg with red color
-      args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\"> Can't bind port<span></b>")
+      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't bind port<span></b>")
   of ERROR_DNS_LOCALHOST:
     # Give warning style with yellow color
-    args.lblDns.setMarkup("DNS:   <b><span foreground=\"##ADFF2F\"> LocalHost<span></b>")
+    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"##ADFF2F\"> LocalHost<span></b>")
   of ERROR_FILE_EMPTY:
     # Give error msg with red color
-    args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\">resolv.conf is empty</span></b>")
+    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf is empty</span></b>")
   of ERROR_FILE_NOT_FOUND:
     # Give error msg with red color
-    args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\">resolv.conf not found</span></b>")
+    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf not found</span></b>")
   of ERROR_UNKNOWN:
     # Give error msg with red color
-    args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\">Unknown error</span></b>")
+    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">Unknown error</span></b>")
   else:
     discard
 
