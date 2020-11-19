@@ -42,7 +42,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   if myStatus.isAnonSurfService == 1:
     # Check status of Tor
     if myStatus.isTorService == 1:
-      args.lblServices.setMarkup("Servc:  <b>Activated</b>")
+      args.lblServices.setMarkup("Servc:  <b<span foreground=\"#00FF00\">>Activated</span></b>")
     elif myStatus.isTorService == 0:
       # Give error msg with red color
       args.lblServices.setMarkup("Servc:  <b><span foreground=\"#FF0000\">Tor is not running</span></b>")
@@ -69,7 +69,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         szErr += 1
     
       if szErr == 0:
-        args.lblPorts.setMarkup("Ports:  <b>Activated</b>")
+        args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#00FF00\">Activated</span></b>")
       elif szErr == 3:
         # Give error msg with red color
         args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#FF0000\">Can't bind ports</span></b>")
@@ -81,11 +81,13 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         args.lblPorts.setMarkup("Ports:  <b<span foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>")
 
   elif myStatus.isAnonsurfSErvice == 0:
-    args.lblServices.setMarkup("Servc:  <b>Deactivated</b>")
-    args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
+    # Deactivated cyan color
+    args.lblServices.setMarkup("Servc:  <b><span foreground=\"#00FFFF\">Deactivated</span></b>")
+    args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#00FFFF\">Deactivated</span></b>")
   else:
-    args.lblServices.setMarkup("Servc:  <b>Can't start AnonSurf</b>")
-    args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
+    # Deactivated cyan color and error red color
+    args.lblServices.setMarkup("Servc:  <b><span foreground=\"#FF0000\">Can't start AnonSurf</span></b>")
+    args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#00FFFF\">Deactivated</span></b>")
 
   # Update DNS status
   # TODO remove all text shadow
@@ -93,9 +95,11 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   of STT_DNS_TOR:
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
+      # ERROR RED
       args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\"> Can't read Tor config<span></b>")
     elif myPorts.isDNSPort:
-      args.lblDns.setMarkup("DNS:   <b>Activated</b>")
+      # Activated green
+      args.lblDns.setMarkup("DNS:   <b><span foreground=\"#00FF00\">Activated</span></b>")
     else:
       # Give error msg with red color
       args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\"> Can't bind port<span></b>")
