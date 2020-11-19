@@ -4,6 +4,14 @@ import strutils
 import services
 
 
+const
+  ERROR_UNKNOWN* = -4
+  ERROR_FILE_NOT_FOUND* = -3
+  ERROR_FILE_EMPTY* = -2
+  ERROR_DNS_LOCALHOST* = -1
+  STT_DNS_TOR* = 0
+
+
 proc checkDNSServers(path: string): int =
   #[
     Check for all DNS servers in path
@@ -72,9 +80,9 @@ proc dnsStatusCheck*(): int =
   ]#
   const resolvPath = "/etc/resolv.conf"
   if not fileExists(resolvPath):
-    return -2
+    return ERROR_FILE_NOT_FOUND
   elif isEmptyOrWhitespace(readFile(resolvPath)):
-    return -3
+    return ERROR_FILE_EMPTY
   let dnsSettings = readFile(resolvPath)
   if dnsSettings == "nameserver 127.0.0.1\n":
     #[
@@ -84,10 +92,9 @@ proc dnsStatusCheck*(): int =
     ]#
     let anonsurfStatus = getServStatus("anonsurfd")
     if anonsurfStatus == 1:
-      return 0
+      return STT_DNS_TOR
     else:
-      # TODO use red color here
-      return -1
+      return ERROR_DNS_LOCALHOST
   else:
     #[
       Check if system is using dynamic setting (default of Debian) or static
@@ -95,16 +102,19 @@ proc dnsStatusCheck*(): int =
       /etc/anonsurf/opennic.lock exists -> system is using OpenNIC DNS
       If ln -s /run/resolvconf/resolv.conf /etc/resolv.conf -> dynamic
     ]#
-    let resolvInfo = getFileInfo(resolvPath, followSymlink = false)
-    # If resolv.conf is a file: static else dynamic
-    if resolvInfo.kind == pcFile:
-      result = 10
-      if result == 10:
-        result += checkDNSServers(resolvPath)
-    else:
-      # Set return value is dynamic value
-      result = 20
-      # Check for different settings in base files
-      if result == 20:
-        result += checkDNSServers(resolvPath)
+    try:
+      let resolvInfo = getFileInfo(resolvPath, followSymlink = false)
+      # If resolv.conf is a file: static else dynamic
+      if resolvInfo.kind == pcFile:
+        result = 10
+        if result == 10:
+          result += checkDNSServers(resolvPath)
+      else:
+        # Set return value is dynamic value
+        result = 20
+        # Check for different settings in base files
+        if result == 20:
+          result += checkDNSServers(resolvPath)
       # return "Dynamic"
+    except:
+      return ERROR_UNKNOWN

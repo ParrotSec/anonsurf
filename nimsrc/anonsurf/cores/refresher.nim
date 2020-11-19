@@ -44,13 +44,16 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     if myStatus.isTorService == 1:
       args.lblServices.setMarkup("Servc:  <b>Activated</b>")
     elif myStatus.isTorService == 0:
-      args.lblServices.setMarkup("Servc:  <b>Tor is not running</b>")
+      # Give error msg with red color
+      args.lblServices.setMarkup("Servc:  <b><span foreground=\"#FF0000\">Tor is not running</span></b>")
     elif myStatus.isTorService == -1:
-      args.lblServices.setMarkup("Servc:  <b>Can't start Tor</b>")
+      # Give error msg with red color
+      args.lblServices.setMarkup("Servc:  <b><span foreground=\"#FF0000\">Can't start Tor</span></b>")
     # Check status of Port
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
-      args.lblPorts.setMarkup("Ports:  <b>Parse torrc failed</b>")
+      # Give error msg with red color
+      args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#FF0000\">Parse torrc failed</span></b>")
     else:
       var
         onErrPorts: seq[string]
@@ -68,11 +71,14 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
       if szErr == 0:
         args.lblPorts.setMarkup("Ports:  <b>Activated</b>")
       elif szErr == 3:
-        args.lblPorts.setMarkup("Ports:  <b>Can't bind ports</b>")
+        # Give error msg with red color
+        args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#FF0000\">Can't bind ports</span></b>")
       elif szErr == 2:
-        args.lblPorts.setMarkup("Ports:  <b>Error on " & join(onErrPorts, ", ") & "</b>")
+        # Give error msg with red color
+        args.lblPorts.setMarkup("Ports:  <b><span foreground=\"#FF0000\">Error on " & join(onErrPorts, ", ") & "</span></b>")
       else:
-        args.lblPorts.setMarkup("Ports:  <b>Error on " & onErrPorts[0] & "</b>")
+        # Give error msg with red color
+        args.lblPorts.setMarkup("Ports:  <b<span foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>")
 
   elif myStatus.isAnonsurfSErvice == 0:
     args.lblServices.setMarkup("Servc:  <b>Deactivated</b>")
@@ -82,25 +88,51 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     args.lblPorts.setMarkup("Ports:  <b>Deactivated</b>")
 
   # Update DNS status
-  let dns = dnsStatusCheck()
-  if dns == 0:
+  # TODO remove all text shadow
+  case dnsStatusCheck()
+  of STT_DNS_TOR:
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
-      args.lblDns.setMarkup("DNS:   <b>[Err] Can't read config</b>")
+      args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\"> Can't read Tor config<span></b>")
     elif myPorts.isDNSPort:
       args.lblDns.setMarkup("DNS:   <b>Activated</b>")
     else:
-      args.lblDns.setMarkup("DNS:   <b>[Err] Can't bind port</b>")
-  elif dns == 1:
-    args.lblDns.setMarkup("DNS:   <b>[Warn] LocalHost</b>")
-  elif dns == -2:
-    args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf N/A</b>")
-  elif dns == -3:
-    args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf EOF</b>")
-  elif dns == 21 or dns == 11:
-    args.lblDns.setMarkup("DNS:   <b>OpenNIC server</b>")
+      # Give error msg with red color
+      args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\"> Can't bind port<span></b>")
+  of ERROR_DNS_LOCALHOST:
+    # Give warning style with yellow color
+    args.lblDns.setMarkup("DNS:   <b><span foreground=\"##ADFF2F\"> LocalHost<span></b>")
+  of ERROR_FILE_EMPTY:
+    # Give error msg with red color
+    args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\">resolv.conf is empty</span></b>")
+  of ERROR_FILE_NOT_FOUND:
+    # Give error msg with red color
+    args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\">resolv.conf not found</span></b>")
+  of ERROR_UNKNOWN:
+    # Give error msg with red color
+    args.lblDns.setMarkup("DNS:   <b><span foreground=\"#FF0000\">Unknown error</span></b>")
   else:
-    args.lblDns.setMarkup("DNS:   <b>Custom setting</b>")
+    discard
+
+  # let dns = dnsStatusCheck()
+  # if dns == STT_DNS_TOR:
+  #   let myPorts = getStatusPorts()
+  #   if myPorts.isReadError:
+  #     args.lblDns.setMarkup("DNS:   <b>[Err] Can't read Tor config</b>")
+  #   elif myPorts.isDNSPort:
+  #     args.lblDns.setMarkup("DNS:   <b>Activated</b>")
+  #   else:
+  #     args.lblDns.setMarkup("DNS:   <b>[Err] Can't bind port</b>")
+  # elif dns == ERROR_DNS_LOCALHOST:
+  #   args.lblDns.setMarkup("DNS:   <b>[Warn] LocalHost</b>")
+  # elif dns == ERROR_FILE_EMPTY:
+  #   args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf is empty</b>")
+  # elif dns == ERROR_FILE_NOT_FOUND:
+  #   args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf not found</b>")
+  # elif dns == 21 or dns == 11:
+  #   args.lblDns.setMarkup("DNS:   <b>OpenNIC server</b>")
+  # else:
+  #   args.lblDns.setMarkup("DNS:   <b>Custom setting</b>")
 
 
 proc updateMain*(args: MainObjs, myStatus: Status) =

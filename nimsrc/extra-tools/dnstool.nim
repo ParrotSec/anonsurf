@@ -87,40 +87,45 @@ proc status() =
     Get current settings of DNS on system
   ]#
   let statusResult = dnsStatusCheck()
-  var
-    dnsType = ""
-    dnsAddr = ""
+  # var
+  #   dnsType = ""
+  #   dnsAddr = ""
 
   case statusResult
-  of 0:
+  of STT_DNS_TOR:
     stdout.write("[\e[32mSTATUS\e[0m] AnonSurf DNS\n")
-  of -1:
+  of ERROR_DNS_LOCALHOST:
     stderr.write("[\e[31mERROR\e[0m] Local host\n")
-  of -2:
-    stderr.write("[\e[31mERROR\e[0m] resolf.conf not found\n")
-  of -3:
+  of ERROR_FILE_NOT_FOUND:
+    stderr.write("[\e[31mERROR\e[0m] resolv.conf not found\n")
+  of ERROR_FILE_EMPTY:
     stderr.write("[\e[31mERROR\e[0m] resolv.conf is empty\n")
-  of 10 .. 13:
-    dnsType = "Static"
-  of 20 .. 23:
-    dnsType = "Dynamic"
+  of ERROR_UNKNOWN:
+    stderr.write("[\e[31mERROR\e[0m] Runtime error: Unknown problem\n")
   else:
     discard
+  # TODO rewrite here for address status
+  # of 10 .. 13:
+  #   dnsType = "Static"
+  # of 20 .. 23:
+  #   dnsType = "Dynamic"
+  # else:
+  #   discard
   
-  case statusResult mod 10
-  of 0:
-    dnsAddr = "DHCP only"
-  of 1:
-    dnsAddr = "OpenNIC"
-  of 2:
-    dnsAddr = "Custom"
-  of 3:
-    dnsAddr = "OpenNIC + Custom"
-  else:
-    discard
+  # case statusResult mod 10
+  # of 0:
+  #   dnsAddr = "DHCP only"
+  # of 1:
+  #   dnsAddr = "OpenNIC"
+  # of 2:
+  #   dnsAddr = "Custom"
+  # of 3:
+  #   dnsAddr = "OpenNIC + Custom"
+  # else:
+  #   discard
 
-  if dnsType != "":
-    echo "[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & dnsType & "\e[0m\n- \e[31mAddress\e[0m: \e[36m" & dnsAddr & "\e[0m"
+  # if dnsType != "":
+  #   echo "[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & dnsType & "\e[0m\n- \e[31mAddress\e[0m: \e[36m" & dnsAddr & "\e[0m"
 
 
 proc makeBackUp() =
