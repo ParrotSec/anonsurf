@@ -69,6 +69,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         szErr += 1
     
       if szErr == 0:
+        # ACtivated green
         args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FF00\">Activated</span></b>")
       elif szErr == 3:
         # Give error msg with red color

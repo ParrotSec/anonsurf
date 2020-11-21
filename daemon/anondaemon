@@ -152,7 +152,8 @@ function start {
 
 	# Allow loopback output
 	/usr/sbin/iptables -A OUTPUT -d 127.0.0.1/32 -o lo -j ACCEPT
-	/usr/sbin/iptables -A INPUT -d 127.0.0.1/32 -o lo -j ACCEPT
+	# iptables 1.8.5 can't use -o with input
+	# /usr/sbin/iptables -A INPUT -d 127.0.0.1/32 -o lo -j ACCEPT
 
 	# Tor transproxy magic
 	/usr/sbin/iptables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport $TOR_PORT --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
