@@ -1,12 +1,19 @@
 import os
 import osproc
 import strutils
+import net
 import .. / utils / dnsutils
 
 const
   sysResolvConf = "/etc/resolv.conf"
   bakResolvConf = "/etc/resolv.conf.bak"
   runResolvConf = "/run/resolvconf/resolv.conf"
+  dhcpResolvConf = "/run/resolvconf/interface/NetworkManager"
+  DNS_STATIC = 1
+  DNS_DYNAMIC = 2
+  ADDR_DHCP = 1
+  ADDR_OPENNIC = 2
+  ADDR_PARROT = 3
 
 
 proc showHelpCmd(cmd = "dnstool", keyword = "help", args = "", descr = "") =
@@ -92,6 +99,10 @@ proc getOpenNIC(): string =
   result = "nameserver 185.121.177.177\nnameserver 169.239.202.202\n"
   result &= "nameserver 198.251.90.108\nnameserver 198.251.90.109\n"
   result &= "nameserver 198.251.90.110\n"
+
+
+proc getDhcpDNS(): string =
+  return readFile(dhcpResolvConf) & "\n"
 
 
 proc lnkResovConf() =
@@ -222,3 +233,66 @@ proc showStatus() =
 
   if dnsType != "":
     echo "[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & dnsType & "\e[0m\n- \e[31mAddress\e[0m: \e[36m" & dnsAddr & "\e[0m"
+
+
+proc handleMakeDNS(dnsType: int, dnsAddr: string) =
+  # if dnsAddr == "" : return error
+  if dnsType == DNS_STATIC:
+    # remove old settings
+    writeResolv(dnsAddr)
+    discard
+  #   if dnsAddrType == ADDR_OPENNIC:
+  #     allAddresses &= 
+
+
+proc main() =
+  if paramCount() == 0:
+    help()
+    showStatus()
+    return
+  elif paramCount() == 1:
+    if paramStr(1) in ["help", "-h", "--help", "-help"]:
+      help()
+      return
+    elif paramStr(1) == "status":
+      showStatus()
+      return
+    elif paramStr(1) == "create-backup":
+      mkBackup()
+      return
+    elif paramStr(1) == "restore-backup":
+      restoreBackup()
+      showStatus()
+      return
+    elif paramStr(1) != "static" or paramStr(1) != "dynamic":
+      help()
+      stderr.write("[!] Unknown option\n")
+      return
+    elif paramStr(1) == "static":
+      stderr.write("[!] You must provide DNS address for static")
+      return
+    else:
+      handleMakeDNS(DNS_DYNAMIC, getDhcpDNS()) # Dynamic DHCP
+  else:
+    var
+      dnsType = 0
+      dnsAddr = ""
+    if paramStr(1) == "static":
+      dnsType = DNS_STATIC
+    elif paramStr(2) == "dynamic":
+      dnsType = DNS_DYNAMIC
+    else:
+      stdout.write("[!] Unknown option\n")
+    for i in 2 .. paramCount():
+      if paramStr(i) == "opennic":
+        dnsAddr &= getOpenNIC()
+      elif paramStr(i) == "dhcp":
+        dnsAddr &= getDhcpDNS()
+      elif paramStr(i) == "parrot":
+        dnsAddr &= getParrotDNS()
+      elif isIpAddress(paramStr(i)):
+        dnsAddr &= "nameserver " & paramStr(i) & "\n"
+    handleMakeDNS(dnsType, dnsAddr)
+
+
+main()
