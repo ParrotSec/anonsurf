@@ -116,28 +116,14 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   of ERROR_UNKNOWN:
     # Give error msg with red color
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">Unknown error</span></b>")
+  of 11:
+    # Use cyan for opennic or custom addresses
+      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">OpenNIC server</span></b>")
+  of 21:
+    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">OpenNIC server</span></b>")
   else:
-    discard
+    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">Custom setting</span></b>")
 
-  # let dns = dnsStatusCheck()
-  # if dns == STT_DNS_TOR:
-  #   let myPorts = getStatusPorts()
-  #   if myPorts.isReadError:
-  #     args.lblDns.setMarkup("DNS:   <b>[Err] Can't read Tor config</b>")
-  #   elif myPorts.isDNSPort:
-  #     args.lblDns.setMarkup("DNS:   <b>Activated</b>")
-  #   else:
-  #     args.lblDns.setMarkup("DNS:   <b>[Err] Can't bind port</b>")
-  # elif dns == ERROR_DNS_LOCALHOST:
-  #   args.lblDns.setMarkup("DNS:   <b>[Warn] LocalHost</b>")
-  # elif dns == ERROR_FILE_EMPTY:
-  #   args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf is empty</b>")
-  # elif dns == ERROR_FILE_NOT_FOUND:
-  #   args.lblDns.setMarkup("DNS:   <b>[Err] resolv.conf not found</b>")
-  # elif dns == 21 or dns == 11:
-  #   args.lblDns.setMarkup("DNS:   <b>OpenNIC server</b>")
-  # else:
-  #   args.lblDns.setMarkup("DNS:   <b>Custom setting</b>")
 
 
 proc updateMain*(args: MainObjs, myStatus: Status) =
