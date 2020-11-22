@@ -11,9 +11,6 @@ const
   dhcpResolvConf = "/run/resolvconf/interface/NetworkManager"
   DNS_STATIC = 1
   DNS_DYNAMIC = 2
-  ADDR_DHCP = 1
-  ADDR_OPENNIC = 2
-  ADDR_PARROT = 3
 
 
 proc showHelpCmd(cmd = "dnstool", keyword = "help", args = "", descr = "") =
@@ -82,6 +79,11 @@ proc help() =
 
 
 proc getParrotDNS(): string =
+  #[
+    Use host command to automatically get ip from director.geo.parrot.sh
+    FIXME get addresses when dns is empty
+    TODO use native libs instead of using subprocess
+  ]#
   try:
     let output = execProcess("/usr/bin/host director.geo.parrot.sh")
     var allIP = ""
@@ -117,12 +119,12 @@ proc lnkResovConf() =
     discard
 
 
-proc writeTail() =
+proc writeTail(dnsAddr: string) =
   #[
     Create dyanmic resolv.conf
     Write tail
   ]#
-  # clean
+  # TODO add write tail file here
   # make
   discard
 
@@ -131,7 +133,6 @@ proc writeResolv(dnsAddr: string) =
   #[
     Create static resolv.conf
   ]#
-  # clean tail
   let banner = "# Static resolv.conf genetared by DNSTool\n# Settings wont change after reboot\n"
   try:
     writeFile(sysResolvConf, banner & dnsAddr)
@@ -236,13 +237,14 @@ proc showStatus() =
 
 
 proc handleMakeDNS(dnsType: int, dnsAddr: string) =
-  # if dnsAddr == "" : return error
+  # TODO if dnsAddr == "" : return error
   if dnsType == DNS_STATIC:
-    # remove old settings
+    # TODO remove old settings
     writeResolv(dnsAddr)
-    discard
-  #   if dnsAddrType == ADDR_OPENNIC:
-  #     allAddresses &= 
+  else:
+    # TODO remove old settings
+    writeTail(dnsAddr)
+    # TODO need to update config using resolvconf?
 
 
 proc main() =
