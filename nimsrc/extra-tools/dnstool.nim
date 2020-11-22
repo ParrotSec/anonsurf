@@ -3,7 +3,9 @@
 ]#
 
 import os
+import osproc
 import net
+import strutils
 import .. / utils / dnsutils
 
 const
@@ -70,6 +72,7 @@ proc help() =
   showHelpCmd(cmd = "sudo " & progName, keyword = "restore-backup", descr = "Restore backup of /etc/resolv.conf")
   stdout.write("\nAddress could be:\n")
   showHelpDesc(keyword = "opennic", descr = "OpenNIC address[es]")
+  showHelpDesc(keyword = "parrot", descr = "ParrotOS DNS address[es]")
   showHelpDesc(keyword = "dhcp", descr = "Address[es] of current DHCP settings")
   showHelpDesc(descr = "Any IPv4 or IPv6 address[es]")
   stdout.write("\nStatic and Dynamic:\n")
@@ -251,7 +254,7 @@ proc cleanTail() =
   try:
     writeFile(resolvTail, "")
   except:
-    stderr.write("[x] Error while clearing tail")
+    stderr.write("[x] Error while clearing tail\n")
 
 
 proc freshResolv(resolvType: string) =
@@ -282,6 +285,20 @@ proc doBasicMake(dynamicOpt: string) =
   freshResolv(dynamicOpt)
   cleanTail()
 
+
+proc getParrotDNS(): string =
+  try:
+    let output = execProcess("/usr/bin/host director.geo.parrot.sh")
+    # FIXME ";; connection timed out; no servers could be reached with" sudo
+    var allIP = ""
+    for line in output.split("\n"):
+      if line.startsWith("director.geo.parrot.sh has "):
+        allIP &= "nameserver " & line.split(" ")[^1] & "\n"
+      else:
+        discard
+    return allIP
+  except:
+    return ""
 
 proc main() =
   #[
@@ -351,6 +368,17 @@ proc main() =
           writeDNSToTail(openNICAddr)
         elif paramStr(1) == "static":
           writeDNSToResolv(openNICAddr)
+      elif paramStr(i) == "parrot":
+        let dnsAddresses = getParrotDNS()
+        if dnsAddresses == "":
+          stderr.write("[x] Can't get addresses from Parrot's geo director. Use DHCP instead.\n")
+          if execShellCmd("/usr/sbin/resolvconf -u") != 0:
+            stderr.write("[x] Error: while updating resolv.conf config\n")
+            stderr.write("[!] Debug: Executing resolvconf -u error\n")
+        if paramStr(1) == "dynamic":
+          writeDNSToTail(dnsAddresses)
+        elif paramStr(1) == "static":
+          writeDNSToResolv(dnsAddresses)
       elif paramStr(i) == "dhcp":
         # If user select DHCP server, we write our DNS to setting
         if paramStr(1) == "static":
