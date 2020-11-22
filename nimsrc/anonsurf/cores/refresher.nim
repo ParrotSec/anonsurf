@@ -118,10 +118,12 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">Unknown error</span></b>")
   of 11:
     # Use cyan for opennic or custom addresses
-      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">OpenNIC server</span></b>")
+    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">OpenNIC server</span></b>")
   of 21:
+    # Use cyan for opennic or custom addresses
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">OpenNIC server</span></b>")
   else:
+    # Use cyan for opennic or custom addresses
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">Custom setting</span></b>")
 
 

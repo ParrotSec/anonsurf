@@ -102,9 +102,6 @@ proc status() =
     stderr.write("[\e[31mERROR\e[0m] resolv.conf is empty\n")
   of ERROR_UNKNOWN:
     stderr.write("[\e[31mERROR\e[0m] Runtime error: Unknown problem\n")
-  # else:
-  #   discard
-  # TODO rewrite here for address status
   of 10 .. 13:
     dnsType = "Static"
   of 20 .. 23:
