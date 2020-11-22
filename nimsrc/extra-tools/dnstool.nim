@@ -194,7 +194,6 @@ proc restoreBackup() =
     # If we backed up symlink of /run/resolvconf/resolv.conf, it should have the same data
     else:
       if readFile(runResolvConf) == readFile(backupFile):
-        # FIXME always use DHCP
         if tryRemoveFile(resolvConf):
           stdout.write("[-] Backup file has same DHCP configurations. Use DHCP settings\n")
           createSymlink(runResolvConf, resolvConf)
@@ -289,7 +288,6 @@ proc doBasicMake(dynamicOpt: string) =
 proc getParrotDNS(): string =
   try:
     let output = execProcess("/usr/bin/host director.geo.parrot.sh")
-    # FIXME ";; connection timed out; no servers could be reached with" sudo
     var allIP = ""
     for line in output.split("\n"):
       if line.startsWith("director.geo.parrot.sh has "):
@@ -342,9 +340,6 @@ proc main() =
       help()
       stderr.write("[x] Err: Unknow option\n")
       return
-  
-  # We clean all base files for new settings
-  doBasicMake(paramStr(1))
 
   if paramCount() == 1 and paramStr(1) == "static":
     stderr.write("[x] Err: Must provide address for static DNS\n")
@@ -364,22 +359,24 @@ proc main() =
     for i in 2 .. paramCount():
       # If user select opennic, we write addresses to good place
       if paramStr(i) == "opennic":
+        doBasicMake(paramStr(1))
         if paramStr(1) == "dynamic":
           writeDNSToTail(openNICAddr)
         elif paramStr(1) == "static":
           writeDNSToResolv(openNICAddr)
       elif paramStr(i) == "parrot":
         let dnsAddresses = getParrotDNS()
+        doBasicMake(paramStr(1))
         if dnsAddresses == "":
           stderr.write("[x] Can't get addresses from Parrot's geo director. Use DHCP instead.\n")
-          if execShellCmd("/usr/sbin/resolvconf -u") != 0:
-            stderr.write("[x] Error: while updating resolv.conf config\n")
-            stderr.write("[!] Debug: Executing resolvconf -u error\n")
+          # FIXME 127.0.0.1 showed as custom instead of error localhost
+          freshResolv("dynamic")
         if paramStr(1) == "dynamic":
           writeDNSToTail(dnsAddresses)
         elif paramStr(1) == "static":
           writeDNSToResolv(dnsAddresses)
       elif paramStr(i) == "dhcp":
+        doBasicMake(paramStr(1))
         # If user select DHCP server, we write our DNS to setting
         if paramStr(1) == "static":
           # We only apply for static because dynamic should always have it
@@ -388,16 +385,17 @@ proc main() =
         allDNSAddress &= "nameserver " & paramStr(i) & "\n"
     
     if paramStr(1) == "dynamic":
+      doBasicMake(paramStr(1))
       writeDNSToTail(allDNSAddress)
     elif paramStr(1) == "static":
+      doBasicMake(paramStr(1))
       writeDNSToResolv(allDNSAddress)
 
   # We apply options even there is no custom option. It must work for both
   if paramStr(1) == "dynamic":
+    doBasicMake(paramStr(1))
     # If dynamic is using, surely the DNS addr of DHCP is in here
-    if execShellCmd("/usr/sbin/resolvconf -u") != 0:
-      stderr.write("[x] Error: while updating resolv.conf config\n")
-      stderr.write("[!] Debug: Executing resolvconf -u error\n")
+    freshResolv("dynamic")
 
   status()
 
