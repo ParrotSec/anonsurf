@@ -60,7 +60,8 @@ proc showHelpDesc(keyword = "", descr = "") =
 
 proc help() =
   banner()
-  let progName = getAppFileName()
+  # let progName = getAppFileName()
+  let progName = "dnstool"
   showHelpCmd(cmd = progName, keyword = "help | -h | --help", descr = "Show help banner")
   showHelpCmd(cmd = progName, keyword = "status", descr = "Show current system DNS")
   showHelpCmd(cmd = "sudo " & progName, keyword = "dynamic", descr = "Use DHCP's DNS")
@@ -270,7 +271,7 @@ proc main() =
       showStatus()
       return
     elif paramStr(1) == "static":
-      stderr.write("[!] You must provide DNS address for static")
+      stderr.write("[!] You must provide DNS address for static\n")
       return
     elif paramStr(1) == "dynamic":
       handleMakeDNS(DNS_DYNAMIC, getDhcpDNS()) # Dynamic DHCP
