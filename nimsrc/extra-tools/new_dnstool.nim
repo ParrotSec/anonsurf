@@ -10,8 +10,6 @@ const
   runResolvConf = "/run/resolvconf/resolv.conf"
   dhcpResolvConf = "/run/resolvconf/interface/NetworkManager"
   tailResolvConf = "/etc/resolvconf/resolv.conf.d/tail"
-  DNS_STATIC = 1
-  DNS_DYNAMIC = 2
 
 
 proc showHelpCmd(cmd = "dnstool", keyword = "help", args = "", descr = "") =
@@ -64,9 +62,7 @@ proc help() =
   let progName = "dnstool"
   showHelpCmd(cmd = progName, keyword = "help | -h | --help", descr = "Show help banner")
   showHelpCmd(cmd = progName, keyword = "status", descr = "Show current system DNS")
-  showHelpCmd(cmd = "sudo " & progName, keyword = "dynamic", descr = "Use DHCP's DNS")
-  showHelpCmd(cmd = "sudo " & progName, keyword = "dynamic", args = "<Address[es]>", descr = "Use DHCP's DNS and custom DNS address[es]")
-  showHelpCmd(cmd = "sudo " & progName, keyword = "static", args = "<Address[es]>", descr = "Use custom DNS address[es]")
+  showHelpCmd(cmd = "sudo " & progName, keyword = "address", args = "<DNS servers>" , descr = "Set DNS servers") # TODO improve msg quality here
   showHelpCmd(cmd = "sudo " & progName, keyword = "create-backup", descr = "Make backup for current settings in /etc/resolv.conf")
   showHelpCmd(cmd = "sudo " & progName, keyword = "restore-backup", descr = "Restore backup of /etc/resolv.conf")
   stdout.write("\nAddress could be:\n")
@@ -75,8 +71,8 @@ proc help() =
   showHelpDesc(keyword = "dhcp", descr = "Address[es] of current DHCP settings")
   showHelpDesc(descr = "Any IPv4 or IPv6 address[es]")
   stdout.write("\nStatic and Dynamic:\n")
-  showHelpDesc(keyword = "static", descr = "Keep DNS settings after reboot or join other network")
-  showHelpDesc(keyword = "dynamic", descr = "Doesn't keep current address[es] after reboot or join new network")
+  showHelpDesc(keyword = "dynamic", descr = sysResolvConf & " is a symlink of" & runResolvConf)
+  showHelpDesc(keyword = "static", descr = sysResolvConf & " is not a symlink. Settings won't be changed after reboot.")
   stdout.write("\n")
 
 
@@ -152,26 +148,18 @@ proc makeDHCPDNS() =
     discard
 
 
-proc handleMakeDNS(dnsType: int, dnsAddr: string) =
+proc handleMakeDNS(dnsAddr: string) =
   if dnsAddr == "":
     stderr.write("[!] Address is empty. Skip!\n")
     return
-  if dnsType == DNS_STATIC:
-    try:
-      # Remove old resolv.conf
-      removeFile(sysResolvConf)
-      # Remove old addresses in tail
-      writeTail("")
-      writeResolv(dnsAddr)
-    except:
-      discard # TODO error here
-  else:
-    try:
-      removeFile(sysResolvConf)
-      writeTail(dnsAddr)
-      discard execProcess("resolvconf -u")
-    except:
-      discard # TODO error here
+  try:
+    # Remove old resolv.conf
+    removeFile(sysResolvConf)
+    # Remove old addresses in tail
+    writeTail("")
+    writeResolv(dnsAddr)
+  except:
+    discard # TODO error here
 
 
 proc mkBackup() =
@@ -289,40 +277,25 @@ proc main() =
       restoreBackup()
       showStatus()
       return
-    elif paramStr(1) == "static":
-      stderr.write("[!] You must provide DNS address for static\n")
-      return
-    elif paramStr(1) == "dynamic":
-      # FIXME unknown option in test
-      # handleMakeDNS(DNS_DYNAMIC, getDhcpDNS()) # Dynamic DHCP
-      makeDHCPDNS()
+    elif paramStr(1) == "address":
+      if paramStr(2) == "dhcp":
+        makeDHCPDNS()
+        return
+      var
+        dnsAddr = ""
+      for i in 2 .. paramCount():
+        if paramStr(i) == "opennic":
+          dnsAddr &= getOpenNIC()
+        elif paramStr(i) == "parrot":
+          dnsAddr &= getParrotDNS()
+        elif isIpAddress(paramStr(i)):
+          dnsAddr &= "nameserver " & paramStr(i) & "\n"
+      handleMakeDNS(dnsAddr)
       showStatus()
-    # elif paramStr(1) != "static" or paramStr(1) != "dynamic":
     else:
       help()
       stderr.write("[!] Unknown option\n")
-      return
-  else:
-    var
-      dnsType = 0
-      dnsAddr = ""
-    if paramStr(1) == "static":
-      dnsType = DNS_STATIC
-    elif paramStr(1) == "dynamic":
-      dnsType = DNS_DYNAMIC
-    else:
-      stdout.write("[!] Unknown option\n")
-    for i in 2 .. paramCount():
-      if paramStr(i) == "opennic":
-        dnsAddr &= getOpenNIC()
-      elif paramStr(i) == "dhcp":
-        dnsAddr &= getDhcpDNS()
-      elif paramStr(i) == "parrot":
-        dnsAddr &= getParrotDNS()
-      elif isIpAddress(paramStr(i)):
-        dnsAddr &= "nameserver " & paramStr(i) & "\n"
-    handleMakeDNS(dnsType, dnsAddr)
-    showStatus()
+      return    
 
 
 main()
