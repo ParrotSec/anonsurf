@@ -262,39 +262,37 @@ proc main() =
   if paramCount() == 0:
     help()
     showStatus()
-    return
   elif paramCount() == 1:
     if paramStr(1) in ["help", "-h", "--help", "-help"]:
       help()
-      return
     elif paramStr(1) == "status":
       showStatus()
-      return
     elif paramStr(1) == "create-backup":
       mkBackup()
-      return
     elif paramStr(1) == "restore-backup":
       restoreBackup()
       showStatus()
-      return
-    elif paramStr(1) == "address":
+    else:
+      stderr.write("[!] Invalid option\n")
+  else:
+    if paramStr(1) == "address":
       if paramStr(2) == "dhcp":
         makeDHCPDNS()
-        return
-      var
-        dnsAddr = ""
-      for i in 2 .. paramCount():
-        if paramStr(i) == "opennic":
-          dnsAddr &= getOpenNIC()
-        elif paramStr(i) == "parrot":
-          dnsAddr &= getParrotDNS()
-        elif isIpAddress(paramStr(i)):
-          dnsAddr &= "nameserver " & paramStr(i) & "\n"
-      handleMakeDNS(dnsAddr)
+      else:
+        var
+          dnsAddr = ""
+        for i in 2 .. paramCount():
+          if paramStr(i) == "opennic":
+            dnsAddr &= getOpenNIC()
+          elif paramStr(i) == "parrot":
+            dnsAddr &= getParrotDNS()
+          elif isIpAddress(paramStr(i)):
+            dnsAddr &= "nameserver " & paramStr(i) & "\n"
+        handleMakeDNS(dnsAddr)
       showStatus()
     else:
       help()
-      stderr.write("[!] Unknown option\n")
+      stderr.write("[!] Invalid option\n")
       return    
 
 
