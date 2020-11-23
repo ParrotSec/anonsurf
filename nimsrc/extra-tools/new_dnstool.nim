@@ -169,7 +169,7 @@ proc handleMakeDNS(dnsType: int, dnsAddr: string) =
     try:
       removeFile(sysResolvConf)
       writeTail(dnsAddr)
-      lnkResovConf()
+      discard execProcess("resolvconf -u")
     except:
       discard # TODO error here
 
