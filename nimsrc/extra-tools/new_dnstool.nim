@@ -144,6 +144,25 @@ proc writeResolv(dnsAddr: string) =
     discard
 
 
+proc makeDHCPDNS() =
+  try:
+    removeFile(sysResolvConf)
+    lnkResovConf()
+  except:
+    discard
+
+
+proc handleMakeDNS(dnsType: int, dnsAddr: string) =
+  # TODO if dnsAddr == "" : return error
+  if dnsType == DNS_STATIC:
+    # TODO remove old settings
+    writeResolv(dnsAddr)
+  else:
+    # TODO remove old settings
+    writeTail(dnsAddr)
+    # TODO need to update config using resolvconf?
+
+
 proc mkBackup() =
   #[
     Backup current settings of /etc/resolv.conf
@@ -240,17 +259,6 @@ proc showStatus() =
     echo "[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & dnsType & "\e[0m\n- \e[31mAddress\e[0m: \e[36m" & dnsAddr & "\e[0m"
 
 
-proc handleMakeDNS(dnsType: int, dnsAddr: string) =
-  # TODO if dnsAddr == "" : return error
-  if dnsType == DNS_STATIC:
-    # TODO remove old settings
-    writeResolv(dnsAddr)
-  else:
-    # TODO remove old settings
-    writeTail(dnsAddr)
-    # TODO need to update config using resolvconf?
-
-
 proc main() =
   if paramCount() == 0:
     help()
@@ -274,7 +282,10 @@ proc main() =
       stderr.write("[!] You must provide DNS address for static\n")
       return
     elif paramStr(1) == "dynamic":
-      handleMakeDNS(DNS_DYNAMIC, getDhcpDNS()) # Dynamic DHCP
+      # FIXME unknown option in test
+      # handleMakeDNS(DNS_DYNAMIC, getDhcpDNS()) # Dynamic DHCP
+      makeDHCPDNS()
+      showStatus()
     # elif paramStr(1) != "static" or paramStr(1) != "dynamic":
     else:
       help()
