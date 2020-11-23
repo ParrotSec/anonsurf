@@ -10,6 +10,8 @@ const
   ERROR_FILE_EMPTY* = -2
   ERROR_DNS_LOCALHOST* = -1
   STT_DNS_TOR* = 0
+  # dhcpResolvConf = "/run/resolvconf/interface/NetworkManager"
+  sysResolvConf = "/etc/resolv.conf"
 
 
 proc checkDNSServers(path: string): int =
@@ -22,30 +24,38 @@ proc checkDNSServers(path: string): int =
       3: Use both OpenNIC and custom
   ]#
   result = 0
+  var
+    isLocalHost = false
+    length = 0
+    
   let
     # dnsDHCP = execProcess("nmcli dev show | grep 'DNS'  | awk '{print $2}'")
-    dnsDHCP = readFile("/run/resolvconf/interface/NetworkManager")
+    # dnsDHCP = readFile(dhcpResolvConf)
     dnsOpenNIC = "185.121.177.177\n169.239.202.202\n198.251.90.108\n198.251.90.109\n198.251.90.110"
 
   for line in lines(path):
     if line.startsWith("nameserver"):
+      length += 1
       let dnsName = line.split(" ")[1]
       # if current DNS is provided by DHCP server -> dynamic only
-      if dnsName in dnsDHCP:
-        discard
+      # if dnsName in dnsDHCP:
+      #   discard
       # if DNS is in list of OpenNIC
-      elif dnsName in dnsOpenNIC:
+      # elif dnsName in dnsOpenNIC:
+      if dnsName in dnsOpenNIC:
         if result == 0 or result == 2:
           # Don't add if the result was added
           result += 1
       elif dnsName == "127.0.0.1" or dnsName == "localhost":
-        result -= 1
+        isLocalHost = true
       # Custom name server
       else:
       # We don't add if name result was added
         if result == 0 or result == 1:
           result += 2
-  if result == -1:
+  if length == 0:
+    return ERROR_FILE_EMPTY
+  if isLocalHost == true and length == 1:
     return ERROR_DNS_LOCALHOST
 
 
@@ -74,22 +84,23 @@ proc dnsStatusCheck*(): int =
         2.2: DHCP with Custom
         2.3: DHCP with OpenNIC and Custom
   ]#
-  const resolvPath = "/etc/resolv.conf"
-  if not fileExists(resolvPath):
+  if not fileExists(sysResolvConf):
     return ERROR_FILE_NOT_FOUND
-  elif isEmptyOrWhitespace(readFile(resolvPath)):
+  elif isEmptyOrWhitespace(readFile(sysResolvConf)):
     return ERROR_FILE_EMPTY
   else:
     try:
       let
-        resolvInfo = getFileInfo(resolvPath, followSymlink = false)
-        dnsCheck = checkDNSServers(resolvPath)
+        resolvInfo = getFileInfo(sysResolvConf, followSymlink = false)
+        dnsCheck = checkDNSServers(sysResolvConf)
 
       if dnsCheck == ERROR_DNS_LOCALHOST:
         if getServStatus("anonsurfd") == 1:
           return STT_DNS_TOR
         else:
           return ERROR_DNS_LOCALHOST
+      elif dnsCheck == ERROR_FILE_EMPTY:
+        return ERROR_FILE_EMPTY
       # If resolv.conf is a file: static else dynamic
       if resolvInfo.kind == pcFile:
         result = 10
