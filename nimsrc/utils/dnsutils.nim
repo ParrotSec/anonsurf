@@ -1,4 +1,4 @@
-import osproc
+# import osproc
 import os
 import strutils
 import services
@@ -23,20 +23,12 @@ proc checkDNSServers(path: string): int =
   ]#
   result = 0
   let
-    dnsDHCP = execProcess("nmcli dev show | grep 'DNS'  | awk '{print $2}'")
+    # dnsDHCP = execProcess("nmcli dev show | grep 'DNS'  | awk '{print $2}'")
+    dnsDHCP = readFile("/run/resolvconf/interface/NetworkManager")
     dnsOpenNIC = "185.121.177.177\n169.239.202.202\n198.251.90.108\n198.251.90.109\n198.251.90.110"
 
   for line in lines(path):
-    if line.startsWith("#"):
-      # We skip comments
-      discard
-    elif line == "options rotate":
-      discard
-    # Check empty line
-    elif isEmptyOrWhitespace(line):
-      discard
-    # Check if OpenNIC DNS is in the setting
-    elif line.startsWith("nameserver"):
+    if line.startsWith("nameserver"):
       let dnsName = line.split(" ")[1]
       # if current DNS is provided by DHCP server -> dynamic only
       if dnsName in dnsDHCP:
@@ -46,11 +38,15 @@ proc checkDNSServers(path: string): int =
         if result == 0 or result == 2:
           # Don't add if the result was added
           result += 1
+      elif dnsName == "127.0.0.1" or dnsName == "localhost":
+        result -= 1
       # Custom name server
       else:
       # We don't add if name result was added
         if result == 0 or result == 1:
           result += 2
+  if result == -1:
+    return ERROR_DNS_LOCALHOST
 
 
 proc dnsStatusCheck*(): int =
@@ -83,38 +79,28 @@ proc dnsStatusCheck*(): int =
     return ERROR_FILE_NOT_FOUND
   elif isEmptyOrWhitespace(readFile(resolvPath)):
     return ERROR_FILE_EMPTY
-  let dnsSettings = readFile(resolvPath)
-  if dnsSettings == "nameserver 127.0.0.1\n":
-    #[
-      System is using localhost DNS settings.
-      1. If anonsurf is running, return AnonSurf and disable buttons
-      2. If anonsurf is not running, return localhost, red text
-    ]#
-    let anonsurfStatus = getServStatus("anonsurfd")
-    if anonsurfStatus == 1:
-      return STT_DNS_TOR
-    else:
-      return ERROR_DNS_LOCALHOST
   else:
-    #[
-      Check if system is using dynamic setting (default of Debian) or static
-      If static, check OpenNIC setting or custom setting
-      /etc/anonsurf/opennic.lock exists -> system is using OpenNIC DNS
-      If ln -s /run/resolvconf/resolv.conf /etc/resolv.conf -> dynamic
-    ]#
     try:
-      let resolvInfo = getFileInfo(resolvPath, followSymlink = false)
+      let
+        resolvInfo = getFileInfo(resolvPath, followSymlink = false)
+        dnsCheck = checkDNSServers(resolvPath)
+
+      if dnsCheck == ERROR_DNS_LOCALHOST:
+        if getServStatus("anonsurfd") == 1:
+          return STT_DNS_TOR
+        else:
+          return ERROR_DNS_LOCALHOST
       # If resolv.conf is a file: static else dynamic
       if resolvInfo.kind == pcFile:
         result = 10
         if result == 10:
-          result += checkDNSServers(resolvPath)
+          result += dnsCheck
       else:
         # Set return value is dynamic value
         result = 20
         # Check for different settings in base files
         if result == 20:
-          result += checkDNSServers(resolvPath)
+          result += dnsCheck
       # return "Dynamic"
     except:
       return ERROR_UNKNOWN
