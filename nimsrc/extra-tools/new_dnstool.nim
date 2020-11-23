@@ -126,7 +126,6 @@ proc writeTail(dnsAddr: string) =
     Create dyanmic resolv.conf
     Write tail
   ]#
-  # TODO add write tail file here
   try:
     writeFile(tailResolvConf, dnsAddr)
   except:
@@ -307,7 +306,7 @@ proc main() =
       dnsAddr = ""
     if paramStr(1) == "static":
       dnsType = DNS_STATIC
-    elif paramStr(2) == "dynamic":
+    elif paramStr(1) == "dynamic":
       dnsType = DNS_DYNAMIC
     else:
       stdout.write("[!] Unknown option\n")
