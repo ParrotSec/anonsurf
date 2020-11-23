@@ -147,6 +147,7 @@ proc writeResolv(dnsAddr: string) =
 proc makeDHCPDNS() =
   try:
     removeFile(sysResolvConf)
+    writeTail("")
     lnkResovConf()
   except:
     discard
@@ -157,7 +158,10 @@ proc handleMakeDNS(dnsType: int, dnsAddr: string) =
     stderr.write("[!] Address is empty. Skip!\n")
   if dnsType == DNS_STATIC:
     try:
+      # Remove old resolv.conf
       removeFile(sysResolvConf)
+      # Remove old addresses in tail
+      writeTail("")
       writeResolv(dnsAddr)
     except:
       discard # TODO error here
