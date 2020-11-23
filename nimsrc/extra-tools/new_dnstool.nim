@@ -155,6 +155,7 @@ proc makeDHCPDNS() =
 proc handleMakeDNS(dnsType: int, dnsAddr: string) =
   if dnsAddr == "":
     stderr.write("[!] Address is empty. Skip!\n")
+    return
   if dnsType == DNS_STATIC:
     try:
       # Remove old resolv.conf
