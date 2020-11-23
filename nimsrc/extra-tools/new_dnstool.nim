@@ -269,15 +269,16 @@ proc main() =
       restoreBackup()
       showStatus()
       return
-    elif paramStr(1) != "static" or paramStr(1) != "dynamic":
-      help()
-      stderr.write("[!] Unknown option\n")
-      return
     elif paramStr(1) == "static":
       stderr.write("[!] You must provide DNS address for static")
       return
-    else:
+    elif paramStr(1) == "dynamic":
       handleMakeDNS(DNS_DYNAMIC, getDhcpDNS()) # Dynamic DHCP
+    # elif paramStr(1) != "static" or paramStr(1) != "dynamic":
+    else:
+      help()
+      stderr.write("[!] Unknown option\n")
+      return
   else:
     var
       dnsType = 0
