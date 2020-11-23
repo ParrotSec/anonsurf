@@ -153,14 +153,20 @@ proc makeDHCPDNS() =
 
 
 proc handleMakeDNS(dnsType: int, dnsAddr: string) =
-  # TODO if dnsAddr == "" : return error
+  if dnsAddr == "":
+    stderr.write("[!] Address is empty. Skip!\n")
   if dnsType == DNS_STATIC:
-    # TODO remove old settings
-    writeResolv(dnsAddr)
+    try:
+      removeFile(sysResolvConf)
+      writeResolv(dnsAddr)
+    except:
+      discard # TODO error here
   else:
-    # TODO remove old settings
-    writeTail(dnsAddr)
-    # TODO need to update config using resolvconf?
+    try:
+      removeFile(sysResolvConf)
+      writeTail(dnsAddr)
+    except:
+      discard # TODO error here
 
 
 proc mkBackup() =
