@@ -311,6 +311,7 @@ proc main() =
       elif isIpAddress(paramStr(i)):
         dnsAddr &= "nameserver " & paramStr(i) & "\n"
     handleMakeDNS(dnsType, dnsAddr)
+    showStatus()
 
 
 main()
