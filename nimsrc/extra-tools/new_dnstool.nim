@@ -9,6 +9,7 @@ const
   bakResolvConf = "/etc/resolv.conf.bak"
   runResolvConf = "/run/resolvconf/resolv.conf"
   dhcpResolvConf = "/run/resolvconf/interface/NetworkManager"
+  tailResolvConf = "/etc/resolvconf/resolv.conf.d/tail"
   DNS_STATIC = 1
   DNS_DYNAMIC = 2
 
@@ -125,8 +126,10 @@ proc writeTail(dnsAddr: string) =
     Write tail
   ]#
   # TODO add write tail file here
-  # make
-  discard
+  try:
+    writeFile(tailResolvConf, dnsAddr)
+  except:
+    discard # TODO use notifcation here
 
 
 proc writeResolv(dnsAddr: string) =
