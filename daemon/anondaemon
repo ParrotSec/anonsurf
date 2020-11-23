@@ -86,7 +86,7 @@ function start {
 	# Init DNS
 	echo -e " $GREEN*$BLUE Modified resolv.conf to use Tor\n"
 	/usr/bin/dnstool create-backup
-	/usr/bin/dnstool static 127.0.0.1
+	/usr/bin/dnstool address 127.0.0.1
 
 	# disable ipv6
 	echo -e " $GREEN*$BLUE Disabling IPv6 for security reasons\n"
