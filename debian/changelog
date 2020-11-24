@@ -1,3 +1,12 @@
+anonsurf (3.1.6+parrot0) rolling-testing; urgency=medium
+
+  * Rewrite dnstool
+  * Add support of Parrot's DNS in dnstool
+  * Fix detection problem of status
+  * Add color of status in AnonSurf GUI
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Tue, 24 Nov 2020 20:40:46 +0700
+
 anonsurf (3.1.5+parrot0) rolling-testing; urgency=medium
 
   * Close status dialog when users quit
