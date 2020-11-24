@@ -1,1 +1,1 @@
-complete -W 'help dynamic static status create-backup restore-backup' dnstool
+complete -W 'help address status create-backup restore-backup' dnstool
