@@ -188,14 +188,16 @@ proc restoreBackup() =
     Or use dhcp addresses
   ]#
   let status = dnsStatusCheck()
-  if status == 0:
+  if status == STT_DNS_TOR:
     # AnonSurf is running so it is using localhost. skip
-    discard
-  elif not fileExists(bakResolvConf):
+    return
+  if not fileExists(bakResolvConf):
     # No backup file. We create DHCP + dynamic setting
     # If there is no resolv.conf, we create symlink
     if fileExists(sysResolvConf):
-      discard
+      if status != ERROR_DNS_LOCALHOST:
+        return
+      makeDHCPDNS()
     else:
       lnkResovConf()
   else:
