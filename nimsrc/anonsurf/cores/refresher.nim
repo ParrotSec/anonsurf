@@ -105,8 +105,8 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
       # Give error msg with red color
       args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't bind port</span></b>")
   of ERROR_DNS_LOCALHOST:
-    # Give warning style with yellow color
-    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"##ADFF2F\"> LocalHost<span></b>")
+    # Give error style with red color
+    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> LocalHost</span></b>")
   of ERROR_FILE_EMPTY:
     # Give error msg with red color
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf is empty</span></b>")
