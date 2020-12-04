@@ -203,20 +203,21 @@ proc restoreBackup() =
     else:
       lnkResovConf()
   else:
-    # AnonSurf is not running and the backup file is there
-    # If resolv.conf is there, we try remove it
-    # solve symlink problem
-    if status != ERROR_FILE_NOT_FOUND:
-      # No resolv.conf
+    # If AnonSurf is running, we ignore request
+    if status == STT_DNS_TOR:
+      # AnonSurf is running so it is using localhost. skip
+      return
+    # If resolv.conf not found, we force creating DHCP
+    if status == ERROR_FILE_NOT_FOUND:
+      makeDHCPDNS()
+    # Else we have resolv.conf and its backup file
+    else:
+      # First force removing old resolv.conf
+      # Solve the symlink error while writing new file
       if tryRemoveFile(sysResolvConf):
         moveFile(bakResolvConf, sysResolvConf)
       else:
         discard # TODO show error here
-        return
-    if tryRemoveFile(sysResolvConf):
-      moveFile(bakResolvConf, sysResolvConf)
-    else:
-      discard # TODO show error here
 
 
 proc showStatus() =
