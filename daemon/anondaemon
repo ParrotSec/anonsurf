@@ -78,7 +78,7 @@ function enableService {
 }
 
 
-function start {
+function startSurf {
 	# If tor didn't start, we start it
 	# It is used for startup
 	TOR_PORT=`cat /etc/tor/torrc | grep TransPort | cut -d " " -f 2 | cut -d ":" -f 2`
@@ -181,7 +181,7 @@ function start {
 }
 
 
-function stop {
+function stopSurf {
 
 	# Restore DNS settings
 	/usr/bin/dnstool restore-backup
@@ -214,22 +214,22 @@ case "$1" in
 	start)
 		# disableService
 		/usr/lib/anonsurf/make-torrc
+		/usr/sbin/service tor start || echo -e "  [x] Can not start Tor service! "
 		if [ -e /etc/tor/torrc ]; then
-			start
-			/usr/sbin/service tor start
+			startSurf
 		else
 			echo -e "  [x] torrc not found. Can not start!"
 		fi
 	;;
 	stop)
-		stop
+		stopSurf
 		# enableService
 		/usr/lib/anonsurf/make-torrc restore
 	;;
 	restart)
-		$0 stop
+		$0 stopSurf
 		# sleep 1
-		$0 start
+		$0 startSurf
 	;;
 	*)
 	esac
