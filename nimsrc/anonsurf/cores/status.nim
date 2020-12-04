@@ -14,7 +14,7 @@ type
     isSocksPort*: bool
     isTransPort*: bool
 
-const surfVersion* = "3.1.6"
+const surfVersion* = "3.1.7"
 
 
 proc getSurfStatus*(): Status =

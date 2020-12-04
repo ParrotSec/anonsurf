@@ -1,6 +1,6 @@
 # Package
 
-version       = "3.1.6"
+version       = "3.1.7"
 author        = "DmKnght"
 description   = "A GUI for AnonSurf"
 license       = "LGPL-3.0"
