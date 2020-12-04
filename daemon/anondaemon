@@ -212,9 +212,9 @@ case "$1" in
 	start)
 		# disableService
 		/usr/lib/anonsurf/make-torrc
-		/usr/sbin/service tor start || echo -e "  [x] Can not start Tor service! "
 		if [ -e /etc/tor/torrc ]; then
 			startSurf
+			/usr/sbin/service tor start || echo -e "  [x] Can not start Tor service!"
 		else
 			echo -e "  [x] torrc not found. Can not start!"
 		fi
