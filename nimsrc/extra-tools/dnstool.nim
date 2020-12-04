@@ -194,6 +194,8 @@ proc restoreBackup() =
   if not fileExists(bakResolvConf):
     # No backup file. We create DHCP + dynamic setting
     # If there is no resolv.conf, we create symlink
+    # If there is resolv.conf:
+    # Create dhcp setting only DNS is localhost
     if fileExists(sysResolvConf):
       if status != ERROR_DNS_LOCALHOST:
         return
