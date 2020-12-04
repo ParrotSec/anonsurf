@@ -80,7 +80,7 @@ proc genTorrc*(hashed: string): string =
   result &= "\nHashedControlPassword " & hashed & "\n"
   let conf = readDefaultConfig() # TODO user's config at home
   if conf.use_bridge == false:
-    result &= "# Enable sandbox\nSandbox 1"
+    result &= "# Enable sandbox\nSandbox 1\n"
   else:
     if conf.custom_bridge == true:
       if conf.bridge_addr == "":
