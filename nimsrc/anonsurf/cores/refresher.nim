@@ -42,7 +42,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   if myStatus.isAnonSurfService == 1:
     # Check status of Tor
     if myStatus.isTorService == 1:
-      args.lblServices.setMarkup("Servc:  <b<span background=\"#333333\" foreground=\"#00FF00\">>Activated</span></b>")
+      args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#00FF00\">Activated</span></b>")
     elif myStatus.isTorService == 0:
       # Give error msg with red color
       args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#FF0000\">Tor is not running</span></b>")
