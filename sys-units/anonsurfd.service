@@ -2,6 +2,7 @@
 Description="Anonsurf Daemon Service"
 Before=poweroff.target reboot.target
 After=network.target
+Wants=tor.service
 
 [Service]
 ExecStart=/usr/lib/anonsurf/anondaemon start
