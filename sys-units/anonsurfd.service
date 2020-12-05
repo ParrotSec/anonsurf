@@ -1,6 +1,6 @@
 [Unit]
 Description="Anonsurf Daemon Service"
-Before=poweroff.target reboot.target
+Before=poweroff.target reboot.target tor.service
 After=network.target
 Wants=tor.service
 
