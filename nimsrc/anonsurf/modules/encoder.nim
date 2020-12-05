@@ -29,7 +29,10 @@ proc toNixHex*(conf: TorConfig): TorConfig =
   if conf.fileErr:
     discard
   else:
-    result.controlPort = handleParse(conf.controlPort)
-    result.dnsPort = handleParse(conf.dnsPort)
-    result.socksPort = handleParse(conf.socksPort)
-    result.transPort = handleParse(conf.transPort)
+    try:
+      result.controlPort = handleParse(conf.controlPort)
+      result.dnsPort = handleParse(conf.dnsPort)
+      result.socksPort = handleParse(conf.socksPort)
+      result.transPort = handleParse(conf.transPort)
+    except:
+      result.fileErr = true
