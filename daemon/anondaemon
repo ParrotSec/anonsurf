@@ -214,7 +214,10 @@ case "$1" in
 		/usr/lib/anonsurf/make-torrc
 		if [ -e /etc/tor/torrc ]; then
 			startSurf
-			#/usr/sbin/service tor start || echo -e "  [x] Can not start Tor service!"
+			if [ `systemctl is-active tor` != "active" ]
+			then
+				/usr/sbin/service tor start || echo -e "  [x] Can not start Tor service!"
+			fi
 		else
 			echo -e "  [x] torrc not found. Can not start!"
 		fi
