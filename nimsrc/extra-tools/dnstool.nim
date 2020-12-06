@@ -76,6 +76,11 @@ proc help() =
   stdout.write("\n")
 
 
+proc printErr(msg: string) =
+  # Print error with color red
+  echo "[\e[31m!\e[0m] \e[31m", msg, "\e[0m"
+
+
 proc getParrotDNS(): string =
   #[
     Use host command to automatically get ip from director.geo.parrot.sh
@@ -92,6 +97,7 @@ proc getParrotDNS(): string =
         discard
     return allIP
   except:
+    printErr("Failed to get DNS addresses from Parrot selector server")
     return ""
 
 
@@ -114,7 +120,7 @@ proc lnkResovConf() =
   try:
     createSymlink(runResolvConf, sysResolvConf)
   except:
-    discard
+    printErr("Failed to create symlink from " & sysResolvConf)
 
 
 proc writeTail(dnsAddr: string) =
@@ -125,7 +131,7 @@ proc writeTail(dnsAddr: string) =
   try:
     writeFile(tailResolvConf, dnsAddr)
   except:
-    discard # TODO use notifcation here
+    printErr("Failed to write addresses to Tail")
 
 
 proc writeResolv(dnsAddr: string) =
@@ -136,7 +142,7 @@ proc writeResolv(dnsAddr: string) =
   try:
     writeFile(sysResolvConf, banner & dnsAddr)
   except:
-    discard
+    printErr("Failed to create new resolv.conf")
 
 
 proc makeDHCPDNS() =
@@ -145,7 +151,7 @@ proc makeDHCPDNS() =
     writeTail("")
     lnkResovConf()
   except:
-    discard
+    printErr("Failed to generate DHCP addresses")
 
 
 proc handleMakeDNS(dnsAddr: string) =
@@ -159,7 +165,7 @@ proc handleMakeDNS(dnsAddr: string) =
     writeTail("")
     writeResolv(dnsAddr)
   except:
-    discard # TODO error here
+    printErr("Failed to write settings to resolv.conf")
 
 
 proc mkBackup() =
@@ -179,7 +185,7 @@ proc mkBackup() =
     try:
       copyFile(sysResolvConf, bakResolvConf)
     except:
-      discard # TODO show error here
+      printErr("Failed to create backup file for resolv.conf")
 
 
 proc restoreBackup() =
