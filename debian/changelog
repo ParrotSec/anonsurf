@@ -1,3 +1,10 @@
+anonsurf (3.1.7+parrot0) rolling-testing; urgency=medium
+
+  * Fix some crash errors in GUI
+  * Fix Tor doesn't start at boot by adding Wants to sys-unit
+
+ -- Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>  Fri, 11 Dec 2020 18:02:13 +0700
+
 anonsurf (3.1.6+parrot0) rolling-testing; urgency=medium
 
   * Rewrite dnstool
