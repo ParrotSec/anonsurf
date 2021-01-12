@@ -1,9 +1,7 @@
-import gintro / [gtk, gobject]
-import .. / cores / images
-import about
+import gintro / gtk
 
 
-proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: Button): Frame =
+proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnStatus, btnRestart: Button): Frame =
   #[
     Create the area Detail in main page
     it has image of current AnonSurf
@@ -17,7 +15,7 @@ proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnDetail, btnStatus: 
     bxDetailPanel = newBox(Orientation.horizontal, 6)
 
   bxDetailPanel.add(imgStatus)
-  bxButtons.packStart(btnDetail, false, true, 4)
+  bxButtons.packStart(btnRestart, false, true, 4)
   bxButtons.packStart(btnStatus, false, true, 2)
 
   areaInfo.packStart(labDetails, false, true, 3)
@@ -49,38 +47,15 @@ proc makeToolBar(btnStart, btnID, btnIP: Button): Frame =
   return fmTool
 
 
-proc makeBottomBarForMain(btnRestart: Button): Box =
-  #[
-    Create bottom bar
-    It has About and Exit button
-  ]#
-  let
-    boxBottomBar = newBox(Orientation.horizontal, 3)
-    imgRestart = newImageFromPixbuf(reloadIcon)
-    btnAbout = newButton("")
-    imgAbout = newImageFromPixbuf(aboutIcon)
-  btnRestart.setImage(imgRestart)
-
-  btnAbout.setImage(imgAbout)
-  btnAbout.connect("clicked", onClickAbout)
-
-  boxBottomBar.packStart(btnRestart, false, true, 3)
-  boxBottomBar.packEnd(btnAbout, false, true, 3)
-
-  return boxBottomBar
-
-
-proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bDetail, bStatus, bID, bIP, bRestart: Button): Box =
+proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bStatus, bID, bIP, bRestart: Button): Box =
   #[
     Create the page for main widget
   ]#
   let
-    boxPanel = makeDetailPanel(imgStatus, lDetails, bDetail, bStatus)
+    boxPanel = makeDetailPanel(imgStatus, lDetails, bStatus, bRestart)
     boxToolBar = makeToolBar(bStart, bID, bIP)
-    bottomBar = makeBottomBarForMain(bRestart)
     mainWidget = newBox(Orientation.vertical, 3)
   
   mainWidget.packStart(boxPanel, false, true, 2)
   mainWidget.packStart(boxToolBar, false, true, 1)
-  mainWidget.packEnd(bottomBar, false, true, 2)
   return mainWidget

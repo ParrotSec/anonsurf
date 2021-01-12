@@ -1,5 +1,5 @@
 import gintro / [gtk, glib, gobject]
-import displays / [detailPage, mainPage]
+import displays / [detailPage, mainPage, bottombar]
 import cores / [status, refresher, images]
 import actions / [actDetailPage, actMainPage, gtkClick]
 
@@ -40,9 +40,9 @@ proc createArea(boxMainWindow: Box) =
     btnShowStatus = newButton("Tor Stats")
     btnChangeID = newButton("Change\nIdentity")
     btnCheckIP = newButton("My IP")
-    btnRestart = newButton("")
+    btnRestart = newButton("Restart")
     imgStatus = newImageFromPixbuf(surfImages.imgSecMed)
-    mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowDetails, btnShowStatus, btnChangeID, btnCheckIP, btnRestart)
+    mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowStatus, btnChangeID, btnCheckIP, btnRestart)
 
   btnRestart.connect("clicked", onClickRestart)
   btnStart.connect("clicked", onClickRun)
@@ -57,10 +57,9 @@ proc createArea(boxMainWindow: Box) =
     imgStatusBoot = newImageFromPixbuf(surfImages.imgBootOff)
     labelStatusBoot = newLabel("Not enabled at boot")
     btnBoot = newButton("Enable")
-    btnBack = newButton("Back")
     detailWidget = createDetailWidget(
       labelDaemons, labelPorts, labelDNS, labelStatusBoot,
-      btnBoot, btnBack, imgStatusBoot
+      btnBoot, imgStatusBoot
     )
   
   btnBoot.connect("clicked", onClickBoot)
@@ -69,11 +68,14 @@ proc createArea(boxMainWindow: Box) =
     mainStack = newStack()
   
   btnShowDetails.connect("clicked", onClickDetail, mainStack)
-  btnBack.connect("clicked", onClickBack, mainStack)
 
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
   boxMainWindow.add(mainStack)
+
+  let boxBottom = makeBottomBar(btnShowDetails)
+  boxMainWindow.add(boxBottom)
+
   boxMainWindow.showAll()
   
   var

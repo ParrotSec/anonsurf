@@ -2,18 +2,16 @@ import gintro / gtk
 import actMainPage
 
 
-proc onClickBack*(b: Button, s: Stack) =
-  #[
-    Return main widget from current page
-  ]#
-  s.setVisibleChildName("main")
-
-
 proc onClickDetail*(b: Button, s: Stack) =
   #[
-    Display status page
+    Display details widget or main widget
   ]#
-  s.setVisibleChildName("detail")
+  if b.label == "Details":
+    s.setVisibleChildName("detail")
+    b.label = "Back"
+  else:
+    s.setVisibleChildName("main")
+    b.label = "Details"
 
 
 proc onClickExit*(b: Button) =
