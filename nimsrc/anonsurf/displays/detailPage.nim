@@ -1,26 +1,4 @@
-import gintro / [gtk, gobject]
-import .. / cores / images
-import about
-
-
-proc makeBottomBarForDetail(bBack: Button): Box =
-  #[
-    Display bottom bar that has btnExit and btnBack
-  ]#
-  let
-    boxBottomBar = newBox(Orientation.horizontal, 3)
-    # btnExit = newButton("Exit")
-    btnAbout = newButton("")
-    imgAbout = newImageFromPixbuf(aboutIcon)
-  
-  boxBottomBar.add(bBack)
-
-  btnAbout.setImage(imgAbout)
-  btnAbout.connect("clicked", onClickAbout)
-
-  boxBottomBar.packEnd(btnAbout, false, true, 3)
-
-  return boxBottomBar
+import gintro / gtk
 
 
 proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label): Frame =
@@ -88,7 +66,7 @@ proc makeServiceDetails(
 
 proc createDetailWidget*(
   labelServices, labelPorts, labelDNS, labelBoot: Label,
-  btnBoot, btnBack: Button,
+  btnBoot: Button,
   imgBoot: Image,
   ): Box =
   #[
@@ -99,8 +77,6 @@ proc createDetailWidget*(
       labelServices, labelPorts, labelDNS, labelBoot, btnBoot, imgBoot
     )
     boxDetailWidget = newBox(Orientation.vertical, 3)
-    boxBottomBar = makeBottomBarForDetail(btnBack)
   
   boxDetailWidget.add(boxServices)
-  boxDetailWidget.packEnd(boxBottomBar, false, true, 3)
   return boxDetailWidget
