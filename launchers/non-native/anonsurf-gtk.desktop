@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=/usr/bin/anonsurf-gtk
+Comment=Routes all internet packets/traffic through Tor
+Name=Start GUI mode of anonsurf
+Categories=Network;
