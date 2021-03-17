@@ -6,6 +6,8 @@
 # 	nimble install gintro
 override_dh_installsystemd:
 	dh_installsystemd --no-enable
+override_dh_auto_build:
+	make build-parrot
 # Install apparmor
 # Learned from Tor rule
 # override_dh_install-arch:
