@@ -4,5 +4,5 @@ Type=Application
 Terminal=false
 Exec=/usr/bin/anonsurf-gtk
 Comment=Routes all internet packets/traffic through Tor
-Name=Start GUI mode of anonsurf
+Name=AnonSurf GUI
 Categories=Network;
