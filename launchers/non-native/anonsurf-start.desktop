@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=/usr/bin/anonsurf start
+Comment=Routes all internet packets/traffic through Tor
+Name=Start AnonSurf daemon
+Categories=Network;
