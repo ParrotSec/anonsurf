@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-Exec=service anonsurfd status>/dev/null; if [ $? -eq 0 ]; then /usr/bin/anonsurf stop; else /usr/bin/anonsurf start; fi
+Exec=/usr/sbin/service anonsurfd status>/dev/null; if [ $? -eq 0 ]; then /usr/bin/anonsurf stop; else /usr/bin/anonsurf start; fi
 Comment=Routes all internet packets/traffic through Tor
-Name=Start / Stop anonsurf
+Name=Start | Stop AnonSurf daemon
 Categories=Network;
