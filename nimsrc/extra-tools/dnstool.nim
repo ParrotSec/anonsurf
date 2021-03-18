@@ -23,12 +23,12 @@ proc showHelpCmd(cmd = "dnstool", keyword = "help", args = "", descr = "") =
     description (optional) -> blue
   ]#
   var cmdOutput = ""
-  cmdOutput &= "\e[32m" & cmd & "\e[0m " # Green color for command
-  cmdOutput &= "\e[31m" & keyword & "\e[0m " # Red color for keyword
+  cmdOutput &= "\e[92m" & cmd & "\e[0m " # Green color for command
+  cmdOutput &= "\e[91m" & keyword & "\e[0m " # Red color for keyword
   if args != "":
-    cmdOutput &= "\e[33m" & args & "\e[0m "
+    cmdOutput &= "\e[93m" & args & "\e[0m "
   if descr != "":
-    cmdOutput &= "[\e[34m" & descr & "\e[0m]"
+    cmdOutput &= "[\e[94m" & descr & "\e[0m]"
   
   echo cmdOutput
 
@@ -50,8 +50,8 @@ proc showHelpDesc(keyword = "", descr = "") =
   ]#
   var helpDesc = ""
   if keyword != "":
-    helpDesc = "\e[31m" & keyword & "\e[0m: "
-  helpDesc &= "\e[34m" & descr & "\e[0m"
+    helpDesc = "\e[91m" & keyword & "\e[0m: "
+  helpDesc &= "\e[94m" & descr & "\e[0m"
 
   echo "  " & helpDesc
 
