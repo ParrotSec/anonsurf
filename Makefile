@@ -20,10 +20,10 @@ build:
 	# Build on other system. nimble install gintro is required
 	# Note: The project was made with gintro 0.8.0. 
 	mkdir -p bin/
-	nim c --nimcache:/tmp --out:bin/dnstool -d:release nimsrc/extra-tools/dnstool.nim
-	nim c --nimcache:/tmp --out:bin/make-torrc -d:release nimsrc/anonsurf/make_torrc.nim
-	nim c --nimcache:/tmp --out:bin/anonsurf-gtk -d:release nimsrc/anonsurf/AnonSurfGTK.nim
-	nim c --nimcache:/tmp --out:bin/anonsurf -d:release nimsrc/anonsurf/AnonSurfCli.nim
+	nim c --out:bin/dnstool -d:release nimsrc/extra-tools/dnstool.nim
+	nim c --out:bin/make-torrc -d:release nimsrc/anonsurf/make_torrc.nim
+	nim c --out:bin/anonsurf-gtk -d:release nimsrc/anonsurf/AnonSurfGTK.nim
+	nim c --out:bin/anonsurf -d:release nimsrc/anonsurf/AnonSurfCli.nim
 
 install:
 	mkdir -p /etc/anonsurf/
