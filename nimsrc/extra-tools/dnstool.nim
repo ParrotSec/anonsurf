@@ -63,16 +63,16 @@ proc help() =
   showHelpCmd(cmd = progName, keyword = "help | -h | --help", descr = "Show help banner")
   showHelpCmd(cmd = progName, keyword = "status", descr = "Show current system DNS")
   showHelpCmd(cmd = "sudo " & progName, keyword = "address", args = "<DNS servers>" , descr = "Set DNS servers") # TODO improve msg quality here
-  showHelpCmd(cmd = "sudo " & progName, keyword = "create-backup", descr = "Make backup for current settings in /etc/resolv.conf")
+  showHelpCmd(cmd = "sudo " & progName, keyword = "create-backup", descr = "Make backup for current /etc/resolv.conf")
   showHelpCmd(cmd = "sudo " & progName, keyword = "restore-backup", descr = "Restore backup of /etc/resolv.conf")
   stdout.write("\nAddress could be:\n")
   showHelpDesc(keyword = "opennic", descr = "OpenNIC address[es]")
   showHelpDesc(keyword = "parrot", descr = "ParrotOS DNS address[es]")
-  showHelpDesc(keyword = "dhcp", descr = "Address[es] of current DHCP settings")
+  showHelpDesc(keyword = "dhcp", descr = "Address[es] of current DHCP client.")
   showHelpDesc(descr = "Any IPv4 or IPv6 address[es]")
   stdout.write("\nStatic and Dynamic:\n")
   showHelpDesc(keyword = "dynamic", descr = sysResolvConf & " is a symlink of " & runResolvConf)
-  showHelpDesc(keyword = "static", descr = sysResolvConf & " is not a symlink. Settings won't be changed after reboot.")
+  showHelpDesc(keyword = "static", descr = sysResolvConf & " is not a symlink and won't be changed after reboot.")
   stdout.write("\n")
 
 
