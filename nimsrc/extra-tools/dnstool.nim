@@ -209,10 +209,6 @@ proc restoreBackup() =
     else:
       lnkResovConf()
   else:
-    # If AnonSurf is running, we ignore request
-    if status == STT_DNS_TOR:
-      # AnonSurf is running so it is using localhost. skip
-      return
     # If resolv.conf not found, we force creating DHCP
     if status == ERROR_FILE_NOT_FOUND:
       makeDHCPDNS()
