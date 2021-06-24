@@ -1,3 +1,9 @@
+anonsurf (3.1.9+parrot0) rolling; urgency=medium
+
+  * Fix dns configuration issue when anonsurf is stopped.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 24 Jun 2021 15:48:50 +0200
+
 anonsurf (3.1.8+parrot0) rolling-testing; urgency=medium
 
   * New layout for AnonSurf GTK

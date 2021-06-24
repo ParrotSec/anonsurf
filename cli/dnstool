@@ -35,7 +35,7 @@ function opennic() {
 
     echo "Parrot OpenNIC Servers" >> /etc/resolv.conf
 
-    for I in $(host -t A director.geo.parrot.sh 198.251.90.110 | cut -d ' ' -f 4)
+    for I in $(host -t A director.geo.parrot.sh 1.1.1.1 | cut -d ' ' -f 4)
     do
         echo "nameserver $I" >> /etc/resolv.conf
     done

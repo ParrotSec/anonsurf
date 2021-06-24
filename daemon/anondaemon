@@ -73,7 +73,7 @@ function enableService {
 	/usr/sbin/service resolvconf start || service resolvconf restart || true
 	/usr/sbin/service dnsmasq start || true
 	/usr/sbin/service nscd start || true
-	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed or started already.$RESETCOLOR"
+	echo -e " $GREEN*$BLUE It is safe to not worry for dnsmasq and nscd start errors if they are not installed.$RESETCOLOR"
 	# sleep 1
 }
 
@@ -198,6 +198,7 @@ function stopSurf {
 	echo -e -n "$GREEN*$BLUE Restore DNS service\n$RESETCOLOR"
 	# Restore DNS settings
 	/usr/bin/dnstool restore-backup
+	/usr/bin/dnstool address dhcp
 
 	if [ `systemctl is-active tor` == "active" ]
 	then
