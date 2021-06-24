@@ -31,7 +31,7 @@ proc checkDNSServers(path: string): int =
   let
     # dnsDHCP = execProcess("nmcli dev show | grep 'DNS'  | awk '{print $2}'")
     # dnsDHCP = readFile(dhcpResolvConf)
-    dnsOpenNIC = "185.121.177.177\n169.239.202.202\n198.251.90.108\n198.251.90.109\n198.251.90.110"
+    dnsOpenNIC = "185.121.177.177\n169.239.202.202"
 
   for line in lines(path):
     if line.startsWith("nameserver"):

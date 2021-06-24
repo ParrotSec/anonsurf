@@ -103,8 +103,6 @@ proc getParrotDNS(): string =
 
 proc getOpenNIC(): string =
   result = "nameserver 185.121.177.177\nnameserver 169.239.202.202\n"
-  result &= "nameserver 198.251.90.108\nnameserver 198.251.90.109\n"
-  result &= "nameserver 198.251.90.110\n"
 
 
 # proc getDhcpDNS(): string =
