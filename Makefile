@@ -28,6 +28,9 @@ build:
 install:
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/usr/lib/anonsurf/
+	mkdir -p $(DESTDIR)/usr/bin/anonsurf/
+	mkdir -p $(DESTDIR)/usr/share/applications/
+	mkdir -p $(DESTDIR)/lib/systemd/system/
 	cp bin/anonsurf $(DESTDIR)/usr/bin/anonsurf
 	cp bin/anonsurf-gtk $(DESTDIR)/usr/bin/anonsurf-gtk
 	cp launchers/non-native/*.desktop $(DESTDIR)/usr/share/applications/
