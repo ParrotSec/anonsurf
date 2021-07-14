@@ -180,10 +180,13 @@ proc mkBackup() =
     # We are having error -> skip
     discard
   else:
-    try:
-      copyFile(sysResolvConf, bakResolvConf)
-    except:
-      printErr("Failed to create backup file for resolv.conf")
+    let resolvConfInfo = getFileInfo(sysResolvConf, followSymlink = false)
+    # If resolv.conf is not a symlink (dynamic), we don't backup it
+    if resolvConfInfo.kind != pcLinkToFile:
+      try:
+        copyFile(sysResolvConf, bakResolvConf)
+      except:
+        printErr("Failed to create backup file for resolv.conf")
 
 
 proc restoreBackup() =

@@ -49,7 +49,7 @@ proc start() =
   # Check if all services are started
   const
     command = "/usr/sbin/service anonsurfd start"
-  if getServStatus("anonsurfd") == 1:
+  if getServStatus("anonsurfd") == ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is running. Can't start it again", "security-low")
     else:
@@ -61,7 +61,7 @@ proc start() =
 
   # Check AnonSurf Daemon status after start
   # TODO maybe better complex check
-  if getServStatus("anonsurfd") == 1:
+  if getServStatus("anonsurfd") == ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "You are under Tor network", "security-high")
     else:
@@ -78,7 +78,7 @@ proc stop() =
   # show notifi
   const
     command = "/usr/sbin/service anonsurfd stop"
-  if getServStatus("anonsurfd") != 1:
+  if getServStatus("anonsurfd") != ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is not running. Can't stop it", "security-low")
     else:
@@ -91,7 +91,7 @@ proc stop() =
 proc restart() =
   const
     command = "/usr/sbin/service anonsurfd restart"
-  if getServStatus("anonsurfd") != 1:
+  if getServStatus("anonsurfd") != ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is not running. Can't restart it", "security-low")
     else:
@@ -134,7 +134,7 @@ proc disableBoot() =
 
 proc changeID() =
   # change id just like gui
-  if getServStatus("anonsurfd") != 1:
+  if getServStatus("anonsurfd") != ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is not running. Can't change ID", "error")
     else:
@@ -177,7 +177,7 @@ proc changeID() =
 
 proc status() =
   # Show nyx
-  if getServStatus("anonsurfd") != 1:
+  if getServStatus("anonsurfd") != ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is not running", "security-low")
     else:

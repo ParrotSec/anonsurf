@@ -1,24 +1,21 @@
-import osproc
 import os
 
 
+const
+  ServiceActivated* = 0
+  ServiceNotRunning* = 3
+
 proc getServStatus*(serviceName: string): int =
   #[
-    Check if service is actived
-    # TODO use native check instead of subprocess
-    return code
-      1 active
-      0 inactive
-      -1 failed
+    Use return code of either `systemctl status` or `service <servicename> status
+    0 program is running or service is OK
+    1 program is dead and /var/run pid file exists
+    2 program is dead and /var/lock lock file exists
+    3 program is not running
+    4 program or service status is unknown
+    https://stackoverflow.com/q/56719780
   ]#
-  let serviceResult = execProcess("systemctl is-active " & serviceName)
- 
-  if serviceResult == "active\n":
-    return 1
-  elif serviceResult == "inactive\n":
-    return 0
-  elif serviceResult == "failed\n":
-    return -1
+  return execShellCmd("/usr/bin/systemctl status " & serviceName & " >/dev/null")
 
 
 proc isServEnabled*(serviceName: string): bool =
