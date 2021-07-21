@@ -5,8 +5,6 @@ import gintro / notify
 type
   callback_send_messenger* = proc(title, body: string, code: int)
 
-let isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
-
 
 proc cli_send_msg(title, body: string, code: int) =
   #[
@@ -57,7 +55,7 @@ proc gtk_send_msg(title, body: string, code: int) =
   discard ipNotify.show()
 
 
-proc cli_init_callback_msg*(): proc =
+proc cli_init_callback_msg*(isDesktop: bool): proc =
   if isDesktop:
     return gtk_send_msg
   else:

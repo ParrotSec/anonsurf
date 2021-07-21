@@ -1,11 +1,8 @@
-import os
-
-let isDesktop* = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
 
 
-proc cliUserAsk*(): bool =
+proc cli_kill_app*(): bool =
   while true:
-    echo "[?] Do you want to kill dangerous applications? (Y/n)"
+    echo("[?] Do you want to kill dangerous applications? (Y/n)")
     let input = readLine(stdin)
     if input == "y" or input == "Y":
       return true
@@ -13,3 +10,6 @@ proc cliUserAsk*(): bool =
       return false
     else:
       echo("Invalid option. Please use Y / n")
+
+
+# proc gtk_kill_apps*() =

@@ -3,10 +3,14 @@ import osproc
 import os
 import modules / [myip, changeid]
 import cores / services
-import cli / [cores, help, killapp]
-import cores / messengers
+import cli / [help, killapp]
+import cores / [messengers, surf_commands]
 
-let callback_msg_proc = cli_init_callback_msg()
+let
+  isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
+  callback_msg_proc = cli_init_callback_msg(isDesktop)
+  sudo = cli_init_sudo(isDesktop)
+
 
 proc checkIP() =
   callback_send_msg(callback_msg_proc, "My IP", "Retrieving data from server", 3)
@@ -32,8 +36,6 @@ proc killApps() =
 proc start() =
   # start daemon
   # Check if all services are started
-  const
-    command = "/usr/sbin/service anonsurfd start"
   
   if not checkInitSystem():
     callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
@@ -44,7 +46,7 @@ proc start() =
     return
 
   killApps()
-  runOSCommand(command, "Start AnonSurf Daemon")
+  cli_handle_start(sudo, callback_msg_proc)
 
   # Check AnonSurf Daemon status after start
   # TODO maybe better complex check
@@ -61,8 +63,6 @@ proc start() =
 proc stop() =
   # stop daemon
   # show notifi
-  const
-    command = "/usr/sbin/service anonsurfd stop"
   
   if not checkInitSystem():
     callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
@@ -71,14 +71,12 @@ proc stop() =
   if getServStatus("anonsurfd") != 0:
     callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is not running", 1)
     return
-  runOSCommand(command, "Stop AnonSurf Daemon")
+
+  cli_handle_stop(sudo, callback_msg_proc)
   killApps()
 
 
-proc restart() =
-  const
-    command = "/usr/sbin/service anonsurfd restart"
-  
+proc restart() =  
   if not checkInitSystem():
     callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
@@ -87,7 +85,7 @@ proc restart() =
     callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is not running", 1)
     return
 
-  runOSCommand(command, "Restart AnonSurf Daemon")
+  cli_handle_restart(sudo, callback_msg_proc)
 
   if getServStatus("anonsurfd") == 0:
     callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is running", 0)
@@ -114,10 +112,6 @@ proc checkBoot() =
 
 
 proc enableBoot() =
-  # no launcher. No send notify
-  const
-    command = "/usr/bin/systemctl enable anonsurfd"
-  
   if not checkInitSystem():
     callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
@@ -126,24 +120,19 @@ proc enableBoot() =
   if isServEnabled("anonsurfd.service"):
     callback_send_msg(callback_msg_proc, "Startup check", "AnonSurf is already enabled!", 1)
   else:
-    runOSCommand(command, "Enable AnonSurf at boot")
+    cli_handle_enable(sudo, callback_msg_proc)
     checkBoot()
 
 
 proc disableBoot() =
-  # disable anonsurf at boot (systemd only for now)
-  # no launcher. No send notify
-  
   if not checkInitSystem():
     callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
 
-  const
-    command = "/usr/bin/systemctl disable anonsurfd"
   if not isServEnabled("anonsurfd.service"):
     callback_send_msg(callback_msg_proc, "Startup check", "AnonSurf is already disabled!", 1)
   else:
-    runOSCommand(command, "Disable AnonSurf at boot")
+    cli_handle_disable(sudo, callback_msg_proc)
     checkBoot()
 
 
@@ -183,7 +172,7 @@ proc status() =
     return
   
   if getServStatus("anonsurfd") != 0:
-    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is running", 2)
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is not running", 2)
   else:
     if not fileExists("/etc/anonsurf/nyxrc"):
       callback_send_msg(callback_msg_proc, "AnonSurf Status", "Nyxrc is not found", 0)

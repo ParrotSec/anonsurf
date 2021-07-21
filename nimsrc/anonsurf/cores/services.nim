@@ -1,10 +1,6 @@
 import os
 
 
-const
-  ServiceActivated* = 0
-  ServiceNotRunning* = 3
-
 proc getServStatus*(serviceName: string): int =
   #[
     Use return code of either `systemctl status` or `service <servicename> status

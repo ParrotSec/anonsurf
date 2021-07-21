@@ -1,4 +1,3 @@
-# import osproc
 import os
 import strutils
 import services
@@ -10,7 +9,6 @@ const
   ERROR_FILE_EMPTY* = -2
   ERROR_DNS_LOCALHOST* = -1
   STT_DNS_TOR* = 0
-  # dhcpResolvConf = "/run/resolvconf/interface/NetworkManager"
   sysResolvConf = "/etc/resolv.conf"
 
 
@@ -95,7 +93,7 @@ proc dnsStatusCheck*(): int =
         dnsCheck = checkDNSServers(sysResolvConf)
 
       if dnsCheck == ERROR_DNS_LOCALHOST:
-        if getServStatus("anonsurfd") == ServiceActivated:
+        if getServStatus("anonsurfd") == 0:
           return STT_DNS_TOR
         else:
           return ERROR_DNS_LOCALHOST

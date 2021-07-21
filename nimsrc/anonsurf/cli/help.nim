@@ -1,4 +1,4 @@
-import .. / cores / status
+import .. / cores / version
 import strformat
 
 const
