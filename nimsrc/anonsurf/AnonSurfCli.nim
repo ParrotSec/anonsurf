@@ -49,6 +49,11 @@ proc start() =
   # Check if all services are started
   const
     command = "/usr/sbin/service anonsurfd start"
+  
+  if not checkInitSystem():
+    msgErr("No system init is running")
+    return
+
   if getServStatus("anonsurfd") == ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is running. Can't start it again", "security-low")
@@ -78,6 +83,11 @@ proc stop() =
   # show notifi
   const
     command = "/usr/sbin/service anonsurfd stop"
+  
+  if not checkInitSystem():
+    msgErr("No system init is running")
+    return
+
   if getServStatus("anonsurfd") != ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is not running. Can't stop it", "security-low")
@@ -91,6 +101,11 @@ proc stop() =
 proc restart() =
   const
     command = "/usr/sbin/service anonsurfd restart"
+  
+  if not checkInitSystem():
+    msgErr("No system init is running")
+    return
+
   if getServStatus("anonsurfd") != ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is not running. Can't restart it", "security-low")
@@ -103,6 +118,10 @@ proc restart() =
 proc checkBoot() =
   # no launcher. No send notify
   # check if it is started with boot and show popup
+  if not checkInitSystem():
+    msgErr("No system init is running")
+    return
+
   let bootResult = isServEnabled("anonsurfd.service")
   if bootResult:
     msgOk("AnonSurf is enabled at boot")
@@ -114,6 +133,11 @@ proc enableBoot() =
   # no launcher. No send notify
   const
     command = "/usr/bin/systemctl enable anonsurfd"
+  
+  if not checkInitSystem():
+    msgErr("No system init is running")
+    return
+
   # enable anosnurf at boot (systemd only for now)
   if isServEnabled("anonsurfd.service"):
     msgErr("AnonSurf is already enabled!")
@@ -124,6 +148,11 @@ proc enableBoot() =
 proc disableBoot() =
   # disable anonsurf at boot (systemd only for now)
   # no launcher. No send notify
+  
+  if not checkInitSystem():
+    msgErr("No system init is running")
+    return
+
   const
     command = "/usr/bin/systemctl disable anonsurfd"
   if not isServEnabled("anonsurfd.service"):
@@ -177,6 +206,11 @@ proc changeID() =
 
 proc status() =
   # Show nyx
+
+  if not checkInitSystem():
+    msgErr("No system init is running")
+    return
+  
   if getServStatus("anonsurfd") != ServiceActivated:
     if isDesktop:
       sendNotify("AnonSurf", "AnonSurf is not running", "security-low")

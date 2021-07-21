@@ -31,3 +31,10 @@ proc isServEnabled*(serviceName: string): bool =
     return true
   else:
     return false
+
+
+
+proc checkInitSystem*(): bool =
+  # Check if systemd / sysvinit, .. is available on  the system
+  # Systemd / sysvinit should have PID 1
+  return dirExists("/proc/1")
