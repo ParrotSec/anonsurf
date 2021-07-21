@@ -40,6 +40,7 @@ proc gtk_send_msg(title, body: string, code: int) =
     0: Ok
     1. Warn
     2. Error
+    3. Info
   ]#
   var icon_name = ""
   if code == 0:
@@ -48,6 +49,8 @@ proc gtk_send_msg(title, body: string, code: int) =
     icon_name = "security-medium"
   elif code == 2:
     icon_name = "security-low"
+  elif code == 3:
+    icon_name = "dialog-information"
 
   discard init("AnonSurf GUI notification")
   let ipNotify = newNotification(title, body, icon_name)

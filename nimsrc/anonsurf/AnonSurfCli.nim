@@ -1,48 +1,33 @@
 import strutils
 import osproc
 import os
-import displays / noti
 import modules / [myip, changeid]
-import .. / utils / services
-import cli / [cores, help, killapp, print]
+import cores / services
+import cli / [cores, help, killapp]
+import cores / messengers
 
+let callback_msg_proc = cli_init_callback_msg()
 
 proc checkIP() =
-  sendNotify("My IP", "Getting data from server", "dialog-information")
+  callback_send_msg(callback_msg_proc, "My IP", "Retrieving data from server", 3)
   let info = checkIPFromTorServer()
   # Error
   if info[0].startsWith("Error"):
-    if isDesktop:
-      sendNotify("Error why checking IP", info[1], "error")
-    else:
-      msgErr("Error while checking IP\n" & info[1])
+    callback_send_msg(callback_msg_proc, "My IP", "Error while checking IP address", 2)
   # If program runs but user didn't connect to tor
   elif info[0].startsWith("Sorry"):
-    if isDesktop:
-      sendNotify("You are not under Tor network", info[1], "security-low")
-    else:
-      msgWarn("You are not connecting to Tor network\n" & info[1])
+    callback_send_msg(callback_msg_proc, "My IP", "You are not under Tor network", 1)
   # Connected to tor
   else:
-    if isDesktop:
-      sendNotify("You are under Tor network", info[1], "security-high")
-    else:
-      msgOk("You are under Tor network\n" & info[1])
+    callback_send_msg(callback_msg_proc, "My IP", "You are under Tor network", 0)
 
 
 proc killApps() =
   let killResult = doKillAppsFromCli()
   if killResult == 0:
-    if isDesktop:
-      sendNotify("AnonSurf", "Killed dangerous application", "security-high")
-    else:
-      msgOk("Killed dangerous applications")
+    callback_send_msg(callback_msg_proc, "Kill apps", "Dangerous applications are killed", 0)
   elif killResult != -1:
-    if isDesktop:
-      sendNotify("AnonSurf", "Error while trying to kill applications", "security-medium")
-    else:
-      msgWarn("Error while trying to kill dangerous applications")
-
+    callback_send_msg(callback_msg_proc, "Kill apps", "Error while trying to kill applications", 1)
 
 proc start() =
   # start daemon
@@ -51,14 +36,11 @@ proc start() =
     command = "/usr/sbin/service anonsurfd start"
   
   if not checkInitSystem():
-    msgErr("No system init is running")
+    callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
 
-  if getServStatus("anonsurfd") == ServiceActivated:
-    if isDesktop:
-      sendNotify("AnonSurf", "AnonSurf is running. Can't start it again", "security-low")
-    else:
-      msgErr("AnonSurf is running. Can't start it again.")
+  if getServStatus("anonsurfd") == 0:
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is started already", 1)
     return
 
   killApps()
@@ -66,16 +48,14 @@ proc start() =
 
   # Check AnonSurf Daemon status after start
   # TODO maybe better complex check
-  if getServStatus("anonsurfd") == ServiceActivated:
-    if isDesktop:
-      sendNotify("AnonSurf", "You are under Tor network", "security-high")
+  if getServStatus("anonsurfd") == 0:
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is running", 0)
+    if getServStatus("tor") == 0:
+      callback_send_msg(callback_msg_proc, "Tor Status", "Tor is running", 0)
     else:
-      msgOk("You are under Tor network.")
+      callback_send_msg(callback_msg_proc, "Tor Status", "Tor is not running", 2)
   else:
-    if isDesktop:
-      sendNotify("AnonSurf", "AnonSurf Daemon is not running", "security-low")
-    else:
-      msgErr("AnonSurf Daemon is not running.")
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf failed to start", 2)
 
 
 proc stop() =
@@ -85,14 +65,11 @@ proc stop() =
     command = "/usr/sbin/service anonsurfd stop"
   
   if not checkInitSystem():
-    msgErr("No system init is running")
+    callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
 
-  if getServStatus("anonsurfd") != ServiceActivated:
-    if isDesktop:
-      sendNotify("AnonSurf", "AnonSurf is not running. Can't stop it", "security-low")
-    else:
-      msgErr("AnonSurf is not running. Can't stop it.")
+  if getServStatus("anonsurfd") != 0:
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is not running", 1)
     return
   runOSCommand(command, "Stop AnonSurf Daemon")
   killApps()
@@ -103,30 +80,37 @@ proc restart() =
     command = "/usr/sbin/service anonsurfd restart"
   
   if not checkInitSystem():
-    msgErr("No system init is running")
+    callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
 
-  if getServStatus("anonsurfd") != ServiceActivated:
-    if isDesktop:
-      sendNotify("AnonSurf", "AnonSurf is not running. Can't restart it", "security-low")
-    else:
-      msgErr("AnonSurf is not running. Can't restart it.")
+  if getServStatus("anonsurfd") != 0:
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is not running", 1)
     return
+
   runOSCommand(command, "Restart AnonSurf Daemon")
+
+  if getServStatus("anonsurfd") == 0:
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is running", 0)
+    if getServStatus("tor") == 0:
+      callback_send_msg(callback_msg_proc, "Tor Status", "Tor is running", 0)
+    else:
+      callback_send_msg(callback_msg_proc, "Tor Status", "Tor is not running", 2)
+  else:
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf failed to restart", 2)
 
 
 proc checkBoot() =
   # no launcher. No send notify
   # check if it is started with boot and show popup
   if not checkInitSystem():
-    msgErr("No system init is running")
+    callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
 
   let bootResult = isServEnabled("anonsurfd.service")
   if bootResult:
-    msgOk("AnonSurf is enabled at boot")
+    callback_send_msg(callback_msg_proc, "Startup check", "AnonSurf is enabled at boot", 0)
   else:
-    msgWarn("AnonSurf is not enabled at boot")
+    callback_send_msg(callback_msg_proc, "Startup check", "AnonSurf is not enabled at boot", 0)
 
 
 proc enableBoot() =
@@ -135,14 +119,15 @@ proc enableBoot() =
     command = "/usr/bin/systemctl enable anonsurfd"
   
   if not checkInitSystem():
-    msgErr("No system init is running")
+    callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
 
   # enable anosnurf at boot (systemd only for now)
   if isServEnabled("anonsurfd.service"):
-    msgErr("AnonSurf is already enabled!")
+    callback_send_msg(callback_msg_proc, "Startup check", "AnonSurf is already enabled!", 1)
   else:
     runOSCommand(command, "Enable AnonSurf at boot")
+    checkBoot()
 
 
 proc disableBoot() =
@@ -150,24 +135,25 @@ proc disableBoot() =
   # no launcher. No send notify
   
   if not checkInitSystem():
-    msgErr("No system init is running")
+    callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
 
   const
     command = "/usr/bin/systemctl disable anonsurfd"
   if not isServEnabled("anonsurfd.service"):
-    msgErr("AnonSurf is already disabled!")
+    callback_send_msg(callback_msg_proc, "Startup check", "AnonSurf is already disabled!", 1)
   else:
     runOSCommand(command, "Disable AnonSurf at boot")
+    checkBoot()
 
 
 proc changeID() =
+  if not checkInitSystem():
+    callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
+    return
   # change id just like gui
-  if getServStatus("anonsurfd") != ServiceActivated:
-    if isDesktop:
-      sendNotify("AnonSurf", "AnonSurf is not running. Can't change ID", "error")
-    else:
-      msgErr("AnonSurf is not running. Can't change your ID")
+  if getServStatus("anonsurfd") != 0:
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is not running", 2)
     return
   
   let conf = "/etc/anonsurf/nyxrc"
@@ -176,58 +162,33 @@ proc changeID() =
       let recvData = doChangeID(conf)
       if recvData[0] != "250 OK\c":
         if isDesktop:
-          sendNotify("Identity Change Error", recvData[0], "error")
-        else:
-          msgErr("Failed to change Identity")
+          callback_send_msg(callback_msg_proc, "ID Change", "Failed to change Identity. Error " & recvData[0], 2)
       else:
         if recvData[1] != "250 OK\c":
-          if isDesktop:
-            sendNotify("Identity Change Error", recvData[1], "error")
-          else:
-            msgErr("Failed to change Identity")
+          callback_send_msg(callback_msg_proc, "ID Change", "Failed to change Identity. Error " & recvData[1], 2)
         else:
           # Success. Show okay
-          if isDesktop:
-            sendNotify("Identity Change Success", "You have a new identity", "security-high")
-          else:
-            msgOk("Change Identity success")
+          callback_send_msg(callback_msg_proc, "ID Change", "You are having new identity", 0)
     except:
-      if isDesktop:
-        sendNotify("Identity Change Error", "Error while connecting to control port", "security-low")
-      else:
-        msgErr("Error while changing ID")
-        echo getCurrentExceptionMsg()
+      callback_send_msg(callback_msg_proc, "ID Change", "Error while connecting to control port", 2)
+      echo getCurrentExceptionMsg()
   else:
-    if isDesktop:
-      sendNotify("Identity Change Error", "File not found", "error")
-    else:
-      msgErr("Config file not found")
+    callback_send_msg(callback_msg_proc, "ID Change", "Configuration file not found", 2)
 
 
 proc status() =
   # Show nyx
-
   if not checkInitSystem():
-    msgErr("No system init is running")
+    callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
     return
   
-  if getServStatus("anonsurfd") != ServiceActivated:
-    if isDesktop:
-      sendNotify("AnonSurf", "AnonSurf is not running", "security-low")
-    else:
-      msgErr("AnonSurf is not running.")
+  if getServStatus("anonsurfd") != 0:
+    callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is running", 2)
   else:
     if not fileExists("/etc/anonsurf/nyxrc"):
-      if isDesktop:
-        sendNotify("AnonSurf", "Can't find nyx configuration", "error")
-      else:
-        msgErr("Can't find nyx configuration")
+      callback_send_msg(callback_msg_proc, "AnonSurf Status", "Nyxrc is not found", 0)
     else:
       discard execCmd("/usr/bin/nyx --config /etc/anonsurf/nyxrc")
-
-
-proc dns() =
-  msgWarn("Please use DNS tool instead")
 
 
 proc checkOptions() =
@@ -254,15 +215,10 @@ proc checkOptions() =
       changeID()
     of "myip":
       checkIP()
-    of "dns":
-      dns()
     of "help":
       devBanner()
       helpBanner()
     else:
-      if isDesktop:
-        sendNotify("AnonSurf", "Invalid option " & paramStr(1), "error")
-      else:
-        msgErr("Invalid option " & paramStr(1))
+      callback_send_msg(callback_msg_proc, "AnonSurf CLI", "Invalid option " & paramStr(1), 2)
 
 checkOptions()
