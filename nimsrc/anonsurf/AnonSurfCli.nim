@@ -33,6 +33,7 @@ proc killApps() =
   elif killResult != -1:
     callback_send_msg(callback_msg_proc, "Kill apps", "Error while trying to kill applications", 1)
 
+
 proc start() =
   # start daemon
   # Check if all services are started
