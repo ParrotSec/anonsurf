@@ -1,7 +1,7 @@
 import gintro / [gtk, glib, gobject]
-import displays / [detailPage, mainPage, bottombar]
-import cores / [status, refresher, images]
-import actions / [actDetailPage, actMainPage, gtkClick]
+import gtk / displays / [detailPage, mainPage, bottombar]
+import gtk / cores / [status, refresher, images]
+import gtk / actions / [actDetailPage, actMainPage, gtkClick]
 
 type
   RefreshObj = ref object

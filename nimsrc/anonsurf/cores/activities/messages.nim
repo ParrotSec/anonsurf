@@ -1,4 +1,3 @@
-import os
 import strformat
 import gintro / notify
 
@@ -6,7 +5,7 @@ type
   callback_send_messenger* = proc(title, body: string, code: int)
 
 
-proc cli_send_msg(title, body: string, code: int) =
+proc cli_send_msg*(title, body: string, code: int) =
   #[
     Print message to CLI
     0: Ok
@@ -32,7 +31,7 @@ proc cli_send_msg(title, body: string, code: int) =
     echo fmt"{B_CYAN}{body}{RESET}"
 
 
-proc gtk_send_msg(title, body: string, code: int) =
+proc gtk_send_msg*(title, body: string, code: int) =
   #[
     Display notification with custom title, body
     0: Ok
@@ -53,18 +52,3 @@ proc gtk_send_msg(title, body: string, code: int) =
   discard init("AnonSurf GUI notification")
   let ipNotify = newNotification(title, body, icon_name)
   discard ipNotify.show()
-
-
-proc cli_init_callback_msg*(isDesktop: bool): proc =
-  if isDesktop:
-    return gtk_send_msg
-  else:
-    return cli_send_msg
-
-
-proc gtk_init_callback_msg*(): proc =
-  return gtk_send_msg
-
-
-proc callback_send_msg*(send_msg_proc: callback_send_messenger, title, body: string, code: int) =
-  send_msg_proc(title, body, code)
