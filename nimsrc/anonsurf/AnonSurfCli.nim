@@ -9,7 +9,7 @@ import cores / [messengers, surf_commands]
 let
   isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
   callback_msg_proc = cli_init_callback_msg(isDesktop)
-  sudo = cli_init_sudo(isDesktop)
+  sudo = cmd_init_sudo(isDesktop)
 
 
 proc checkIP() =

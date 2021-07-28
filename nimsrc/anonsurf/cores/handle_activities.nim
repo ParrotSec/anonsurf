@@ -3,7 +3,7 @@ import os
 import activities / [boot, core_actions, extra_actions]
 
 
-proc cli_init_sudo*(isDesktop: bool): string =
+proc cmd_init_sudo*(isDesktop: bool): string =
   if isDesktop:
     return "gksudo"
   else:
