@@ -1,24 +1,16 @@
-import os
-# import activities / app_kills
+import killapps / killapps_interface
 
 
-proc cmd_kill_apps*(callback_send_messages, handle_ansurf_sendkill: proc) =
-  const
-    path_bleachbit = "/usr/bin/bleachbit"
-  
-  let kill_result = handle_ansurf_sendkill()
-  if kill_result != 0:
-    callback_send_messages("Kill apps", "Some apps coudn't be killed", 1)
-  
-  if not fileExists(path_bleachbit):
-    callback_send_messages("Kill apps", "Bleachbit is not found. Can't remove caches", 1)
+# proc init_kill_app_dialog*(): Box =
+#   return box_kill_app()
+
+
+proc killapp_handle_cli_askkill(is_desktop: bool, cb_send_msg) =
+  if is_desktop:
+    window_kill_app()
   else:
-    discard
+    cmd_kill_apps()
 
 
-proc cmd_init_cli_askkill(is_desktop: bool) =
-  discard
-
-
-proc cmd_init_gtk_askkill() =
+proc killapp_handle_gtk_askkill() =
   discard
