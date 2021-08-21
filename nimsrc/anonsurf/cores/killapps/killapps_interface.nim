@@ -8,11 +8,11 @@ proc onExit*(w: Window) =
   mainQuit()
 
 
-proc cmd_kill_apps*(callback_send_messages, handle_ansurf_sendkill: proc) =
+proc cmd_kill_apps*(callback_send_messages: proc) =
   const
     path_bleachbit = "/usr/bin/bleachbit"
   
-  let kill_result = handle_ansurf_sendkill()
+  let kill_result = an_kill_apps()
   if kill_result != 0:
     callback_send_messages("Kill apps", "Some apps coudn't be killed", 1)
   
@@ -37,7 +37,19 @@ proc cli_kill_apps*(msg_callback: proc) =
       msg_callback("Apps killer", "Invalid option! Please use Y / N", 1)
 
 
-proc box_kill_app*(): Box =
+proc do_skip(b: Button) =
+  discard
+
+
+proc do_kill(b: Button, callback_send_msg: proc) =
+  cmd_kill_apps(callback_send_msg)
+
+
+proc do_exit(b: Button) =
+  discard
+
+
+proc box_kill_app*(callback_send_msg: proc): Box =
   let
     boxAppKill = newBox(Orientation.horizontal, 3)
     labelAsk = newLabel("Do you want to kill apps and clear cache?")
@@ -46,19 +58,25 @@ proc box_kill_app*(): Box =
     btnDoNotKill = newButton("Don't kill")
     btnCancel = newButton("Cancel")
   
+  btnKill.connect("clicked", do_kill, callback_send_msg)
   boxButtons.add(btnKill)
+
+  btnDoNotKill.connect("clicked", do_skip)
   boxButtons.add(btnDoNotKill)
+
+  btnCancel.connect("clicked", do_exit)
   boxButtons.add(btnCancel)
+
   boxAppKill.add(labelAsk)
   boxAppkill.add(boxButtons)
   return boxAppKill
 
 
-proc window_kill_app*(): Window =
+proc window_kill_app*(callback_send_msg: proc): Window =
   gtk.init()
   let
     mainBoard = newWindow()
-    boxMainWindow = box_kill_app()
+    boxMainWindow = box_kill_app(callback_send_msg)
   
   mainBoard.setResizable(false)
   mainBoard.title = "Kill dangerous application"

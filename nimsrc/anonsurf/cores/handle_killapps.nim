@@ -5,11 +5,11 @@ import killapps / killapps_interface
 #   return box_kill_app()
 
 
-proc killapp_handle_cli_askkill(is_desktop: bool, cb_send_msg) =
+proc killapp_handle_cli_askkill*(is_desktop: bool, cb_send_msg: proc) =
   if is_desktop:
-    window_kill_app()
+    window_kill_app(cb_send_msg)
   else:
-    cmd_kill_apps()
+    cmd_kill_apps(cb_send_msg)
 
 
 proc killapp_handle_gtk_askkill() =

@@ -1,8 +1,8 @@
 import strformat
 import gintro / notify
 
-type
-  callback_send_messenger* = proc(title, body: string, code: int)
+# type
+#   callback_send_messenger* = proc(title, body: string, code: int)
 
 
 proc cli_send_msg*(title, body: string, code: int) =
