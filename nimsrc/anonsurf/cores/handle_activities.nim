@@ -117,7 +117,7 @@ proc ansurf_acts_handle_checkIP*(callback_send_messages: proc) =
     callback_send_messages("My IP", "Error while checking IP address", 2)
   # If program runs but user didn't connect to tor
   elif info[0].startsWith("Sorry"):
-    callback_send_messages("My IP", "You are not under Tor network", 1)
+    callback_send_messages(info[1], "You are not under Tor network", 1)
   # Connected to tor
   else:
-    callback_send_messages("My IP", "You are under Tor network", 0)
+    callback_send_messages(info[1], "You are under Tor network", 0)
