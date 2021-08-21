@@ -4,12 +4,6 @@ import os
 import cores / commons / services
 import cores / [handle_killapps, handle_activities]
 import cli / help
-# import modules / [myip, changeid]
-# import cores / commons / services
-# import cli / [help, killapp]
-# import cores / [messengers, surf_commands]
-# import cores / activities / messages
-# import cores / [handle_activities, handle_killapps]
 
 let
   isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
@@ -59,10 +53,6 @@ proc restart() =
 proc checkBoot() =
   # no launcher. No send notify
   # check if it is started with boot and show popup
-  if not checkInitSystem():
-    callback_msg_proc("System check", "No system init is running", 2)
-    return
-
   let bootResult = isServEnabled("anonsurfd.service")
   if bootResult:
     callback_msg_proc("Startup check", "AnonSurf is enabled at boot", 0)
@@ -71,10 +61,6 @@ proc checkBoot() =
 
 
 proc enableBoot() =
-  if not checkInitSystem():
-    callback_msg_proc("System check", "No system init is running", 2)
-    return
-
   # enable anosnurf at boot (systemd only for now)
   if isServEnabled("anonsurfd.service"):
     callback_msg_proc("Startup check", "AnonSurf is already enabled!", 1)
@@ -84,10 +70,6 @@ proc enableBoot() =
 
 
 proc disableBoot() =
-  if not checkInitSystem():
-    callback_msg_proc("System check", "No system init is running", 2)
-    return
-
   if not isServEnabled("anonsurfd.service"):
     callback_msg_proc("Startup check", "AnonSurf is already disabled!", 1)
   else:
@@ -96,9 +78,6 @@ proc disableBoot() =
 
 
 proc changeID() =
-  if not checkInitSystem():
-    callback_msg_proc("System check", "No system init is running", 2)
-    return
   # change id just like gui
   if getServStatus("anonsurfd") != 0:
     callback_msg_proc("AnonSurf Status", "AnonSurf is not running", 2)
@@ -109,10 +88,6 @@ proc changeID() =
 
 proc status() =
   # Show nyx
-  if not checkInitSystem():
-    callback_msg_proc("System check", "No system init is running", 2)
-    return
-  
   if getServStatus("anonsurfd") != 0:
     callback_msg_proc("AnonSurf Status", "AnonSurf is not running", 2)
   else:
