@@ -73,18 +73,22 @@ proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
     callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
 
 
-proc ansurf_acts_handle_status*() =
-  # if not checkInitSystem():
-  #   callback_send_messages("System check", "No system init is running", 2)
-  #   return
-  let status = ansurf_core_status()
-  # Expected program didn't start. We have to handle program exits / interrupted as well
-  if status != 0:
-    # TODO we have to show status of Tor, AnonDaemon, ports, DNS
-    discard
+# proc ansurf_acts_handle_status*() =
+    # TODO must deal with gtk and cli
+#   # if not checkInitSystem():
+#   #   callback_send_messages("System check", "No system init is running", 2)
+#   #   return
+#   let status = ansurf_core_status()
+#   # Expected program didn't start. We have to handle program exits / interrupted as well
+#   if status != 0:
+#     # TODO we have to show status of Tor, AnonDaemon, ports, DNS
+#     discard
 
 
 proc ansurf_acts_handle_boot_disable*(sudo: string, callback_send_messages: proc) =
+  if not isServEnabled("anonsurfd.service"):
+    callback_send_messages("AnonSurf disable boot", "AnonSurf is already disabled!", 1)
+    return
   if ansurf_boot_disable(sudo) == 0:
     callback_send_messages("AnonSurf Disable Boot", "Disabled AnonSurf at boot", 0)
   else:
@@ -92,20 +96,28 @@ proc ansurf_acts_handle_boot_disable*(sudo: string, callback_send_messages: proc
 
 
 proc ansurf_acts_handle_boot_enable*(sudo: string, callback_send_messages: proc) =
+  if isServEnabled("anonsurfd.service"):
+    callback_send_messages("AnonSurf disable boot", "AnonSurf is already enabled!", 1)
+    return
   if ansurf_boot_enable(sudo) == 0:
     callback_send_messages("AnonSurf Enable Boot", "Enabled AnonSurf at boot", 0)
   else:
     callback_send_messages("AnonSurf Enable Boot", "Failed to enable AnonSurf at boot", 2)
 
 
-proc ansurf_acts_handle_boot_status*() =
+# proc ansurf_acts_handle_boot_status*() =
+  # TODO must deal with gtk and cli
   # if not checkInitSystem():
   #   callback_send_messages("System check", "No system init is running", 2)
   #   return
-  discard
+  # discard
 
 
 proc ansurf_acts_handle_changeID*(callback_send_messages: proc) =
+  if getServStatus("anonsurfd") != 0:
+    callback_send_messages("AnonSurf Status", "AnonSurf is not running", 2)
+    return
+
   let conf = "/etc/anonsurf/nyxrc"
   if fileExists(conf):
     try:

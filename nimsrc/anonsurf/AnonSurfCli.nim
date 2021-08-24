@@ -13,7 +13,6 @@ let
 
 
 proc check_ip() =
-  # TODO check surf is running here
   ansurf_acts_handle_checkIP(callback_msg_proc)
 
 
@@ -27,26 +26,10 @@ proc start() =
 proc stop() =
   # stop daemon
   # show notifi
-  
-  if not checkInitSystem():
-    # callback_send_msg(callback_msg_proc, "System check", "No system init is running", 2)
-    callback_msg_proc("System check", "No system init is running", 2)
-    return
-
-  if getServStatus("anonsurfd") != 0:
-    # callback_send_msg(callback_msg_proc, "AnonSurf Status", "AnonSurf is not running", 1)
-    callback_msg_proc("System check", "No system init is running", 2)
-    return
-
   ansurf_acts_handle_stop(sudo, callback_kill_apps, callback_msg_proc)
-  # TODO kill app
 
 
 proc restart() =
-  if getServStatus("anonsurfd") != 0:
-    callback_msg_proc("AnonSurf Status", "AnonSurf is not running", 1)
-    return
-
   ansurf_acts_handle_restart(sudo, callback_msg_proc)
 
 
@@ -57,32 +40,20 @@ proc checkBoot() =
   if bootResult:
     callback_msg_proc("Startup check", "AnonSurf is enabled at boot", 0)
   else:
-    callback_msg_proc("Startup check", "AnonSurf is not enabled at boot", 0)
+    callback_msg_proc("Startup check", "AnonSurf is not enabled at boot", 1)
 
 
 proc enableBoot() =
-  # enable anosnurf at boot (systemd only for now)
-  if isServEnabled("anonsurfd.service"):
-    callback_msg_proc("Startup check", "AnonSurf is already enabled!", 1)
-  else:
-    ansurf_acts_handle_boot_enable(sudo, callback_msg_proc)
-    checkBoot()
+  ansurf_acts_handle_boot_enable(sudo, callback_msg_proc)
+  checkBoot()
 
 
 proc disableBoot() =
-  if not isServEnabled("anonsurfd.service"):
-    callback_msg_proc("Startup check", "AnonSurf is already disabled!", 1)
-  else:
-    ansurf_acts_handle_boot_disable(sudo, callback_msg_proc)
-    checkBoot()
+  ansurf_acts_handle_boot_disable(sudo, callback_msg_proc)
+  checkBoot()
 
 
 proc changeID() =
-  # change id just like gui
-  if getServStatus("anonsurfd") != 0:
-    callback_msg_proc("AnonSurf Status", "AnonSurf is not running", 2)
-    return
-  
   ansurf_acts_handle_changeID(callback_msg_proc)
 
 
