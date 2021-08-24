@@ -15,11 +15,11 @@ type
 
 proc initImgs(): AnonImgBuf =
   const
-    imgSecLow = staticRead("../../../icons/sec-low.svg")
-    imgSecMed = staticRead("../../../icons/sec-med.svg")
-    imgSecHigh = staticRead("../../../icons/sec-high.svg")
-    imgBootOff = staticRead("../../../icons/boot-off.svg")
-    imgBootOn = staticRead("../../../icons/boot-on.svg")
+    imgSecLow = staticRead("../../../../icons/sec-low.svg")
+    imgSecMed = staticRead("../../../../icons/sec-med.svg")
+    imgSecHigh = staticRead("../../../../icons/sec-high.svg")
+    imgBootOff = staticRead("../../../../icons/boot-off.svg")
+    imgBootOn = staticRead("../../../../icons/boot-on.svg")
 
   let loadLow = newPixbufLoader()
   discard loadLow.write(imgSecLow)
@@ -49,7 +49,7 @@ proc initImgs(): AnonImgBuf =
 
 proc surfIconPixbuf(): Pixbuf =
   const
-    imgData = staticRead("../../../icons/anonsurf.png")
+    imgData = staticRead("../../../../icons/anonsurf.png")
   let loadData = newPixbufLoader()
   discard loadData.write(imgData)
   discard loadData.close()
@@ -58,7 +58,7 @@ proc surfIconPixbuf(): Pixbuf =
 
 proc exitIconPixbuf(): Pixbuf =
   const
-    imgData = staticRead("../../../icons/exit.png")
+    imgData = staticRead("../../../../icons/exit.png")
   let loadData = newPixbufLoader()
   discard loadData.write(imgData)
   discard loadData.close()
@@ -67,7 +67,7 @@ proc exitIconPixbuf(): Pixbuf =
 
 proc aboutIconPixbuf(): Pixbuf =
   const
-    imgData = staticRead("../../../icons/help-about.png")
+    imgData = staticRead("../../../../icons/help-about.png")
   let loadData = newPixbufLoader()
   discard loadData.write(imgData)
   discard loadData.close()

@@ -1,9 +1,10 @@
 import gintro / [gtk, glib, vte, gobject]
-import .. / modules / [myip, changeid, runsurf]
-import .. / displays / [noti, askKill]
-import strutils
+# import .. / modules / [myip, changeid, runsurf]
+# import .. / displays / [noti, askKill]
+# import strutils
 import system
 import os
+# import .. / cores / 
 
 type
   MyIP = object

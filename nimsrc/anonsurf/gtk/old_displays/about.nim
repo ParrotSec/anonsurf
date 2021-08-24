@@ -1,6 +1,7 @@
 import gintro / [gtk, gdkpixbuf]
 import system
-import .. / cores / status
+# import .. / cores / status
+import .. / .. / cores / version
 
 
 proc onClickAbout*(b: Button) =
