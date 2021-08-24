@@ -1,21 +1,18 @@
 import gintro / [gtk, gobject]
-# import .. / activities / messages
 import .. / ansurf_types
-# import killapps_commands
+import kill_apps_activities
 
-# type
-#   callback_kill_apps* = proc(callback_send_msg: proc)
 
 proc onExit(w: Window) =
   mainQuit()
 
 
 proc do_not_kill(b: Button) =
-  echo "do_skip"
+  mainQuit()
 
 
 proc do_kill(b: Button, callback_send_msg: callback_send_messenger) =
-  mainQuit()
+  ansurf_kill_apps(callback_send_msg)
 
 
 # proc do_exit(b: Button) =
