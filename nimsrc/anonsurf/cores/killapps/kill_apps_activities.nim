@@ -60,7 +60,9 @@ proc ansurf_kill_apps*(callback_send_messages: callback_send_messenger) =
     kill_result = kill_processes()
     cache_result = clear_caches()
 
-  if kill_result != 0:
+  if kill_result != 0 and kill_result != 1:
+    # kill_result = 0: done
+    # kill_resuilt = 1: some apps are not running
     callback_send_messages("AnonSurf kill apps", fmt"Return code {kill_result}. Some apps are failed to kill", 1)
   
   if cache_result == -1:
