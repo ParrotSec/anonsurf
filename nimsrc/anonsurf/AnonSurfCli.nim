@@ -8,6 +8,7 @@ import cli / help
 let
   isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
   callback_msg_proc = cli_init_callback_msg(isDesktop)
+  callback_kill_apps = init_cli_askkill(isDesktop)
   sudo = cmd_init_sudo(isDesktop)
 
 
@@ -20,8 +21,7 @@ proc start() =
   # start daemon
   # Check surf is not running here
   # Check if all services are started
-  # killApps() # TODO kill app
-  ansurf_acts_handle_start(sudo, callback_msg_proc)
+  ansurf_acts_handle_start(sudo, callback_kill_apps, callback_msg_proc)
 
 
 proc stop() =
@@ -38,7 +38,7 @@ proc stop() =
     callback_msg_proc("System check", "No system init is running", 2)
     return
 
-  ansurf_acts_handle_stop(sudo, callback_msg_proc)
+  ansurf_acts_handle_stop(sudo, callback_kill_apps, callback_msg_proc)
   # TODO kill app
 
 

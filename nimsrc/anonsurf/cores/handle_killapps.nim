@@ -1,16 +1,15 @@
-import killapps / killapps_interface
+import killapps / [kill_apps_cli, kill_apps_gtk]
+import ansurf_types
+# type
+#   callback_kill_apps* = proc(callback_send_msg: proc)
 
 
-# proc init_kill_app_dialog*(): Box =
-#   return box_kill_app()
-
-
-proc killapp_handle_cli_askkill*(is_desktop: bool, cb_send_msg: proc) =
+proc init_cli_askkill*(is_desktop: bool): callback_kill_apps =
   if is_desktop:
-    window_kill_app(cb_send_msg)
+    return window_kill_app
   else:
-    cmd_kill_apps(cb_send_msg)
+    return cli_kill_apps
 
 
-proc killapp_handle_gtk_askkill() =
-  discard
+proc init_gtk_askkill*(is_desktop: bool): proc =
+  return window_kill_app

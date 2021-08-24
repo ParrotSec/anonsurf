@@ -11,6 +11,7 @@ proc cmd_init_sudo*(isDesktop: bool): string =
   else:
     return "sudo"
 
+
 proc cli_init_callback_msg*(isDesktop: bool): proc =
   if isDesktop:
     return gtk_send_msg
@@ -18,7 +19,13 @@ proc cli_init_callback_msg*(isDesktop: bool): proc =
     return cli_send_msg
 
 
-proc ansurf_acts_handle_start*(sudo: string, callback_send_messages: proc) =
+proc ansurf_acts_handle_start*(sudo: string, callback_kill_apps, callback_send_messages: proc) =
+  if getServStatus("anonsurfd") == 0:
+    callback_send_messages("AnonSurf Status", "AnonSurf is running. Can't start it again", 2)
+    return
+  
+  callback_kill_apps(callback_send_messages)
+
   if ansurf_core_start(sudo) == 0:
     callback_send_messages("AnonSurf Start", "AnonSurf started", 0)
   else:
@@ -34,14 +41,23 @@ proc ansurf_acts_handle_start*(sudo: string, callback_send_messages: proc) =
     callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
 
 
-proc ansurf_acts_handle_stop*(sudo: string, callback_send_messages: proc) =
+proc ansurf_acts_handle_stop*(sudo: string, callback_kill_apps, callback_send_messages: proc) =
+  if getServStatus("anonsurfd") != 0:
+    callback_send_messages("AnonSurf Status", "AnonSurf is not running. Can't stop it", 2)
+    return
+
   if ansurf_core_stop(sudo) == 0:
     callback_send_messages("AnonSurf Stop", "AnonSurf stopped", 0)
   else:
     callback_send_messages("AnonSurf Stop", "AnonSurf failed to stop", 2)
+  
+  callback_kill_apps(callback_send_messages)
 
 
 proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
+  if getServStatus("anonsurfd") != 0:
+    callback_send_messages("AnonSurf Status", "AnonSurf is not running. Can't restart it", 2)
+    return
   if ansurf_core_restart(sudo) == 0:
     callback_send_messages("AnonSurf Restart", "AnonSurf restarted", 0)
   else:
