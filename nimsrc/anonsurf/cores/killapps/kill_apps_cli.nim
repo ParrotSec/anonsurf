@@ -1,6 +1,5 @@
 import os
-import killapps_commands
-# import .. / activities / messages
+import kill_apps_activities
 import .. / ansurf_types
 
 

@@ -10,14 +10,6 @@ proc an_kill_apps*(): int =
     cacheResult = execCmd(cacheCommand)
   return killResult + cacheResult
 
-
-# import posix
-# import os
-# import strutils
-# # import strtabs # Dict-like object in Nim
-# # import sequtils
-
-
 # const apt_status_path = "/var/lib/dpkg/status"
 
 

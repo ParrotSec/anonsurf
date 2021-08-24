@@ -1,10 +1,20 @@
-# import strutils
 import osproc
 import os
 import cores / commons / services
 import cores / [handle_killapps, handle_activities]
 import cli / help
 
+#[
+  isDesktop: bool -> Check if current OS has Desktop Environment.
+    if true:
+      Use DE's notifications, ask kill apps using GTK
+    if false:
+      Use CLI for output msg, ask kill apps, ...
+  callback_msg_proc: callback proc to call by other functions
+  callback_kill_apps: callback kill applications to call by other functions
+  sudo: return "gksudo" or "sudo" depends on Desktop Environment
+
+]#
 let
   isDesktop = if getEnv("XDG_CURRENT_DESKTOP") == "": false else: true
   callback_msg_proc = cli_init_callback_msg(isDesktop)
@@ -13,29 +23,31 @@ let
 
 
 proc check_ip() =
+  #[
+    Try to get public IP of current client
+    This function calls handle_checkIP, which connects to Tor's server
+    and then parses result
+  ]#
   ansurf_acts_handle_checkIP(callback_msg_proc)
 
 
 proc start() =
-  # start daemon
-  # Check surf is not running here
-  # Check if all services are started
+  # Start Anonsurf's Daemon
   ansurf_acts_handle_start(sudo, callback_kill_apps, callback_msg_proc)
 
 
 proc stop() =
-  # stop daemon
-  # show notifi
+  # Stop Anonsurf's Daemon
   ansurf_acts_handle_stop(sudo, callback_kill_apps, callback_msg_proc)
 
 
 proc restart() =
+  # Restart Anonsurf's Daemon
   ansurf_acts_handle_restart(sudo, callback_msg_proc)
 
 
 proc checkBoot() =
-  # no launcher. No send notify
-  # check if it is started with boot and show popup
+  # Check if AnonSurf is enabled at boot
   let bootResult = isServEnabled("anonsurfd.service")
   if bootResult:
     callback_msg_proc("Startup check", "AnonSurf is enabled at boot", 0)
@@ -44,16 +56,19 @@ proc checkBoot() =
 
 
 proc enableBoot() =
+  # Enable AnonSurf as system service at boot
   ansurf_acts_handle_boot_enable(sudo, callback_msg_proc)
   checkBoot()
 
 
 proc disableBoot() =
+  # Disable AnonSurf as system service at boot
   ansurf_acts_handle_boot_disable(sudo, callback_msg_proc)
   checkBoot()
 
 
 proc changeID() =
+  # Change Tor's ID by sending signal to control port
   ansurf_acts_handle_changeID(callback_msg_proc)
 
 
