@@ -13,6 +13,7 @@ proc do_not_kill(b: Button) =
 
 proc do_kill(b: Button, callback_send_msg: callback_send_messenger) =
   ansurf_kill_apps(callback_send_msg)
+  mainQuit()
 
 
 # proc do_exit(b: Button) =
