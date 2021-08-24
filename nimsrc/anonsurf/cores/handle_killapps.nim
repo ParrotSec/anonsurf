@@ -1,7 +1,5 @@
 import killapps / [kill_apps_cli, kill_apps_gtk]
 import ansurf_types
-# type
-#   callback_kill_apps* = proc(callback_send_msg: proc)
 
 
 proc init_cli_askkill*(is_desktop: bool): callback_kill_apps =
