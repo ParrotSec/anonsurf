@@ -10,36 +10,36 @@ proc onExit(w: Window) =
   mainQuit()
 
 
-proc do_skip(b: Button) =
+proc do_not_kill(b: Button) =
   echo "do_skip"
 
 
 proc do_kill(b: Button, callback_send_msg: callback_send_messenger) =
-  echo "do_kill"
-  # ansurf_kill_apps_handler(callback_send_msg)
+  mainQuit()
 
 
-proc do_exit(b: Button) =
-  echo "do_exit"
+# proc do_exit(b: Button) =
+#   mainQuit()
+#   # TODO do not start as well
 
 
 proc box_kill_app(callback_send_msg: callback_send_messenger): Box =
   let
-    boxAppKill = newBox(Orientation.horizontal, 3)
+    boxAppKill = newBox(Orientation.vertical, 3)
     labelAsk = newLabel("Do you want to kill apps and clear cache?")
-    boxButtons = newBox(Orientation.vertical, 3)
+    boxButtons = newBox(Orientation.horizontal, 3)
     btnKill = newButton("Kill")
     btnDoNotKill = newButton("Don't kill")
-    btnCancel = newButton("Cancel")
+    # btnCancel = newButton("Cancel")
   
   btnKill.connect("clicked", do_kill, callback_send_msg)
   boxButtons.add(btnKill)
 
-  btnDoNotKill.connect("clicked", do_skip)
-  boxButtons.add(btnDoNotKill)
+  btnDoNotKill.connect("clicked", do_not_kill)
+  boxButtons.packEnd(btnDoNotKill, false, true, 3)
 
-  btnCancel.connect("clicked", do_exit)
-  boxButtons.add(btnCancel)
+  # btnCancel.connect("clicked", do_exit)
+  # boxButtons.add(btnCancel)
 
   boxAppKill.add(labelAsk)
   boxAppkill.add(boxButtons)
