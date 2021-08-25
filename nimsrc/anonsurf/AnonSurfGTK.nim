@@ -67,7 +67,7 @@ proc createArea(boxMainWindow: Box) =
       btnBoot, imgStatusBoot
     )
   
-  # btnBoot.connect("clicked", ansurf_gtk_do_enable_disable_boot, cb_send_msg)
+  btnBoot.connect("clicked", ansurf_gtk_do_enable_disable_boot, cb_send_msg)
 
   let
     mainStack = newStack()
