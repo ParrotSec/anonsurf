@@ -5,6 +5,7 @@ import gintro / [gtk, glib, gobject]
 import cores / [handle_activities, handle_killapps]
 import gtk / widgets / [details_widget, main_widget, bottom_widget]
 import gtk / old_cores / images
+import gtk / gui_activities / [details_widget_activities, main_widget_activities, core_activities]
 
 # type
 #   RefreshObj = ref object
@@ -47,11 +48,11 @@ proc createArea(boxMainWindow: Box) =
     imgStatus = newImageFromPixbuf(surfImages.imgSecMed)
     mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowStatus, btnChangeID, btnCheckIP, btnRestart)
 
-  # btnRestart.connect("clicked", onClickRestart)
-  # btnStart.connect("clicked", onClickRun)
-  # btnCheckIP.connect("clicked", onClickCheckIP)
-  # btnChangeID.connect("clicked", onClickChangeID)
-  # btnShowStatus.connect("clicked", onClickTorStatus)
+  # btnRestart.connect("clicked", ansurf_gtk_do_restart, cb_send_msg)
+  # btnStatus.connect("clicked", ansurf_gtk_do_status)
+  # btnStart.connect("clicked", ansurf_gtk_do_start_stop, cb_kill_apps, cb_send_msg)
+  # btnID.connect("clicked", ansurf_gtk_do_changeid, cb_send_msg)
+  # btnIP.connect("clicked", ansurf_gtk_do_IP, cb_send_msg)
 
   let
     labelDaemons = newLabel("Services: Checking")
@@ -65,12 +66,12 @@ proc createArea(boxMainWindow: Box) =
       btnBoot, imgStatusBoot
     )
   
-  # btnBoot.connect("clicked", onClickBoot)
+  # btnBoot.connect("clicked", ansurf_gtk_do_enable_disable_boot, cb_send_msg)
 
   let
     mainStack = newStack()
   
-  # btnShowDetails.connect("clicked", onClickDetail, mainStack)
+  btnShowDetails.connect("clicked", ansurf_gtk_do_show_details, mainStack)
 
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
