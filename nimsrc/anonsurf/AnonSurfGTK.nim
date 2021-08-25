@@ -137,7 +137,7 @@ proc main =
   mainBoard.setBorderWidth(3)
 
   mainBoard.show()
-  # mainBoard.connect("destroy", ansurf_gtk_do_stop)
+  mainBoard.connect("destroy", ansurf_gtk_do_stop)
   gtk.main()
 
 main()

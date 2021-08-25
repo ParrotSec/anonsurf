@@ -18,7 +18,7 @@ proc ansurf_gtk_do_exit*(b: Button) =
   mainQuit()
 
 
-proc ansurf_gtk_do_stop*(b: Button) =
+proc ansurf_gtk_do_stop*(w: Window) =
   #[
     Close program by click on title bar
   ]#
