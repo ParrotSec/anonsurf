@@ -1,10 +1,8 @@
 import gintro / [gtk, glib, gobject]
-# import gtk / displays / [detailPage, mainPage, bottombar]
 # import gtk / cores / [status, refresher, images]
-# import gtk / actions / [actDetailPage, actMainPage, gtkClick]
 import cores / [handle_activities, handle_killapps]
 import gtk / widgets / [details_widget, main_widget, bottom_widget]
-import gtk / old_cores / images
+import gtk / anonsurf_icons
 import gtk / gui_activities / [details_widget_activities, main_widget_activities, core_activities]
 
 # type
@@ -130,7 +128,7 @@ proc main =
   
   mainBoard.setResizable(false)
   mainBoard.title = "AnonSurf GUI"
-  # mainBoard.setIcon(surfIcon)
+  mainBoard.setIcon(surfIcon)
   mainBoard.setPosition(WindowPosition.center)
 
   createArea(boxMainWindow)
@@ -139,7 +137,7 @@ proc main =
   mainBoard.setBorderWidth(3)
 
   mainBoard.show()
-  # mainBoard.connect("destroy", onClickStop)
+  # mainBoard.connect("destroy", ansurf_gtk_do_stop)
   gtk.main()
 
 main()
