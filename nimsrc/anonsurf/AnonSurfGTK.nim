@@ -4,6 +4,7 @@ import cores / [handle_activities, handle_killapps]
 import gtk / widgets / [details_widget, main_widget, bottom_widget]
 import gtk / anonsurf_icons
 import gtk / gui_activities / [details_widget_activities, main_widget_activities, core_activities]
+import cores / handle_activities
 
 # type
 #   RefreshObj = ref object
@@ -34,6 +35,8 @@ proc createArea(boxMainWindow: Box) =
   #[
     Create everything for the program
   ]#
+  let
+    cb_send_msg = cli_init_callback_msg(true)
 
   let
     btnStart = newButton("Start")
@@ -46,11 +49,11 @@ proc createArea(boxMainWindow: Box) =
     imgStatus = newImageFromPixbuf(surfImages.imgSecMed)
     mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowStatus, btnChangeID, btnCheckIP, btnRestart)
 
-  # btnRestart.connect("clicked", ansurf_gtk_do_restart, cb_send_msg)
-  # btnStatus.connect("clicked", ansurf_gtk_do_status)
+  btnRestart.connect("clicked", ansurf_gtk_do_restart, cb_send_msg)
+  # btnStatus.connect("clicked", ansurf_gtk_do_status) # TODO handle do status differently
   # btnStart.connect("clicked", ansurf_gtk_do_start_stop, cb_kill_apps, cb_send_msg)
-  # btnID.connect("clicked", ansurf_gtk_do_changeid, cb_send_msg)
-  # btnIP.connect("clicked", ansurf_gtk_do_IP, cb_send_msg)
+  btnChangeID.connect("clicked", ansurf_gtk_do_changeid, cb_send_msg)
+  btnCheckIP.connect("clicked", ansurf_gtk_do_myip, cb_send_msg)
 
   let
     labelDaemons = newLabel("Services: Checking")
