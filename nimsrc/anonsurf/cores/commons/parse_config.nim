@@ -12,7 +12,7 @@ proc getTorrcPorts*(): TorConfig =
     result.fileErr = false
     for line in lines(path):
       if line.startsWith("TransPort"):
-        result.transPort = line.split(" ")[1]
+        result.transPort = line.split(" ")[1] # FIXME got crash randomly here
       elif line.startsWith("SocksPort"):
         result.socksPort = line.split(" ")[1]
       elif line.startsWith("DNSPort"):

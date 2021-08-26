@@ -18,7 +18,7 @@ proc do_kill(b: Button, callback_send_msg: callback_send_messenger) =
 
 # proc do_exit(b: Button) =
 #   mainQuit()
-#   # TODO do not start as well
+#   # TODO do not start anonsurf instead of just call
 
 
 proc box_kill_app(callback_send_msg: callback_send_messenger): Box =

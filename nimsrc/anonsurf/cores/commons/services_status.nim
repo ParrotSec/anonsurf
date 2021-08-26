@@ -17,9 +17,8 @@ proc getServStatus*(serviceName: string): int =
 proc isServEnabled*(serviceName: string): bool =
   #[
     Check if service is enabled at boot by systemd
-    Todo: use native check instead of subprocess
-      Enable service: Created symlink /etc/systemd/system/multi-user.target.wants/tor.service → /lib/systemd/system/tor.service.
-      Disable service: Removed /etc/systemd/system/multi-user.target.wants/tor.service.
+    Enable service: Created symlink /etc/systemd/system/multi-user.target.wants/tor.service → /lib/systemd/system/tor.service.
+    Disable service: Removed /etc/systemd/system/multi-user.target.wants/tor.service.
   ]#
   if fileExists("/etc/systemd/system/multi-user.target.wants/" & serviceName):
     return true
