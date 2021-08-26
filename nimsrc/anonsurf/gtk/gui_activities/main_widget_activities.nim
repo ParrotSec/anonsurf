@@ -3,6 +3,7 @@ import .. / .. / cores / handle_activities
 import .. / .. / cores / handle_killapps
 import .. / ansurf_objects
 import .. / widgets / tor_status_widget
+import .. / .. / cores / commons / services_status
 
 
 let cb_kill_apps = init_gtk_askkill() 
@@ -12,8 +13,8 @@ proc do_anonsurf_start(cb_send_msg: proc) {.gcsafe.} =
   ansurf_acts_handle_start("gksudo", cb_send_msg)
 
 
-proc do_anonsurf_stop(cb_send_msg: proc) {.gcsafe.} =
-  ansurf_acts_handle_stop("gksudo", cb_send_msg)
+# proc do_anonsurf_stop(cb_send_msg: proc) {.gcsafe.} =
+#   ansurf_acts_handle_stop("gksudo", cb_send_msg)
 
 
 proc do_anonsurf_restart(cb_send_msg: proc) {.gcsafe.} =
@@ -31,14 +32,19 @@ proc do_anonsurf_checkip(cb_send_msg: proc) {.gcsafe.} =
 proc ansurf_gtk_do_start_stop*(b: Button, cb_send_msg: proc) =
   if b.label == "Start":
     cb_kill_apps(cb_send_msg)
+    # ansurf_acts_handle_start("gksudo", cb_send_msg)
     createThread(ansurf_workers_common, do_anonsurf_start, cb_send_msg)
   else:
-    createThread(ansurf_workers_common, do_anonsurf_stop, cb_send_msg)
-    cb_kill_apps(cb_send_msg)
+    # createThread(ansurf_workers_common, do_anonsurf_stop, cb_send_msg)
+    ansurf_acts_handle_stop("gksudo", cb_send_msg)
+    if getServStatus("anonsurfd") == 3:
+      cb_kill_apps(cb_send_msg)
+  # joinThread(ansurf_workers_common)
 
 
 proc ansurf_gtk_do_restart*(b: Button, cb_send_msg: proc) =
   createThread(ansurf_workers_common, do_anonsurf_restart, cb_send_msg)
+  # ansurf_workers_common.joinThread()
 
 
 proc ansurf_gtk_do_myip*(b: Button, cb_send_msg: proc) =
