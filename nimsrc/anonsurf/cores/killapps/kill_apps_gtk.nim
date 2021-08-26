@@ -59,3 +59,15 @@ proc window_kill_app*(callback_send_msg: callback_send_messenger) =
   mainBoard.showAll()
   mainBoard.connect("destroy", onExit)
   gtk.main()
+
+
+proc dialog_kill_app*(callback_send_msg: callback_send_messenger) =
+  let
+    retDialog = newDialog()
+    dialogArea = retDialog.getContentArea()
+    boxDialog = box_kill_app(callback_send_msg)
+  retDialog.setTitle("Kill dangerous application")
+  dialogArea.add(boxDialog)
+  retDialog.showAll()
+  discard retDialog.run()
+  retDialog.destroy()
