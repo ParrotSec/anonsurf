@@ -46,7 +46,7 @@ proc stop() =
   if getServStatus("anonsurfd") != 0:
     callback_msg_proc("AnonSurf Status", "AnonSurf is not running. Can't stop it", 2)
     return
-  ansurf_acts_handle_stop(sudo, callback_kill_apps, callback_msg_proc)
+  ansurf_acts_handle_stop(sudo, callback_msg_proc)
   if getServStatus("anonsurfd") == 3: # status 3 == not running
     callback_kill_apps(callback_msg_proc)
 
