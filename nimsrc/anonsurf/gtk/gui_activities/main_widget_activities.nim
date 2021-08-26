@@ -1,8 +1,13 @@
 import gintro / gtk
 import .. / .. / cores / handle_activities
+# import .. / # TODO import object here and try work with the tuple for click
+# import .. / ansurf_objects
+import .. / .. / cores / handle_killapps
 
 
-proc ansurf_gtk_do_start_stop*(b: Button, cb_kill_apps, cb_send_msg: proc) =
+# proc ansurf_gtk_do_start_stop*(b: Button, cb_kill_apps, cb_send_msg: proc) =
+proc ansurf_gtk_do_start_stop*(b: Button, cb_send_msg: proc) =
+  let cb_kill_apps = init_gtk_askkill()
   if b.label == "Start":
     ansurf_acts_handle_start("gksudo", cb_kill_apps, cb_send_msg)
   else:

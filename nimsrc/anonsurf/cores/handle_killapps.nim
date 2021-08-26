@@ -9,5 +9,5 @@ proc init_cli_askkill*(is_desktop: bool): callback_kill_apps =
     return cli_kill_apps
 
 
-proc init_gtk_askkill*(is_desktop: bool): proc =
+proc init_gtk_askkill*(): proc =
   return window_kill_app

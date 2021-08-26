@@ -1,4 +1,5 @@
 import gintro / gtk
+# import .. / cores / ansurf_types
 
 
 type
@@ -32,6 +33,7 @@ type
     isDNSPort*: bool
     isSocksPort*: bool
     isTransPort*: bool
+  # AnsurfStartArgs* = tuple[cb_kill_apps: callback_kill_apps, cb_send_msg: callback_send_messenger]
 #   MyIP* = object
 #     thisAddr*: string
 #     isUnderTor*: string

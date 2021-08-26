@@ -46,7 +46,7 @@ proc createArea(boxMainWindow: Box) =
 
   btnRestart.connect("clicked", ansurf_gtk_do_restart, cb_send_msg)
   # btnStatus.connect("clicked", ansurf_gtk_do_status) # TODO handle do status differently
-  # btnStart.connect("clicked", ansurf_gtk_do_start_stop, cb_kill_apps, cb_send_msg)
+  btnStart.connect("clicked", ansurf_gtk_do_start_stop, cb_send_msg)
   btnChangeID.connect("clicked", ansurf_gtk_do_changeid, cb_send_msg)
   btnCheckIP.connect("clicked", ansurf_gtk_do_myip, cb_send_msg)
 
