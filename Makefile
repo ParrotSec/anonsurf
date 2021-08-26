@@ -13,7 +13,7 @@ build-parrot:
 	mkdir -p bin/
 	nim c --nimcache:/tmp --out:bin/dnstool -d:release nimsrc/extra-tools/dnstool.nim
 	nim c --nimcache:/tmp --out:bin/make-torrc -d:release nimsrc/anonsurf/make_torrc.nim
-	nim c --nimcache:/tmp --out:bin/anonsurf-gtk -p:/usr/include/nim/ -d:release nimsrc/anonsurf/AnonSurfGTK.nim
+	nim c --nimcache:/tmp --out:bin/anonsurf-gtk -p:/usr/include/nim/ -d:release --gc:arc nimsrc/anonsurf/AnonSurfGTK.nim
 	nim c --nimcache:/tmp --out:bin/anonsurf -p:/usr/include/nim/ -d:release nimsrc/anonsurf/AnonSurfCli.nim
 
 build:
@@ -22,7 +22,7 @@ build:
 	mkdir -p bin/
 	nim c --out:bin/dnstool -d:release nimsrc/extra-tools/dnstool.nim
 	nim c --out:bin/make-torrc -d:release nimsrc/anonsurf/make_torrc.nim
-	nim c --out:bin/anonsurf-gtk -d:release nimsrc/anonsurf/AnonSurfGTK.nim
+	nim c --out:bin/anonsurf-gtk -d:release --gc:arc nimsrc/anonsurf/AnonSurfGTK.nim
 	nim c --out:bin/anonsurf -d:release nimsrc/anonsurf/AnonSurfCli.nim
 
 install:
