@@ -1,13 +1,7 @@
 import os
 import strutils
-
-type
-  TorConfig* = object
-    fileErr*: bool # Error while reading file
-    controlPort*: string
-    transPort*: string
-    socksPort*: string
-    dnsPort*: string
+import .. / ansurf_types
+import json
 
 
 proc getTorrcPorts*(): TorConfig =
@@ -65,3 +59,28 @@ proc toNixHex*(conf: TorConfig): TorConfig =
       result.transPort = handleParse(conf.transPort)
     except:
       result.fileErr = true
+
+
+proc readConf*(p: string): AnonOptions =
+  let defConfVal = AnonOptions(
+    use_bridge: false,
+    custom_bridge: false,
+    bridge_addr: "",
+  )
+  if fileExists(p):
+    var jnode = parseFile(p)
+    return to(jnode, AnonOptions)
+  else:
+    stderr.write("[x] Config doesn't exists. Use default options\n")
+    return defConfVal
+
+
+proc readDefaultConfig*(): AnonOptions =
+  return readConf(defConfPath)
+
+
+proc writeConf*(p: string, op: AnonOptions) =
+  try:
+    writeFile(p, pretty(%op))
+  except:
+    stderr.write("[x] Error while writing config at " & p & "\n")

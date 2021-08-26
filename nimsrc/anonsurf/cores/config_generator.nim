@@ -1,7 +1,7 @@
 import random
 import strutils
 import osproc
-import .. / cores / options
+import commons / parse_config
 
 randomize()
 
@@ -78,7 +78,7 @@ proc genTorrc*(hashed: string): string =
   result &= "# Customize your tor configuration by editing /etc/anonsurf/torrc.base\n"
   result &= readFile(basePath)
   result &= "\nHashedControlPassword " & hashed & "\n"
-  let conf = readDefaultConfig() # TODO user's config at home
+  let conf = readDefaultConfig()
   if conf.use_bridge == false:
     result &= "# Enable sandbox\nSandbox 1\n"
   else:
