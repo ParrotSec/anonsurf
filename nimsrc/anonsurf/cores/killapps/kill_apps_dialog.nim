@@ -5,15 +5,19 @@ import kill_apps_activities
 
 # proc onClickExit(w: Window) =
 #   mainQuit()
+type
+  KillArgs = object
+    cb_send_msg: callback_send_messenger
+    d: Dialog
 
 
 proc do_not_kill(b: Button, d: Dialog) =
   d.destroy()
 
 
-proc do_kill(b: Button, callback_send_msg: callback_send_messenger) =
-  ansurf_kill_apps(callback_send_msg)
-  # d.destroy()
+proc do_kill(b: Button, args: KillArgs) =
+  ansurf_kill_apps(args.cb_send_msg)
+  args.d.destroy()
 
 
 # proc do_exit(b: Button) =
@@ -29,8 +33,12 @@ proc box_kill_app(callback_send_msg: callback_send_messenger, d: Dialog): Box =
     btnKill = newButton("Kill")
     btnDoNotKill = newButton("Don't kill")
     # btnCancel = newButton("Cancel")
+    pass_args = KillArgs(
+      cb_send_msg: callback_send_msg,
+      d: d
+    )
   
-  btnKill.connect("clicked", do_kill, callback_send_msg)
+  btnKill.connect("clicked", do_kill, pass_args)
   boxButtons.add(btnKill)
 
   btnDoNotKill.connect("clicked", do_not_kill, d)
