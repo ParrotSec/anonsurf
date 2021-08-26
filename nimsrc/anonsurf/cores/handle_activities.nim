@@ -26,7 +26,8 @@ proc ansurf_acts_handle_start*(sudo: string, callback_kill_apps, callback_send_m
   
   callback_kill_apps(callback_send_messages)
 
-  if ansurf_core_start(sudo) == 0:
+  let status_start_surf = ansurf_core_start(sudo)
+  if status_start_surf == 0:
     if getServStatus("anonsurfd") == 0:
       callback_send_messages("AnonSurf Status", "AnonSurf is running", 0)
       if getServStatus("tor") == 0:
@@ -35,6 +36,8 @@ proc ansurf_acts_handle_start*(sudo: string, callback_kill_apps, callback_send_m
         callback_send_messages("Tor Status", "Tor is not running", 2)
     else:
       callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
+  elif status_start_surf == 255:
+    callback_send_messages("AnonSurf Start", "Cancelled by user", 2)
   else:
     callback_send_messages("AnonSurf Start", "AnonSurf failed to start", 2)
 
