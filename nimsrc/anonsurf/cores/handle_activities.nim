@@ -61,11 +61,11 @@ proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
     return
   if ansurf_core_restart(sudo) == 0:
     if getServStatus("anonsurfd") == 0:
-      callback_send_messages("AnonSurf Status", "AnonSurf is running", 0)
-      if getServStatus("tor") == 0:
-        callback_send_messages("Tor Status", "Tor is running", 0)
-      else:
-        callback_send_messages("Tor Status", "Tor is not running", 2)
+      callback_send_messages("AnonSurf Status", "AnonSurf is restarted", 0)
+      # if getServStatus("tor") == 0:
+      #   callback_send_messages("Tor Status", "Tor is running", 0)
+      # else:
+      #   callback_send_messages("Tor Status", "Tor is not running", 2)
     else:
       callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
   else:
