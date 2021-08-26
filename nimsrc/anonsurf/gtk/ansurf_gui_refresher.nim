@@ -62,7 +62,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         # Give error msg with red color
         args.lblPorts.setMarkup("Ports:  <b<span background=\"#333333\" foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>")
 
-  elif myStatus.isAnonsurfSErvice == 0:
+  elif myStatus.isAnonsurfSErvice == 3:
     # Deactivated cyan color
     args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
     args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
