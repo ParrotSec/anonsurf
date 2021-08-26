@@ -1,5 +1,5 @@
 import gintro / gtk
-# import .. / cores / ansurf_types
+import .. / cores / ansurf_types
 
 
 type
@@ -33,7 +33,12 @@ type
     isDNSPort*: bool
     isSocksPort*: bool
     isTransPort*: bool
-  # AnsurfStartArgs* = tuple[cb_kill_apps: callback_kill_apps, cb_send_msg: callback_send_messenger]
+
+var
+  # ansurf_start_stop_workers*: Thread[string, callback_kill_apps, callback_send_messenger]
+  # ansurf_workers_common_sudo*: Thread[string, callback_send_messenger]
+  ansurf_workers_common*: Thread[callback_send_messenger]
+  # worker*: Thread[void]
 #   MyIP* = object
 #     thisAddr*: string
 #     isUnderTor*: string
@@ -41,3 +46,6 @@ type
 # var
 #   worker*: system.Thread[void]
 #   channel*: Channel[MyIP]
+
+# var
+#   retCode*: Channel[int]
