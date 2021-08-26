@@ -27,18 +27,16 @@ proc ansurf_acts_handle_start*(sudo: string, callback_kill_apps, callback_send_m
   callback_kill_apps(callback_send_messages)
 
   if ansurf_core_start(sudo) == 0:
-    callback_send_messages("AnonSurf Start", "AnonSurf started", 0)
+    if getServStatus("anonsurfd") == 0:
+      callback_send_messages("AnonSurf Status", "AnonSurf is running", 0)
+      if getServStatus("tor") == 0:
+        callback_send_messages("Tor Status", "Tor is running", 0)
+      else:
+        callback_send_messages("Tor Status", "Tor is not running", 2)
+    else:
+      callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
   else:
     callback_send_messages("AnonSurf Start", "AnonSurf failed to start", 2)
-  
-  if getServStatus("anonsurfd") == 0:
-    callback_send_messages("AnonSurf Status", "AnonSurf is running", 0)
-    if getServStatus("tor") == 0:
-      callback_send_messages("Tor Status", "Tor is running", 0)
-    else:
-      callback_send_messages("Tor Status", "Tor is not running", 2)
-  else:
-    callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
 
 
 proc ansurf_acts_handle_stop*(sudo: string, callback_kill_apps, callback_send_messages: proc) =
@@ -59,18 +57,17 @@ proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
     callback_send_messages("AnonSurf Status", "AnonSurf is not running. Can't restart it", 2)
     return
   if ansurf_core_restart(sudo) == 0:
-    callback_send_messages("AnonSurf Restart", "AnonSurf restarted", 0)
+    if getServStatus("anonsurfd") == 0:
+      callback_send_messages("AnonSurf Status", "AnonSurf is running", 0)
+      if getServStatus("tor") == 0:
+        callback_send_messages("Tor Status", "Tor is running", 0)
+      else:
+        callback_send_messages("Tor Status", "Tor is not running", 2)
+    else:
+      callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
   else:
     callback_send_messages("AnonSurf Restart", "AnonSurf failed to restart", 2)
-  
-  if getServStatus("anonsurfd") == 0:
-    callback_send_messages("AnonSurf Status", "AnonSurf is running", 0)
-    if getServStatus("tor") == 0:
-      callback_send_messages("Tor Status", "Tor is running", 0)
-    else:
-      callback_send_messages("Tor Status", "Tor is not running", 2)
-  else:
-    callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
+
 
 
 # proc ansurf_acts_handle_status*() =
