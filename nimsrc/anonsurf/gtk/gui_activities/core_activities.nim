@@ -10,17 +10,15 @@ proc ansurf_gtk_do_show_details*(b: Button, s: Stack) =
     b.label = "Details"
 
 
-proc ansurf_gtk_do_exit*(b: Button) =
-  #[
-    Close program by click on exit button
-  ]#
-  # channel.close()
-  mainQuit()
+# proc ansurf_gtk_do_exit*(b: Button) =
+#   #[
+#     Close program by click on exit button
+#   ]#
+#   mainQuit()
 
 
 proc ansurf_gtk_do_stop*(w: Window) =
   #[
     Close program by click on title bar
   ]#
-  # channel.close()
   mainQuit()
