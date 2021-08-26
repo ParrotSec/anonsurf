@@ -1,6 +1,6 @@
 import osproc
 import os
-import cores / commons / services
+import cores / commons / services_status
 import cores / [handle_killapps, handle_activities]
 import cli / help
 

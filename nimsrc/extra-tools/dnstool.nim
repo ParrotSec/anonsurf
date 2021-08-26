@@ -2,7 +2,7 @@ import os
 import osproc
 import strutils
 import net
-import .. / utils / dnsutils
+import .. / anonsurf / cores / commons / dns_utils
 
 const
   sysResolvConf = "/etc/resolv.conf"

@@ -1,6 +1,6 @@
 import osproc
 import strformat
-import .. / commons / services
+import .. / commons / services_status
 
 
 proc ansurf_boot_enable*(sudo: string): int =
