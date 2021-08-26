@@ -164,12 +164,7 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
     args.btnID.setSensitive(false)
     args.btnStatus.setSensitive(false)
 
-  # if worker.running:
+  # if ansurf_workers_myip.running:
   #   args.btnIP.setSensitive(false)
   # else:
-  #   let finalAddr = channel.tryRecv()
-  #   if finalAddr.dataAvailable:
-  #     # channel.close()
-  #     worker.joinThread()
-  #     # sendNotify($finalAddr.msg.thisAddr, $finalAddr.msg.isUnderTor, $finalAddr.msg.iconName)
   #   args.btnIP.setSensitive(true)

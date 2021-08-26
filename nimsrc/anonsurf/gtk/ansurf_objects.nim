@@ -34,10 +34,14 @@ type
     isSocksPort*: bool
     isTransPort*: bool
 
+#[
+  The workers are meant to run start / stop / restart / ... without hanging main gui
+  The workers_myip is the same worker but different variable
+    so when we use refresher, we can disable this button only
+]#
 var
-  # ansurf_start_stop_workers*: Thread[string, callback_kill_apps, callback_send_messenger]
-  # ansurf_workers_common_sudo*: Thread[string, callback_send_messenger]
   ansurf_workers_common*: Thread[callback_send_messenger]
+  ansurf_workers_myip*: Thread[callback_send_messenger]
   # worker*: Thread[void]
 #   MyIP* = object
 #     thisAddr*: string
