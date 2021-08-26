@@ -1,5 +1,5 @@
 import gintro / [gtk, gobject]
-import .. / old_cores / images
+import .. / ansurf_icons
 import about_widget
 
 
