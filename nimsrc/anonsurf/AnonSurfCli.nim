@@ -33,12 +33,22 @@ proc check_ip() =
 
 proc start() =
   # Start Anonsurf's Daemon
-  ansurf_acts_handle_start(sudo, callback_kill_apps, callback_msg_proc)
+  if getServStatus("anonsurfd") == 0:
+    callback_msg_proc("AnonSurf Status", "AnonSurf is running. Can't start it again", 2)
+    return
+  
+  callback_kill_apps(callback_msg_proc)
+  ansurf_acts_handle_start(sudo, callback_msg_proc)
 
 
 proc stop() =
   # Stop Anonsurf's Daemon
+  if getServStatus("anonsurfd") != 0:
+    callback_msg_proc("AnonSurf Status", "AnonSurf is not running. Can't stop it", 2)
+    return
   ansurf_acts_handle_stop(sudo, callback_kill_apps, callback_msg_proc)
+  if getServStatus("anonsurfd") == 3: # status 3 == not running
+    callback_kill_apps(callback_msg_proc)
 
 
 proc restart() =
