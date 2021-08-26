@@ -3,8 +3,6 @@ import .. / commons / ansurf_types
 import kill_apps_activities
 
 
-# proc onClickExit(w: Window) =
-#   mainQuit()
 type
   KillArgs = object
     cb_send_msg: callback_send_messenger
@@ -53,7 +51,6 @@ proc box_kill_app(callback_send_msg: callback_send_messenger, d: Dialog): Box =
 
 
 proc dialog_kill_app*(callback_send_msg: callback_send_messenger) =
-  # FIXME broken
   let
     retDialog = newDialog()
     dialogArea = retDialog.getContentArea()
