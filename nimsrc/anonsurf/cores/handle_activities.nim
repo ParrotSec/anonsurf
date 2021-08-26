@@ -59,7 +59,8 @@ proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
   if getServStatus("anonsurfd") != 0:
     callback_send_messages("AnonSurf Status", "AnonSurf is not running. Can't restart it", 2)
     return
-  if ansurf_core_restart(sudo) == 0:
+  let restart_result = ansurf_core_restart(sudo)
+  if restart_result == 0:
     if getServStatus("anonsurfd") == 0:
       callback_send_messages("AnonSurf Status", "AnonSurf is restarted", 0)
       # if getServStatus("tor") == 0:
@@ -68,6 +69,8 @@ proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
       #   callback_send_messages("Tor Status", "Tor is not running", 2)
     else:
       callback_send_messages("AnonSurf Status", "AnonSurf failed to start", 2)
+  elif restart_result == 255:
+    discard
   else:
     callback_send_messages("AnonSurf Restart", "AnonSurf failed to restart", 2)
 
