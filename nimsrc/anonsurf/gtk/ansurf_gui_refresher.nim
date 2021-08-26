@@ -1,29 +1,9 @@
 import gintro / gtk
 import ansurf_objects
-# import .. / .. / utils / dnsutils
-# import status
-# import .. / actions / actMainPage
-# import images
-# import .. / displays / noti
-# import strutils
-
-type
-  MainObjs* = ref object
-    btnRun*: Button
-    btnID*: Button
-    btnDetail*: Button
-    btnStatus*: Button
-    btnIP*: Button
-    lDetails*: Label
-    imgStatus*: Image
-    btnRestart*: Button
-  DetailObjs* = ref object
-    lblServices*: Label
-    lblPorts*: Label
-    lblDns*: Label
-    lblBoot*: Label
-    btnBoot*: Button
-    imgBoot*: Image
+import ansurf_icons
+import ansurf_get_status
+import strutils
+import .. / cores / commons / dns_utils
 
 
 proc updateDetail*(args: DetailObjs, myStatus: Status) =
@@ -184,12 +164,12 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
     args.btnID.setSensitive(false)
     args.btnStatus.setSensitive(false)
 
-  if worker.running:
-    args.btnIP.setSensitive(false)
-  else:
-    let finalAddr = channel.tryRecv()
-    if finalAddr.dataAvailable:
-      # channel.close()
-      worker.joinThread()
-      sendNotify($finalAddr.msg.thisAddr, $finalAddr.msg.isUnderTor, $finalAddr.msg.iconName)
-    args.btnIP.setSensitive(true)
+  # if worker.running:
+  #   args.btnIP.setSensitive(false)
+  # else:
+  #   let finalAddr = channel.tryRecv()
+  #   if finalAddr.dataAvailable:
+  #     # channel.close()
+  #     worker.joinThread()
+  #     # sendNotify($finalAddr.msg.thisAddr, $finalAddr.msg.isUnderTor, $finalAddr.msg.iconName)
+  #   args.btnIP.setSensitive(true)

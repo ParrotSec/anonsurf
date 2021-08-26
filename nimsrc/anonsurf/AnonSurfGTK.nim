@@ -2,33 +2,28 @@ import gintro / [gtk, glib, gobject]
 # import gtk / cores / [status, refresher, images]
 import cores / [handle_activities, handle_killapps]
 import gtk / widgets / [details_widget, main_widget, bottom_widget]
-import gtk / anonsurf_icons
+import gtk / [ansurf_icons, ansurf_gui_refresher]
 import gtk / gui_activities / [details_widget_activities, main_widget_activities, core_activities]
 import cores / handle_activities
-
-# type
-#   RefreshObj = ref object
-#     mainObjs: MainObjs
-#     detailObjs: DetailObjs
-#     stackObjs: Stack
+import gtk / [ansurf_get_status, ansurf_objects]
 
 
-# proc handleRefresh(args: RefreshObj): bool =
-#   #[
-#     Program is having 2 pages: main and detail
-#     This handleRefresh check which page is using
-#     so it update only 1 page for better performance
-#   ]#
-#   let
-#     freshStatus = getSurfStatus()
-#     # portStatus = getStatusPorts()
+proc handleRefresh(args: RefreshObj): bool =
+  #[
+    Program is having 2 pages: main and detail
+    This handleRefresh check which page is using
+    so it update only 1 page for better performance
+  ]#
+  let
+    freshStatus = getSurfStatus()
+    # portStatus = getStatusPorts()
 
-#   if args.stackObjs.getVisibleChildName == "main":
-#     updateMain(args.mainObjs, freshStatus)
-#   else:
-#     updateDetail(args.detailObjs, freshStatus)
+  if args.stackObjs.getVisibleChildName == "main":
+    updateMain(args.mainObjs, freshStatus)
+  else:
+    updateDetail(args.detailObjs, freshStatus)
 
-#   return SOURCE_CONTINUE
+  return SOURCE_CONTINUE
 
 
 proc createArea(boxMainWindow: Box) =
@@ -83,39 +78,39 @@ proc createArea(boxMainWindow: Box) =
 
   boxMainWindow.showAll()
   
-  # var
-  #   mainArgs = MainObjs(
-  #     btnRun: btnStart,
-  #     btnID: btnChangeID,
-  #     btnDetail: btnShowDetails,
-  #     btnStatus: btnShowStatus,
-  #     btnIP: btnCheckIP,
-  #     lDetails: labelDetails,
-  #     btnRestart: btnRestart,
-  #     imgStatus: imgStatus,
-  #   )
-  #   detailArgs = DetailObjs(
-  #     lblServices: labelDaemons,
-  #     lblPorts: labelPorts,
-  #     lblDns: labelDNS,
-  #     lblBoot: labelStatusBoot,
-  #     btnBoot: btnBoot,
-  #     imgBoot: imgStatusBoot
-  #   )
-  #   refresher = RefreshObj(
-  #     mainObjs: mainArgs,
-  #     detailObjs: detailArgs,
-  #     stackObjs: mainStack,
-  #   )
+  var
+    mainArgs = MainObjs(
+      btnRun: btnStart,
+      btnID: btnChangeID,
+      btnDetail: btnShowDetails,
+      btnStatus: btnShowStatus,
+      btnIP: btnCheckIP,
+      lDetails: labelDetails,
+      btnRestart: btnRestart,
+      imgStatus: imgStatus,
+    )
+    detailArgs = DetailObjs(
+      lblServices: labelDaemons,
+      lblPorts: labelPorts,
+      lblDns: labelDNS,
+      lblBoot: labelStatusBoot,
+      btnBoot: btnBoot,
+      imgBoot: imgStatusBoot
+    )
+    refresher = RefreshObj(
+      mainObjs: mainArgs,
+      detailObjs: detailArgs,
+      stackObjs: mainStack,
+    )
 
   # Load latest status when start program
-  # let
-  #   atStartStatus = getSurfStatus()
-  #   # atStartPorts = getStatusPorts()
-  # updateMain(mainArgs, atStartStatus)
-  # updateDetail(detailArgs, atStartStatus)
+  let
+    atStartStatus = getSurfStatus()
+    # atStartPorts = getStatusPorts()
+  updateMain(mainArgs, atStartStatus)
+  updateDetail(detailArgs, atStartStatus)
 
-  # discard timeoutAdd(200, handleRefresh, refresher)
+  discard timeoutAdd(200, handleRefresh, refresher)
 
 
 proc main =

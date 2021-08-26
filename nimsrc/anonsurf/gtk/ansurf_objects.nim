@@ -32,3 +32,10 @@ type
     isDNSPort*: bool
     isSocksPort*: bool
     isTransPort*: bool
+#   MyIP* = object
+#     thisAddr*: string
+#     isUnderTor*: string
+#     iconName*: string
+# var
+#   worker*: system.Thread[void]
+#   channel*: Channel[MyIP]

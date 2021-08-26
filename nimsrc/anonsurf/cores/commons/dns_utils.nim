@@ -1,6 +1,6 @@
 import os
 import strutils
-import services
+import services_status
 
 
 const
