@@ -1,5 +1,4 @@
 import gintro / [gtk, glib, gobject]
-# import gtk / cores / [status, refresher, images]
 import cores / [handle_activities, handle_killapps]
 import gtk / widgets / [details_widget, main_widget, bottom_widget]
 import gtk / [ansurf_icons, ansurf_gui_refresher]
@@ -16,7 +15,6 @@ proc handleRefresh(args: RefreshObj): bool =
   ]#
   let
     freshStatus = getSurfStatus()
-    # portStatus = getStatusPorts()
 
   if args.stackObjs.getVisibleChildName == "main":
     updateMain(args.mainObjs, freshStatus)
