@@ -47,12 +47,14 @@ proc ansurf_acts_handle_stop*(sudo: string, callback_kill_apps, callback_send_me
     callback_send_messages("AnonSurf Status", "AnonSurf is not running. Can't stop it", 2)
     return
 
-  if ansurf_core_stop(sudo) == 0:
+  let stop_status = ansurf_core_stop(sudo)
+  if stop_status == 0:
     callback_send_messages("AnonSurf Stop", "AnonSurf stopped", 0)
+    callback_kill_apps(callback_send_messages)
+  elif stop_status == 255:
+    discard
   else:
     callback_send_messages("AnonSurf Stop", "AnonSurf failed to stop", 2)
-  
-  callback_kill_apps(callback_send_messages)
 
 
 proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
