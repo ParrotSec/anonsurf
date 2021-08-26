@@ -1,7 +1,7 @@
 import random
 import strutils
 import osproc
-import commons / parse_config
+import parse_config
 
 randomize()
 

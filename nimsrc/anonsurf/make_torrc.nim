@@ -1,4 +1,4 @@
-import cores / config_generator
+import cores / commons / config_generator
 import os
 
 const

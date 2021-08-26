@@ -1,5 +1,5 @@
 import killapps / [kill_apps_cli, kill_apps_gtk, kill_apps_dialog]
-import ansurf_types
+import commons / ansurf_types
 
 
 proc init_cli_askkill*(is_desktop: bool): callback_kill_apps =

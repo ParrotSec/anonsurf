@@ -1,5 +1,5 @@
 import gintro / gtk
-import .. / cores / ansurf_types
+import .. / cores / commons / ansurf_types
 
 
 type

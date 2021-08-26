@@ -1,5 +1,5 @@
 import gintro / [gtk, gobject]
-import .. / ansurf_types
+import .. / commons / ansurf_types
 import kill_apps_activities
 
 
