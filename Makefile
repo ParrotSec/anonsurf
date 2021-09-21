@@ -28,7 +28,7 @@ build:
 install:
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/usr/lib/anonsurf/
-	mkdir -p $(DESTDIR)/usr/bin/anonsurf/
+	mkdir -p $(DESTDIR)/usr/bin/
 	mkdir -p $(DESTDIR)/usr/share/applications/
 	mkdir -p $(DESTDIR)/lib/systemd/system/
 	cp bin/anonsurf $(DESTDIR)/usr/bin/anonsurf
