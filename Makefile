@@ -1,4 +1,13 @@
-all: build install
+os_name = "$(shell cat /etc/os-release | grep "^ID=" | cut -d = -f 2)"
+
+
+all:
+	if [ os_name == "parrot" ]; then \
+		build-parrot; \
+	else \
+		build\
+	fi
+	install
 
 clean:
 	rm -rf bin
@@ -44,15 +53,15 @@ install:
 	cp daemon/anondaemon $(DESTDIR)/usr/lib/anonsurf/anondaemon
 
 	# Copy launchers
-	ifeq ($(shell cat /etc/os-release | grep "^ID=" | cut -d = -f 2), "parrot")
-		cp launchers/anon-change-identity.desktop $(DESTDIR)/usr/share/applications/
-		cp launchers/anon-surf-start.desktop $(DESTDIR)/usr/share/applications/
-		cp launchers/anon-surf-stop.desktop $(DESTDIR)/usr/share/applications/
-		cp launchers/anon-check-ip.desktop $(DESTDIR)/usr/share/applications/
-		cp launchers/anon-gui.desktop $(DESTDIR)/usr/share/applications/
-	else
-		cp launchers/non-native/*.desktop $(DESTDIR)/usr/share/applications/
-	endif
+	if [ os_name == "parrot" ]; then \
+		cp launchers/anon-change-identity.desktop $(DESTDIR)/usr/share/applications/ \
+		cp launchers/anon-surf-start.desktop $(DESTDIR)/usr/share/applications/ \
+		cp launchers/anon-surf-stop.desktop $(DESTDIR)/usr/share/applications/ \
+		cp launchers/anon-check-ip.desktop $(DESTDIR)/usr/share/applications/ \
+		cp launchers/anon-gui.desktop $(DESTDIR)/usr/share/applications/ \
+	else \
+		cp launchers/non-native/*.desktop $(DESTDIR)/usr/share/applications/ \
+	fi
 
 	# Copy configs
 	cp configs/* $(DESTDIR)/etc/anonsurf/.
