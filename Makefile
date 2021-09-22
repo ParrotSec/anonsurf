@@ -7,11 +7,16 @@ clean:
 	rm -rf bin
 
 uninstall:
+	# Remove config files
 	rm -rf /etc/anonsurf/
+	# Remove daemon scripts and some other binaries
 	rm -rf /usr/lib/anonsurf/
+	# Remove binaries
 	rm /usr/bin/anonsurf
 	rm /usr/bin/anonsurf-gtk
+	# Remove systemd unit
 	rm /lib/systemd/system/anonsurfd.service
+	# Remove launchers
 	rm /usr/share/applications/anonsurf*.desktop
 
 build-parrot:
