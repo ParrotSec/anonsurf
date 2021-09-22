@@ -6,7 +6,10 @@ clean:
 uninstall:
 	rm -rf /etc/anonsurf/
 	rm -rf /usr/lib/anonsurf/
-	rm $(DESTDIR)/usr/bin/anonsurf $(DESTDIR)/usr/bin/anonsurf-gtk $(DESTDIR)/lib/systemd/system/anonsurfd.service $(DESTDIR)/usr/share/applications/anonsurf*.desktop
+	rm /usr/bin/anonsurf
+	rm /usr/bin/anonsurf-gtk
+	rm /lib/systemd/system/anonsurfd.service
+	rm /usr/share/applications/anonsurf*.desktop
 
 build-parrot:
 	# Compile binary on parrot's platform. libnim-gintro-dev is required. Developed with version 0.8.0
@@ -41,7 +44,7 @@ install:
 	cp daemon/anondaemon $(DESTDIR)/usr/lib/anonsurf/anondaemon
 
 	# Copy launchers
-	ifeq ($(cat /etc/os-release | grep "^ID=" | cut -d = -f 2), "parrot")
+	ifeq ($(shell cat /etc/os-release | grep "^ID=" | cut -d = -f 2), "parrot")
 		cp launchers/anon-change-identity.desktop $(DESTDIR)/usr/share/applications/
 		cp launchers/anon-surf-start.desktop $(DESTDIR)/usr/share/applications/
 		cp launchers/anon-surf-stop.desktop $(DESTDIR)/usr/share/applications/
