@@ -41,7 +41,7 @@ install:
 	cp daemon/anondaemon $(DESTDIR)/usr/lib/anonsurf/anondaemon
 
 	# Copy launchers
-	if [ $(cat /etc/os-release | grep "^ID=" | cut -d = -f 2) == "parrot" ]; then
+	ifeq ($(cat /etc/os-release | grep "^ID=" | cut -d = -f 2), "parrot")
 		cp launchers/anon-change-identity.desktop $(DESTDIR)/usr/share/applications/
 		cp launchers/anon-surf-start.desktop $(DESTDIR)/usr/share/applications/
 		cp launchers/anon-surf-stop.desktop $(DESTDIR)/usr/share/applications/
@@ -49,10 +49,10 @@ install:
 		cp launchers/anon-gui.desktop $(DESTDIR)/usr/share/applications/
 	else
 		cp launchers/non-native/*.desktop $(DESTDIR)/usr/share/applications/
-	fi
+	endif
 
 	# Copy configs
 	cp configs/* $(DESTDIR)/etc/anonsurf/.
-	
+
 	# Copy daemon service
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/anonsurfd.service
