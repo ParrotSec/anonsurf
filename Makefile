@@ -26,14 +26,33 @@ build:
 	nim c --out:bin/anonsurf -d:release nimsrc/anonsurf/AnonSurfCli.nim
 
 install:
+	# Create all folders
 	mkdir -p $(DESTDIR)/etc/anonsurf/
 	mkdir -p $(DESTDIR)/usr/lib/anonsurf/
 	mkdir -p $(DESTDIR)/usr/bin/
 	mkdir -p $(DESTDIR)/usr/share/applications/
 	mkdir -p $(DESTDIR)/lib/systemd/system/
+
+	# Copy binaries to system
 	cp bin/anonsurf $(DESTDIR)/usr/bin/anonsurf
 	cp bin/anonsurf-gtk $(DESTDIR)/usr/bin/anonsurf-gtk
-	cp launchers/non-native/*.desktop $(DESTDIR)/usr/share/applications/
+	cp bin/dnstool $(DESTDIR)/usr/bin/dnstool
+	cp bin/make-torrc $(DESTDIR)/usr/lib/anonsurf/make-torrc
 	cp daemon/anondaemon $(DESTDIR)/usr/lib/anonsurf/anondaemon
+
+	# Copy launchers
+	if [ $(cat /etc/os-release | grep "^ID=" | cut -d = -f 2) == "parrot" ]; then
+		cp launchers/anon-change-identity.desktop $(DESTDIR)/usr/share/applications/
+		cp launchers/anon-surf-start.desktop $(DESTDIR)/usr/share/applications/
+		cp launchers/anon-surf-stop.desktop $(DESTDIR)/usr/share/applications/
+		cp launchers/anon-check-ip.desktop $(DESTDIR)/usr/share/applications/
+		cp launchers/anon-gui.desktop $(DESTDIR)/usr/share/applications/
+	else
+		cp launchers/non-native/*.desktop $(DESTDIR)/usr/share/applications/
+	fi
+
+	# Copy configs
 	cp configs/* $(DESTDIR)/etc/anonsurf/.
+	
+	# Copy daemon service
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/anonsurfd.service
