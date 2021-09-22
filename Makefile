@@ -5,7 +5,7 @@ all:
 	if [ os_name == "parrot" ]; then \
 		build-parrot; \
 	else \
-		build\
+		build; \
 	fi
 	install
 
@@ -54,13 +54,13 @@ install:
 
 	# Copy launchers
 	if [ os_name == "parrot" ]; then \
-		cp launchers/anon-change-identity.desktop $(DESTDIR)/usr/share/applications/ \
-		cp launchers/anon-surf-start.desktop $(DESTDIR)/usr/share/applications/ \
-		cp launchers/anon-surf-stop.desktop $(DESTDIR)/usr/share/applications/ \
-		cp launchers/anon-check-ip.desktop $(DESTDIR)/usr/share/applications/ \
-		cp launchers/anon-gui.desktop $(DESTDIR)/usr/share/applications/ \
+		cp launchers/anon-change-identity.desktop $(DESTDIR)/usr/share/applications/; \
+		cp launchers/anon-surf-start.desktop $(DESTDIR)/usr/share/applications/; \
+		cp launchers/anon-surf-stop.desktop $(DESTDIR)/usr/share/applications/; \
+		cp launchers/anon-check-ip.desktop $(DESTDIR)/usr/share/applications/; \
+		cp launchers/anon-gui.desktop $(DESTDIR)/usr/share/applications/; \
 	else \
-		cp launchers/non-native/*.desktop $(DESTDIR)/usr/share/applications/ \
+		cp launchers/non-native/*.desktop $(DESTDIR)/usr/share/applications/; \
 	fi
 
 	# Copy configs
