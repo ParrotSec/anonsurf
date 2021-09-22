@@ -6,3 +6,4 @@ Exec=/usr/bin/anonsurf stop
 Comment=Routes all internet packets/traffic through Tor
 Name=Stop AnonSurf daemon
 Categories=Network;
+Icon=anonsurf
