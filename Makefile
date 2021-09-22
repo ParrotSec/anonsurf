@@ -1,13 +1,7 @@
 os_name = "$(shell cat /etc/os-release | grep "^ID=" | cut -d = -f 2)"
 
 
-all:
-	if [ os_name == "parrot" ]; then \
-		build-parrot; \
-	else \
-		build; \
-	fi
-	install
+all: build install
 
 clean:
 	rm -rf bin
