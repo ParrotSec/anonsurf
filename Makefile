@@ -52,7 +52,7 @@ install:
 	cp daemon/anondaemon $(DESTDIR)/usr/lib/anonsurf/anondaemon
 
 	# Copy launchers
-	if [ os_name == "parrot" ]; then \
+	if [ os_name = "parrot" ]; then \
 		cp launchers/anon-change-identity.desktop $(DESTDIR)/usr/share/applications/; \
 		cp launchers/anon-surf-start.desktop $(DESTDIR)/usr/share/applications/; \
 		cp launchers/anon-surf-stop.desktop $(DESTDIR)/usr/share/applications/; \
