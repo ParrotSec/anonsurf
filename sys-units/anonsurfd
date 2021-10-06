@@ -1,22 +1,11 @@
 #!/bin/bash
 
-### BEGIN INIT INFO
-# Provides:          anonsurf
-# Required-Start:
-# Required-Stop:
-# Should-Start:
-# Default-Start:
-# Default-Stop:
-# Short-Description: Transparent Proxy through TOR.
 ### END INIT INFO
 #
 # Devs:
 # Lorenzo 'Palinuro' Faletra <palinuro@parrotsec.org>
 # Lisetta 'Sheireen' Ferrero <sheireen@autistiche.org>
 # Francesco 'Mibofra' Bonanno <mibofra@parrotsec.org>
-#
-# Maintainer:
-# Nong Hoang 'DmKnght' Tu <dmknght@parrotsec.org>
 #
 # Extended:
 # Daniel 'Sawyer' Garcia <dagaba13@gmail.com>
@@ -36,16 +25,52 @@
 # along with Parrot Security OS. If not, see <http://www.gnu.org/licenses/>.
 
 # THIS IS SYSTEM UNIT FOR SYSVINIT
+# The script is made with apache2's init.d script as example
+PIDFILE="/var/run/anonsurf.pid"
+
+do_start() {
+	# Return
+	#   status code of starting anondaemon start
+	#   1 if anondaemon is started
+	if [ -f "$PIDFILE" ]; then
+		return 1
+	else
+		/usr/lib/anonsurf/anondaemon start
+		return $?
+	fi
+}
+
+
+do_stop() {
+		# Return
+	#   status code of starting anondaemon start
+	#   1 if anondaemon is not started
+	if [ -e "$PIDFILE" ]; then
+		return 1
+	else
+		/usr/lib/anonsurf/anondaemon stop
+		return $?
+	fi
+}
+
+
+do_restart() {
+	# TODO if anondaemon is not started, return -1, else
+	/usr/lib/anonsurf/anondaemon restart
+}
 
 case "$1" in
 	start)
-		/usr/lib/anonsurf/anondaemon start
+		do_start
 	;;
 	stop)
-		/usr/lib/anonsurf/anondaemon stop
+		do_stop
 	;;
 	restart)
-		/usr/lib/anonsurf/anondaemon restart
+		do_restart
+	;;
+	status)
+		status_of_proc /usr/lib/anonsurf/anondaemon
 	;;
 	*)
 esac
