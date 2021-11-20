@@ -138,7 +138,6 @@ proc handleMakeDNS(dnsAddr: seq[string]) =
     for address in dnsAddr:
       dns_to_write &= "nameserver " & address & "\n"
     # Remove old resolv.conf
-    # TODO add append addresses
     removeFile(sysResolvConf)
     # Remove old addresses in tail
     writeTail("")
