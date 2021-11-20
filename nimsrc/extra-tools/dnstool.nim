@@ -1,8 +1,8 @@
 import os
-import osproc
 import strutils
 import net
-import .. / anonsurf / cores / commons / dns_utils
+import sequtils
+import .. / anonsurf / cores / commons / [dns_utils, services_status]
 
 const
   sysResolvConf = "/etc/resolv.conf"
@@ -10,6 +10,12 @@ const
   runResolvConf = "/run/resolvconf/resolv.conf"
   # dhcpResolvConf = "/run/resolvconf/interface/NetworkManager"
   tailResolvConf = "/etc/resolvconf/resolv.conf.d/tail"
+
+
+proc getResolvConfAddresses(): seq[string] =
+  for line in lines(sysResolvConf):
+    if line.startsWith("nameserver"):
+      result.add(line.split(" ")[1])
 
 
 proc showHelpCmd(cmd = "dnstool", keyword = "help", args = "", descr = "") =
@@ -66,43 +72,17 @@ proc help() =
   showHelpCmd(cmd = "sudo " & progName, keyword = "create-backup", descr = "Make backup for current /etc/resolv.conf")
   showHelpCmd(cmd = "sudo " & progName, keyword = "restore-backup", descr = "Restore backup of /etc/resolv.conf")
   stdout.write("\nAddress could be:\n")
-  showHelpDesc(keyword = "opennic", descr = "OpenNIC address[es]")
-  showHelpDesc(keyword = "parrot", descr = "ParrotOS DNS address[es]")
   showHelpDesc(keyword = "dhcp", descr = "Address[es] of current DHCP client.")
   showHelpDesc(descr = "Any IPv4 or IPv6 address[es]")
-  stdout.write("\nStatic and Dynamic:\n")
-  showHelpDesc(keyword = "dynamic", descr = sysResolvConf & " is a symlink of " & runResolvConf)
-  showHelpDesc(keyword = "static", descr = sysResolvConf & " is not a symlink and won't be changed after reboot.")
+  stdout.write("\nStatic file and Symlink:\n")
+  showHelpDesc(keyword = "Symlink", descr = sysResolvConf & " is a symlink of " & runResolvConf)
+  showHelpDesc(keyword = "Static file", descr = sysResolvConf & " is not a symlink and won't be changed after reboot.")
   stdout.write("\n")
 
 
 proc printErr(msg: string) =
   # Print error with color red
   echo "[\e[31m!\e[0m] \e[31m", msg, "\e[0m"
-
-
-proc getParrotDNS(): string =
-  #[
-    Use host command to automatically get ip from director.geo.parrot.sh
-    FIXME get addresses when dns is empty
-    TODO use native libs instead of using subprocess
-  ]#
-  try:
-    let output = execProcess("/usr/bin/host director.geo.parrot.sh")
-    var allIP = ""
-    for line in output.split("\n"):
-      if line.startsWith("director.geo.parrot.sh has "):
-        allIP &= "nameserver " & line.split(" ")[^1] & "\n"
-      else:
-        discard
-    return allIP
-  except:
-    printErr("Failed to get DNS addresses from Parrot selector server")
-    return ""
-
-
-proc getOpenNIC(): string =
-  result = "nameserver 185.121.177.177\nnameserver 169.239.202.202\n"
 
 
 # proc getDhcpDNS(): string =
@@ -152,16 +132,17 @@ proc makeDHCPDNS() =
     printErr("Failed to generate DHCP addresses")
 
 
-proc handleMakeDNS(dnsAddr: string) =
-  if dnsAddr == "":
-    stderr.write("[!] Address is empty. Skip!\n")
-    return
+proc handleMakeDNS(dnsAddr: seq[string]) =
   try:
+    var dns_to_write = ""
+    for address in dnsAddr:
+      dns_to_write &= "nameserver " & address & "\n"
     # Remove old resolv.conf
+    # TODO add append addresses
     removeFile(sysResolvConf)
     # Remove old addresses in tail
     writeTail("")
-    writeResolv(dnsAddr)
+    writeResolv(dns_to_write)
   except:
     printErr("Failed to write settings to resolv.conf")
 
@@ -227,43 +208,28 @@ proc showStatus() =
   #[
     Get current settings of DNS on system
   ]#
-  let statusResult = dnsStatusCheck()
-  var
-    dnsType = ""
-    dnsAddr = ""
 
-  case statusResult
-  of STT_DNS_TOR:
-    stdout.write("[\e[32mSTATUS\e[0m] AnonSurf DNS\n")
-  of ERROR_DNS_LOCALHOST:
-    stderr.write("[\e[31mERROR\e[0m] Local host\n")
-  of ERROR_FILE_NOT_FOUND:
-    stderr.write("[\e[31mERROR\e[0m] resolv.conf not found\n")
-  of ERROR_FILE_EMPTY:
-    stderr.write("[\e[31mERROR\e[0m] resolv.conf is empty\n")
-  of ERROR_UNKNOWN:
-    stderr.write("[\e[31mERROR\e[0m] Runtime error: Unknown problem\n")
-  of 10 .. 13:
-    dnsType = "Static"
-  of 20 .. 23:
-    dnsType = "Dynamic"
-  else:
-    discard
-  
-  case statusResult mod 10
-  of 0:
-    dnsAddr = "DHCP"
-  of 1:
-    dnsAddr = "OpenNIC"
-  of 2:
-    dnsAddr = "Custom"
-  of 3:
-    dnsAddr = "OpenNIC + Custom"
-  else:
-    discard
+  if fileExists(sysResolvConf):
+    let resolvFileType = if getFileInfo(sysResolvConf).kind == pcLinkToFile: "Symlink" else: "Static file"
+    stdout.write("[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & resolvFileType & "\e[0m\n")
+    
+    let addresses = getResolvConfAddresses()
 
-  if dnsType != "":
-    echo "[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & dnsType & "\e[0m\n- \e[31mAddress\e[0m: \e[36m" & dnsAddr & "\e[0m"
+    if addresses == []:
+      stderr.write("[\e[31mDNS error\e[0m] resolv.conf is empty\n")
+    elif addresses == ["127.0.0.1"] or addresses == ["localhost"]:
+      # If anonsurf is running
+      if getServStatus("anonsurfd") == 0:
+        stdout.write("- \e[31mAddress\e[0m: Under Tor network\n")
+      else:
+        stderr.write("[\e[31mDNS error\e[0m] Local host\n")
+    else:
+      stdout.write("- \e[31mAddress\e[0m:\n")
+      for address in addresses:
+        stdout.write("  nameserver \e[95m" & address & "\e[0m\n")
+
+  else:
+    stderr.write("[\e[31mDNS error\e[0m] File \e[31mresolv.conf\e[0m not found\n")
 
 
 proc main() =
@@ -288,15 +254,17 @@ proc main() =
         makeDHCPDNS()
       else:
         var
-          dnsAddr = ""
+          dnsAddr: seq[string]
         for i in 2 .. paramCount():
-          if paramStr(i) == "opennic":
-            dnsAddr &= getOpenNIC()
-          elif paramStr(i) == "parrot":
-            dnsAddr &= getParrotDNS()
-          elif isIpAddress(paramStr(i)):
-            dnsAddr &= "nameserver " & paramStr(i) & "\n"
-        handleMakeDNS(dnsAddr)
+          if paramStr(i) == "--add":
+            let current_addresses = getResolvConfAddresses()
+            if current_addresses != [] and current_addresses != ["localhost"] and current_addresses != ["127.0.0.1"]:
+              for address in getResolvConfAddresses():
+                dnsAddr = dnsAddr.concat(current_addresses)
+          else:
+            dnsAddr.add(paramStr(i))
+
+        handleMakeDNS(deduplicate(dnsAddr))
       showStatus()
     else:
       help()
