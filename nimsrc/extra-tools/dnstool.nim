@@ -266,6 +266,7 @@ proc main() =
 
         handleMakeDNS(deduplicate(dnsAddr))
       showStatus()
+      stdout.write("\n[*] Applied DNS settings\n")
     else:
       help()
       stderr.write("[!] Invalid option\n")
