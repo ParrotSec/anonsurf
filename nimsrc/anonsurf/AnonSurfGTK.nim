@@ -1,7 +1,7 @@
 import gintro / [gtk, glib, gobject]
 import cores / handle_activities
 import gtk / widgets / [details_widget, main_widget, bottom_widget]
-import gtk / [ansurf_icons, ansurf_gui_refresher]
+import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_systray]
 import gtk / gui_activities / [details_widget_activities, main_widget_activities, core_activities]
 import cores / handle_activities
 import gtk / [ansurf_get_status, ansurf_objects]
@@ -121,11 +121,15 @@ proc main =
   let
     mainBoard = newWindow()
     boxMainWindow = newBox(Orientation.vertical, 3)
+    sysTrayIcon = newStatusIcon()
   
   mainBoard.setResizable(false)
   mainBoard.title = "AnonSurf GUI"
   mainBoard.setIcon(surfIcon)
   mainBoard.setPosition(WindowPosition.center)
+
+  sysTrayIcon.setFromPixbuf(surfIcon)
+  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu)
 
   createArea(boxMainWindow)
 
