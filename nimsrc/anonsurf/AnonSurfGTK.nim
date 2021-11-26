@@ -121,19 +121,23 @@ proc main =
   let
     mainBoard = newWindow()
     boxMainWindow = newBox(Orientation.vertical, 3)
-    sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
+    # sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
   
   mainBoard.setResizable(false)
   mainBoard.title = "AnonSurf GUI"
   mainBoard.setIcon(surfIcon)
   mainBoard.setPosition(WindowPosition.center)
 
-  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu)
+  # sysTrayIcon.connect("popup-menu", ansurf_right_click_menu)
+  # sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
 
   createArea(boxMainWindow)
 
   mainBoard.add(boxMainWindow)
   mainBoard.setBorderWidth(3)
+  mainBoard.connect("destroy", ansurf_gtk_do_stop)
+  # https://stackoverflow.com/a/8241865
+  # mainBoard.connect("window-state-event", ansurf_gtk_on_window_state_event, sysTrayIcon)
 
   mainBoard.show()
   gtk.main()
