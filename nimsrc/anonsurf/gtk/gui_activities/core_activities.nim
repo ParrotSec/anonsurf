@@ -22,3 +22,8 @@ proc ansurf_gtk_do_stop*(w: Window) =
     Close program by click on title bar
   ]#
   mainQuit()
+  # discard w.hideOnDelete()
+
+
+proc ansurf_gtk_on_window_state_event*(w: Window) =
+  w.hide()
