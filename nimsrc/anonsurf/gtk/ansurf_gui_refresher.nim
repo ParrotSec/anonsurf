@@ -57,10 +57,10 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#FF0000\">Can't bind ports</span></b>")
       elif szErr == 2:
         # Give error msg with red color
-        args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#FF0000\">Error on " & join(onErrPorts, ", ") & "</span></b>")
+        args.lblPorts.setMarkup(cstring("Ports:  <b><span background=\"#333333\" foreground=\"#FF0000\">Error on " & join(onErrPorts, ", ") & "</span></b>"))
       else:
         # Give error msg with red color
-        args.lblPorts.setMarkup("Ports:  <b<span background=\"#333333\" foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>")
+        args.lblPorts.setMarkup(cstring("Ports:  <b<span background=\"#333333\" foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>"))
 
   elif myStatus.isAnonsurfSErvice == 3:
     # Deactivated cyan color
