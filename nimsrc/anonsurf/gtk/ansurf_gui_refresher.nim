@@ -172,5 +172,5 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
   if ansurf_workers_myip.running:
     args.btnIP.setSensitive(false)
   else:
-    ansurf_workers_myip.joinThread()
+    # ansurf_workers_myip.joinThread()
     args.btnIP.setSensitive(true)
