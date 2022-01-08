@@ -34,6 +34,7 @@ proc checkDNSServers(path: string): int =
   for line in lines(path):
     if line.startsWith("nameserver"):
       length += 1
+      # FIXME random crash here
       let dnsName = line.split(" ")[1]
       # if current DNS is provided by DHCP server -> dynamic only
       # if dnsName in dnsDHCP:
