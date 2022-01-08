@@ -52,5 +52,3 @@ proc gtk_send_msg*(title, body: string, code: int) =
   discard init("AnonSurf GUI notification")
   let ipNotify = newNotification(title, body, cstring(icon_name))
   discard ipNotify.show()
-  discard ipNotify.close()
-  uninit()
