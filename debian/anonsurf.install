@@ -7,5 +7,5 @@ configs/bridgerc.base etc/anonsurf
 bin/make-torrc usr/lib/anonsurf/
 bin/dnstool usr/bin/
 
-daemon/anondaemon usr/lib/anonsurf/
+scripts/* usr/lib/anonsurf/
 sys-units/anonsurfd.service lib/systemd/system/
