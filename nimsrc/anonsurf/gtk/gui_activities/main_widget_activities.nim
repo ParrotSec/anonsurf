@@ -7,15 +7,15 @@ import .. / .. / cores / killapps / kill_apps_dialog
 
 
 proc do_anonsurf_start(cb_send_msg: proc) {.gcsafe.} =
-  ansurf_acts_handle_start("gksudo", cb_send_msg)
+  ansurf_acts_handle_start("menuexec", cb_send_msg)
 
 
 # proc do_anonsurf_stop(cb_send_msg: proc) {.gcsafe.} =
-#   ansurf_acts_handle_stop("gksudo", cb_send_msg)
+#   ansurf_acts_handle_stop("menuexec", cb_send_msg)
 
 
 proc do_anonsurf_restart(cb_send_msg: proc) {.gcsafe.} =
-  ansurf_acts_handle_restart("gksudo", cb_send_msg)
+  ansurf_acts_handle_restart("menuexec", cb_send_msg)
 
 
 proc do_anonsurf_changeid(cb_send_msg: proc) {.gcsafe.} =
@@ -30,11 +30,11 @@ proc ansurf_gtk_do_start_stop*(b: Button, cb_send_msg: proc) =
   if b.label == "Start":
     # cb_kill_apps(cb_send_msg)
     dialog_kill_app(cb_send_msg)
-    # ansurf_acts_handle_start("gksudo", cb_send_msg)
+    # ansurf_acts_handle_start("menuexec", cb_send_msg)
     createThread(ansurf_workers_common, do_anonsurf_start, cb_send_msg)
   else:
     # createThread(ansurf_workers_common, do_anonsurf_stop, cb_send_msg)
-    ansurf_acts_handle_stop("gksudo", cb_send_msg)
+    ansurf_acts_handle_stop("menuexec", cb_send_msg)
     if getServStatus("anonsurfd") == 3:
       dialog_kill_app(cb_send_msg)
   # joinThread(ansurf_workers_common)
