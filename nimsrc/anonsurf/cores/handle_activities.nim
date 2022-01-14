@@ -7,7 +7,7 @@ import strutils
 
 proc cmd_init_sudo*(isDesktop: bool): string =
   if isDesktop:
-    return "gksudo"
+    return "pkexec env DISPLAY=\"$DISPLAY\" XAUTHORITY=\"$XAUTHORITY\" "
   else:
     return "sudo"
 
