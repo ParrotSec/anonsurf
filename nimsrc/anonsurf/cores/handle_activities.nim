@@ -7,7 +7,7 @@ import strutils
 
 proc cmd_init_sudo*(isDesktop: bool): string =
   if isDesktop:
-    return "menuexec "
+    return "menuexecg "
   else:
     return "sudo"
 
