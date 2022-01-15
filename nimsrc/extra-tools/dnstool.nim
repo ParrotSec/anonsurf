@@ -173,6 +173,7 @@ proc mkBackup() =
       if getuid() == 0:
         try:
           copyFile(sysResolvConf, bakResolvConf)
+          echo "Backup file created at ", bakResolvConf
         except:
           printErr("Failed to create backup file for resolv.conf")
       else:
