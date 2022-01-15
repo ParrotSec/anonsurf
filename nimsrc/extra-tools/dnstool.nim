@@ -224,20 +224,24 @@ proc showStatus() =
     stdout.write("[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & resolvFileType & "\e[0m\n")
     
     let addresses = getResolvConfAddresses()
+    let is_surf_running = if getServStatus("anonsurfd") == 0: true  else: false
 
     if addresses == []:
       stderr.write("[\e[31mDNS error\e[0m] resolv.conf is empty\n")
-    elif addresses == ["127.0.0.1"] or addresses == ["localhost"]:
-      # If anonsurf is running
-      if getServStatus("anonsurfd") == 0:
-        stdout.write("- \e[31mAddress\e[0m: Under Tor network\n")
-      else:
-        stderr.write("[\e[31mDNS error\e[0m] Local host\n")
-    else:
-      stdout.write("- \e[31mAddress\e[0m:\n")
+    # If anonsurf is running. Check by status instead
+    elif is_surf_running:
+      stdout.write("- \e[31mAddress\e[0m: AnonSurf is running\n")
       for address in addresses:
-        stdout.write("  nameserver \e[95m" & address & "\e[0m\n")
-
+        if addresses == ["127.0.0.1"] or addresses == ["localhost"]:
+          stdout.write("  " & address & "\e[32mUsing Tor's DNS\e[0m\n")
+        else:
+          stdout.write("  " & address & "\e[31mNot a DNS server via Tor. This may cause information leak.\e[0m\n")
+    else:
+      for address in addresses:
+        if addresses == ["127.0.0.1"] or addresses == ["localhost"]:
+          stdout.write("  " & address & "\e[31mLocalHost. This may cause no internet access\e[0m\n")
+        else:
+          stdout.write("  " & address)
   else:
     stderr.write("[\e[31mDNS error\e[0m] File \e[31mresolv.conf\e[0m not found\n")
 
