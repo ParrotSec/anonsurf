@@ -231,15 +231,19 @@ proc showStatus() =
     # If anonsurf is running. Check by status instead
     elif is_surf_running:
       stdout.write("- \e[31mAddress\e[0m: AnonSurf is running\n")
+      var is_other_dns_addr = false
       for address in addresses:
-        if addresses == ["127.0.0.1"] or addresses == ["localhost"]:
+        if address == "127.0.0.1" or address == "localhost":
           stdout.write("  " & address & " \e[32mUsing Tor's DNS\e[0m\n")
         else:
-          stdout.write("  " & address & " \e[31mNot a DNS server via Tor. This may cause information leak.\e[0m\n")
+          is_other_dns_addr = true
+          stdout.write("  " & address & " \e[31mNot a Tor DNS server.\e[0m\n")
+      if is_other_dns_addr:
+        stderr.write("\e[31m\nDetected Non-Tor address[es]. This may cause information leaks.\e[0m\n")
     else:
       stdout.write("- \e[31mAddress\e[0m:\n")
       for address in addresses:
-        if addresses == ["127.0.0.1"] or addresses == ["localhost"]:
+        if address == "127.0.0.1" or address == "localhost":
           stdout.write("  " & address & " \e[31mLocalHost. This may cause no internet access\e[0m\n")
         else:
           stdout.write("  " & address & "\n")
