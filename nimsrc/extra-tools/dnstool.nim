@@ -170,7 +170,7 @@ proc mkBackup() =
     let resolvConfInfo = getFileInfo(sysResolvConf, followSymlink = false)
     # If resolv.conf is not a symlink (dynamic), we don't backup it
     if resolvConfInfo.kind != pcLinkToFile:
-      if getuid() != 0:
+      if getuid() == 0:
         try:
           copyFile(sysResolvConf, bakResolvConf)
         except:
