@@ -241,7 +241,7 @@ proc showStatus() =
         if addresses == ["127.0.0.1"] or addresses == ["localhost"]:
           stdout.write("  " & address & "\e[31mLocalHost. This may cause no internet access\e[0m\n")
         else:
-          stdout.write("  " & address)
+          stdout.write("  " & address & "\n")
   else:
     stderr.write("[\e[31mDNS error\e[0m] File \e[31mresolv.conf\e[0m not found\n")
 
