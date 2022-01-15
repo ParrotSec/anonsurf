@@ -10,7 +10,7 @@ proc ansurf_core_start*(sudo: string): int =
     Return: int: error code of systemctl commmand
   ]#
   const
-    command = "/usr/sbin/service anonsurfd start"
+    command = "service anonsurfd start"
   return execCmd(fmt"{sudo} {command}")
 
 
@@ -22,7 +22,7 @@ proc ansurf_core_stop*(sudo: string): int =
     Return: int: error code of systemctl commmand
   ]#
   const
-    command = "/usr/sbin/service anonsurfd stop"
+    command = "service anonsurfd stop"
   return execCmd(fmt"{sudo} {command}")
 
 
@@ -34,7 +34,7 @@ proc ansurf_core_restart*(sudo: string): int =
     Return: int: error code of systemctl commmand
   ]#
   const
-    command = "/usr/sbin/service anonsurfd restart"
+    command = "service anonsurfd restart"
   return execCmd(fmt"{sudo} {command}")
 
 
