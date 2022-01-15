@@ -237,6 +237,7 @@ proc showStatus() =
         else:
           stdout.write("  " & address & "\e[31mNot a DNS server via Tor. This may cause information leak.\e[0m\n")
     else:
+      stdout.write("- \e[31mAddress\e[0m:\n")
       for address in addresses:
         if addresses == ["127.0.0.1"] or addresses == ["localhost"]:
           stdout.write("  " & address & "\e[31mLocalHost. This may cause no internet access\e[0m\n")
