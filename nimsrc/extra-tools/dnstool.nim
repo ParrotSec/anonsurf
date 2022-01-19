@@ -83,7 +83,7 @@ proc help() =
 
 proc printErr(msg: string) =
   # Print error with color red
-  echo "[\e[31m!\e[0m] \e[31m", msg, "\e[0m"
+  echo "[\e[91m!\e[0m] \e[91m", msg, "\e[0m"
 
 
 # proc getDhcpDNS(): string =
@@ -221,34 +221,34 @@ proc showStatus() =
 
   if fileExists(sysResolvConf):
     let resolvFileType = if getFileInfo(sysResolvConf).kind == pcLinkToFile: "Symlink" else: "Static file"
-    stdout.write("[\e[32mSTATUS\e[0m]\n- \e[31mMethod\e[0m: \e[36m" & resolvFileType & "\e[0m\n")
+    stdout.write("[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m" & resolvFileType & "\e[0m\n")
     
     let addresses = getResolvConfAddresses()
     let is_surf_running = if getServStatus("anonsurfd") == 0: true  else: false
 
     if addresses == []:
-      stderr.write("[\e[31mDNS error\e[0m] resolv.conf is empty\n")
+      stderr.write("[\e[91mDNS error\e[0m] resolv.conf is empty\n")
     # If anonsurf is running. Check by status instead
     elif is_surf_running:
-      stdout.write("- \e[31mAddress\e[0m: AnonSurf is running\n")
+      stdout.write("- \e[91mAddress\e[0m: AnonSurf is running\n")
       var is_other_dns_addr = false
       for address in addresses:
         if address == "127.0.0.1" or address == "localhost":
           stdout.write("  " & address & " \e[32mUsing Tor's DNS\e[0m\n")
         else:
           is_other_dns_addr = true
-          stdout.write("  " & address & " \e[31mNot a Tor DNS server.\e[0m\n")
+          stdout.write("  " & address & " \e[91mNot a Tor DNS server.\e[0m\n")
       if is_other_dns_addr:
-        stderr.write("\e[31m\nDetected Non-Tor address[es]. This may cause information leaks.\e[0m\n")
+        stderr.write("\e[91m\nDetected Non-Tor address[es]. This may cause information leaks.\e[0m\n")
     else:
-      stdout.write("- \e[31mAddress\e[0m:\n")
+      stdout.write("- \e[91mAddress\e[0m:\n")
       for address in addresses:
         if address == "127.0.0.1" or address == "localhost":
-          stdout.write("  " & address & " \e[31mLocalHost. This may cause no internet access\e[0m\n")
+          stdout.write("  " & address & " \e[91mLocalHost. This may cause no internet access\e[0m\n")
         else:
           stdout.write("  " & address & "\n")
   else:
-    stderr.write("[\e[31mDNS error\e[0m] File \e[31mresolv.conf\e[0m not found\n")
+    stderr.write("[\e[91mDNS error\e[0m] File \e[91mresolv.conf\e[0m not found\n")
 
 
 proc main() =
