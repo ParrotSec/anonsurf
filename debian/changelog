@@ -1,3 +1,140 @@
+anonsurf (3.2.0+parrot1) parrot-updates; urgency=medium
+
+  [ Lorenzo Palinuro Faletra ]
+  * fix makefile
+
+  [ Nong Hoang Tu ]
+  * Change the way check status of process
+  * Add check system init is running
+  * Remove old bash scripts
+  * Create callback for cli and gtk to send msg
+  * First use callback for msg
+  * New code structure for development version
+  * add killapp code
+  * code beauty
+  * Use "UseBridges" instead of BridgeRelay
+  * New code structure
+  * Add simple handle kill apps
+  * sync changes
+  * sync new code structure
+  * Make the code work with new code structure
+  * Remove check init system
+  * Show pub IP to notify
+  * Make kill app works
+  * Remove old file
+  * Change box layout. Temp remove cancle
+  * Improve code structure and some function call
+  * add some code optimization and comments
+  * code clean
+  * Add kill app to cli
+  * Add kill_apps to gtk
+  * New surf version in banner
+  * Close ask_kill app after kill is done
+  * Dont show warn msg if kill apps == 1 (some process are not running)
+  * Change name of old code modules
+  * remove unused module
+  * prepare for new code structure
+  * first in development activities for main widget
+  * first code for details widget and other activities
+  * Add gitignore to ignore config files and binary files (don't delete it again Palinuro)
+  * Add activities
+  * restore icons module
+  * Fix and restore stop button
+  * Fix missing sudo args and add some more buttons to work
+  * Add boot buttons to work
+  * prepare for status refresh
+  * add refresher to work
+  * Added callback functions
+  * code clean and improve the init gtk_askkill
+  * Make threading works with functions
+  * multithreaded buttons for details page. Remove some comments
+  * Try to change kill app ask to dialog
+  * Improve logic of anonsurf check
+  * Check if anonsurf is cancelled by user instead
+  * Fix kill app issue when select don't kill
+  * Fix status and update some code
+  * Correct more status check
+  * Add status widget
+  * Fix kill app for cli
+  * Remove tor check when restart (need delay for accurate status)
+  * Remove old modules and rework make_torrc
+  * Fix old function call
+  * Don't display msg if user cancel restart
+  * code clean
+  * Only ask kill apps if anonsurf stopped okay
+  * Create sperate module for kill app for anonsurf-gtk Fix don't kill button
+  * Fix kill button doesn't close
+  * change code structure in cores for better display
+  * Remove unused lib
+  * Fix my ip button is not disabled
+  * Optimize code
+  * Remove multithread for enable / disable boot
+  * Restore threading (solved crash with help of arc)
+  * Add arc to build
+  * code clean
+  * code clean
+  * Change start / stop code structure
+  * remove unused arg callback
+  * Force remove after stop because of threading problem
+  * No longer set stop as multi threaded
+  * code clean
+  * Remove unessecary code
+  * Fix wrong destination
+  * Fix some makefile mistakes
+  * Use ifeq makefile instead of bash like
+  * Fix wrong bash execute syntax
+  * use if else bash like syntax
+  * add semicolor to if else commands
+  * add icons to non-native launchers
+  * restore old label "all"
+  * Add comments to uninstall
+  * fix stupid makefile comparision in condition
+  * Do not use absotelute path in .install files
+  * - New way to show status - Remove default OpenNIC and Parrot DNS - Add "--add" flag to let user not replace whole settings - update help banner with new removal
+  * add a line to show new setting is applied
+  * remove completed todo
+  * add first testing code of popup with right click
+  * Don't quit program when click exit on GUI
+  * actions now supports calling from systray icon as well
+  * tmp remove systray from code
+  * add some more todo code
+  * remove duplicate import
+  * use cstring for string concat. Fix some compile warnings from NIm 1.6
+  * Do close and uninit notify
+  * add joinThread
+  * remove MenuItem
+  * restore checkip threading
+  * don't join thread
+  * don't close and uninit msg
+  * Use gc:arc by default
+  * sync some small changes
+  * restore thread join
+  * remove -d:release for anonsurf gtk which causes crash
+  * Use -d:release and -d:useMalloc together
+  * remove -d:useMalloc
+  * change hardcoded kill apps to a bash script to kill
+  * Use posix access to check path permission
+  * add path of firefox-esr
+  * use pkexec instead of gksudo
+  * Use menu exec instead
+  * change version to 3.2.0
+  * remove firefox absolute path
+  * menuexec to menuexecg
+  * use getuid instead of access
+  * fix wrong getuid comparison
+  * add msg to tell user backup file was created
+  * shorter start service command to work with pkexec
+  * improve show status output
+  * fixx missing EOL
+  * add missing title when anonsurf is not running
+  * fix missing spacing when doing string concat
+  * Improve output message and fix comparision of current dns
+  * remove some old recommends
+  * light red for all output
+  * address to address[es]
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Fri, 21 Jan 2022 08:51:49 +0700
+
 anonsurf (3.1.9+parrot0) rolling; urgency=medium
 
   * Fix dns configuration issue when anonsurf is stopped.
