@@ -241,7 +241,7 @@ proc showStatus() =
       if is_other_dns_addr:
         stderr.write("\e[91m\nDetected Non-Tor address[es]. This may cause information leaks.\e[0m\n")
     else:
-      stdout.write("- \e[91mAddress\e[0m:\n")
+      stdout.write("- \e[91mAddress[es]\e[0m:\n")
       for address in addresses:
         if address == "127.0.0.1" or address == "localhost":
           stdout.write("  " & address & " \e[91mLocalHost. This may cause no internet access\e[0m\n")
