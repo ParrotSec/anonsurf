@@ -7,7 +7,11 @@ import strutils
 
 proc cmd_init_sudo*(isDesktop: bool): string =
   if isDesktop:
-    return "menuexecg "
+    let menuexecPath = findExe("menuexecg")
+    if not isEmptyOrWhitespace(menuexecPath):
+      return menuexecPath
+    else:
+      return "pkexec env DISPLAY=\"$DISPLAY\" XAUTHORITY=\"$XAUTHORITY\" "
   else:
     return "sudo"
 
