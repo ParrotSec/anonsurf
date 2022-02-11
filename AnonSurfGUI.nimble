@@ -1,6 +1,6 @@
 # Package
 
-version       = "3.2.0"
+version       = "3.2.1"
 author        = "DmKnght"
 description   = "A GUI for AnonSurf"
 license       = "LGPL-3.0"
@@ -11,5 +11,5 @@ bin           = @["AnonSurfGUI"]
 
 # Dependencies
 
-requires "nim >= 1.4.0"
+requires "nim >= 1.6.0"
 requires "gintro >= 0.8.0"
