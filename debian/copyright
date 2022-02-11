@@ -50,6 +50,11 @@ Copyright:
 License: LGPL-3.0
 
 Files:
+  icons/nyx-log.png
+Copyright: 2022, Dario "danterolle" Camonita
+License: LGPL-3.0
+
+Files:
   icons/boot-off.svg
   icons/boot-on.svg
 Copyright:
