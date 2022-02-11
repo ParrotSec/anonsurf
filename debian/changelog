@@ -1,3 +1,19 @@
+anonsurf (3.2.1+parrot1) parrot-updates; urgency=medium
+
+  * check if menuexecg exists, else use pkexec
+  * Show icon of about dialog in window list
+  * add icon of nyx to window list
+  * add license for icon
+  * Update version release and nim version
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Fri, 11 Feb 2022 16:57:14 +0700
+
+anonsurf (3.2.1+parrot0) parrot-updates; urgency=medium
+
+  * Add icons for status dialog and about dialog
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Fri, 11 Feb 2022 16:55:35 +0700
+
 anonsurf (3.2.0+parrot1) parrot-updates; urgency=medium
 
   [ Lorenzo Palinuro Faletra ]
