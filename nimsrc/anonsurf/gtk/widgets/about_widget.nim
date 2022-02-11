@@ -14,8 +14,11 @@ proc onClickAbout*(b: Button) =
   
   discard bufLoader.write(readImgLogo)
   discard bufLoader.close()
+
   let imgLogo: Pixbuf = bufLoader.getPixbuf()
+
   showAbout.setLogo(imgLogo)
+  showAbout.setIcon(imgLogo)
   showAbout.setProgramName("AnonSurf")
   showAbout.setVersion(surfVersion)
   showAbout.setArtists([
