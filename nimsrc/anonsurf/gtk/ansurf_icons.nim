@@ -74,9 +74,19 @@ proc aboutIconPixbuf(): Pixbuf =
   result = loadData.getPixbuf()
 
 
+proc nyxIconPixbuf(): Pixbuf =
+  const
+    imgData = staticRead("../../../icons/nyx-logo.png")
+  let loadData = newPixbufLoader()
+  discard loadData.write(imgData)
+  discard loadData.close()
+  result = loadData.getPixbuf()
+
+
 let
   surfImages* = initImgs()
   surfIcon* = surfIconPixbuf()
   # reloadIcon* = reloadIconPixbuf()
   exitIcon* = exitIconPixbuf()
   aboutIcon* = aboutIconPixbuf()
+  nyxIcon* = nyxIconPixbuf()

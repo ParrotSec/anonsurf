@@ -1,4 +1,5 @@
 import gintro / [gtk, vte, gobject, glib]
+import .. / ansurf_icons
 
 
 proc callback_dummy(terminal: ptr Terminal00; pid: int32; error: ptr glib.Error; userData: pointer) {.cdecl.} =
@@ -23,6 +24,7 @@ proc onClickTorStatus*() =
 
   statusDialog.setTitle("Tor bandwidth")
   statusDialog.setResizable(false)
+  statusDialog.setIcon(nyxIcon)
 
   nyxTerm.connect("child-exited", onVTEExit, statusDialog)
   nyxTerm.spawnAsync(
