@@ -20,16 +20,13 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     args.imgBoot.setFromPixbuf(surfImages.imgBootOff)
   
   # Check current status of daemon services and control ports
-  if myStatus.isAnonSurfService == 0:
+  if myStatus.isAnonSurfService:
     # Check status of Tor
-    if myStatus.isTorService == 0:
+    if myStatus.isTorService:
       args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#00FF00\">Activated</span></b>")
-    elif myStatus.isTorService == 1:
+    else:
       # Give error msg with red color
       args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#FF0000\">Tor is not running</span></b>")
-    elif myStatus.isTorService > 1:
-      # Give error msg with red color
-      args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#FF0000\">Can't start Tor</span></b>")
     # Check status of Port
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
@@ -62,13 +59,9 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         # Give error msg with red color
         args.lblPorts.setMarkup(cstring("Ports:  <b<span background=\"#333333\" foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>"))
 
-  elif myStatus.isAnonsurfSErvice == 3:
+  elif not myStatus.isAnonsurfSErvice:
     # Deactivated cyan color
     args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
-    args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
-  else:
-    # Deactivated cyan color and error red color
-    args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#FF0000\">Can't start AnonSurf</span></b>")
     args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
 
   # Update DNS status
@@ -115,11 +108,11 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
       to show correct state of buttons
   ]#
   # args.btnRestart.label = "Restart"
-  if myStatus.isAnonSurfService == 0:
+  if myStatus.isAnonSurfService:
     # Idea: Restart when AnonSurf is failed
     args.btnRestart.setSensitive(true)
     # Check status of tor service
-    if myStatus.isTorService == 0:
+    if myStatus.isTorService:
       let myPorts = getStatusPorts()
       # If everything (except DNS port) is okay
       if myPorts.isControlPort and myPorts.isSocksPort and myPorts.isTransPort and
@@ -150,21 +143,10 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
     
     args.btnRun.label = "Stop"
   else:
-    if myStatus.isAnonSurfService == 1:
-      args.btnRestart.setSensitive(false)
-      args.lDetails.setText("AnonSurf start failed") # Fix me
-      # args.imgStatus.setFromIconName("security-low", 6)
-      args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
-    elif myStatus.isAnonSurfService == 3:
-      args.btnRestart.setSensitive(false)
-      args.lDetails.setText("AnonSurf is not running")
-      # args.imgStatus.setFromIconName("security-medium", 6)
-      args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
-    else:
-      args.btnRestart.setSensitive(false)
-      args.lDetails.setText("AnonSurf service is broken")
-      # args.imgStatus.setFromIconName("security-medium", 6)
-      args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
+    args.btnRestart.setSensitive(false)
+    args.lDetails.setText("AnonSurf is not running")
+    # args.imgStatus.setFromIconName("security-medium", 6)
+    args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
     args.btnRun.label = "Start"
     args.btnID.setSensitive(false)
     args.btnStatus.setSensitive(false)

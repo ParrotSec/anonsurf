@@ -24,8 +24,8 @@ type
     detailObjs*: DetailObjs
     stackObjs*: Stack
   Status* = ref object
-    isAnonSurfService*: int
-    isTorService*: int
+    isAnonSurfService*: bool
+    isTorService*: bool
     isAnonSurfBoot*: bool
   PortStatus* = object
     isReadError*: bool
