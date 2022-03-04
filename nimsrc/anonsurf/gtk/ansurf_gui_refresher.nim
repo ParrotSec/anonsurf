@@ -74,7 +74,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
       args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't read Tor config<span></b>")
     elif myPorts.isDNSPort:
       # Activated green
-      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FF00\">Activated</span></b>")
+      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FF00\">Tor DNS</span></b>")
     else:
       # Give error msg with red color
       args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't bind port</span></b>")
