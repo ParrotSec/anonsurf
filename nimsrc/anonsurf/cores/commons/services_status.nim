@@ -1,29 +1,27 @@
 import os
-
-
-# proc getServStatus*(serviceName: string): int =
-#   #[
-#     Use return code of either `systemctl status` or `service <servicename> status
-#     0 program is running or service is OK
-#     1 program is dead and /var/run pid file exists
-#     2 program is dead and /var/lock lock file exists
-#     3 program is not running
-#     4 program or service status is unknown
-#     https://stackoverflow.com/q/56719780
-#   ]#
-#   return execShellCmd("/usr/bin/systemctl status " & serviceName & " >/dev/null")
+import posix
 
 
 proc getServStatus*(serviceName: string): bool =
   #[
     All activated, enabled service is at /run/systemd/units/
-    Activated service is a symlink
+    Activated service is a BROKEN symlink
     lrwxrwxrwx 1 root root 32 Mar  5 05:33 invocation:anonsurfd.service -> 76c26d0a0ad640278a2f45b9defcc843
   ]#
   const
     systemd_dir = "/run/systemd/units/"
-  let service_path = systemd_dir & "invocation:" & serviceName & ".service"
-  return fileExists(service_path)
+  var
+    file_stat: Stat
+  let
+    service_path = systemd_dir & "invocation:" & serviceName & ".service"
+  
+  # The file path is a broken symlink
+  # Seems like Nim's fileExists checks for actual file from symlink so this
+  # broken symlink always return false.
+  # Use lstat for more accurate check. lstat returns 0 -> file exists. -1 -> doesn't exist
+  if lstat(cstring(service_path), file_stat) == 0:
+    return true
+  return false
 
 
 proc isServEnabled*(serviceName: string): bool =
