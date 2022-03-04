@@ -22,9 +22,8 @@ proc getServStatus*(serviceName: string): bool =
   ]#
   const
     systemd_dir = "/run/systemd/units/"
-  if fileExists(systemd_dir & serviceName & ".service"):
-    return true
-  return false
+  let service_path = systemd_dir & "invocation:" & serviceName & ".service"
+  return fileExists(service_path)
 
 
 proc isServEnabled*(serviceName: string): bool =
