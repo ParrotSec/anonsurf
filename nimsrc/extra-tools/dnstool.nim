@@ -224,7 +224,7 @@ proc showStatus() =
     stdout.write("[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m" & resolvFileType & "\e[0m\n")
     
     let addresses = getResolvConfAddresses()
-    let is_surf_running = if getServStatus("anonsurfd") == 0: true  else: false
+    let is_surf_running = getServStatus("anonsurfd")
 
     if addresses == []:
       stderr.write("[\e[91mDNS error\e[0m] resolv.conf is empty\n")

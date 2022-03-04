@@ -94,7 +94,7 @@ proc dnsStatusCheck*(): int =
         dnsCheck = checkDNSServers(sysResolvConf)
 
       if dnsCheck == ERROR_DNS_LOCALHOST:
-        if getServStatus("anonsurfd") == 0:
+        if not getServStatus("anonsurfd"):
           return STT_DNS_TOR
         else:
           return ERROR_DNS_LOCALHOST

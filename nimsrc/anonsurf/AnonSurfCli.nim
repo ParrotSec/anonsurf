@@ -33,7 +33,7 @@ proc check_ip() =
 
 proc start() =
   # Start Anonsurf's Daemon
-  if getServStatus("anonsurfd") == 0:
+  if getServStatus("anonsurfd"):
     callback_msg_proc("AnonSurf Status", "AnonSurf is running. Can't start it again", 2)
     return
   
@@ -42,12 +42,13 @@ proc start() =
 
 
 proc stop() =
-  # Stop Anonsurf's Daemon
-  if getServStatus("anonsurfd") != 0:
+  # Stop Anonsurf's Daemon. If anonsurf didn't run, return
+  if not getServStatus("anonsurfd"):
     callback_msg_proc("AnonSurf Status", "AnonSurf is not running. Can't stop it", 2)
     return
   ansurf_acts_handle_stop(sudo, callback_msg_proc)
-  if getServStatus("anonsurfd") == 3: # status 3 == not running
+  # Only do kill apps when anonsurf is not running.
+  if not getServStatus("anonsurfd"):
     callback_kill_apps(callback_msg_proc)
 
 
@@ -84,7 +85,7 @@ proc changeID() =
 
 proc status() =
   # Show nyx
-  if getServStatus("anonsurfd") != 0:
+  if not getServStatus("anonsurfd"):
     callback_msg_proc("AnonSurf Status", "AnonSurf is not running", 2)
   else:
     if not fileExists("/etc/anonsurf/nyxrc"):

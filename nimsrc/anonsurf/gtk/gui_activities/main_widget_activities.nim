@@ -35,7 +35,7 @@ proc ansurf_gtk_do_start_stop*(b: Button, cb_send_msg: proc) =
   else:
     # createThread(ansurf_workers_common, do_anonsurf_stop, cb_send_msg)
     ansurf_acts_handle_stop("menuexecg", cb_send_msg)
-    if getServStatus("anonsurfd") == 3:
+    if not getServStatus("anonsurfd"):
       dialog_kill_app(cb_send_msg)
   # joinThread(ansurf_workers_common)
 

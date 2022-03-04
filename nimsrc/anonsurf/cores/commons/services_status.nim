@@ -1,17 +1,30 @@
 import os
 
 
-proc getServStatus*(serviceName: string): int =
+# proc getServStatus*(serviceName: string): int =
+#   #[
+#     Use return code of either `systemctl status` or `service <servicename> status
+#     0 program is running or service is OK
+#     1 program is dead and /var/run pid file exists
+#     2 program is dead and /var/lock lock file exists
+#     3 program is not running
+#     4 program or service status is unknown
+#     https://stackoverflow.com/q/56719780
+#   ]#
+#   return execShellCmd("/usr/bin/systemctl status " & serviceName & " >/dev/null")
+
+
+proc getServStatus*(serviceName: string): bool =
   #[
-    Use return code of either `systemctl status` or `service <servicename> status
-    0 program is running or service is OK
-    1 program is dead and /var/run pid file exists
-    2 program is dead and /var/lock lock file exists
-    3 program is not running
-    4 program or service status is unknown
-    https://stackoverflow.com/q/56719780
+    All activated, enabled service is at /run/systemd/units/
+    Activated service is a symlink
+    lrwxrwxrwx 1 root root 32 Mar  5 05:33 invocation:anonsurfd.service -> 76c26d0a0ad640278a2f45b9defcc843
   ]#
-  return execShellCmd("/usr/bin/systemctl status " & serviceName & " >/dev/null")
+  const
+    systemd_dir = "/run/systemd/units/"
+  if fileExists(systemd_dir & serviceName & ".service"):
+    return true
+  return false
 
 
 proc isServEnabled*(serviceName: string): bool =
