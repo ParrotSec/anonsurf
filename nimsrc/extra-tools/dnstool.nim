@@ -153,7 +153,7 @@ proc handleMakeDNS(dnsAddr: seq[string]) =
     printErr("Failed to write settings to resolv.conf")
 
 
-proc mkBackup() =
+proc createBackup() =
   #[
     Backup current settings of /etc/resolv.conf
     to /etc/resolv.conf.bak
@@ -163,21 +163,18 @@ proc mkBackup() =
   # skip if it is localhost or error of /etc/resolv.conf
   # or symlink
   let status = dnsStatusCheck()
-  if status <= 0:
-    # We are having error -> skip
-    discard
-  else:
-    let resolvConfInfo = getFileInfo(sysResolvConf, followSymlink = false)
-    # If resolv.conf is not a symlink (dynamic), we don't backup it
-    if resolvConfInfo.kind != pcLinkToFile:
-      if getuid() == 0:
-        try:
-          copyFile(sysResolvConf, bakResolvConf)
-          echo "Backup file created at ", bakResolvConf
-        except:
-          printErr("Failed to create backup file for resolv.conf")
-      else:
-        printErr("User ID is not 0. Did you try sudo?")
+  if status.err == ERR_FILE_NOT_FOUND:
+    return
+  # If resolv.conf is not a symlink (a static file instead), we create a backup
+  if status.is_static:
+    if getuid() == 0:
+      try:
+        copyFile(sysResolvConf, bakResolvConf)
+        echo "Backup file created at ", bakResolvConf
+      except:
+        printErr("Failed to create backup file for resolv.conf")
+    else:
+      printErr("User ID is not 0. Did you try sudo?")
 
 
 proc restoreBackup() =
@@ -186,7 +183,7 @@ proc restoreBackup() =
     Or use dhcp addresses
   ]#
   let status = dnsStatusCheck()
-  if status == STT_DNS_TOR:
+  if status.err == ERR_TOR:
     # AnonSurf is running so it is using localhost. skip
     return
   if not fileExists(bakResolvConf):
@@ -195,14 +192,14 @@ proc restoreBackup() =
     # If there is resolv.conf:
     # Create dhcp setting only DNS is localhost
     if fileExists(sysResolvConf):
-      if status != ERROR_DNS_LOCALHOST:
+      if status.err != ERR_LOCAL_HOST:
         return
       makeDHCPDNS()
     else:
       lnkResovConf()
   else:
     # If resolv.conf not found, we force creating DHCP
-    if status == ERROR_FILE_NOT_FOUND:
+    if status.err == ERR_FILE_NOT_FOUND:
       makeDHCPDNS()
     # Else we have resolv.conf and its backup file
     else:
@@ -261,7 +258,7 @@ proc main() =
     elif paramStr(1) == "status":
       showStatus()
     elif paramStr(1) == "create-backup":
-      mkBackup()
+      createBackup()
     elif paramStr(1) == "restore-backup":
       restoreBackup()
       showStatus()
