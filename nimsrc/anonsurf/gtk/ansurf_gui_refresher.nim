@@ -66,8 +66,8 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
 
   # Update DNS status
   # TODO remove all text shadow
-  case dnsStatusCheck()
-  of STT_DNS_TOR:
+  let dns_status = dnsStatusCheck()
+  if dns_status.err == ERR_TOR:
     let myPorts = getStatusPorts()
     if myPorts.isReadError:
       # ERROR RED
@@ -78,28 +78,24 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     else:
       # Give error msg with red color
       args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't bind port</span></b>")
-  of ERROR_DNS_LOCALHOST:
+  elif dns_status.err == ERR_LOCAL_HOST:
     # Give error style with red color
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> LocalHost</span></b>")
-  of ERROR_FILE_EMPTY:
+  elif dns_status.err == ERR_FILE_EMPTY:
     # Give error msg with red color
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf is empty</span></b>")
-  of ERROR_FILE_NOT_FOUND:
+  elif dns_status.err == ERR_FILE_NOT_FOUND:
     # Give error msg with red color
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf not found</span></b>")
-  of ERROR_UNKNOWN:
+  elif dns_status.err == ERR_UNKNOWN:
     # Give error msg with red color
     args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">Unknown error</span></b>")
-  of 11:
-    # Use cyan for opennic or custom addresses
-    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">OpenNIC server</span></b>")
-  of 21:
-    # Use cyan for opennic or custom addresses
-    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">OpenNIC server</span></b>")
   else:
+    if dns_status.is_static:
     # Use cyan for opennic or custom addresses
-    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">Custom setting</span></b>")
-
+      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">Custom servers</span></b>")
+    else:
+      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">DHCP servers</span></b>")
 
 
 proc updateMain*(args: MainObjs, myStatus: Status) =
