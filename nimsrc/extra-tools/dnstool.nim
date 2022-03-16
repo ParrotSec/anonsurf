@@ -217,11 +217,15 @@ proc showStatus() =
   ]#
 
   if fileExists(sysResolvConf):
-    let resolvFileType = if getFileInfo(sysResolvConf, followSymlink = false).kind == pcLinkToFile: "Symlink" else: "Static file"
-    stdout.write("[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m" & resolvFileType & "\e[0m\n")
-    
-    let addresses = getResolvConfAddresses()
-    let is_surf_running = getServStatus("anonsurfd")
+    let
+      is_static = if getFileInfo(sysResolvConf, followSymlink = false).kind == pcLinkToFile: false else: true
+      addresses = getResolvConfAddresses()
+      is_surf_running = getServStatus("anonsurfd")
+
+    if is_static:
+      stdout.write("[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m Static File\e[0m\n")
+    else:
+      stdout.write("[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m Symlink\e[0m\n")
 
     if addresses == []:
       stderr.write("[\e[91mDNS error\e[0m] resolv.conf is empty\n")
@@ -238,12 +242,28 @@ proc showStatus() =
       if is_other_dns_addr:
         stderr.write("\e[91m\nDetected Non-Tor address[es]. This may cause information leaks.\e[0m\n")
     else:
+      var
+        has_localhost = false
+        has_other_addr = false
+      
       stdout.write("- \e[91mAddress[es]\e[0m:\n")
       for address in addresses:
         if address == "127.0.0.1" or address == "localhost":
-          stdout.write("  " & address & " \e[91mLocalHost. This may cause no internet access\e[0m\n")
+          has_localhost = true
         else:
-          stdout.write("  " & address & "\n")
+          has_other_addr= true
+        stdout.write("  " & address & "\n")
+      
+      if has_other_addr:
+        if is_static:
+          stdout.write(" \e[32mCustom DNS Servers\e[0m\n")
+        else:
+          stdout.write(" \e[32mDHCP Servers\e[0m\n")
+      else:
+        if has_localhost:
+          stdout.write(" \e[91mLocalHost only. This may cause no internet access\e[0m\n")
+        else:
+          stdout.write(" \e[91mUnknown error\e[0m\n")
   else:
     stderr.write("[\e[91mDNS error\e[0m] File \e[91mresolv.conf\e[0m not found\n")
 
