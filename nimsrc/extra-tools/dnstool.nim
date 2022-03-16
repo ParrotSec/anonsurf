@@ -217,7 +217,7 @@ proc showStatus() =
   ]#
 
   if fileExists(sysResolvConf):
-    let resolvFileType = if getFileInfo(sysResolvConf).kind == pcLinkToFile: "Symlink" else: "Static file"
+    let resolvFileType = if getFileInfo(sysResolvConf, followSymlink = false).kind == pcLinkToFile: "Symlink" else: "Static file"
     stdout.write("[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m" & resolvFileType & "\e[0m\n")
     
     let addresses = getResolvConfAddresses()
