@@ -1,3 +1,23 @@
+anonsurf (3.3.1+parrot0) parrot-updates; urgency=medium
+
+  * Use new method fileExists to check if service is running
+  * Use new anonsurf check to GUI
+  * Fix wrong systemd unit prefix name, which caused service "failed to start" everytime
+  * Use lstat instead of Nim's file exists, fixed status always returns false
+  * No longer use nimble file
+  * New version 3.2.2
+  * Change new version to 3.3.0 because it's feature change
+  * Fix wrong dns condition
+  * Show Tor DNS instead of "activated" for DNS
+  * New sub version with minor fixes
+  * Rewrite DNS check using enum. Remove checking OpenNIC
+  * Switch type of dns check to new object
+  * Use new enum object for status check
+  * Fix followSymlink wasn't set to false, which cause wrong file status result
+  * Fix a bug when check symlink and improve output result of show status
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Tue, 22 Mar 2022 21:27:31 +0700
+
 anonsurf (3.2.1+parrot1) parrot-updates; urgency=medium
 
   * check if menuexecg exists, else use pkexec
