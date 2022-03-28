@@ -170,9 +170,6 @@ proc createBackup() =
     if access(sysResolvConf, R_OK) != F_OK:
       printErr(sysResolvConf & " is not readable")
       return
-    if access(bakResolvConf, W_OK) != F_OK:
-      printErr(bakResolvConf & " is not writable")
-      return
     try:
       copyFile(sysResolvConf, bakResolvConf)
       echo "Backup file created at ", bakResolvConf
