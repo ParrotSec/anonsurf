@@ -198,18 +198,16 @@ proc restoreBackup() =
       lnkResovConf()
   else:
     # If resolv.conf not found, we force creating DHCP
-    # if status.err == ERR_FILE_NOT_FOUND:
-    #   makeDHCPDNS()  # FIXME this function doesn't work
+    if status.err == ERR_FILE_NOT_FOUND:
+      makeDHCPDNS()
     # Else we have resolv.conf and its backup file
-    if fileExists(sysResolvConf):
+    else:
       # First force removing old resolv.conf
       # Solve the symlink error while writing new file
       if tryRemoveFile(sysResolvConf):
         moveFile(bakResolvConf, sysResolvConf)
       else:
         discard # TODO show error here
-    else:
-      makeDHCPDNS()
 
 
 proc showStatus() =
