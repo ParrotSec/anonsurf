@@ -173,7 +173,7 @@ proc createBackup() =
       except:
         printErr("Failed to create backup file for resolv.conf")
     else:
-      printErr("User ID is not 0. Did you try sudo?")
+      printErr(sysResolvConf & " is not writable. Did you try sudo?")
 
 
 proc restoreBackup() =
