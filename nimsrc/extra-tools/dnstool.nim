@@ -135,7 +135,7 @@ proc makeDHCPDNS() =
     printErr("Failed to generate DHCP addresses")
 
 
-proc handleMakeDNS(dnsAddr: seq[string]) =
+proc makeCustomDNS(dnsAddr: seq[string]) =
   var
     dns_to_write = ""
 
@@ -301,7 +301,7 @@ proc main() =
           else:
             dnsAddr.add(paramStr(i))
 
-        handleMakeDNS(deduplicate(dnsAddr))
+        makeCustomDNS(deduplicate(dnsAddr))
       showStatus()
       stdout.write("\n[*] Applied DNS settings\n")
     else:
