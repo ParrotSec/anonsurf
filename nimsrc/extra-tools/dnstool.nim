@@ -285,7 +285,7 @@ proc main() =
     else:
       stderr.write("[!] Invalid option\n")
   else:
-    if paramStr(1) == "address":
+    if paramStr(1) == "address" or paramStr(1) == "addr":
       if paramStr(2) == "dhcp":
         makeDHCPDNS()
       else:
