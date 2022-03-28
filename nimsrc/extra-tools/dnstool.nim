@@ -166,14 +166,17 @@ proc createBackup() =
     return
   # If resolv.conf is not a symlink (a static file instead), we create a backup
   if status.is_static:
-    if access(sysResolvConf, W_OK) == F_OK:
-      try:
-        copyFile(sysResolvConf, bakResolvConf)
-        echo "Backup file created at ", bakResolvConf
-      except:
-        printErr("Failed to create backup file for resolv.conf")
-    else:
-      printErr(sysResolvConf & " is not writable. Did you try sudo?")
+    if access(sysResolvConf, R_OK) != F_OK:
+      printErr(sysResolvConf & " is not readable")
+      return
+    if access(bakResolvConf, W_OK) != F_OK:
+      printErr(bakResolvConf & " is not writable")
+      return
+    try:
+      copyFile(sysResolvConf, bakResolvConf)
+      echo "Backup file created at ", bakResolvConf
+    except:
+      printErr("Failed to create backup file for resolv.conf")
 
 
 proc restoreBackup() =
