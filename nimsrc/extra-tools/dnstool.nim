@@ -167,6 +167,7 @@ proc createBackup() =
     return
   # If resolv.conf is not a symlink (a static file instead), we create a backup
   if status.is_static:
+    # FIXME latest version doesn't create backup
     if getuid() == 0:
       try:
         copyFile(sysResolvConf, bakResolvConf)
@@ -183,16 +184,21 @@ proc restoreBackup() =
     Or use dhcp addresses
   ]#
   let status = dnsStatusCheck()
+  # FIXME wrong condition failed restore backup
   if status.err == ERR_TOR:
+    echo "Debug: hit Tor"
     # AnonSurf is running so it is using localhost. skip
     return
   if not fileExists(bakResolvConf):
+    echo "Debug: hit file doesn't exist"
     # No backup file. We create DHCP + dynamic setting
     # If there is no resolv.conf, we create symlink
     # If there is resolv.conf:
     # Create dhcp setting only DNS is localhost
     if fileExists(sysResolvConf):
+      echo "Debug: hit sysResolvConf"
       if status.err != ERR_LOCAL_HOST:
+        echo "Debug hit localhost"
         return
       makeDHCPDNS()
     else:
@@ -200,11 +206,13 @@ proc restoreBackup() =
   else:
     # If resolv.conf not found, we force creating DHCP
     if status.err == ERR_FILE_NOT_FOUND:
+      echo "Debug file not found"
       makeDHCPDNS()
     # Else we have resolv.conf and its backup file
     else:
       # First force removing old resolv.conf
       # Solve the symlink error while writing new file
+      echo "Debug: hit else"
       if tryRemoveFile(sysResolvConf):
         moveFile(bakResolvConf, sysResolvConf)
       else:
