@@ -136,15 +136,14 @@ proc makeDHCPDNS() =
 
 
 proc makeCustomDNS(dnsAddr: seq[string]) =
-  var
-    dns_to_write = ""
-
-  try:  
-    for address in dnsAddr:
-      dns_to_write &= "nameserver " & address & "\n"
+  try:
     if access(sysResolvConf, W_OK) != F_OK:
       printErr(sysResolvConf & " is not writable. Did you try sudo?")
       return
+    var
+      dns_to_write = ""
+    for address in dnsAddr:
+      dns_to_write &= "nameserver " & address & "\n"
     # Remove old resolv.conf
     removeFile(sysResolvConf)
     # Remove old addresses in tail
