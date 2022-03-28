@@ -132,7 +132,7 @@ proc writeResolv(dnsAddr: string) =
 proc makeDHCPDNS() =
   try:
     removeFile(sysResolvConf)
-    writeTail("")
+    # writeTail("")
     lnkResovConf()
   except:
     printErr("Failed to generate DHCP addresses")
