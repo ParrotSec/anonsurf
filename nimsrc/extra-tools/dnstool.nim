@@ -166,8 +166,7 @@ proc createBackup() =
     return
   # If resolv.conf is not a symlink (a static file instead), we create a backup
   if status.is_static:
-    # FIXME latest version doesn't create backup
-    if getuid() == 0:
+    if access(sysResolvConf, W_OK) == F_OK:
       try:
         copyFile(sysResolvConf, bakResolvConf)
         echo "Backup file created at ", bakResolvConf
