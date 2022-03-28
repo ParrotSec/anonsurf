@@ -1,3 +1,9 @@
+anonsurf (3.3.2+parrot0) parrot-updates; urgency=medium
+
+  * Fix getuid logic bugs in dnstool caused missing resolv.conf
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Mon, 28 Mar 2022 09:17:43 +0700
+
 anonsurf (3.3.1+parrot0) parrot-updates; urgency=medium
 
   * Use new method fileExists to check if service is running

@@ -19,6 +19,6 @@ proc makeBottomBar*(bSwitchWidget: Button): Box =
 
   bxBottomBar.packStart(bSwitchWidget, false, true, 3)
   bxBottomBar.packEnd(btnAbout, false, true, 3)
-  bxBottomBar.packEnd(btnSettings, false, true, 3)
+  # bxBottomBar.packEnd(btnSettings, false, true, 3)
 
   return bxBottomBar
