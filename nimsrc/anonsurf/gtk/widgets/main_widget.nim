@@ -1,7 +1,8 @@
-import gintro / gtk
+import gintro / [gtk, gdk, gobject, glib]
+import .. / gui_activities / core_activities
 
 
-proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnStatus, btnRestart: Button): Frame =
+proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnStatus, btnRestart: Button, s: Stack): Frame =
   #[
     Create the area Detail in main page
     it has image of current AnonSurf
@@ -9,18 +10,24 @@ proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnStatus, btnRestart:
     Button status which show nyx
   ]#
   let
-    fmDetail = newFrame()
-    areaInfo = newBox(Orientation.vertical, 3)
-    bxButtons = newBox(Orientation.horizontal, 3)
-    bxDetailPanel = newBox(Orientation.horizontal, 6)
+    fmDetail = newFrame() # The outsider. Use it to make border
+    areaInfo = newBox(Orientation.vertical, 3) # Whole left widget, vertical
+    bxButtons = newBox(Orientation.horizontal, 3) # Only buttons. This's used for horizontal buttons
+    bxDetailPanel = newBox(Orientation.horizontal, 6) # This is the whole box, horizontal
+    evBox = gtk.newEventBox()
 
-  bxDetailPanel.add(imgStatus)
   bxButtons.packStart(btnRestart, false, true, 4)
   bxButtons.packStart(btnStatus, false, true, 2)
 
+  bxDetailPanel.add(imgStatus)
+
+  evBox.connect("button-press-event", ansurf_gtk_widget_details, s)
+
   areaInfo.packStart(labDetails, false, true, 3)
   areaInfo.packEnd(bxButtons, false, true, 5)
-  bxDetailPanel.add(areaInfo)
+
+  evBox.add(areaInfo)
+  bxDetailPanel.add(evBox)
 
   fmDetail.add(bxDetailPanel)
   return fmDetail
@@ -47,12 +54,12 @@ proc makeToolBar(btnStart, btnID, btnIP: Button): Frame =
   return fmTool
 
 
-proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bStatus, bID, bIP, bRestart: Button): Box =
+proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bStatus, bID, bIP, bRestart: Button, s: Stack): Box =
   #[
     Create the page for main widget
   ]#
   let
-    boxPanel = makeDetailPanel(imgStatus, lDetails, bStatus, bRestart)
+    boxPanel = makeDetailPanel(imgStatus, lDetails, bStatus, bRestart, s)
     boxToolBar = makeToolBar(bStart, bID, bIP)
     mainWidget = newBox(Orientation.vertical, 3)
   

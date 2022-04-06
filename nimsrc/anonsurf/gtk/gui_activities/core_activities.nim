@@ -1,4 +1,5 @@
 import gintro / gtk
+import gintro / gdk except Window
 
 
 proc ansurf_gtk_do_show_details*(b: Button, s: Stack) =
@@ -15,6 +16,11 @@ proc ansurf_gtk_do_show_details*(b: Button, s: Stack) =
 #     Close program by click on exit button
 #   ]#
 #   mainQuit()
+
+
+proc ansurf_gtk_widget_details*(e: EventBox, eb: gdk.EventButton, s: Stack): bool =
+  s.setVisibleChildName("detail")
+  # discard
 
 
 proc ansurf_gtk_do_stop*(w: Window) =

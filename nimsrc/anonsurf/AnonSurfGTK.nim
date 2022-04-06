@@ -29,6 +29,7 @@ proc createArea(boxMainWindow: Box) =
   ]#
   let
     cb_send_msg = cli_init_callback_msg(true)
+    mainStack = newStack()
 
   let
     btnStart = newButton("Start")
@@ -39,7 +40,7 @@ proc createArea(boxMainWindow: Box) =
     btnCheckIP = newButton("My IP")
     btnRestart = newButton("Restart")
     imgStatus = newImageFromPixbuf(surfImages.imgSecMed)
-    mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowStatus, btnChangeID, btnCheckIP, btnRestart)
+    mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowStatus, btnChangeID, btnCheckIP, btnRestart, mainStack)
 
   btnRestart.connect("clicked", ansurf_gtk_do_restart, cb_send_msg)
   btnShowStatus.connect("clicked", ansurf_gtk_do_status)
@@ -60,9 +61,6 @@ proc createArea(boxMainWindow: Box) =
     )
   
   btnBoot.connect("clicked", ansurf_gtk_do_enable_disable_boot, cb_send_msg)
-
-  let
-    mainStack = newStack()
   
   btnShowDetails.connect("clicked", ansurf_gtk_do_show_details, mainStack)
 
