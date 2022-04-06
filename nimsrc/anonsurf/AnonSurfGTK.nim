@@ -1,7 +1,7 @@
 import gintro / [gtk, glib, gobject]
 import cores / handle_activities
-import gtk / widgets / [details_widget, main_widget, bottom_widget]
-import gtk / [ansurf_icons, ansurf_gui_refresher]
+import gtk / widgets / [details_widget, main_widget]
+import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_title_bar]
 import gtk / gui_activities / [details_widget_activities, main_widget_activities, core_activities]
 import gtk / [ansurf_get_status, ansurf_objects]
 
@@ -70,9 +70,6 @@ proc createArea(boxMainWindow: Box) =
   mainStack.addNamed(detailWidget, "detail")
   boxMainWindow.add(mainStack)
 
-  let boxBottom = makeBottomBar(btnShowDetails)
-  boxMainWindow.add(boxBottom)
-
   boxMainWindow.showAll()
   
   var
@@ -123,7 +120,7 @@ proc main =
     # sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
   
   mainBoard.setResizable(false)
-  mainBoard.title = "AnonSurf GUI"
+  mainBoard.setTitlebar(surfTitleBar())
   mainBoard.setIcon(surfIcon)
   mainBoard.setPosition(WindowPosition.center)
 
@@ -138,7 +135,7 @@ proc main =
   # https://stackoverflow.com/a/8241865
   # mainBoard.connect("window-state-event", ansurf_gtk_on_window_state_event, sysTrayIcon)
 
-  mainBoard.show()
+  mainBoard.showAll()
   gtk.main()
 
 main()
