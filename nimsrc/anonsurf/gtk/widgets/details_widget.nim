@@ -1,13 +1,16 @@
-import gintro / gtk
+import gintro / [gtk, gdk, gobject, glib]
+import .. / gui_activities / core_activities
 
 
-proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label): Frame =
+
+proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label, s: Stack): Frame =
   #[
     Create a Frame for service status
   ]#
   let
     areaServices = newBox(Orientation.vertical, 3)
     frameServices = newFrame()
+    evBox = newEventBox()
   
   labelServices.setXalign(0.04)
   labelPorts.setXalign(0.04)
@@ -16,8 +19,12 @@ proc makeServiceFrame(labelServices, labelPorts, labelDNS: Label): Frame =
   areaServices.add(labelServices)
   areaServices.add(labelPorts)
   areaServices.add(labelDNS)
+
+  evBox.connect("button-press-event", ansurf_gtk_widget_show_main, s)
+  evBox.add(areaServices)
   
-  frameServices.add(areaServices)
+  # frameServices.add(areaServices)
+  frameServices.add(evBox)
 
   return frameServices
 
@@ -47,12 +54,13 @@ proc makeBootFrame(labelBoot: Label, btnBoot: Button, imgBoot: Image): Frame =
 proc makeServiceDetails(
   labelServices, labelPorts, labelDNS, labelBoot: Label,
   btnBoot: Button,
-  imgBoot: Image): Box =
+  imgBoot: Image,
+  s: Stack): Box =
   #[
     Display information about all services
   ]#
   let
-    areaService = makeServiceFrame(labelServices, labelPorts, labelDNS)
+    areaService = makeServiceFrame(labelServices, labelPorts, labelDNS, s)
     areaBoot = makeBootFrame(labelBoot, btnBoot, imgBoot)
 
   let
@@ -68,13 +76,13 @@ proc createDetailWidget*(
   labelServices, labelPorts, labelDNS, labelBoot: Label,
   btnBoot: Button,
   imgBoot: Image,
-  ): Box =
+  s: Stack): Box =
   #[
     Create a page to display current detail of AnonSurf
   ]#
   let
     boxServices = makeServiceDetails(
-      labelServices, labelPorts, labelDNS, labelBoot, btnBoot, imgBoot
+      labelServices, labelPorts, labelDNS, labelBoot, btnBoot, imgBoot, s
     )
     boxDetailWidget = newBox(Orientation.vertical, 3)
   

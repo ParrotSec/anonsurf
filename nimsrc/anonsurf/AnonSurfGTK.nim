@@ -56,7 +56,7 @@ proc createArea(boxMainWindow: Box) =
     btnBoot = newButton("Enable")
     detailWidget = createDetailWidget(
       labelDaemons, labelPorts, labelDNS, labelStatusBoot,
-      btnBoot, imgStatusBoot
+      btnBoot, imgStatusBoot, mainStack
     )
   
   btnBoot.connect("clicked", ansurf_gtk_do_enable_disable_boot, cb_send_msg)

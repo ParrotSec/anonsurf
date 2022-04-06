@@ -21,7 +21,7 @@ proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnStatus, btnRestart:
 
   bxDetailPanel.add(imgStatus)
 
-  evBox.connect("button-press-event", ansurf_gtk_widget_details, s)
+  evBox.connect("button-press-event", ansurf_gtk_widget_show_details, s)
 
   areaInfo.packStart(labDetails, false, true, 3)
   areaInfo.packEnd(bxButtons, false, true, 5)
