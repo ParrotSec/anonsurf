@@ -1,1 +1,1 @@
-const surfVersion* = "3.3.2"
+const surfVersion* = "4.0.0-pre"
