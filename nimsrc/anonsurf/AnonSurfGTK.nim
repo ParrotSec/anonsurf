@@ -34,7 +34,6 @@ proc createArea(boxMainWindow: Box) =
   let
     btnStart = newButton("Start")
     labelDetails = newLabel("AnonSurf is not running")
-    btnShowDetails = newButton("Details")
     btnShowStatus = newButton("Tor Stats")
     btnChangeID = newButton("Change\nIdentity")
     btnCheckIP = newButton("My IP")
@@ -62,7 +61,6 @@ proc createArea(boxMainWindow: Box) =
   
   btnBoot.connect("clicked", ansurf_gtk_do_enable_disable_boot, cb_send_msg)
   
-  btnShowDetails.connect("clicked", ansurf_gtk_do_show_details, mainStack)
 
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
@@ -74,7 +72,6 @@ proc createArea(boxMainWindow: Box) =
     mainArgs = MainObjs(
       btnRun: btnStart,
       btnID: btnChangeID,
-      btnDetail: btnShowDetails,
       btnStatus: btnShowStatus,
       btnIP: btnCheckIP,
       lDetails: labelDetails,

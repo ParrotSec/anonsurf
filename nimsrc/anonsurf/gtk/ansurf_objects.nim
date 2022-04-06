@@ -6,7 +6,6 @@ type
   MainObjs* = ref object
     btnRun*: Button
     btnID*: Button
-    btnDetail*: Button
     btnStatus*: Button
     btnIP*: Button
     lDetails*: Label
