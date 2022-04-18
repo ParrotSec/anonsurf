@@ -95,10 +95,14 @@ proc lnkResovConf() =
     Create a symlink of /etc/resolv.conf from
     /run/resolvconf/resolv.conf
   ]#
-  try:
-    createSymlink(runResolvConf, sysResolvConf)
-  except:
-    printErr("Failed to create symlink from " & sysResolvConf)
+  if fileExists(runResolvConf):
+    try:
+      createSymlink(runResolvConf, sysResolvConf)
+    except:
+      printErr("Failed to create symlink from " & sysResolvConf)
+  else:
+    echo runResolvConf, " doesn't exist. Maybe resolvconfig is not running."
+    # TODO make other solution here
 
 
 proc writeTail(dnsAddr: string) =
