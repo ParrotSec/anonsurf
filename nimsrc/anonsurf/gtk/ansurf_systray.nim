@@ -1,13 +1,9 @@
 import gintro / [gtk, gobject]
 import .. / cores / handle_activities
-import gui_activities / main_widget_activities
+import gui_activities / [main_widget_activities, core_activities]
 
 
 let cb_send_msg = cli_init_callback_msg(true)
-
-
-proc on_click_quit(i: MenuItem) =
-  mainQuit()
 
 
 proc ansurf_right_click_menu*(i: StatusIcon, b: int, activeTime: int) =
@@ -20,7 +16,7 @@ proc ansurf_right_click_menu*(i: StatusIcon, b: int, activeTime: int) =
   item_my_ip.connect("activate", ansurf_gtk_do_myip, cb_send_msg)
   menu.append(item_my_ip)
 
-  item_quit.connect("activate", on_click_quit)
+  item_quit.connect("activate", ansurf_gtk_do_stop)
   menu.append(item_quit)
 
   menu.showAll()

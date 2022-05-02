@@ -10,7 +10,7 @@ proc ansurf_gtk_widget_show_main*(e: EventBox, eb: gdk.EventButton, s: Stack): b
   s.setVisibleChildName("main")
 
 
-proc ansurf_gtk_do_stop*(w: Window) =
+proc ansurf_gtk_do_stop*(w: Window | MenuItem) =
   #[
     Close program by click on title bar
   ]#
