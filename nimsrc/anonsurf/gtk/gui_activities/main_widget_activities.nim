@@ -45,7 +45,7 @@ proc ansurf_gtk_do_restart*(b: Button, cb_send_msg: proc) =
   # ansurf_workers_common.joinThread()
 
 
-proc ansurf_gtk_do_myip*(b: Button, cb_send_msg: proc) =
+proc ansurf_gtk_do_myip*(b: Button | MenuItem, cb_send_msg: proc) =
   createThread(ansurf_workers_myip, do_anonsurf_checkip, (cb_send_msg))
   # ansurf_workers_myip.joinThread()
   # do_anonsurf_checkip(cb_send_msg)
