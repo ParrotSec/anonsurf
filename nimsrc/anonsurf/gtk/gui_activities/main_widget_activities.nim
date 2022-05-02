@@ -46,7 +46,6 @@ proc ansurf_gtk_do_restart*(b: Button, cb_send_msg: MessageCallback) =
 
 
 proc ansurf_gtk_do_myip*(b: Button, cb_send_msg: MessageCallback) =
-  # FIXME crash here. Likely no channels created this problem
   createThread(ansurf_workers_myip, do_anonsurf_checkip, (cb_send_msg))
   # ansurf_workers_myip.joinThread()
   # do_anonsurf_checkip(cb_send_msg)
