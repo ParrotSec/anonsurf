@@ -11,7 +11,7 @@ type
     use_bridge*: bool
     custom_bridge*: bool
     bridge_addr*: string
-  MessageCallback* = proc (title: string, body: string, code: int)
+  # MessageCallback* = proc (title: string, body: string, code: int)
   # TorRC* = object
   #   use_bridge*: bool
   #   custom_bridge*: bool
