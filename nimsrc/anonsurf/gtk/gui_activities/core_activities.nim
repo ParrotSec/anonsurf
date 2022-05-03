@@ -15,8 +15,13 @@ proc ansurf_gtk_do_stop*(w: Window | MenuItem) =
     Close program by click on title bar
   ]#
   mainQuit()
-  # discard w.hideOnDelete()
 
 
-proc ansurf_gtk_on_window_state_event*(w: Window) =
-  w.hide()
+proc ansurf_gtk_do_not_stop*(w: Window, e: Event): bool =
+  #[
+    Do not close program when user click on button "exit"
+    When user clicks on "exit" button, GTK sends signal "delete_event"
+    We catch it here and do "hide on delete" instead. Show we can restore
+    the main window by showAll() later
+  ]#
+  return w.hideOnDelete()

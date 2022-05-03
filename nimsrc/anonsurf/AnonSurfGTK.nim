@@ -3,7 +3,8 @@ import cores / handle_activities
 import gtk / widgets / [details_widget, main_widget]
 import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_title_bar]
 import gtk / gui_activities / [details_widget_activities, main_widget_activities, core_activities]
-import gtk / [ansurf_get_status, ansurf_objects]
+import gtk / [ansurf_get_status, ansurf_objects, ansurf_systray]
+import gintro / gdk except Window
 
 
 proc handleRefresh(args: RefreshObj): bool =
@@ -112,21 +113,21 @@ proc main =
   let
     mainBoard = newWindow()
     boxMainWindow = newBox(Orientation.vertical, 3)
-    # sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
-  
+    sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
+
   mainBoard.setResizable(false)
   mainBoard.setTitlebar(surfTitleBar())
   mainBoard.setIcon(surfIcon)
   mainBoard.setPosition(WindowPosition.center)
 
-  # sysTrayIcon.connect("popup-menu", ansurf_right_click_menu)
-  # sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
+  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu)
+  sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
 
   createArea(boxMainWindow)
 
   mainBoard.add(boxMainWindow)
   mainBoard.setBorderWidth(3)
-  mainBoard.connect("destroy", ansurf_gtk_do_stop)
+  mainBoard.connect("delete_event", ansurf_gtk_do_not_stop)
   # https://stackoverflow.com/a/8241865
   # mainBoard.connect("window-state-event", ansurf_gtk_on_window_state_event, sysTrayIcon)
 
