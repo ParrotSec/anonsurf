@@ -128,8 +128,6 @@ proc main =
   mainBoard.add(boxMainWindow)
   mainBoard.setBorderWidth(3)
   mainBoard.connect("delete_event", ansurf_gtk_do_not_stop)
-  # https://stackoverflow.com/a/8241865
-  # mainBoard.connect("window-state-event", ansurf_gtk_on_window_state_event, sysTrayIcon)
 
   mainBoard.showAll()
   gtk.main()
