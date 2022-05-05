@@ -52,9 +52,9 @@ proc ansurf_detail_w_boot_area*(labelBoot: Label, btnBoot: Button, imgBoot: Imag
 
 proc ansurf_details_w_main_area*(box_services, box_boot: Frame): Box =
   let
-    retBox = newBox(Orientation.vertical, 3)
+    detail_widget = newBox(Orientation.vertical, 3)
 
-  retBox.add(box_services)
-  retBox.add(box_boot)
+  detail_widget.packStart(box_services, false, true, 2)
+  detail_widget.packStart(box_boot, false, true, 2)
 
-  return retBox
+  return detail_widget
