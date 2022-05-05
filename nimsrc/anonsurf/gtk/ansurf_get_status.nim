@@ -1,5 +1,5 @@
 import strutils
-import ansurf_objects
+import ansurf_gtk_objects
 import .. / cores / commons / [services_status, parse_config]
 
 

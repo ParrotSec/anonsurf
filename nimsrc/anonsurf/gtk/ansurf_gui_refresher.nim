@@ -1,5 +1,5 @@
 import gintro / gtk
-import ansurf_objects
+import ansurf_gtk_objects
 import ansurf_icons
 import ansurf_get_status
 import strutils
