@@ -23,6 +23,7 @@ proc ansurf_right_click_menu*(i: StatusIcon, b: int, activeTime: int, cb_send_ms
 
   # Main menu
   right_click_menu.append(item_ansurf_control)
+  item_status_surf.connect("activate", ansurf_gtk_do_status, cb_send_msg)
   right_click_menu.append(item_status_surf)
   item_my_ip.connect("activate", ansurf_gtk_do_myip, cb_send_msg)
   right_click_menu.append(item_my_ip)
