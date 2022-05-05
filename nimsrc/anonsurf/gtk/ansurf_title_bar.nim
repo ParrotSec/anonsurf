@@ -6,7 +6,7 @@ import dialogs / [ansurf_dialog_about, ansurf_dialog_options]
 proc btnSettings(): Button =
   let
     btnSettings = newButton("")
-  
+
   btnSettings.setImage(newImageFromIconName("preferences-desktop", 4))
   btnSettings.connect("clicked", onClickOptions)
 
@@ -17,7 +17,7 @@ proc btnAbout(): Button =
   let
     btnAbout = newButton("")
     imgAbout = newImageFromPixbuf(aboutIcon)
-  
+
   btnAbout.setImage(imgAbout)
   btnAbout.connect("clicked", onClickAbout)
   return btnAbout
@@ -29,7 +29,7 @@ proc surfTitleBar*(): HeaderBar =
 
   titleBar.setShowCloseButton(true)
   titleBar.settitle("AnonSurf GUI")
-  titleBar.add(btnSettings())
   titleBar.add(btnAbout())
-  
+  titleBar.add(btnSettings())
+
   return titleBar
