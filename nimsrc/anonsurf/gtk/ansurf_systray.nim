@@ -19,11 +19,11 @@ proc ansurf_right_click_menu*(i: StatusIcon, b: int, activeTime: int, cb_send_ms
   ansurf_control_menu.append(item_start_surf)
   ansurf_control_menu.append(item_stop_surf)
   ansurf_control_menu.append(item_restart_surf)
-  ansurf_control_menu.append(item_status_surf)
   item_ansurf_control.setSubmenu(ansurf_control_menu)
 
   # Main menu
   right_click_menu.append(item_ansurf_control)
+  right_click_menu.append(item_status_surf)
   item_my_ip.connect("activate", ansurf_gtk_do_myip, cb_send_msg)
   right_click_menu.append(item_my_ip)
   item_quit.connect("activate", ansurf_gtk_do_stop)
