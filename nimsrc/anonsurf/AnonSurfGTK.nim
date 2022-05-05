@@ -24,12 +24,11 @@ proc handleRefresh(args: RefreshObj): bool =
   return SOURCE_CONTINUE
 
 
-proc createArea(boxMainWindow: Box) =
+proc createArea(boxMainWindow: Box, cb_send_msg: proc) =
   #[
     Create everything for the program
   ]#
   let
-    cb_send_msg = cli_init_callback_msg(true)
     mainStack = newStack()
 
   let
@@ -106,16 +105,17 @@ proc main =
     mainBoard = newWindow()
     boxMainWindow = newBox(Orientation.vertical, 3)
     sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
+    cb_send_msg = cli_init_callback_msg(true)
 
   mainBoard.setResizable(false)
   mainBoard.setTitlebar(surfTitleBar())
   mainBoard.setIcon(surfIcon)
   mainBoard.setPosition(WindowPosition.center)
 
-  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu)
+  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu, cb_send_msg)
   sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
 
-  createArea(boxMainWindow)
+  createArea(boxMainWindow, cb_send_msg)
 
   mainBoard.add(boxMainWindow)
   mainBoard.setBorderWidth(3)

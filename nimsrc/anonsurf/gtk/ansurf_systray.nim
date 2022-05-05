@@ -1,12 +1,8 @@
 import gintro / [gtk, gobject]
-import .. / cores / handle_activities
 import gui_activities / [main_widget_activities, core_activities]
 
 
-let cb_send_msg = cli_init_callback_msg(true)
-
-
-proc ansurf_right_click_menu*(i: StatusIcon, b: int, activeTime: int) =
+proc ansurf_right_click_menu*(i: StatusIcon, b: int, activeTime: int, cb_send_msg: proc) =
   # TODO refresh menu
   let
     right_click_menu = newMenu()
