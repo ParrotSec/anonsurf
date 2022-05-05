@@ -1,7 +1,7 @@
 import gintro / gtk
 import .. / .. / cores / handle_activities
 import .. / ansurf_gtk_objects
-import .. / widgets / tor_status_widget
+import .. / dialogs / ansurf_dialog_tor_status
 import .. / .. / cores / commons / services_status
 import .. / .. / cores / killapps / kill_apps_dialog
 

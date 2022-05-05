@@ -1,6 +1,6 @@
 import gintro / [gtk, gobject]
 import ansurf_icons
-import widgets / [about_widget, options_widget]
+import dialogs / [ansurf_dialog_about, ansurf_dialog_options]
 
 
 proc btnSettings(): Button =
