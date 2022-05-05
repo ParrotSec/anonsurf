@@ -56,5 +56,8 @@ proc ansurf_gtk_do_changeid*(b: Button, cb_send_msg: proc) =
   ansurf_workers_common.joinThread()
 
 
-proc ansurf_gtk_do_status*(b: Button) =
-  onClickTorStatus()
+proc ansurf_gtk_do_status*(b: Button | MenuItem, cb_send_msg: proc) =
+  if getServStatus("anonsurfd"):
+    onClickTorStatus()
+  else:
+    cb_send_msg("AnonSurf Status", "AnonSurf is not running", 1)
