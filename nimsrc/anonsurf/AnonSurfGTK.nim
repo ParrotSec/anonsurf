@@ -1,6 +1,6 @@
 import gintro / [gtk, glib, gobject]
 import cores / handle_activities
-import gtk / widgets / [details_widget, ansurf_widgets_main]
+import gtk / widgets / [ansurf_widget_details, ansurf_widgets_main]
 import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_title_bar, ansurf_get_status, ansurf_systray, ansurf_gtk_objects]
 # all widget activities must be declared here to fix macro error
 import gtk / gui_activities / [details_widget_activities, core_activities, main_widget_activities]
@@ -44,21 +44,16 @@ proc createArea(boxMainWindow: Box) =
       ansurf_main_w_detail_area(imgStatus, labelDetails, btnShowStatus, btnRestart, mainStack, cb_send_msg),
       ansurf_main_w_button_area(btnStart, btnChangeID, btnCheckIP, cb_send_msg)
     )
-
-
-  let
-    labelDaemons = newLabel("Services: Checking")
+    labelServices = newLabel("Services: Checking")
     labelPorts = newLabel("Ports: Checking")
     labelDNS = newLabel("DNS: Checking")
-    imgStatusBoot = newImageFromPixbuf(surfImages.imgBootOff)
-    labelStatusBoot = newLabel("Not enabled at boot")
+    imgBootStatus = newImageFromPixbuf(surfImages.imgBootOff)
+    labelBootStatus = newLabel("Not enabled at boot")
     btnBoot = newButton("Enable")
-    detailWidget = createDetailWidget(
-      labelDaemons, labelPorts, labelDNS, labelStatusBoot,
-      btnBoot, imgStatusBoot, mainStack
+    detailWidget = ansurf_details_w_main_area(
+      ansurf_detail_w_service_area(labelServices, labelPorts, labelDNS, mainStack),
+      ansurf_detail_w_boot_area(labelBootStatus, btnBoot, imgBootStatus, cb_send_msg)
     )
-
-  btnBoot.connect("clicked", ansurf_gtk_do_enable_disable_boot, cb_send_msg)
 
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
@@ -77,12 +72,12 @@ proc createArea(boxMainWindow: Box) =
       imgStatus: imgStatus,
     )
     detailArgs = DetailObjs(
-      lblServices: labelDaemons,
+      lblServices: labelServices,
       lblPorts: labelPorts,
       lblDns: labelDNS,
-      lblBoot: labelStatusBoot,
+      lblBoot: labelBootStatus,
       btnBoot: btnBoot,
-      imgBoot: imgStatusBoot
+      imgBoot: imgBootStatus
     )
     refresher = RefreshObj(
       mainObjs: mainArgs,
