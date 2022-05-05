@@ -1,9 +1,9 @@
 import gintro / [gtk, glib, gobject]
 import cores / handle_activities
-import gtk / widgets / [details_widget, main_widget]
-import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_title_bar]
-import gtk / gui_activities / [details_widget_activities, main_widget_activities, core_activities]
-import gtk / [ansurf_get_status, ansurf_objects, ansurf_systray]
+import gtk / widgets / [details_widget, ansurf_widgets_main]
+import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_title_bar, ansurf_get_status, ansurf_systray, ansurf_gtk_objects]
+# all widget activities must be declared here to fix macro error
+import gtk / gui_activities / [details_widget_activities, core_activities, main_widget_activities]
 import gintro / gdk except Window
 
 
@@ -40,13 +40,11 @@ proc createArea(boxMainWindow: Box) =
     btnCheckIP = newButton("My IP")
     btnRestart = newButton("Restart")
     imgStatus = newImageFromPixbuf(surfImages.imgSecMed)
-    mainWidget = createMainWidget(imgStatus, labelDetails, btnStart, btnShowStatus, btnChangeID, btnCheckIP, btnRestart, mainStack)
+    mainWidget = ansurf_main_w_main_area(
+      ansurf_main_w_detail_area(imgStatus, labelDetails, btnShowStatus, btnRestart, mainStack, cb_send_msg),
+      ansurf_main_w_button_area(btnStart, btnChangeID, btnCheckIP, cb_send_msg)
+    )
 
-  btnRestart.connect("clicked", ansurf_gtk_do_restart, cb_send_msg)
-  btnShowStatus.connect("clicked", ansurf_gtk_do_status)
-  btnStart.connect("clicked", ansurf_gtk_do_start_stop, cb_send_msg)
-  btnChangeID.connect("clicked", ansurf_gtk_do_changeid, cb_send_msg)
-  btnCheckIP.connect("clicked", ansurf_gtk_do_myip, cb_send_msg)
 
   let
     labelDaemons = newLabel("Services: Checking")
@@ -59,16 +57,15 @@ proc createArea(boxMainWindow: Box) =
       labelDaemons, labelPorts, labelDNS, labelStatusBoot,
       btnBoot, imgStatusBoot, mainStack
     )
-  
+
   btnBoot.connect("clicked", ansurf_gtk_do_enable_disable_boot, cb_send_msg)
-  
 
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
   boxMainWindow.add(mainStack)
 
   boxMainWindow.showAll()
-  
+
   var
     mainArgs = MainObjs(
       btnRun: btnStart,

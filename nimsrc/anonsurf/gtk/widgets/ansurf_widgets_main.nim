@@ -1,8 +1,9 @@
-import gintro / [gtk, gdk, gobject, glib]
-import .. / gui_activities / core_activities
+# import gintro / [gtk, gdk, gobject, glib]
+import gintro / gtk
+import .. / gui_activities / [core_activities, main_widget_activities]
 
 
-proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnStatus, btnRestart: Button, s: Stack): Frame =
+proc ansurf_main_w_detail_area*(imgStatus: Image, labDetails: Label, btnStatus, btnRestart: Button, s: Stack, cb_send_msg: proc): Frame =
   #[
     Create the area Detail in main page
     it has image of current AnonSurf
@@ -15,6 +16,9 @@ proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnStatus, btnRestart:
     bxButtons = newBox(Orientation.horizontal, 3) # Only buttons. This's used for horizontal buttons
     bxDetailPanel = newBox(Orientation.horizontal, 6) # This is the whole box, horizontal
     evBox = gtk.newEventBox()
+
+  btnRestart.connect("clicked", ansurf_gtk_do_restart, cb_send_msg)
+  btnStatus.connect("clicked", ansurf_gtk_do_status)
 
   bxButtons.packStart(btnRestart, false, true, 4)
   bxButtons.packStart(btnStatus, false, true, 2)
@@ -33,36 +37,37 @@ proc makeDetailPanel(imgStatus: Image, labDetails: Label, btnStatus, btnRestart:
   return fmDetail
 
 
-proc makeToolBar(btnStart, btnID, btnIP: Button): Frame =
+proc ansurf_main_w_button_area*(btnStart, btnChangeID, btnCheckIP: Button, cb_send_msg: proc): Frame =
   #[
     Create Tool Panel which has buttons
   ]#
   let
     boxTool = newBox(Orientation.horizontal, 6)
     fmTool = newFrame()
-  
+
+  btnStart.connect("clicked", ansurf_gtk_do_start_stop, cb_send_msg)
+  btnChangeID.connect("clicked", ansurf_gtk_do_changeid, cb_send_msg)
+  btnCheckIP.connect("clicked", ansurf_gtk_do_myip, cb_send_msg)
   btnStart.setSizeRequest(80, 80)
-  btnID.setSizeRequest(80, 80)
-  btnIP.setSizeRequest(80, 80)
+  btnChangeID.setSizeRequest(80, 80)
+  btnCheckIP.setSizeRequest(80, 80)
 
   boxTool.add(btnStart)
-  boxTool.add(btnID)
-  boxTool.add(btnIP)
+  boxTool.add(btnChangeID)
+  boxTool.add(btnCheckIP)
 
   fmTool.add(boxTool)
 
   return fmTool
 
 
-proc createMainWidget*(imgStatus: Image, lDetails: Label, bStart, bStatus, bID, bIP, bRestart: Button, s: Stack): Box =
+proc ansurf_main_w_main_area*(box_detail_area, box_button_area: Frame): Box =
   #[
     Create the page for main widget
   ]#
   let
-    boxPanel = makeDetailPanel(imgStatus, lDetails, bStatus, bRestart, s)
-    boxToolBar = makeToolBar(bStart, bID, bIP)
     mainWidget = newBox(Orientation.vertical, 3)
-  
-  mainWidget.packStart(boxPanel, false, true, 2)
-  mainWidget.packStart(boxToolBar, false, true, 1)
+
+  mainWidget.packStart(box_detail_area, false, true, 2)
+  mainWidget.packStart(box_button_area, false, true, 1)
   return mainWidget
