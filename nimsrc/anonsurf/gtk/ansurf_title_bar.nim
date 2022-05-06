@@ -28,7 +28,7 @@ proc surfTitleBar*(): HeaderBar =
     titleBar = newHeaderBar()
 
   titleBar.setShowCloseButton(true)
-  titleBar.settitle("AnonSurf GUI")
+  titleBar.settitle("AnonSurf")
   titleBar.add(btnAbout())
   titleBar.add(btnSettings())
 
