@@ -24,14 +24,14 @@ proc handleRefresh(args: RefreshObj): bool =
   return SOURCE_CONTINUE
 
 
-proc createArea(boxMainWindow: Box, cb_send_msg: proc) =
+proc createWindowLayout(mainBoard: Window): Box =
   #[
     Create everything for the program
   ]#
   let
+    cb_send_msg = cli_init_callback_msg(true)
+    boxMainWindow = newBox(Orientation.vertical, 3)
     mainStack = newStack()
-
-  let
     btnStart = newButton("Start")
     labelDetails = newLabel("AnonSurf is not running")
     btnShowStatus = newButton("Tor Stats")
@@ -53,7 +53,10 @@ proc createArea(boxMainWindow: Box, cb_send_msg: proc) =
       ansurf_detail_w_service_area(labelServices, labelPorts, labelDNS, mainStack),
       ansurf_detail_w_boot_area(labelBootStatus, btnBoot, imgBootStatus, cb_send_msg)
     )
+    sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
 
+  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu, cb_send_msg)
+  sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
   boxMainWindow.add(mainStack)
@@ -92,6 +95,7 @@ proc createArea(boxMainWindow: Box, cb_send_msg: proc) =
   updateDetail(detailArgs, atStartStatus)
 
   discard timeoutAdd(200, handleRefresh, refresher)
+  return boxMainWindow
 
 
 proc init_main_window(w: Window) =
@@ -112,17 +116,9 @@ proc main =
 
   let
     mainBoard = newWindow()
-    boxMainWindow = newBox(Orientation.vertical, 3)
-    sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
-    cb_send_msg = cli_init_callback_msg(true)
 
   init_main_window(mainBoard)
-
-  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu, cb_send_msg)
-  sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
-
-  createArea(boxMainWindow, cb_send_msg)
-  mainBoard.add(boxMainWindow)
+  mainBoard.add(createWindowLayout(mainBoard))
 
   mainBoard.showAll()
   gtk.main()
