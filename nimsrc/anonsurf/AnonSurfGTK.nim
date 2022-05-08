@@ -94,6 +94,15 @@ proc createArea(boxMainWindow: Box, cb_send_msg: proc) =
   discard timeoutAdd(200, handleRefresh, refresher)
 
 
+proc init_main_window(w: Window) =
+  w.setResizable(false)
+  w.setTitlebar(surfTitleBar())
+  w.setIcon(surfIcon)
+  w.setPosition(WindowPosition.center)
+  w.setBorderWidth(3)
+  w.connect("delete_event", ansurf_gtk_do_not_stop)
+
+
 proc main =
   #[
     Create new window
@@ -107,19 +116,13 @@ proc main =
     sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
     cb_send_msg = cli_init_callback_msg(true)
 
-  mainBoard.setResizable(false)
-  mainBoard.setTitlebar(surfTitleBar())
-  mainBoard.setIcon(surfIcon)
-  mainBoard.setPosition(WindowPosition.center)
+  init_main_window(mainBoard)
 
   sysTrayIcon.connect("popup-menu", ansurf_right_click_menu, cb_send_msg)
   sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
 
   createArea(boxMainWindow, cb_send_msg)
-
   mainBoard.add(boxMainWindow)
-  mainBoard.setBorderWidth(3)
-  mainBoard.connect("delete_event", ansurf_gtk_do_not_stop)
 
   mainBoard.showAll()
   gtk.main()
