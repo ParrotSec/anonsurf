@@ -61,7 +61,7 @@ proc createWindowLayout(mainBoard: Window): Box =
   mainStack.addNamed(detailWidget, "detail")
   boxMainWindow.add(mainStack)
 
-  boxMainWindow.showAll()
+  # boxMainWindow.showAll()
 
   var
     mainArgs = MainObjs(
