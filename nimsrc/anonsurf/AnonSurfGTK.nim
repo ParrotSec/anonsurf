@@ -24,7 +24,7 @@ proc handleRefresh(args: RefreshObj): bool =
   return SOURCE_CONTINUE
 
 
-proc createWindowLayout(mainBoard: Window): Box =
+proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
   #[
     Create everything for the program
   ]#
@@ -53,10 +53,7 @@ proc createWindowLayout(mainBoard: Window): Box =
       ansurf_detail_w_service_area(labelServices, labelPorts, labelDNS, mainStack),
       ansurf_detail_w_boot_area(labelBootStatus, btnBoot, imgBootStatus, cb_send_msg)
     )
-    sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
-
   sysTrayIcon.connect("popup-menu", ansurf_right_click_menu, cb_send_msg)
-  sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
   mainStack.addNamed(mainWidget, "main")
   mainStack.addNamed(detailWidget, "detail")
   boxMainWindow.add(mainStack)
@@ -116,9 +113,11 @@ proc main =
 
   let
     mainBoard = newWindow()
+    sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
 
+  sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
   init_main_window(mainBoard)
-  mainBoard.add(createWindowLayout(mainBoard))
+  mainBoard.add(createWindowLayout(mainBoard, sysTrayIcon))
 
   mainBoard.showAll()
   gtk.main()
