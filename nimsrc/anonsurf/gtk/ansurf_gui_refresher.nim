@@ -6,13 +6,13 @@ import strutils
 import .. / cores / commons / dns_utils
 
 
-proc upd_boot_is_enabled(btn: Button, label: Label, img: Image) =
+proc w_detail_update_enabled_boot(btn: Button, label: Label, img: Image) =
   btn.label = "Disable"
   label.setLabel("Enabled at boot")
   img.setFromPixbuf(surfImages.imgBootOn)
 
 
-proc upd_boot_is_disabled(btn: Button, label: Label, img: Image) =
+proc w_detail_update_disabled_boot(btn: Button, label: Label, img: Image) =
   btn.label = "Enable"
   label.setLabel("Not enabled at boot")
   img.setFromPixbuf(surfImages.imgBootOn)
@@ -21,9 +21,9 @@ proc upd_boot_is_disabled(btn: Button, label: Label, img: Image) =
 proc updateDetail*(args: DetailObjs, myStatus: Status) =
   # AnonSurf is Enabled at boot
   if myStatus.isAnonSurfBoot:
-    upd_boot_is_enabled(args.btnBoot, args.lblBoot, args.imgBoot)
+    w_detail_update_enabled_boot(args.btnBoot, args.lblBoot, args.imgBoot)
   else:
-    upd_boot_is_disabled(args.btnBoot, args.lblBoot, args.imgBoot)
+    w_detail_update_disabled_boot(args.btnBoot, args.lblBoot, args.imgBoot)
 
   # Check current status of daemon services and control ports
   if myStatus.isAnonSurfService:
