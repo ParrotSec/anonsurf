@@ -1,61 +1,8 @@
 import gintro / gtk
 import ansurf_gtk_objects
-import ansurf_icons
 import ansurf_get_status
 import strutils
-import .. / cores / commons / dns_utils
-import refresher / main_widget_refresher
-
-
-proc w_detail_update_enabled_boot(btn: Button, label: Label, img: Image) =
-  btn.label = "Disable"
-  label.setLabel("Enabled at boot")
-  img.setFromPixbuf(surfImages.imgBootOn)
-
-
-proc w_detail_update_disabled_boot(btn: Button, label: Label, img: Image) =
-  btn.label = "Enable"
-  label.setLabel("Not enabled at boot")
-  img.setFromPixbuf(surfImages.imgBootOn)
-
-
-proc w_detail_update_dns_status(labelDNS: Label) =
-  # TODO remove all text shadow
-  let dns_status = dnsStatusCheck()
-  if dns_status.err == ERR_TOR:
-    let myPorts = getStatusPorts()
-    if myPorts.isReadError:
-      # ERROR RED
-      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't read Tor config<span></b>")
-    elif myPorts.isDNSPort:
-      # Activated green
-      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FF00\">Tor DNS</span></b>")
-    else:
-      # Give error msg with red color
-      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't bind port</span></b>")
-  elif dns_status.err == ERR_LOCAL_HOST:
-    # Give error style with red color
-    labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> LocalHost</span></b>")
-  elif dns_status.err == ERR_FILE_EMPTY:
-    # Give error msg with red color
-    labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf is empty</span></b>")
-  elif dns_status.err == ERR_FILE_NOT_FOUND:
-    # Give error msg with red color
-    labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf not found</span></b>")
-  elif dns_status.err == ERR_UNKNOWN:
-    # Give error msg with red color
-    labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">Unknown error</span></b>")
-  else:
-    if dns_status.is_static:
-    # Use cyan for opennic or custom addresses
-      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">Custom servers</span></b>")
-    else:
-      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">DHCP servers</span></b>")
-
-
-proc w_detail_update_deactivated(labelServices, labelPorts: Label) =
-  labelServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
-  labelPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
+import refresher / [main_widget_refresher, detail_widget_refresher]
 
 
 proc updateDetail*(args: DetailObjs, myStatus: Status) =
