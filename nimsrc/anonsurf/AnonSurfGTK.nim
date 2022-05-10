@@ -1,7 +1,7 @@
 import gintro / [gtk, glib, gobject]
 import cores / handle_activities
 import gtk / widgets / [ansurf_widget_details, ansurf_widgets_main]
-import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_title_bar, ansurf_get_status, ansurf_systray, ansurf_gtk_objects]
+import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_title_bar, ansurf_systray, ansurf_gtk_objects]
 # all widget activities must be declared here to fix macro error
 import gtk / gui_activities / [details_widget_activities, core_activities, main_widget_activities]
 import gintro / gdk except Window
@@ -59,19 +59,16 @@ proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
       btnBoot: btnBoot,
       imgBoot: imgBootStatus
     )
-    refresher = RefreshObj(
+    refreshObjects = RefreshObj(
       mainObjs: mainArgs,
       detailObjs: detailArgs,
       stackObjs: mainStack,
     )
 
   # Load latest status when start program
-  let
-    atStartStatus = getSurfStatus()
-  updateMainWidget(mainArgs, atStartStatus)
-  updateDetailWidget(detailArgs, atStartStatus)
+  ansurf_handle_refresh_all(refreshObjects)
 
-  discard timeoutAdd(200, do_gtk_refresh, refresher)
+  discard timeoutAdd(200, ansurf_handle_refresh_layouts, refreshObjects)
   return boxMainWindow
 
 

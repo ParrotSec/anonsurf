@@ -4,7 +4,7 @@ import ansurf_get_status
 import refresher / [main_widget_refresher, detail_widget_refresher]
 
 
-proc updateDetailWidget*(args: DetailObjs, myStatus: Status) =
+proc updateDetailWidget(args: DetailObjs, myStatus: Status) =
   w_detail_update_dns_status(args.lblDns)
 
   if myStatus.isAnonSurfBoot:
@@ -19,7 +19,7 @@ proc updateDetailWidget*(args: DetailObjs, myStatus: Status) =
     w_detail_update_label_ports_and_services_deactivated(args.lblServices, args.lblPorts)
 
 
-proc updateMainWidget*(args: MainObjs, myStatus: Status) =
+proc updateMainWidget(args: MainObjs, myStatus: Status) =
   #[
     Always check status of current widget
       to show correct state of buttons
@@ -48,7 +48,7 @@ proc updateMainWidget*(args: MainObjs, myStatus: Status) =
   w_main_update_btn_check_ip(args.btnIP)
 
 
-proc do_gtk_refresh*(args: RefreshObj): bool =
+proc ansurf_handle_refresh_layouts*(args: RefreshObj): bool =
   #[
     Program is having 2 pages: main and detail
     This handleRefresh check which page is using
@@ -63,3 +63,16 @@ proc do_gtk_refresh*(args: RefreshObj): bool =
     updateDetailWidget(args.detailObjs, freshStatus)
 
   return SOURCE_CONTINUE
+
+
+proc ansurf_handle_refresh_all*(args: RefreshObj) =
+  #[
+    Program is having 2 pages: main and detail
+    This handleRefresh check which page is using
+    so it update only 1 page for better performance
+  ]#
+  let
+    freshStatus = getSurfStatus()
+
+  updateMainWidget(args.mainObjs, freshStatus)
+  updateDetailWidget(args.detailObjs, freshStatus)
