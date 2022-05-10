@@ -18,6 +18,64 @@ proc w_detail_update_disabled_boot(btn: Button, label: Label, img: Image) =
   img.setFromPixbuf(surfImages.imgBootOn)
 
 
+# proc w_main_update_ansurf_ok(btnID, btnStatus: Button) =
+#   args.btnID.setSensitive(true)
+#   args.btnStatus.setSensitive(true)
+
+
+proc w_main_update_ansurf_not_running(btnRun, btnID, btnStatus, btnRestart: Button, labelDetails: Label, imgStatus: Image) =
+  btnRestart.setSensitive(false)
+  labelDetails.setText("AnonSurf is not running")
+  # args.imgStatus.setFromIconName("security-medium", 6)
+  imgStatus.setFromPixBuf(surfImages.imgSecMed)
+  btnRun.label = "Start"
+  btnID.setSensitive(false)
+  btnStatus.setSensitive(false)
+
+
+proc w_main_update_tor_not_running(btnID, btnStatus: Button, labelDetails: Label, imgStatus: Image) =
+  # args.imgStatus.setFromIconName("security-low", 6)
+  imgStatus.setFromPixBuf(surfImages.imgSecLow)
+  labelDetails.setText("Tor service doesn't start")
+  btnID.setSensitive(false)
+  btnStatus.setSensitive(false)
+
+
+proc w_main_update_tor_ports_error(btnID, btnStatus: Button, labelDetails: Label, imgStatus: Image) =
+  imgStatus.setFromPixBuf(surfImages.imgSecLow)
+  labelDetails.setText("Error with Tor ports")
+  btnID.setSensitive(false)
+  btnStatus.setSensitive(false)
+
+
+proc w_main_update_btn_run_and_restart(btnRun, btnRestart: Button) =
+  btnRun.label = "Stop"
+  btnRestart.setSensitive(true)
+
+
+proc w_main_update_btn_id_and_status(btnID, btnStatus: Button) =
+  btnID.setSensitive(true)
+  btnStatus.setSensitive(true)
+
+
+proc w_main_update_anonsurf_is_running(imgStatus: Image, labelDetails: Label) =
+  imgStatus.setFromPixBuf(surfImages.imgSecHigh)
+  labelDetails.setText("AnonSurf is running")
+
+
+proc w_main_update_error_dns_port(imgStatus: Image, labelDetails: Label) =
+  imgStatus.setFromPixBuf(surfImages.imgSecMed)
+  labelDetails.setText("Error with DNS port")
+
+
+proc w_main_update_btn_check_ip(btnIP: Button) =
+  if ansurf_workers_myip.running:
+    btnIP.setSensitive(false)
+  else:
+    ansurf_workers_myip.joinThread()
+    btnIP.setSensitive(true)
+
+
 proc updateDetail*(args: DetailObjs, myStatus: Status) =
   # AnonSurf is Enabled at boot
   if myStatus.isAnonSurfBoot:
@@ -51,7 +109,6 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
       if not myPorts.isTransPort:
         onErrPorts.add("Trans")
         szErr += 1
-    
       if szErr == 0:
         # ACtivated green
         args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FF00\">Activated</span></b>")
@@ -109,52 +166,25 @@ proc updateMain*(args: MainObjs, myStatus: Status) =
     Always check status of current widget
       to show correct state of buttons
   ]#
-  # args.btnRestart.label = "Restart"
-  if myStatus.isAnonSurfService:
-    # Idea: Restart when AnonSurf is failed
-    args.btnRestart.setSensitive(true)
+  if not myStatus.isAnonSurfService:
+    w_main_update_ansurf_not_running(args.btnRun, args.btnID, args.btnStatus, args.btnRestart, args.lDetails, args.imgStatus)
+  else:
+    w_main_update_btn_run_and_restart(args.btnRun, args.btnRestart)
     # Check status of tor service
     if myStatus.isTorService:
       let myPorts = getStatusPorts()
       # If everything (except DNS port) is okay
       if myPorts.isControlPort and myPorts.isSocksPort and myPorts.isTransPort and
         not myPorts.isReadError:
-        args.btnID.setSensitive(true)
-        args.btnStatus.setSensitive(true)
+        w_main_update_btn_id_and_status(args.btnID, args.btnStatus)
         # Check DNS
         if myPorts.isDNSPort:
-          # args.imgStatus.setFromIconName("security-high", 6)
-          args.imgStatus.setFromPixBuf(surfImages.imgSecHigh)
-          args.lDetails.setText("AnonSurf is running")
+          w_main_update_anonsurf_is_running(args.imgStatus, args.lDetails)
         else:
-          # args.imgStatus.setFromIconName("security-medium", 6)
-          args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
-          args.lDetails.setText("Error with DNS port")
+          w_main_update_error_dns_port(args.imgStatus, args.lDetails)
       else:
-        # args.imgStatus.setFromIconName("security-low", 6)
-        args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
-        args.lDetails.setText("Error with Tor ports")
-        args.btnID.setSensitive(false)
-        args.btnStatus.setSensitive(false)
+        w_main_update_tor_ports_error(args.btnID, args.btnSTatus, args.lDetails, args.imgStatus)
     else:
-      # args.imgStatus.setFromIconName("security-low", 6)
-      args.imgStatus.setFromPixBuf(surfImages.imgSecLow)
-      args.lDetails.setText("Tor service doesn't start")
-      args.btnID.setSensitive(false)
-      args.btnStatus.setSensitive(false)
-    
-    args.btnRun.label = "Stop"
-  else:
-    args.btnRestart.setSensitive(false)
-    args.lDetails.setText("AnonSurf is not running")
-    # args.imgStatus.setFromIconName("security-medium", 6)
-    args.imgStatus.setFromPixBuf(surfImages.imgSecMed)
-    args.btnRun.label = "Start"
-    args.btnID.setSensitive(false)
-    args.btnStatus.setSensitive(false)
+      w_main_update_tor_not_running(args.btnId, args.btnStatus, args.lDetails, args.imgStatus)
 
-  if ansurf_workers_myip.running:
-    args.btnIP.setSensitive(false)
-  else:
-    ansurf_workers_myip.joinThread()
-    args.btnIP.setSensitive(true)
+  w_main_update_btn_check_ip(args.btnIP)
