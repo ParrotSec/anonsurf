@@ -10,15 +10,15 @@ const
 
 
 proc set_markup_green(label: Label, title, msg: string) =
-  label.setMarkup(cstring(title & "<b><span background=\"#333333\" foreground=\"#00FF00\"> " & msg & "<span></b>"))
+  label.setMarkup(cstring(title & "<b><span background=\"#333333\" foreground=\"#00FF00\"> " & msg & "</span></b>"))
 
 
 proc set_markup_red(label: Label, title, msg: string) =
-  label.setMarkup(cstring(title & "<b><span background=\"#333333\" foreground=\"#FF0000\"> " & msg & "<span></b>"))
+  label.setMarkup(cstring(title & "<b><span background=\"#333333\" foreground=\"#FF0000\"> " & msg & "</span></b>"))
 
 
 proc set_markup_cyan(label: Label, title, msg: string) =
-  label.setMarkup(cstring(title & "<b><span background=\"#333333\" foreground=\"#00FFFF\"> " & msg & "<span></b>"))
+  label.setMarkup(cstring(title & "<b><span background=\"#333333\" foreground=\"#00FFFF\"> " & msg & "</span></b>"))
 
 
 proc w_detail_update_enabled_boot*(btn: Button, label: Label, img: Image) =
