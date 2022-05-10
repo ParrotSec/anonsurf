@@ -15,7 +15,7 @@ proc getSurfStatus*(): Status =
 
   var
     finalStatus: Status
-  
+
   finalStatus = Status(
     isAnonSurfService: surfStatus,
     isTorService: torStatus,
