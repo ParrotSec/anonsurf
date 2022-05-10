@@ -14,7 +14,7 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
   if myStatus.isAnonSurfService:
     w_detail_update_label_services(myStatus.isTorService, args.lblServices)
     w_detail_update_label_ports(args.lblPorts)
-  elif not myStatus.isAnonsurfService:
+  else:
     # Deactivated cyan color
     w_detail_update_label_ports_and_services_deactivated(args.lblServices, args.lblPorts)
 
