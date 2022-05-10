@@ -65,7 +65,7 @@ proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
       stackObjs: mainStack,
     )
 
-  # Load latest status when start program
+  # Load latest status when start program. Useful when start AnonSurf GUI again (after it ran)
   ansurf_handle_refresh_all(refreshObjects)
 
   discard timeoutAdd(200, ansurf_handle_refresh_layouts, refreshObjects)
