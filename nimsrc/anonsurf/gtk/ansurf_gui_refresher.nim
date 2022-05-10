@@ -3,7 +3,7 @@ import ansurf_get_status
 import refresher / [main_widget_refresher, detail_widget_refresher]
 
 
-proc updateDetail*(args: DetailObjs, myStatus: Status) =
+proc updateDetailWidget*(args: DetailObjs, myStatus: Status) =
   w_detail_update_dns_status(args.lblDns)
 
   if myStatus.isAnonSurfBoot:
@@ -15,11 +15,10 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
     w_detail_update_label_services(myStatus.isTorService, args.lblServices)
     w_detail_update_label_ports(args.lblPorts)
   else:
-    # Deactivated cyan color
     w_detail_update_label_ports_and_services_deactivated(args.lblServices, args.lblPorts)
 
 
-proc updateMain*(args: MainObjs, myStatus: Status) =
+proc updateMainWidget*(args: MainObjs, myStatus: Status) =
   #[
     Always check status of current widget
       to show correct state of buttons

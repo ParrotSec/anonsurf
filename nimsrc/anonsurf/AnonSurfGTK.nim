@@ -17,9 +17,9 @@ proc handleRefresh(args: RefreshObj): bool =
     freshStatus = getSurfStatus()
 
   if args.stackObjs.getVisibleChildName == "main":
-    updateMain(args.mainObjs, freshStatus)
+    updateMainWidget(args.mainObjs, freshStatus)
   else:
-    updateDetail(args.detailObjs, freshStatus)
+    updateDetailWidget(args.detailObjs, freshStatus)
 
   return SOURCE_CONTINUE
 
@@ -87,9 +87,8 @@ proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
   # Load latest status when start program
   let
     atStartStatus = getSurfStatus()
-    # atStartPorts = getStatusPorts()
-  updateMain(mainArgs, atStartStatus)
-  updateDetail(detailArgs, atStartStatus)
+  updateMainWidget(mainArgs, atStartStatus)
+  updateDetailWidget(detailArgs, atStartStatus)
 
   discard timeoutAdd(200, handleRefresh, refresher)
   return boxMainWindow
