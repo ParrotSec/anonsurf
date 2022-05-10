@@ -1,7 +1,5 @@
-import gintro / gtk
 import ansurf_gtk_objects
 import ansurf_get_status
-import strutils
 import refresher / [main_widget_refresher, detail_widget_refresher]
 
 
