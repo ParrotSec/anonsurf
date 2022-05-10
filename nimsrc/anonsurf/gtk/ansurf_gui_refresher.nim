@@ -4,6 +4,7 @@ import ansurf_icons
 import ansurf_get_status
 import strutils
 import .. / cores / commons / dns_utils
+import refresher / main_widget_refresher
 
 
 proc w_detail_update_enabled_boot(btn: Button, label: Label, img: Image) =
@@ -18,62 +19,43 @@ proc w_detail_update_disabled_boot(btn: Button, label: Label, img: Image) =
   img.setFromPixbuf(surfImages.imgBootOn)
 
 
-# proc w_main_update_ansurf_ok(btnID, btnStatus: Button) =
-#   args.btnID.setSensitive(true)
-#   args.btnStatus.setSensitive(true)
-
-
-proc w_main_update_ansurf_not_running(btnRun, btnID, btnStatus, btnRestart: Button, labelDetails: Label, imgStatus: Image) =
-  btnRestart.setSensitive(false)
-  labelDetails.setText("AnonSurf is not running")
-  # args.imgStatus.setFromIconName("security-medium", 6)
-  imgStatus.setFromPixBuf(surfImages.imgSecMed)
-  btnRun.label = "Start"
-  btnID.setSensitive(false)
-  btnStatus.setSensitive(false)
-
-
-proc w_main_update_tor_not_running(btnID, btnStatus: Button, labelDetails: Label, imgStatus: Image) =
-  # args.imgStatus.setFromIconName("security-low", 6)
-  imgStatus.setFromPixBuf(surfImages.imgSecLow)
-  labelDetails.setText("Tor service doesn't start")
-  btnID.setSensitive(false)
-  btnStatus.setSensitive(false)
-
-
-proc w_main_update_tor_ports_error(btnID, btnStatus: Button, labelDetails: Label, imgStatus: Image) =
-  imgStatus.setFromPixBuf(surfImages.imgSecLow)
-  labelDetails.setText("Error with Tor ports")
-  btnID.setSensitive(false)
-  btnStatus.setSensitive(false)
-
-
-proc w_main_update_btn_run_and_restart(btnRun, btnRestart: Button) =
-  btnRun.label = "Stop"
-  btnRestart.setSensitive(true)
-
-
-proc w_main_update_btn_id_and_status(btnID, btnStatus: Button) =
-  btnID.setSensitive(true)
-  btnStatus.setSensitive(true)
-
-
-proc w_main_update_anonsurf_is_running(imgStatus: Image, labelDetails: Label) =
-  imgStatus.setFromPixBuf(surfImages.imgSecHigh)
-  labelDetails.setText("AnonSurf is running")
-
-
-proc w_main_update_error_dns_port(imgStatus: Image, labelDetails: Label) =
-  imgStatus.setFromPixBuf(surfImages.imgSecMed)
-  labelDetails.setText("Error with DNS port")
-
-
-proc w_main_update_btn_check_ip(btnIP: Button) =
-  if ansurf_workers_myip.running:
-    btnIP.setSensitive(false)
+proc w_detail_update_dns_status(labelDNS: Label) =
+  # TODO remove all text shadow
+  let dns_status = dnsStatusCheck()
+  if dns_status.err == ERR_TOR:
+    let myPorts = getStatusPorts()
+    if myPorts.isReadError:
+      # ERROR RED
+      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't read Tor config<span></b>")
+    elif myPorts.isDNSPort:
+      # Activated green
+      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FF00\">Tor DNS</span></b>")
+    else:
+      # Give error msg with red color
+      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't bind port</span></b>")
+  elif dns_status.err == ERR_LOCAL_HOST:
+    # Give error style with red color
+    labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> LocalHost</span></b>")
+  elif dns_status.err == ERR_FILE_EMPTY:
+    # Give error msg with red color
+    labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf is empty</span></b>")
+  elif dns_status.err == ERR_FILE_NOT_FOUND:
+    # Give error msg with red color
+    labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf not found</span></b>")
+  elif dns_status.err == ERR_UNKNOWN:
+    # Give error msg with red color
+    labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">Unknown error</span></b>")
   else:
-    ansurf_workers_myip.joinThread()
-    btnIP.setSensitive(true)
+    if dns_status.is_static:
+    # Use cyan for opennic or custom addresses
+      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">Custom servers</span></b>")
+    else:
+      labelDNS.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">DHCP servers</span></b>")
+
+
+proc w_detail_update_deactivated(labelServices, labelPorts: Label) =
+  labelServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
+  labelPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
 
 
 proc updateDetail*(args: DetailObjs, myStatus: Status) =
@@ -122,43 +104,12 @@ proc updateDetail*(args: DetailObjs, myStatus: Status) =
         # Give error msg with red color
         args.lblPorts.setMarkup(cstring("Ports:  <b<span background=\"#333333\" foreground=\"#FF0000\">>Error on " & onErrPorts[0] & "</span></b>"))
 
-  elif not myStatus.isAnonsurfSErvice:
+  elif not myStatus.isAnonsurfService:
     # Deactivated cyan color
-    args.lblServices.setMarkup("Servc:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
-    args.lblPorts.setMarkup("Ports:  <b><span background=\"#333333\" foreground=\"#00FFFF\">Deactivated</span></b>")
+    w_detail_update_deactivated(args.lblServices, args.lblPorts)
 
   # Update DNS status
-  # TODO remove all text shadow
-  let dns_status = dnsStatusCheck()
-  if dns_status.err == ERR_TOR:
-    let myPorts = getStatusPorts()
-    if myPorts.isReadError:
-      # ERROR RED
-      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't read Tor config<span></b>")
-    elif myPorts.isDNSPort:
-      # Activated green
-      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FF00\">Tor DNS</span></b>")
-    else:
-      # Give error msg with red color
-      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> Can't bind port</span></b>")
-  elif dns_status.err == ERR_LOCAL_HOST:
-    # Give error style with red color
-    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\"> LocalHost</span></b>")
-  elif dns_status.err == ERR_FILE_EMPTY:
-    # Give error msg with red color
-    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf is empty</span></b>")
-  elif dns_status.err == ERR_FILE_NOT_FOUND:
-    # Give error msg with red color
-    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">resolv.conf not found</span></b>")
-  elif dns_status.err == ERR_UNKNOWN:
-    # Give error msg with red color
-    args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#FF0000\">Unknown error</span></b>")
-  else:
-    if dns_status.is_static:
-    # Use cyan for opennic or custom addresses
-      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">Custom servers</span></b>")
-    else:
-      args.lblDns.setMarkup("DNS:   <b><span background=\"#333333\" foreground=\"#00FFFF\">DHCP servers</span></b>")
+  w_detail_update_dns_status(args.lblDns)
 
 
 proc updateMain*(args: MainObjs, myStatus: Status) =
