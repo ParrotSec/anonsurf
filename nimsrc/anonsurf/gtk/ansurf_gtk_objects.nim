@@ -18,6 +18,10 @@ type
     lblBoot*: Label
     btnBoot*: Button
     imgBoot*: Image
+  MenuObj* = ref object
+    menuRun*: MenuItem
+    menuRestart*: MenuItem
+    menuStatus*: MenuItem
   RefreshObj* = ref object
     mainObjs*: MainObjs
     detailObjs*: DetailObjs
