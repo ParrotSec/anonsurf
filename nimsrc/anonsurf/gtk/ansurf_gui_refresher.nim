@@ -1,3 +1,4 @@
+import gintro / [gtk, glib]
 import ansurf_gtk_objects
 import ansurf_get_status
 import refresher / [main_widget_refresher, detail_widget_refresher]
@@ -45,3 +46,20 @@ proc updateMainWidget*(args: MainObjs, myStatus: Status) =
       w_main_update_tor_not_running(args.btnId, args.btnStatus, args.lDetails, args.imgStatus)
 
   w_main_update_btn_check_ip(args.btnIP)
+
+
+proc do_gtk_refresh*(args: RefreshObj): bool =
+  #[
+    Program is having 2 pages: main and detail
+    This handleRefresh check which page is using
+    so it update only 1 page for better performance
+  ]#
+  let
+    freshStatus = getSurfStatus()
+
+  if args.stackObjs.getVisibleChildName == "main":
+    updateMainWidget(args.mainObjs, freshStatus)
+  else:
+    updateDetailWidget(args.detailObjs, freshStatus)
+
+  return SOURCE_CONTINUE

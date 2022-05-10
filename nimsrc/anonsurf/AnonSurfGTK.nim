@@ -7,23 +7,6 @@ import gtk / gui_activities / [details_widget_activities, core_activities, main_
 import gintro / gdk except Window
 
 
-proc handleRefresh(args: RefreshObj): bool =
-  #[
-    Program is having 2 pages: main and detail
-    This handleRefresh check which page is using
-    so it update only 1 page for better performance
-  ]#
-  let
-    freshStatus = getSurfStatus()
-
-  if args.stackObjs.getVisibleChildName == "main":
-    updateMainWidget(args.mainObjs, freshStatus)
-  else:
-    updateDetailWidget(args.detailObjs, freshStatus)
-
-  return SOURCE_CONTINUE
-
-
 proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
   #[
     Create everything for the program
@@ -58,8 +41,6 @@ proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
   mainStack.addNamed(detailWidget, "detail")
   boxMainWindow.add(mainStack)
 
-  # boxMainWindow.showAll()
-
   var
     mainArgs = MainObjs(
       btnRun: btnStart,
@@ -90,7 +71,7 @@ proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
   updateMainWidget(mainArgs, atStartStatus)
   updateDetailWidget(detailArgs, atStartStatus)
 
-  discard timeoutAdd(200, handleRefresh, refresher)
+  discard timeoutAdd(200, do_gtk_refresh, refresher)
   return boxMainWindow
 
 
