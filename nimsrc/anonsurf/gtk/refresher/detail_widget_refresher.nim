@@ -59,6 +59,25 @@ proc w_detail_update_dns_status*(labelDNS: Label) =
       labelDNS.set_markup_cyan(title_dns, "DHCP servers")
 
 
-proc w_detail_update_deactivated*(labelServices, labelPorts: Label) =
+proc w_detail_update_label_ports_and_services_deactivated*(labelServices, labelPorts: Label) =
   labelServices.set_markup_cyan(title_service, "Deactivated")
   labelPorts.set_markup_cyan(title_ports, "Deactivated")
+
+
+proc w_detail_update_label_services*(isTorService: bool, labelServices: Label) =
+  if isTorService:
+    labelServices.set_markup_green(title_service, "Activated")
+  else:
+    labelServices.set_markup_red(title_service, "Tor is not running")
+
+
+proc w_detail_update_label_ports*(labelPorts: Label) =
+  let portStatus = getStatusPorts()
+  if portStatus.isReadError:
+    labelPorts.set_markup_red(title_ports, "Parse torrc failed")
+  else:
+    case int(portStatus.isControlPort) + int(portStatus.isSocksPort) + int(portStatus.isTransPort)
+    of 3:
+      labelPorts.set_markup_green(title_ports, "Activated")
+    else:
+      labelPorts.set_markup_red(title_ports, "Can't bind ports")
