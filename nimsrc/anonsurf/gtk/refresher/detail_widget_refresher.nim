@@ -9,7 +9,6 @@ const
   title_ports = "Ports:  "
 
 
-
 proc set_markup_green(label: Label, title, msg: string) =
   label.setMarkup(cstring(title & "<b><span background=\"#333333\" foreground=\"#00FF00\"> " & msg & "<span></b>"))
 
