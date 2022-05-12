@@ -46,7 +46,7 @@ proc genBridgeAddr*(): string =
   for line in lines(basePath):
     if not line.startsWith("#") and not isEmptyOrWhitespace(line):
       allBridgeAddr.add(line)
-  
+
   return sample(allBridgeAddr)
 
 

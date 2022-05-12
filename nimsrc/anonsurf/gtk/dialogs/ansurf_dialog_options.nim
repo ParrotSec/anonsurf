@@ -15,7 +15,7 @@ proc onClickOptions*(b: Button) =
 
   dialogSettings.setTitle("AnonSurf Settings")
   dialogSEttings.setIconName("preferences-desktop")
-  
+
   dialogArea.add(optionBridge)
   dialogSettings.showAll()
   discard dialogSettings.run()

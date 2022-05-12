@@ -14,7 +14,7 @@ proc getServStatus*(serviceName: string): bool =
     file_stat: Stat
   let
     service_path = systemd_dir & "invocation:" & serviceName & ".service"
-  
+
   # The file path is a broken symlink
   # Seems like Nim's fileExists checks for actual file from symlink so this
   # broken symlink always return false.

@@ -2,7 +2,6 @@ import strscans
 import net
 import strutils
 import httpclient
-# import osproc
 import .. / commons / [parse_config, parse_resp]
 
 
@@ -29,7 +28,7 @@ proc ansurf_extra_changeID*(conf: string): seq[string] =
   var
     tmp, passwd: string
     sock = net.newSocket()
-  
+
   if scanf(readFile(conf), "$w $w", tmp, passwd):
     let controlPort = getTorrcPorts().controlPort
     # sock.connect("127.0.0.1", Port(9051))

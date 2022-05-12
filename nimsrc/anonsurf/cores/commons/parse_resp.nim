@@ -11,4 +11,3 @@ proc parseIPFromTorServer*(data: string): array[2, string] =
   let ipAddr = parseHtml(data).findAll("strong")[0].innerText
   let status = parseHtml(data).findAll("title")[0].innerText
   return [status.replace("\n", "").replace("  ", ""), "Your address is: " & ipAddr]
-  # return "Your address is: " & ipAddr & "\n" & status.replace("\n", "").replace("  ", "")

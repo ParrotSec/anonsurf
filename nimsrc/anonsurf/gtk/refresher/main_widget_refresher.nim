@@ -6,7 +6,6 @@ import .. / ansurf_gtk_objects
 proc w_main_update_ansurf_not_running*(btnRun, btnID, btnStatus, btnRestart: Button, labelDetails: Label, imgStatus: Image) =
   btnRestart.setSensitive(false)
   labelDetails.setText("AnonSurf is not running")
-  # args.imgStatus.setFromIconName("security-medium", 6)
   imgStatus.setFromPixBuf(surfImages.imgSecMed)
   btnRun.label = "Start"
   btnID.setSensitive(false)
@@ -14,7 +13,6 @@ proc w_main_update_ansurf_not_running*(btnRun, btnID, btnStatus, btnRestart: But
 
 
 proc w_main_update_tor_not_running*(btnID, btnStatus: Button, labelDetails: Label, imgStatus: Image) =
-  # args.imgStatus.setFromIconName("security-low", 6)
   imgStatus.setFromPixBuf(surfImages.imgSecLow)
   labelDetails.setText("Tor service doesn't start")
   btnID.setSensitive(false)

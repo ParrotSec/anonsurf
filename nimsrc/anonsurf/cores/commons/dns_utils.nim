@@ -19,7 +19,7 @@ proc dnsAddressCheck(): DnsAddr =
   var
     has_localhost = false
     has_custom_addr = false
-  
+
   for line in lines(sysResolvConf):
     if line.startsWith("nameserver"):
       let name_server = line.split(" ")[1]

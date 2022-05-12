@@ -23,11 +23,9 @@ proc onClickAbout*(b: Button) =
   showAbout.setVersion(surfVersion)
   showAbout.setArtists([
     "Federica \"marafed\" Marasà",
-    # "Manuel \"Serverket\" Hernandez",
     "David \"mcder3\" Linares",
-  ]) # Artwork by
-  # showAbout.setDocumenters([]) # Documented by
-  # showAbout.setTranslatorCredits([]) # Translated by
+  ])
+
   showAbout.setAuthors([
     "Lorenzo \"Palinuro\" Faletra",
     "Nong Hoang \"DmKnght\" Tu",
@@ -37,7 +35,7 @@ proc onClickAbout*(b: Button) =
   ])
   showAbout.setComments("Anonymous Toolkit for Parrot OS")
   showAbout.setCopyright(
-    "Copyright © 2013 - 2020 Lorenzo \"Palinuro\" Faletra\nCopyright © 2020 Parrot Security CIC"
+    "Copyright © 2013 - 2020 Lorenzo \"Palinuro\" Faletra\nCopyright © 2022 Parrot Security CIC"
   )
   showAbout.setLicenseType(gpl_3_0)
   showAbout.setWebsite("https://nest.parrot.sh/packages/tools/anonsurf")
