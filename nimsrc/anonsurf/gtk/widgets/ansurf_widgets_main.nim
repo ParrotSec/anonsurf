@@ -18,7 +18,7 @@ proc ansurf_main_w_detail_area*(imgStatus: Image, labDetails: Label, btnStatus, 
     evBox = gtk.newEventBox()
 
   btnRestart.connect("clicked", ansurf_gtk_do_restart, cb_send_msg)
-  btnStatus.connect("clicked", ansurf_gtk_do_status, cb_send_msg)
+  btnStatus.connect("clicked", ansurf_gtk_do_status)
 
   bxButtons.packStart(btnRestart, false, true, 4)
   bxButtons.packStart(btnStatus, false, true, 2)
