@@ -1,4 +1,3 @@
-# import gintro / [gtk, gdk, gobject, glib]
 import gintro / gtk
 import .. / gui_activities / [core_activities, main_widget_activities]
 
