@@ -45,14 +45,3 @@ type
 var
   ansurf_workers_common*: Thread[callback_send_messenger]
   ansurf_workers_myip*: Thread[callback_send_messenger]
-  # worker*: Thread[void]
-#   MyIP* = object
-#     thisAddr*: string
-#     isUnderTor*: string
-#     iconName*: string
-# var
-#   worker*: system.Thread[void]
-#   channel*: Channel[MyIP]
-
-# var
-#   retCode*: Channel[int]
