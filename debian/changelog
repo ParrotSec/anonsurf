@@ -1,3 +1,9 @@
+anonsurf (3.3.2+parrot1) parrot-security; urgency=medium
+
+  * Fix dns restore on parrot 5.0.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 12 May 2022 10:11:25 +0200
+
 anonsurf (3.3.2+parrot0) parrot-updates; urgency=medium
 
   * Fix getuid logic bugs in dnstool caused missing resolv.conf
