@@ -1,5 +1,5 @@
-import kill_apps_activities
-import .. / commons / ansurf_types
+import .. / cores / activities / kill_apps_actions
+import .. / cores / commons / ansurf_types
 
 
 proc cli_kill_apps*(callback_send_msg: callback_send_messenger) =
@@ -11,4 +11,4 @@ proc cli_kill_apps*(callback_send_msg: callback_send_messenger) =
     elif input == "n" or input == "N":
       return
     else:
-      callback_send_msg("Apps killer", "Invalid option! Please use Y / N", 1)
+      callback_send_msg("Apps killer", "Invalid option! Please use Y / N", SecurityMedium)

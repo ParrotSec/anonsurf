@@ -1,6 +1,11 @@
+#[
+  Init new GTK application to ask user to kill apps
+  Call when function is not inside AnonSurf GTK
+]#
+
 import gintro / [gtk, gobject]
-import .. / commons / ansurf_types
-import kill_apps_activities
+import .. / .. / cores / commons / ansurf_types
+import .. / .. / cores / activities / kill_apps_actions
 
 
 proc onClickExit(w: Window) =

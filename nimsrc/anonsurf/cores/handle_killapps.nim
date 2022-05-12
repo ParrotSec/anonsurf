@@ -1,4 +1,5 @@
-import killapps / [kill_apps_cli, kill_apps_gtk]
+import .. / cli / ansurf_cli_killapps
+import .. / gtk / utils / ansurf_gtk_kill_apps
 import commons / ansurf_types
 
 

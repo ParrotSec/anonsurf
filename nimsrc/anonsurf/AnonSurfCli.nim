@@ -1,8 +1,8 @@
 import osproc
 import os
-import cores / commons / services_status
+import cores / commons / [services_status, ansurf_types]
 import cores / [handle_killapps, handle_activities]
-import cli / help
+import cli / ansurf_cli_help
 
 #[
   isDesktop: bool -> Check if current OS has Desktop Environment.
@@ -34,7 +34,7 @@ proc check_ip() =
 proc start() =
   # Start Anonsurf's Daemon
   if getServStatus("anonsurfd"):
-    callback_msg_proc("AnonSurf Status", "AnonSurf is running. Can't start it again", 2)
+    callback_msg_proc("AnonSurf Status", "AnonSurf is running. Can't start it again", SecurityLow)
     return
   
   callback_kill_apps(callback_msg_proc)
@@ -44,7 +44,7 @@ proc start() =
 proc stop() =
   # Stop Anonsurf's Daemon. If anonsurf didn't run, return
   if not getServStatus("anonsurfd"):
-    callback_msg_proc("AnonSurf Status", "AnonSurf is not running. Can't stop it", 2)
+    callback_msg_proc("AnonSurf Status", "AnonSurf is not running. Can't stop it", SecurityLow)
     return
   ansurf_acts_handle_stop(sudo, callback_msg_proc)
   # Only do kill apps when anonsurf is not running.
@@ -61,9 +61,9 @@ proc checkBoot() =
   # Check if AnonSurf is enabled at boot
   let bootResult = isServEnabled("anonsurfd.service")
   if bootResult:
-    callback_msg_proc("Startup check", "AnonSurf is enabled at boot", 0)
+    callback_msg_proc("Startup check", "AnonSurf is enabled at boot", SecurityHigh)
   else:
-    callback_msg_proc("Startup check", "AnonSurf is not enabled at boot", 1)
+    callback_msg_proc("Startup check", "AnonSurf is not enabled at boot", SecurityMedium)
 
 
 proc enableBoot() =
@@ -86,10 +86,10 @@ proc changeID() =
 proc status() =
   # Show nyx
   if not getServStatus("anonsurfd"):
-    callback_msg_proc("AnonSurf Status", "AnonSurf is not running", 2)
+    callback_msg_proc("AnonSurf Status", "AnonSurf is not running", SecurityLow)
   else:
     if not fileExists("/etc/anonsurf/nyxrc"):
-      callback_msg_proc("AnonSurf Status", "Nyxrc is not found", 0)
+      callback_msg_proc("AnonSurf Status", "Nyxrc is not found", SecurityHigh)
     else:
       discard execCmd("/usr/bin/nyx --config /etc/anonsurf/nyxrc")
 
@@ -105,7 +105,7 @@ proc checkOptions() =
         helpBanner()
         return
       else:
-        callback_msg_proc("System check", "No system init is running", 2)
+        callback_msg_proc("System check", "No system init is running", SecurityLow)
         return
     case paramStr(1)
     of "start":
@@ -130,6 +130,6 @@ proc checkOptions() =
       devBanner()
       helpBanner()
     else:
-      callback_msg_proc("AnonSurf CLI", "Invalid option " & paramStr(1), 2)
+      callback_msg_proc("AnonSurf CLI", "Invalid option " & paramStr(1), SecurityLow)
 
 checkOptions()

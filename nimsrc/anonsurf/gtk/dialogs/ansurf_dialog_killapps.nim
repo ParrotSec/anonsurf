@@ -1,6 +1,11 @@
+#[
+  Create a dialog to ask user to kill applications.
+  Call this inside AnonSurf GTK. No need to init new GTK app
+]#
+
 import gintro / [gtk, gobject]
-import .. / commons / ansurf_types
-import kill_apps_activities
+import .. / .. / cores / commons / ansurf_types
+import .. / .. / cores / activities / kill_apps_actions
 
 
 type
@@ -35,7 +40,7 @@ proc box_kill_app(callback_send_msg: callback_send_messenger, d: Dialog): Box =
       cb_send_msg: callback_send_msg,
       d: d
     )
-  
+
   btnKill.connect("clicked", do_kill, pass_args)
   boxButtons.add(btnKill)
 
@@ -50,7 +55,7 @@ proc box_kill_app(callback_send_msg: callback_send_messenger, d: Dialog): Box =
   return boxAppKill
 
 
-proc dialog_kill_app*(callback_send_msg: callback_send_messenger) =
+proc dialog_kill_apps*(callback_send_msg: callback_send_messenger) =
   let
     retDialog = newDialog()
     dialogArea = retDialog.getContentArea()
