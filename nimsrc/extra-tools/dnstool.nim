@@ -136,7 +136,7 @@ proc makeDHCPDNS() =
     writeTail("")
     lnkResovConf()
   except:
-    printErr("Failed to generate DHCP addresses")
+    printErr("makeDHCPDNS(): Failed to configure DHCP addresses in resolvconf mode")
 
 
 proc makeCustomDNS(dnsAddr: seq[string]) =
@@ -202,17 +202,9 @@ proc restoreBackup() =
     else:
       lnkResovConf()
   else:
-    # If resolv.conf not found, we force creating DHCP
-    if status.err == ERR_FILE_NOT_FOUND:
-      makeDHCPDNS()
-    # Else we have resolv.conf and its backup file
-    else:
-      # First force removing old resolv.conf
-      # Solve the symlink error while writing new file
-      if tryRemoveFile(sysResolvConf):
-        moveFile(bakResolvConf, sysResolvConf)
-      else:
-        discard # TODO show error here
+    # If backup is found, restore it as is.
+    # Next dhcp handshake will fix in case it is no longer valid.
+    moveFile(bakResolvConf, sysResolvConf)
 
 
 proc showStatus() =
