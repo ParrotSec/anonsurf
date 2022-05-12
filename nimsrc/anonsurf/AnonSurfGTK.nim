@@ -4,7 +4,7 @@ import cores / handle_activities
 import gtk / widgets / [ansurf_widget_details, ansurf_widgets_main]
 import gtk / [ansurf_icons, ansurf_gui_refresher, ansurf_title_bar, ansurf_systray, ansurf_gtk_objects]
 # all widget activities must be declared here to fix macro error
-import gtk / gui_activities / [details_widget_activities, core_activities, main_widget_activities, systray_activities]
+import gtk / gui_activities / core_activities
 import cores / commons / ansurf_types
 
 

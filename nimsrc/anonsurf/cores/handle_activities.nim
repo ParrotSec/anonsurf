@@ -16,14 +16,14 @@ proc cmd_init_sudo*(isDesktop: bool): string =
     return "sudo"
 
 
-proc cli_init_callback_msg*(isDesktop: bool): proc =
+proc cli_init_callback_msg*(isDesktop: bool): callback_send_messenger =
   if isDesktop:
     return gtk_send_msg
   else:
     return cli_send_msg
 
 
-proc ansurf_acts_handle_start*(sudo: string, callback_send_messages: proc) =
+proc ansurf_acts_handle_start*(sudo: string, callback_send_messages: callback_send_messenger) =
   let status_start_surf = ansurf_core_start(sudo)
   if status_start_surf == 0:
     if getServStatus("anonsurfd"):
@@ -40,7 +40,7 @@ proc ansurf_acts_handle_start*(sudo: string, callback_send_messages: proc) =
     callback_send_messages("AnonSurf Start", "AnonSurf failed to start", SecurityLow)
 
 
-proc ansurf_acts_handle_stop*(sudo: string, callback_send_messages: proc) =
+proc ansurf_acts_handle_stop*(sudo: string, callback_send_messages: callback_send_messenger) =
   let stop_status = ansurf_core_stop(sudo)
   if stop_status == 0:
     callback_send_messages("AnonSurf Stop", "AnonSurf stopped", SecurityHigh)
@@ -50,7 +50,7 @@ proc ansurf_acts_handle_stop*(sudo: string, callback_send_messages: proc) =
     callback_send_messages("AnonSurf Stop", "AnonSurf failed to stop", SecurityLow)
 
 
-proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
+proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: callback_send_messenger) =
   if not getServStatus("anonsurfd"):
     callback_send_messages("AnonSurf Status", "AnonSurf is not running. Can't restart it", SecurityLow)
     return
@@ -66,7 +66,7 @@ proc ansurf_acts_handle_restart*(sudo: string, callback_send_messages: proc) =
     callback_send_messages("AnonSurf Restart", "AnonSurf failed to restart", SecurityLow)
 
 
-proc ansurf_acts_handle_boot_disable*(sudo: string, callback_send_messages: proc) =
+proc ansurf_acts_handle_boot_disable*(sudo: string, callback_send_messages: callback_send_messenger) =
   if not isServEnabled("anonsurfd.service"):
     callback_send_messages("AnonSurf disable boot", "AnonSurf is already disabled!", SecurityMedium)
     return
@@ -76,7 +76,7 @@ proc ansurf_acts_handle_boot_disable*(sudo: string, callback_send_messages: proc
     callback_send_messages("AnonSurf Disable Boot", "Failed to disable AnonSurf at boot", SecurityLow)
 
 
-proc ansurf_acts_handle_boot_enable*(sudo: string, callback_send_messages: proc) =
+proc ansurf_acts_handle_boot_enable*(sudo: string, callback_send_messages: callback_send_messenger) =
   if isServEnabled("anonsurfd.service"):
     callback_send_messages("AnonSurf disable boot", "AnonSurf is already enabled!", SecurityMedium)
     return
@@ -86,7 +86,7 @@ proc ansurf_acts_handle_boot_enable*(sudo: string, callback_send_messages: proc)
     callback_send_messages("AnonSurf Enable Boot", "Failed to enable AnonSurf at boot", SecurityLow)
 
 
-proc ansurf_acts_handle_changeID*(callback_send_messages: proc) =
+proc ansurf_acts_handle_changeID*(callback_send_messages: callback_send_messenger) =
   if not getServStatus("anonsurfd"):
     callback_send_messages("AnonSurf Status", "AnonSurf is not running", SecurityLow)
     return
@@ -110,7 +110,7 @@ proc ansurf_acts_handle_changeID*(callback_send_messages: proc) =
     callback_send_messages("ID Change", "Configuration file not found", SecurityLow)
 
 
-proc ansurf_acts_handle_checkIP*(callback_send_messages: proc) =
+proc ansurf_acts_handle_checkIP*(callback_send_messages: callback_send_messenger) =
   callback_send_messages("My IP", "Retrieving data from server", SecurityInfo)
   let info = ansurf_extra_checkIP()
   # Error

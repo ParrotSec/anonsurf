@@ -12,8 +12,8 @@ type
   StatusImg* = enum
     SecurityHigh, SecurityMedium, SecurityLow, SecurityInfo
 
-  callback_kill_apps* = proc(callback_send_msg: callback_send_messenger) {.closure.}
   callback_send_messenger* = proc(title, body: string, code: StatusImg)
+  callback_kill_apps* = proc(callback_send_msg: callback_send_messenger) {.closure.}
   # MessageCallback* = proc (title: string, body: string, code: int)
   # TorRC* = object
   #   use_bridge*: bool

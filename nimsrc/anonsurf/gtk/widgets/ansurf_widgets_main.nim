@@ -1,8 +1,10 @@
-import gintro / gtk
+import gintro / [gtk, glib, gobject]
+import gintro / gdk except Window
 import .. / gui_activities / [core_activities, main_widget_activities]
+import .. / .. / cores / commons / ansurf_types
 
 
-proc ansurf_main_w_detail_area*(imgStatus: Image, labDetails: Label, btnStatus, btnRestart: Button, s: Stack, cb_send_msg: proc): Frame =
+proc ansurf_main_w_detail_area*(imgStatus: Image, labDetails: Label, btnStatus, btnRestart: Button, s: Stack, cb_send_msg: callback_send_messenger): Frame =
   #[
     Create the area Detail in main page
     it has image of current AnonSurf
@@ -36,7 +38,7 @@ proc ansurf_main_w_detail_area*(imgStatus: Image, labDetails: Label, btnStatus, 
   return fmDetail
 
 
-proc ansurf_main_w_button_area*(btnStart, btnChangeID, btnCheckIP: Button, cb_send_msg: proc): Frame =
+proc ansurf_main_w_button_area*(btnStart, btnChangeID, btnCheckIP: Button, cb_send_msg: callback_send_messenger): Frame =
   #[
     Create Tool Panel which has buttons
   ]#
