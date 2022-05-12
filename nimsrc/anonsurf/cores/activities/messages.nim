@@ -1,11 +1,9 @@
 import strformat
 import gintro / notify
-
-# type
-#   callback_send_messenger* = proc(title, body: string, code: int)
+import .. / commons / ansurf_types
 
 
-proc cli_send_msg*(title, body: string, code: int) =
+proc cli_send_msg*(title, body: string, code: StatusImg) =
   #[
     Print message to CLI
     0: Ok
@@ -19,19 +17,23 @@ proc cli_send_msg*(title, body: string, code: int) =
     B_CYAN = "\e[96m"
     B_BLUE = "\e[94m"
     RESET = "\e[0m"
-    
-  if code == 0:
+
+  case code
+  of SecurityHigh:
     echo fmt"[{B_GREEN}*{RESET}] {title}"
     echo fmt"{B_GREEN}{body}{RESET}"
-  elif code == 1:
+  of SecurityMedium:
     echo fmt"[{B_MAGENTA}!{RESET}] {title}"
     echo fmt"{B_BLUE}{body}{RESET}"
-  elif code == 2:
+  of SecurityLow:
     echo fmt"[{B_RED}x{RESET}] {title}"
     echo fmt"{B_CYAN}{body}{RESET}"
+  of SecurityInfo:
+    echo fmt"[{B_BLUE}+{RESET}] {title}"
+    echo fmt"{B_BLUE}{body}{RESET}"
 
 
-proc gtk_send_msg*(title, body: string, code: int) =
+proc gtk_send_msg*(title, body: string, code: StatusImg) =
   #[
     Display notification with custom title, body
     0: Ok
@@ -39,16 +41,17 @@ proc gtk_send_msg*(title, body: string, code: int) =
     2. Error
     3. Info
   ]#
-  var icon_name = ""
-  if code == 0:
-    icon_name = "security-high"
-  elif code == 1:
-    icon_name = "security-medium"
-  elif code == 2:
-    icon_name = "security-low"
-  elif code == 3:
-    icon_name = "dialog-information"
+  var
+    notifi: Notification
 
   discard init("AnonSurf GUI notification")
-  let ipNotify = newNotification(title, body, cstring(icon_name))
-  discard ipNotify.show()
+  case code
+  of SecurityHigh:
+    notifi = newNotification(title, body, cstring("security-high"))
+  of SecurityMedium:
+    notifi = newNotification(title, body, cstring("security-medium"))
+  of SecurityLow:
+    notifi = newNotification(title, body, cstring("security-low"))
+  of SecurityInfo:
+    notifi = newNotification(title, body, cstring("dialog-information"))
+  discard notifi.show()

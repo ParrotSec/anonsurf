@@ -1,6 +1,4 @@
 type
-  callback_kill_apps* = proc(callback_send_msg: callback_send_messenger) {.closure.}
-  callback_send_messenger* = proc(title, body: string, code: int)
   TorConfig* = object
     fileErr*: bool # Error while reading file
     controlPort*: string
@@ -11,6 +9,11 @@ type
     use_bridge*: bool
     custom_bridge*: bool
     bridge_addr*: string
+  StatusImg* = enum
+    SecurityHigh, SecurityMedium, SecurityLow, SecurityInfo
+
+  callback_kill_apps* = proc(callback_send_msg: callback_send_messenger) {.closure.}
+  callback_send_messenger* = proc(title, body: string, code: StatusImg)
   # MessageCallback* = proc (title: string, body: string, code: int)
   # TorRC* = object
   #   use_bridge*: bool
