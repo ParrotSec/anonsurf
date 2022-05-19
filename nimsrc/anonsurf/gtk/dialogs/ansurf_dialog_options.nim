@@ -13,6 +13,10 @@ proc initEntryBridge(en: Entry) =
   en.setTooltipText("We should put format here?")
 
 
+proc initOptionSandbox(cb: CheckButton) =
+  cb.setTooltipText("Only work without bridge")
+
+
 proc onClickOptions*(b: Button) =
   let
     dialogSettings = newDialog()
@@ -23,6 +27,7 @@ proc onClickOptions*(b: Button) =
 
   initOptionBridge(optionBridge, 0) # TODO load active number from settings instead
   initEntryBridge(addrBridge)
+  initOptionSandbox(optionSandbox)
 
   dialogArea.add(optionBridge)
   dialogArea.add(addrBridge)
