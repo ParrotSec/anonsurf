@@ -1,10 +1,6 @@
 import os
 import strutils
-
-const
-  system_dns_file = "/etc/resolv.conf"
-  resolvconf_dns_file = "/run/resolvconf/resolv.conf"
-  dhclient_dns_file = "/var/lib/dhcp/dhclient.leases"
+import cores / dnstool_const
 
 
 proc resolvconf_exists(): bool =
