@@ -52,3 +52,10 @@ proc w_main_update_btn_check_ip*(btnIP: Button) =
   else:
     ansurf_workers_myip.joinThread()
     btnIP.setSensitive(true)
+
+
+proc w_main_update_all_ports_okay*(portStatus: PortStatus): bool =
+  if portStatus.isControlPort and portStatus.isSocksPort and portStatus.isTransPort and
+    not portStatus.isReadError:
+      return true
+  return false

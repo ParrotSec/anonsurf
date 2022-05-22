@@ -32,8 +32,7 @@ proc updateMainWidget(args: MainObjs, myStatus: Status) =
     if myStatus.isTorService:
       let myPorts = getStatusPorts()
       # If everything (except DNS port) is okay
-      if myPorts.isControlPort and myPorts.isSocksPort and myPorts.isTransPort and
-        not myPorts.isReadError:
+      if w_main_update_all_ports_okay(myPorts):
         w_main_update_btn_id_and_status(args.btnID, args.btnStatus)
         # Check DNS
         if myPorts.isDNSPort:
