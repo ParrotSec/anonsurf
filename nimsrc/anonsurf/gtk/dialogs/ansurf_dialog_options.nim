@@ -29,6 +29,7 @@ proc onClickOptions*(b: Button) =
     addrBridge = newEntry()
     optionSandbox = newCheckButton("Sandbox mode")
     optionBlockInbound = newCheckButton("Block Inbound traffic")
+    optionBypassFirewall = newCheckButton("Bypass NetworkFirewall")
 
   initOptionBridge(optionBridge, 0) # TODO load active number from settings instead
   initEntryBridge(addrBridge)
