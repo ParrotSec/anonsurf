@@ -11,15 +11,16 @@ proc print_help(cmd = "dnstool", keyword = "help", args = "", descr = "") =
     args (optional) -> yellow
     description (optional) -> blue
   ]#
-  var cmdOutput = ""
-  cmdOutput &= "\e[92m" & cmd & "\e[0m " # Green color for command
-  cmdOutput &= "\e[91m" & keyword & "\e[0m " # Red color for keyword
-  if args != "":
-    cmdOutput &= "\e[93m" & args & "\e[0m "
-  if descr != "":
-    cmdOutput &= "[\e[94m" & descr & "\e[0m]"
+  var print_text = "\e[92m" & cmd & "\e[91m " & keyword # & "\e[0m "
 
-  echo cmdOutput
+  if args != "":
+    print_text &= "\e[93m" & args # & "\e[0m "
+  if descr != "":
+    print_text &= "[\e[94m" & descr #  & "\e[0m]"
+
+  print_text &= "\e[0m]"
+
+  echo print_text
 
 
 proc print_desc(keyword = "", descr = "") =
@@ -30,12 +31,12 @@ proc print_desc(keyword = "", descr = "") =
     keyword -> red
     description -> blue
   ]#
-  var helpDesc = ""
+  var print_text = ""
   if keyword != "":
-    helpDesc = "\e[91m" & keyword & "\e[0m: "
-  helpDesc &= "\e[94m" & descr & "\e[0m"
+    print_text = "\e[91m" & keyword & "\e[0m: "
+  print_text &= "\e[94m" & descr & "\e[0m"
 
-  echo "  " & helpDesc
+  echo "  " & print_text
 
 
 proc show_banner() =
