@@ -25,7 +25,7 @@ proc parse_dns_addresses*(): seq[string] =
       result.add(line.split(" ")[1])
 
 
-proc write_dns_addr_to_file(file_path: string, list_dns_addr: seq[string]) =
+proc write_dns_addr_to_file*(file_path: string, list_dns_addr: seq[string]) =
   let dns_addr = convert_seq_addr_to_string(list_dns_addr)
   try:
     writeFile(file_path, "# Written by DNSTool\n" & dns_addr)
@@ -35,7 +35,3 @@ proc write_dns_addr_to_file(file_path: string, list_dns_addr: seq[string]) =
 
 proc write_dns_to_system*(list_dns_addr: seq[string]) =
   write_dns_addr_to_file(system_dns_file, list_dns_addr)
-
-
-proc write_dns_to_resolvconf_tail*(list_dns_addr: seq[string]) =
-  write_dns_addr_to_file(resolvconf_tail_file, list_dns_addr)
