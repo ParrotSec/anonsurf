@@ -1,14 +1,6 @@
 import os
-import strutils
-import cores / dnstool_const
-
-
-proc resolvconf_exists(): bool =
-  return fileExists(resolvconf_dns_file)
-
-
-proc dhclient_lease_exists(): bool =
-  return fileExists(dhclient_dns_file)
+import cores / [dnstool_const, dhclient, resolvconf]
+import cli / [help, print]
 
 
 proc system_dns_file_is_symlink(): bool =
@@ -17,36 +9,13 @@ proc system_dns_file_is_symlink(): bool =
   return false
 
 
-proc resolvconf_create_symlink() =
-  try:
-    createSymlink(resolvconf_dns_file, system_dns_file)
-  except:
-    echo("Failed to create symlink from " & system_dns_file)
-
-
-proc dhclient_parse_dns(): string =
-  for line in lines(dhclient_dns_file):
-    if "domain-name-servers" in line:
-      return line.split(" ")[^1].replace(";", "")
-
-
-proc dhclient_create_dhcp_dns() =
-  let dns_addr = dhclient_parse_dns()
-  # TODO handle if it's wrong value
-  try:
-    writeFile(system_dns_file, "nameserver " & dns_addr)
-    # TODO create a hook script to keep this address after reboot
-  except:
-    echo("Failed to write DNS address to " & system_dns_file)
-
-
-proc dnst_create_dhcp_with_resolvconf() =
+proc dnst_create_dhcp_dns() =
   if resolvconf_exists():
     resolvconf_create_symlink()
   elif dhclient_lease_exists():
     dhclient_create_dhcp_dns()
   else:
-    echo "Can't find neither resolvconf nor dhclient. Try custom DNS addr"
+    print_error("Can't find neither resolvconf nor dhclient. Try custom DNS addr")
 
 
 proc dnst_create_backup() =
@@ -62,11 +31,57 @@ proc dnst_create_backup() =
   try:
     copyFile(system_dns_file, system_dns_backup)
   except:
-    echo("Failed to create backup file")
+    print_error("Failed to create backup file")
 
 
 proc dnst_restore_backup() =
   try:
     moveFile(system_dns_backup, system_dns_file)
   except:
-    echo("Failed to restore backup")
+    print_error("Failed to restore backup")
+
+
+# TODO show status
+# TODO write custom addr
+# TODO mix dns with dhcp
+proc main() =
+  if paramCount() == 0:
+    dnst_show_help()
+    showStatus()
+  elif paramCount() == 1:
+    if paramStr(1) in ["help", "-h", "--help", "-help"]:
+      dnst_show_help()
+    elif paramStr(1) == "status":
+      showStatus()
+    elif paramStr(1) == "create-backup":
+      dnst_create_backup()
+    elif paramStr(1) == "restore-backup":
+      dnst_restore_backup()
+      showStatus()
+    else:
+      stderr.write("[!] Invalid option\n")
+  else:
+    if paramStr(1) == "address" or paramStr(1) == "addr":
+      if paramStr(2) == "dhcp":
+        dnst_create_dhcp_dns()
+      else:
+        var
+          dnsAddr: seq[string]
+        for i in 2 .. paramCount():
+          if paramStr(i) == "--add":
+            let current_addresses = getResolvConfAddresses()
+            if current_addresses != [] and current_addresses != ["localhost"] and current_addresses != ["127.0.0.1"]:
+              for address in getResolvConfAddresses():
+                dnsAddr = dnsAddr.concat(current_addresses)
+          else:
+            dnsAddr.add(paramStr(i))
+
+        makeCustomDNS(deduplicate(dnsAddr))
+      showStatus()
+      stdout.write("\n[*] Applied DNS settings\n")
+    else:
+      dnst_show_help()
+      print_error("[!] Invalid option")
+      return
+
+main()

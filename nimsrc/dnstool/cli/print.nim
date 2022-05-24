@@ -23,3 +23,7 @@ proc print_warn_not_using_tor_dns*(address: string) =
 
 proc print_error_resolv_not_found*() =
   echo "[\e[91mDNS error: \e[91m" & system_dns_file & "\e[0m not found"
+
+
+proc print_error_resolv_empty*() =
+  echo "[\e[91mDNS error\e[0m] " & system_dns_file & " empty"
