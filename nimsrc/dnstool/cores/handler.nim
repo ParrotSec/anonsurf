@@ -9,7 +9,7 @@ import utils
 proc dnst_create_dhcp_dns*() =
   if resolvconf_exists():
     resolvconf_create_symlink()
-  elif dhclient_lease_exists():
+  elif dhclient_binary_exists():
     dhclient_create_dhcp_dns()
   else:
     print_error("Can't find neither resolvconf nor dhclient. Try custom DNS addr")

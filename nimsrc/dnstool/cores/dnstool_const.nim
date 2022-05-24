@@ -4,3 +4,4 @@ const
   resolvconf_dns_file* = "/run/resolvconf/resolv.conf"
   dhclient_dns_file* = "/var/lib/dhcp/dhclient.leases"
   resolvconf_tail_file* = "/etc/resolvconf/resolv.conf.d/tail"
+  dhclient_binary* = "/usr/sbin/dhclient"
