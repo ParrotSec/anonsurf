@@ -6,6 +6,35 @@ import dhclient
 import utils
 
 
+proc handle_hookscript_for_dhcp() =
+  #[
+    If system is not using resolvconf
+    and hook script exists, we remove it
+    The logic to check resolvconf exists and
+    dhclient exists should be covered by other func
+  ]#
+  #[
+    if fileExists(dns_hook_script):
+      if not tryRemoveFile(dns_hook_script):
+        print_error("Failed to remove hook script " & dns_hook_script)
+  ]#
+  discard
+
+
+proc handle_hookscript_for_custom_addr() =
+  #[
+    If system is not using resolvconf
+    create a hook script to keep custom addr
+    The logic to check resolvconf exists and
+    dhclient exists should be covered by other func
+  ]#
+  #[
+    if not fileExists(dns_hook_script):
+      dhclient_create_hook_script()
+  ]#
+  discard
+
+
 proc handle_create_resolvconf_symlink() =
   if not tryRemoveFile(system_dns_file):
     print_error("Failed to remove " & system_dns_file & " to create a new one")
