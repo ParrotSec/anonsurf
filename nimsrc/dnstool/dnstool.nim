@@ -27,7 +27,6 @@ proc main() =
     discard
   else:
     dnst_show_help()
-    print_error("[!] Invalid options")
-    return
+    print_error("Invalid options")
 
 main()
