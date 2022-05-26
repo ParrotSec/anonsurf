@@ -20,6 +20,10 @@ proc dnst_restore_backup() =
     print_error("Failed to restore backup")
 
 
+proc dnst_show_status*() =
+  discard
+
+
 proc handle_addr_dhcp_only*() =
   if resolvconf_exists():
     resolvconf_create_symlink()
@@ -58,7 +62,9 @@ proc handle_restore_backup*() =
   else:
     discard # TODO dhcp here
 
+  dnst_show_status()
+
 
 proc handle_argv_missing*() =
   dnst_show_help()
-  # TODO show help here
+  dnst_show_status()
