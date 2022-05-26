@@ -4,6 +4,7 @@ import strutils
 import .. / cli / print
 import sequtils
 import net
+import .. / .. / anonsurf / cores / commons / services_status
 
 
 proc convert_seq_addr_to_string(addresses: seq[string]): string =
@@ -31,6 +32,24 @@ proc parse_dns_addresses*(): seq[string] =
   for line in lines(resolvconf_dns_file):
     if line.startsWith("nameserver"):
       result.add(line.split(" ")[1])
+
+
+proc anonsurf_is_running*(): bool =
+  return getServStatus("anonsurfd")
+
+
+proc create_backup*() =
+  try:
+    copyFile(system_dns_file, system_dns_backup)
+  except:
+    print_error("Failed to create backup file")
+
+
+proc restore_backup*() =
+  try:
+    moveFile(system_dns_backup, system_dns_file)
+  except:
+    print_error("Failed to restore backup")
 
 
 proc write_dns_addr_to_file*(file_path: string, list_dns_addr: seq[string]) =
