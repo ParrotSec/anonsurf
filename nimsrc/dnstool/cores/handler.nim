@@ -50,7 +50,8 @@ proc handle_addr_mix_with_dhcp(list_addr: seq[string]) =
     # TODO handle mixed addr of dhclient and custom
     discard
   else:
-    discard # force writing custom addr only
+    print_error("Resolvconf and dhclient not found in the system. Force using custom address only.")
+    handle_addr_custom_only(list_addr)
 
 
 proc dnst_show_status*() =
@@ -90,7 +91,6 @@ proc handle_argv_missing*() =
 
 
 proc handle_create_dns_addr*(has_dhcp: bool, list_addr: seq[string]) =
-  # TODO better to do callback: write addr, call show status, .. if all proc has the same structure
   if not has_dhcp:
     if len(list_addr) == 0:
       print_error("There's no valid DNS addresses.")
