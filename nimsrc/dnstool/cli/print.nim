@@ -13,12 +13,8 @@ proc print_file_static*(is_static: bool) =
     echo "[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m Symlink\e[0m"
 
 
-proc print_under_tor_dns*(address: string) =
-  echo "  " & address & " \e[32mUsing Tor's DNS\e[0m"
-
-
-proc print_warn_not_using_tor_dns*(address: string) =
-  echo "  " & address & " \e[91mNot a Tor DNS server.\e[0m"
+proc print_under_tor_dns*() =
+  echo " \e[32mUsing Tor's DNS\e[0m"
 
 
 proc print_error_resolv_not_found*() =
@@ -39,3 +35,8 @@ proc print_error_dns_leak*() =
 
 proc print_anonsurf_running*() =
   echo "- \e[91mAddress\e[0m: AnonSurf is running"
+
+
+proc print_dns_addresses*(list_addr: seq[string]) =
+  for address in list_addr:
+    echo "  " & address

@@ -16,10 +16,10 @@ proc convert_seq_addr_to_string(addresses: seq[string]): string =
   return dns_addr_in_text
 
 
-# proc has_only_localhost*(list_addr: seq[string]): bool =
-#   if len(list_addr) == 1 and (list_addr[0] == "localhost" or list_addr[0] == "127.0.0.1"):
-#     return true
-#   return false
+proc has_only_localhost*(list_addr: seq[string]): bool =
+  if len(list_addr) == 1 and (list_addr[0] == "localhost" or list_addr[0] == "127.0.0.1"):
+    return true
+  return false
 
 
 proc system_dns_file_is_symlink*(): bool =

@@ -6,20 +6,6 @@ import dhclient
 import utils
 
 
-proc create_backup() =
-  try:
-    copyFile(system_dns_file, system_dns_backup)
-  except:
-    print_error("Failed to create backup file")
-
-
-proc restore_backup() =
-  try:
-    moveFile(system_dns_backup, system_dns_file)
-  except:
-    print_error("Failed to restore backup")
-
-
 proc handle_create_resolvconf_symlink() =
   if not tryRemoveFile(system_dns_file):
     print_error("Failed to remove " & system_dns_file & " to create a new one")
@@ -56,9 +42,34 @@ proc handle_addr_mix_with_dhcp(list_addr: seq[string]) =
     handle_addr_custom_only(list_addr)
 
 
+proc check_system_dns_is_static() =
+  let
+    is_static = if getFileInfo(system_dns_file, followSymlink = false).kind == pcLinkToFile: false else: true
+  print_file_static(is_static)
+
+
 proc dnst_show_status*() =
-  # TODO complete here
-  discard
+  if not fileExists(system_dns_file):
+    print_error_resolv_not_found()
+    return
+
+  check_system_dns_is_static()
+
+  let
+    addresses = parse_dns_addresses()
+
+  if len(addresses) == 0:
+    print_error_resolv_empty()
+  elif anonsurf_is_running():
+    if has_only_localhost(addresses):
+      print_under_tor_dns()
+    else:
+      print_error_dns_leak()
+  else:
+    if has_only_localhost(addresses):
+      print_error_local_host()
+    else:
+      print_dns_addresses(addresses)
 
 
 proc handle_create_backup*() =
