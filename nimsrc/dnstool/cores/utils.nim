@@ -52,6 +52,12 @@ proc restore_backup*() =
     print_error("Failed to restore backup")
 
 
+proc check_system_dns_is_static*() =
+  let
+    is_static = if getFileInfo(system_dns_file, followSymlink = false).kind == pcLinkToFile: false else: true
+  print_file_static(is_static)
+
+
 proc write_dns_addr_to_file*(file_path: string, list_dns_addr: seq[string]) =
   let
     deduplicated_list_addr = deduplicate(list_dns_addr)

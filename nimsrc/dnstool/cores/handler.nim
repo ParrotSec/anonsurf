@@ -42,12 +42,6 @@ proc handle_addr_mix_with_dhcp(list_addr: seq[string]) =
     handle_addr_custom_only(list_addr)
 
 
-proc check_system_dns_is_static() =
-  let
-    is_static = if getFileInfo(system_dns_file, followSymlink = false).kind == pcLinkToFile: false else: true
-  print_file_static(is_static)
-
-
 proc dnst_show_status*() =
   if not fileExists(system_dns_file):
     print_error_resolv_not_found()
