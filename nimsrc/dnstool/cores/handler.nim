@@ -67,6 +67,10 @@ proc dnst_show_status*() =
 
 
 proc handle_create_backup*() =
+  if system_has_only_localhost():
+    print_error("System has only localhost. Skip making backup.")
+    return
+
   if fileExists(system_dns_backup):
     if not tryRemoveFile(system_dns_backup):
       print_error("Failed to remove " & system_dns_backup & " to create new one.")

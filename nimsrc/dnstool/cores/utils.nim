@@ -34,6 +34,12 @@ proc parse_dns_addresses*(): seq[string] =
       result.add(line.split(" ")[1])
 
 
+proc system_has_only_localhost*(): bool =
+  let
+    addresses = parse_dns_addresses()
+  return has_only_localhost(addresses)
+
+
 proc anonsurf_is_running*(): bool =
   return getServStatus("anonsurfd")
 
