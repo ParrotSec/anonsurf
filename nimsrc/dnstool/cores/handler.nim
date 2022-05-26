@@ -68,3 +68,17 @@ proc handle_restore_backup*() =
 proc handle_argv_missing*() =
   dnst_show_help()
   dnst_show_status()
+
+
+proc handle_create_dns_addr*(has_dhcp: bool, list_addr: seq[string]) =
+  let final_list_addr = validate_dns_addr(list_addr)
+  if not has_dhcp:
+    if len(final_list_addr) == 0:
+      print_error("There's no valid DNS addresses.")
+    else:
+      handle_addr_custom_only()
+  else:
+    if len(final_list_addr) == 0:
+      handle_addr_dhcp_only()
+    else:
+      handle_addr_mix_with_dhcp()
