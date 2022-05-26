@@ -12,7 +12,7 @@ proc dhclient_binary_exists*(): bool =
   return fileExists(dhclient_binary)
 
 
-proc dhclient_parse_dns(): string =
+proc dhclient_parse_dns*(): string =
   for line in lines(dhclient_dns_file):
     if "domain-name-servers" in line:
       return line.split(" ")[^1].replace(";", "")
