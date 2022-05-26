@@ -19,66 +19,14 @@ proc getResolvConfAddresses(): seq[string] =
       result.add(line.split(" ")[1])
 
 
-proc showHelpCmd(cmd = "dnstool", keyword = "help", args = "", descr = "") =
-  #[
-    Make color for command syntax in help bannner
-    Print them in help
-    Syntax: <command> <keyword> <args> [<description>]
-    command -> light green
-    keyword -> red
-    args (optional) -> yellow
-    description (optional) -> blue
-  ]#
-  var cmdOutput = ""
-  cmdOutput &= "\e[92m" & cmd & "\e[0m " # Green color for command
-  cmdOutput &= "\e[91m" & keyword & "\e[0m " # Red color for keyword
-  if args != "":
-    cmdOutput &= "\e[93m" & args & "\e[0m "
-  if descr != "":
-    cmdOutput &= "[\e[94m" & descr & "\e[0m]"
-  
-  echo cmdOutput
 
 
-proc banner() =
-  stdout.write("DNS Tool: A CLI tool to change DNS settings quickly\n")
-  stdout.write("Developer: Nong Hoang \"DmKnght\" Tu <dmknght@parrotsec.org>\n")
-  stdout.write("Gitlab: https://nest.parrot.sh/packages/tools/anonsurf\n")
-  stdout.write("License: GPL3\n\n")
 
 
-proc showHelpDesc(keyword = "", descr = "") =
-  #[
-    Make color for description
-    syntax:
-      <keyword>: <description>
-    keyword -> red
-    description -> blue
-  ]#
-  var helpDesc = ""
-  if keyword != "":
-    helpDesc = "\e[91m" & keyword & "\e[0m: "
-  helpDesc &= "\e[94m" & descr & "\e[0m"
-
-  echo "  " & helpDesc
 
 
-proc help() =
-  banner()
-  # let progName = getAppFileName()
-  let progName = "dnstool"
-  showHelpCmd(cmd = progName, keyword = "help | -h | --help", descr = "Show help banner")
-  showHelpCmd(cmd = progName, keyword = "status", descr = "Show current system DNS")
-  showHelpCmd(cmd = "sudo " & progName, keyword = "address", args = "<DNS servers>" , descr = "Set DNS servers") # TODO improve msg quality here
-  showHelpCmd(cmd = "sudo " & progName, keyword = "create-backup", descr = "Make backup for current /etc/resolv.conf")
-  showHelpCmd(cmd = "sudo " & progName, keyword = "restore-backup", descr = "Restore backup of /etc/resolv.conf")
-  stdout.write("\nAddress could be:\n")
-  showHelpDesc(keyword = "dhcp", descr = "Address[es] of current DHCP client.")
-  showHelpDesc(descr = "Any IPv4 or IPv6 address[es]")
-  stdout.write("\nStatic file and Symlink:\n")
-  showHelpDesc(keyword = "Symlink", descr = sysResolvConf & " is a symlink of " & runResolvConf)
-  showHelpDesc(keyword = "Static file", descr = sysResolvConf & " is not a symlink and won't be changed after reboot.")
-  stdout.write("\n")
+
+
 
 
 proc printErr(msg: string) =
@@ -132,6 +80,7 @@ proc writeResolv(dnsAddr: string) =
 
 proc makeDHCPDNS() =
   try:
+    # TODO fix logic flow here
     removeFile(sysResolvConf)
     writeTail("")
     lnkResovConf()
