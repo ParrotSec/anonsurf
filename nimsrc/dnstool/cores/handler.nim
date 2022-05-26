@@ -47,8 +47,10 @@ proc handle_addr_mix_with_dhcp(list_addr: seq[string]) =
     handle_create_resolvconf_symlink()
     write_dns_to_resolvconf_tail(list_addr)
   elif dhclient_binary_exists():
-    # TODO handle mixed addr of dhclient and custom
-    discard
+    var
+      list_combo_addr = list_addr
+    list_combo_addr.add(dhclient_parse_dns())
+    write_dns_to_system(list_addr)
   else:
     print_error("Resolvconf and dhclient not found in the system. Force using custom address only.")
     handle_addr_custom_only(list_addr)
