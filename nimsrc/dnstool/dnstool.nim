@@ -9,24 +9,23 @@ import cli / [help, print]
 # TODO mix dns with dhcp
 proc main() =
   if paramCount() == 0:
-    dnst_show_help()
-    showStatus()
+    handle_argv_missing()
   elif paramCount() == 1:
-    if paramStr(1) in ["help", "-h", "--help", "-help"]:
+    case paramStr(1)
+    of ["help", "-h", "--help", "-help"]:
       dnst_show_help()
-    elif paramStr(1) == "status":
-      showStatus()
-    elif paramStr(1) == "create-backup":
-      dnst_create_backup()
-    elif paramStr(1) == "restore-backup":
-      dnst_restore_backup()
-      showStatus()
+    of "status":
+      dnst_show_status()
+    of "create-backup":
+      handle_create_backup()
+    of "restore-backup":
+      handle_restore_backup()
     else:
-      stderr.write("[!] Invalid option\n")
+      print_error("Invalid option " & paramStr(1))
   else:
     if paramStr(1) == "address" or paramStr(1) == "addr":
       if paramStr(2) == "dhcp":
-        dnst_create_dhcp_dns()
+        handle_addr_dhcp_only()
       else:
         var
           dnsAddr: seq[string]
@@ -40,7 +39,7 @@ proc main() =
             dnsAddr.add(paramStr(i))
 
         makeCustomDNS(deduplicate(dnsAddr))
-      showStatus()
+      dnst_show_status()
       stdout.write("\n[*] Applied DNS settings\n")
     else:
       dnst_show_help()
