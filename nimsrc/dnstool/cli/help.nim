@@ -60,6 +60,6 @@ proc dnst_show_help*() =
   print_desc(keyword = "dhcp", descr = "Address[es] of current DHCP client.")
   print_desc(descr = "Any IPv4 or IPv6 address[es]")
   echo("\nStatic file and Symlink:")
-  print_desc(keyword = "Symlink", descr = system_dns_file & " is a symlink of " & resolvconf_dns_file)
-  print_desc(keyword = "Static file", descr = system_dns_file & " is not a symlink and won't be changed after reboot.")
+  print_desc(keyword = "Symlink", descr = "A symlink of " & resolvconf_dns_file)
+  print_desc(keyword = "Static file", descr = system_dns_file & " is a file")
   stdout.write("\n")
