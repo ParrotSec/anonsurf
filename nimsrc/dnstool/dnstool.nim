@@ -3,8 +3,6 @@ import cores / [handler, utils]
 import cli / [help, print]
 
 
-# TODO show status
-
 proc main() =
   if paramCount() == 0:
     handle_argv_missing()
