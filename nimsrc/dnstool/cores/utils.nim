@@ -29,7 +29,7 @@ proc system_dns_file_is_symlink*(): bool =
 
 
 proc parse_dns_addresses*(): seq[string] =
-  for line in lines(resolvconf_dns_file):
+  for line in lines(system_dns_file):
     if line.startsWith("nameserver"):
       result.add(line.split(" ")[1])
 
