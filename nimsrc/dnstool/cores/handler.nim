@@ -94,11 +94,7 @@ proc handle_argv_missing*() =
 
 proc handle_create_dns_addr*(has_dhcp: bool, list_addr: seq[string]) =
   if not has_dhcp:
-    if len(list_addr) == 0:
-      print_error("There's no valid DNS addresses.")
-      return
-    else:
-      handle_addr_custom_only(list_addr)
+    handle_addr_custom_only(list_addr)
   else:
     if len(list_addr) == 0:
       handle_addr_dhcp_only()

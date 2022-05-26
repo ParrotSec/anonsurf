@@ -15,6 +15,12 @@ proc convert_seq_addr_to_string(addresses: seq[string]): string =
   return dns_addr_in_text
 
 
+# proc has_only_localhost*(list_addr: seq[string]): bool =
+#   if len(list_addr) == 1 and (list_addr[0] == "localhost" or list_addr[0] == "127.0.0.1"):
+#     return true
+#   return false
+
+
 proc system_dns_file_is_symlink*(): bool =
   if getFileInfo(system_dns_file, followSymlink = false).kind == pcLinkToFile:
     return true
@@ -28,7 +34,14 @@ proc parse_dns_addresses*(): seq[string] =
 
 
 proc write_dns_addr_to_file*(file_path: string, list_dns_addr: seq[string]) =
-  let dns_addr = convert_seq_addr_to_string(deduplicate(list_dns_addr))
+  let
+    deduplicated_list_addr = deduplicate(list_dns_addr)
+  if len(deduplicated_list_addr) == 0:
+    print_error("No valid DNS address is found.")
+    return
+
+  let
+    dns_addr = convert_seq_addr_to_string(deduplicated_list_addr)
   try:
     writeFile(file_path, "# Written by DNSTool\n" & dns_addr)
   except:
