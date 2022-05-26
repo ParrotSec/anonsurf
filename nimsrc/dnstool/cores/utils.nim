@@ -2,6 +2,8 @@ import os
 import dnstool_const
 import strutils
 import .. / cli / print
+import sequtils
+import net
 
 
 proc convert_seq_addr_to_string(addresses: seq[string]): string =
@@ -35,3 +37,11 @@ proc write_dns_addr_to_file*(file_path: string, list_dns_addr: seq[string]) =
 
 proc write_dns_to_system*(list_dns_addr: seq[string]) =
   write_dns_addr_to_file(system_dns_file, list_dns_addr)
+
+
+proc validate_dns_addr*(list_addr: seq[string]): seq[string] =
+  for address in list_addr:
+    if isIpAddress(address):
+      result.add(address)
+
+  return deduplicate(result)
