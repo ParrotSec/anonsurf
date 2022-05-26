@@ -37,6 +37,11 @@ proc print_anonsurf_running*() =
   echo "- \e[91mAddress\e[0m: AnonSurf is running"
 
 
+proc print_info_addresses() =
+  echo "- \e[91mAddress[es]\e[0m:"
+
+
 proc print_dns_addresses*(list_addr: seq[string]) =
+  print_info_addresses()
   for address in list_addr:
     echo "  " & address
