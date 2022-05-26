@@ -39,9 +39,16 @@ proc write_dns_to_system*(list_dns_addr: seq[string]) =
   write_dns_addr_to_file(system_dns_file, list_dns_addr)
 
 
-proc validate_dns_addr*(list_addr: seq[string]): seq[string] =
-  for address in list_addr:
-    if isIpAddress(address):
-      result.add(address)
+proc parse_addr_from_params*(params: seq[string]): AddrFromParams =
+  var param_result = AddrFromParams(
+    has_dhcp_flag: false
+  )
 
-  return deduplicate(result)
+  for value in params:
+    if value == "dhcp":
+      param_result.has_dhcp_flag = true
+    elif isIpAddress(value):
+      param_result.list_addr.add(value)
+
+  param_result.list_addr = deduplicate(param_result.list_addr)
+  return param_result

@@ -54,6 +54,7 @@ proc handle_addr_mix_with_dhcp(list_addr: seq[string]) =
 
 
 proc dnst_show_status*() =
+  # TODO complete here
   discard
 
 
@@ -89,16 +90,15 @@ proc handle_argv_missing*() =
 
 
 proc handle_create_dns_addr*(has_dhcp: bool, list_addr: seq[string]) =
-  let final_list_addr = validate_dns_addr(list_addr)
   # TODO better to do callback: write addr, call show status, .. if all proc has the same structure
   if not has_dhcp:
-    if len(final_list_addr) == 0:
+    if len(list_addr) == 0:
       print_error("There's no valid DNS addresses.")
       return
     else:
       handle_addr_custom_only(list_addr)
   else:
-    if len(final_list_addr) == 0:
+    if len(list_addr) == 0:
       handle_addr_dhcp_only()
     else:
       handle_addr_mix_with_dhcp(list_addr)

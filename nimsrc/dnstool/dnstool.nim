@@ -1,12 +1,10 @@
 import os
-import sequtils
 import cores / [handler, utils]
 import cli / [help, print]
 
 
 # TODO show status
-# TODO write custom addr
-# TODO mix dns with dhcp
+
 proc main() =
   if paramCount() == 0:
     handle_argv_missing()
@@ -22,28 +20,16 @@ proc main() =
       handle_restore_backup()
     else:
       print_error("Invalid option " & paramStr(1))
+  elif paramStr(1) == "address" or paramStr(1) == "addr":
+    let addr_result = parse_addr_from_params(commandLineParams()[1 .. ^1])
+    handle_create_dns_addr(addr_result.has_dhcp_flag, addr_result.list_addr)
+  elif paramStr(1) == "add-address" or paramStr(1) == "add-addr":
+    # TODO handle command "add-addr" that do add new addr into current
+    # let addr_result = parse_addr_from_params(commandLineParams()[1 .. ^1])
+    discard
   else:
-    if paramStr(1) == "address" or paramStr(1) == "addr":
-      if paramStr(2) == "dhcp":
-        handle_addr_dhcp_only()
-      else:
-        var
-          dnsAddr: seq[string]
-        for i in 2 .. paramCount():
-          if paramStr(i) == "--add":
-            let current_addresses = parse_dns_addresses()
-            if current_addresses != [] and current_addresses != ["localhost"] and current_addresses != ["127.0.0.1"]:
-              for address in parse_dns_addresses():
-                dnsAddr = dnsAddr.concat(current_addresses)
-          else:
-            dnsAddr.add(paramStr(i))
-
-        makeCustomDNS(deduplicate(dnsAddr))
-      dnst_show_status()
-      stdout.write("\n[*] Applied DNS settings\n")
-    else:
-      dnst_show_help()
-      print_error("[!] Invalid option")
-      return
+    dnst_show_help()
+    print_error("[!] Invalid options")
+    return
 
 main()
