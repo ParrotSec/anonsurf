@@ -6,14 +6,14 @@ import dhclient
 import utils
 
 
-proc dnst_create_backup() =
+proc create_backup() =
   try:
     copyFile(system_dns_file, system_dns_backup)
   except:
     print_error("Failed to create backup file")
 
 
-proc dnst_restore_backup() =
+proc restore_backup() =
   try:
     moveFile(system_dns_backup, system_dns_file)
   except:
@@ -27,10 +27,6 @@ proc handle_create_resolvconf_symlink() =
     resolvconf_create_symlink()
 
 
-proc dnst_show_status*() =
-  discard
-
-
 proc handle_addr_dhcp_only() =
   if resolvconf_exists():
     handle_create_resolvconf_symlink()
@@ -40,8 +36,10 @@ proc handle_addr_dhcp_only() =
     print_error("Can't find neither resolvconf nor dhclient. Try custom DNS addr.")
 
 
-proc handle_addr_custom_only() =
-  discard
+proc handle_addr_custom_only(list_addr: seq[string]) =
+  if not tryRemoveFile(system_dns_file):
+    print_error("Failed to remove " & system_dns_file & " to create new one.")
+  write_dns_to_system(list_addr)
 
 
 proc handle_addr_mix_with_dhcp(list_addr: seq[string]) =
@@ -53,6 +51,10 @@ proc handle_addr_mix_with_dhcp(list_addr: seq[string]) =
     discard
   else:
     discard # force writing custom addr only
+
+
+proc dnst_show_status*() =
+  discard
 
 
 proc handle_create_backup*() =
@@ -67,14 +69,16 @@ proc handle_create_backup*() =
       When there's no backup, dnstool will try create DHCP's DNS
       which should create a symlink if resolvconf is installed
     ]#
-    dnst_create_backup()
+    create_backup()
 
 
 proc handle_restore_backup*() =
+  if not tryRemoveFile(system_dns_file):
+    print_error("Failed to remove " & system_dns_file & " to restore backup.")
   if fileExists(system_dns_backup):
-    dnst_restore_backup()
+    restore_backup()
   else:
-    discard # TODO dhcp here
+    handle_addr_dhcp_only()
 
   dnst_show_status()
 
@@ -92,7 +96,7 @@ proc handle_create_dns_addr*(has_dhcp: bool, list_addr: seq[string]) =
       print_error("There's no valid DNS addresses.")
       return
     else:
-      handle_addr_custom_only()
+      handle_addr_custom_only(list_addr)
   else:
     if len(final_list_addr) == 0:
       handle_addr_dhcp_only()
