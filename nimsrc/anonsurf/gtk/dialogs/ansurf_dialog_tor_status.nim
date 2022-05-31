@@ -1,5 +1,6 @@
 import gintro / [gtk, vte, gobject, glib]
 import .. / ansurf_icons
+import .. / gui_activities / core_activities
 
 
 proc callback_dummy(terminal: ptr Terminal00; pid: int32; error: ptr glib.Error; userData: pointer) {.cdecl.} =
@@ -10,7 +11,7 @@ proc callback_dummy(terminal: ptr Terminal00; pid: int32; error: ptr glib.Error;
 
 
 proc onVTEExit(v: Terminal, signal: int, d: Dialog) =
-  d.destroy()
+  ansurf_gtk_close_dialog(d)
 
 
 proc onClickTorStatus*() =

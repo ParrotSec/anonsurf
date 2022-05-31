@@ -6,6 +6,7 @@
 import gintro / [gtk, gobject]
 import .. / .. / cores / commons / ansurf_types
 import .. / .. / cores / activities / kill_apps_actions
+import .. / gui_activities / core_activities
 
 
 type
@@ -15,12 +16,12 @@ type
 
 
 proc do_not_kill(b: Button, d: Dialog) =
-  d.destroy()
+  ansurf_gtk_close_dialog(d)
 
 
 proc do_kill(b: Button, args: KillArgs) =
   ansurf_kill_apps(args.cb_send_msg)
-  args.d.destroy()
+  ansurf_gtk_close_dialog(args.d)
 
 
 # proc do_exit(b: Button) =
@@ -64,4 +65,4 @@ proc dialog_kill_apps*(callback_send_msg: callback_send_messenger) =
   dialogArea.add(boxDialog)
   retDialog.showAll()
   discard retDialog.run()
-  retDialog.destroy()
+  ansurf_gtk_close_dialog(retDialog)

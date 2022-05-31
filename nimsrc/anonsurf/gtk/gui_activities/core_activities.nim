@@ -25,3 +25,7 @@ proc ansurf_gtk_do_not_stop*(w: Window, e: Event): bool =
     the main window by showAll() later
   ]#
   return w.hideOnDelete()
+
+
+proc ansurf_gtk_close_dialog*(d: Dialog) =
+  d.destroy()

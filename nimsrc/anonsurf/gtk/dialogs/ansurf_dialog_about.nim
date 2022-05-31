@@ -1,6 +1,7 @@
 import gintro / [gtk, gdkpixbuf]
 import system
 import .. / .. / cores / version
+import .. / gui_activities / core_activities
 
 
 proc onClickAbout*(b: Button) =
@@ -42,4 +43,4 @@ proc onClickAbout*(b: Button) =
   showAbout.setWebsiteLabel("Gitlab Source")
 
   discard showAbout.run()
-  showAbout.destroy()
+  ansurf_gtk_close_dialog(showAbout)
