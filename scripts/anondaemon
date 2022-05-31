@@ -81,8 +81,8 @@ function enableService {
 function startSurf {
 	# If tor didn't start, we start it
 	# It is used for startup
-	TOR_PORT=`cat /etc/tor/torrc | grep TransPort | cut -d " " -f 2 | cut -d ":" -f 2`
-	DNS_PORT=`cat /etc/tor/torrc | grep DNSPort | cut -d " " -f 2 | cut -d ":" -f 2`
+	TOR_PORT=$(grep TransPort "/etc/tor/torrc" | cut -d " " -f 2 | cut -d ":" -f 2)
+	DNS_PORT=$(grep DNSPort "/etc/tor/torrc" | cut -d " " -f 2 | cut -d ":" -f 2)
 	# Init DNS
 	echo -e "[$GREEN*${RESETCOLOR}]$BLUE Modified resolv.conf to use Tor${RESETCOLOR}"
 	/usr/bin/dnstool address 127.0.0.1
@@ -107,22 +107,22 @@ function startSurf {
 
 	#set dns redirect
 	echo -e " $GREEN+$BLUE Redirecting DNS traffic through tor${RESETCOLOR}"
-	/usr/sbin/iptables -t nat -A OUTPUT -d 127.0.0.1/32 -p udp -m udp --dport 53 -j REDIRECT --to-ports $DNS_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -d 127.0.0.1/32 -p udp -m udp --dport 53 -j REDIRECT --to-ports "$DNS_PORT"
 
 	#resolve .onion domains mapping 10.192.0.0/10 address space
-	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
-	/usr/sbin/iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports "$TOR_PORT"
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp -d 10.192.0.0/10 -j REDIRECT --to-ports "$TOR_PORT"
 
 	#exclude local addresses
 	for NET in $TOR_EXCLUDE 127.0.0.0/9 127.128.0.0/10; do
-		/usr/sbin/iptables -t nat -A OUTPUT -d $NET -j RETURN
+		/usr/sbin/iptables -t nat -A OUTPUT -d "$NET" -j RETURN
 		/usr/sbin/iptables -A OUTPUT -d "$NET" -j ACCEPT
 	done
 
 	#redirect all other output through TOR
-	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TOR_PORT
-	/usr/sbin/iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports $TOR_PORT
-	/usr/sbin/iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports $TOR_PORT
+	/usr/sbin/iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports "$TOR_PORT"
+	/usr/sbin/iptables -t nat -A OUTPUT -p udp -j REDIRECT --to-ports "$TOR_PORT"
+	/usr/sbin/iptables -t nat -A OUTPUT -p icmp -j REDIRECT --to-ports "$TOR_PORT"
 
 	#accept already established connections
 	/usr/sbin/iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -155,7 +155,7 @@ function startSurf {
 	# /usr/sbin/iptables -A INPUT -d 127.0.0.1/32 -o lo -j ACCEPT
 
 	# Tor transproxy magic
-	/usr/sbin/iptables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport $TOR_PORT --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
+	/usr/sbin/iptables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport "$TOR_PORT" --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
 
 	# Allow OUTPUT to lan hosts in $_non_tor
 	# Uncomment these 3 lines to enable.
@@ -198,7 +198,7 @@ function stopSurf {
 	# Restore DNS settings
 	/usr/bin/dnstool address dhcp
 
-	if [ `systemctl is-active tor` == "active" ]
+	if [ "$(systemctl is-active tor)" == "active" ]
 	then
 		/usr/sbin/service tor stop
 	fi
@@ -213,7 +213,7 @@ case "$1" in
 		/usr/lib/anonsurf/make-torrc
 		if [ -e /etc/tor/torrc ]; then
 			startSurf
-			if [ `systemctl is-active tor` != "active" ]
+			if [ "$(systemctl is-active tor)" != "active" ]
 			then
 				/usr/sbin/service tor start || echo -e "  [x] Can not start Tor service!"
 			fi
