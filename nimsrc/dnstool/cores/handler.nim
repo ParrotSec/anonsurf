@@ -72,7 +72,7 @@ proc handle_addr_mix_with_dhcp(list_addr: seq[string]) =
 
 
 proc dnst_show_status*() =
-  if not fileExists(system_dns_file):
+  if not system_resolvconf_exists():
     print_error_resolv_not_found()
     return
 
@@ -96,8 +96,12 @@ proc dnst_show_status*() =
 
 
 proc handle_create_backup*() =
+  if not system_resolvconf_exists():
+    print_error("Skip creating backup file. Missing " & system_dns_file)
+    return
+
   if system_has_only_localhost():
-    print_error("System has only localhost. Skip making backup.")
+    print_error("Skip creating backup file. System has only localhost.")
     return
 
   if fileExists(system_dns_backup):
@@ -112,6 +116,8 @@ proc handle_create_backup*() =
       which should create a symlink if resolvconf is installed
     ]#
     create_backup()
+  else:
+    print_error("Skip creating backup file because " & system_dns_file & " is a symlink.")
 
 
 proc handle_restore_backup*() =

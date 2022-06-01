@@ -95,3 +95,7 @@ proc parse_addr_from_params*(params: seq[string]): AddrFromParams =
       param_result.list_addr.add(value)
 
   return param_result
+
+
+proc system_resolvconf_exists*(): bool =
+  return fileExists(system_dns_file)
