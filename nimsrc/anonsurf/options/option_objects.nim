@@ -5,6 +5,7 @@ let
 type
   BridgeMode* = enum
     NoBridge, Auto, Manual
+  PipeArray* = array[2, cint]
   SurfConfig* = object
     option_sandbox*: bool
     option_bypass_firewall*: bool
