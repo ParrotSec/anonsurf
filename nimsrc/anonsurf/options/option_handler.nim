@@ -1,3 +1,9 @@
+#[
+  Handle read, write config
+  and transfer config object using pipe
+  Tutorial: https://www.youtube.com/watch?v=4xYu2WrygtQ
+]#
+
 import posix
 import option_objects
 
