@@ -12,9 +12,12 @@ proc ansurf_detail_w_service_area*(labelServices, labelPorts, labelDNS: Label, s
     frameServices = newFrame()
     evBox = newEventBox()
 
-  labelServices.setXalign(0.04)
-  labelPorts.setXalign(0.04)
-  labelDNS.setXalign(0.04)
+  # labelServices.setXalign(0.04)
+  # labelPorts.setXalign(0.04)
+  # labelDNS.setXalign(0.04)
+  labelServices.setJustify(Justification.left)
+  labelPorts.setJustify(Justification.left)
+  labelDNS.setJustify(Justification.left)
 
   areaServices.add(labelServices)
   areaServices.add(labelPorts)
