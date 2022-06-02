@@ -4,9 +4,9 @@ import .. / .. / cores / commons / dns_utils
 import .. / ansurf_get_status
 
 const
-  title_dns = "DNS:   "
-  title_service = "Servc:  "
-  title_ports = "Ports:  "
+  title_dns = "DNS: "
+  title_service = "Servc: "
+  title_ports = "Ports: "
 
 
 proc set_markup_green(label: Label, title, msg: string) =
