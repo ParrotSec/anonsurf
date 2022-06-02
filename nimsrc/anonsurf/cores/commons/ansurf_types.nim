@@ -5,26 +5,11 @@ type
     transPort*: string
     socksPort*: string
     dnsPort*: string
-  AnonOptions* = object
-    use_bridge*: bool
-    custom_bridge*: bool
-    bridge_addr*: string
   StatusImg* = enum
     SecurityHigh, SecurityMedium, SecurityLow, SecurityInfo
 
   callback_send_messenger* = proc(title, body: string, code: StatusImg)
   callback_kill_apps* = proc(callback_send_msg: callback_send_messenger) {.closure.}
-  # MessageCallback* = proc (title: string, body: string, code: int)
-  # TorRC* = object
-  #   use_bridge*: bool
-  #   custom_bridge*: bool
-  #   bridge_addr*: string
-  #   trans_port*: int
-  #   socks_port*: int
-  #   control_port*: int
-  #   dns_port*: int
-  #   sandbox_with_bridge*: bool
-
 
 let
   bridgePath* = "/etc/anonsurf/bridges.txt"
