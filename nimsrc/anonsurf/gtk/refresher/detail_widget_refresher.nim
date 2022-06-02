@@ -56,7 +56,7 @@ proc w_detail_update_dns_status*(labelDNS: Label) =
     if dns_status.is_static:
       labelDNS.set_markup_cyan(title_dns, "Custom servers")
     else:
-      labelDNS.set_markup_cyan(title_dns, "DHCP servers")
+      labelDNS.set_markup_cyan(title_dns, "resolvconf settings")
 
 
 proc w_detail_update_label_ports_and_services_deactivated*(labelServices, labelPorts: Label) =
