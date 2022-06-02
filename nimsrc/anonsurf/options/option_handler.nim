@@ -6,6 +6,15 @@ proc ansurf_write_config(user_options: SurfConfig) =
   discard
 
 
+proc ansurf_read_config*(): SurfConfig =
+  #[
+    Map the config from file into a struct
+    should be used by option dialog or
+    make-torrc to generate new torrc
+  ]#
+  discard
+
+
 proc ansurf_option_sendp*(user_options: SurfConfig) =
   #[
     Send data using pipe
