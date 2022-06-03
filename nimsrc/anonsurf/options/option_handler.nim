@@ -64,10 +64,14 @@ proc ansurf_create_default_config*(): SurfConfig =
 
 proc ansurf_options_handle_load_config*(): SurfConfig =
   var system_config: SurfConfig
-  if not ansurf_options_config_file_exists():
-    system_config = ansurf_create_default_config()
+
+  if ansurf_options_config_file_exists():
+    try:
+      system_config = ansurf_options_load_config()
+    except:
+      system_config = ansurf_create_default_config()
   else:
-    system_config = ansurf_options_load_config()
+    system_config = ansurf_create_default_config()
 
 
 proc ansurf_options_read_config*(): SurfConfig =
