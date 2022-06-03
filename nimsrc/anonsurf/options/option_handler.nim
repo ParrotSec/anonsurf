@@ -15,13 +15,22 @@ proc ansurf_options_config_file_exists(): bool =
   return fileExists(ansurf_config_path)
 
 
+proc set_value(config: var Config, key: string, value: auto) =
+  config.setSectionKey("AnonSurfConfig", key, $value)
+
+
+proc get_value(config: Config, key: string): auto =
+  return config.getSectionValue("AnonSurfConfig", key)
+
+
 proc ansurf_options_to_config(user_options: SurfConfig): Config =
   var
     surfOptions = newConfig()
-  surfOptions.setSectionKey("", "use_sandbox", $user_options.option_sandbox)
-  surfOptions.setSectionKey("", "bypass_firewall", $user_options.option_bypass_firewall)
-  surfOptions.setSectionKey("", "use_bridge", $user_options.option_bridge_mode)
-  surfOptions.setSectionKey("", "bridge_address", user_options.option_bridge_address)
+  surfOptions.set_value("user_sandbox", user_options.option_sandbox)
+  surfOptions.set_value("bypass_firewall", user_options.option_bypass_firewall)
+  surfOptions.set_value("use_bridge", user_options.option_bridge_mode)
+  surfOptions.set_value("bridge_address", user_options.option_bridge_address)
+
   return surfOptions
 
 
@@ -33,12 +42,13 @@ proc ansurf_options_load_config(): SurfConfig =
   let
     config = ansurf_options_read_config_from_disk()
     ansurf_config = SurfConfig(
-      option_sandbox: parseBool(config.getSectionValue("", "use_sandbox")),
-      option_bypass_firewall: parseBool(config.getSectionValue("", "bypass_firewall")),
+      option_sandbox: parseBool(config.get_value("use_sandbox")),
+      option_bypass_firewall: parseBool(config.get_value("bypass_firewall")),
       # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
-      option_bridge_mode: parseEnum[BridgeMode](config.getSectionValue("", "use_bridge")),
-      option_bridge_address: config.getSectionValue("", "bridge_address"),
+      option_bridge_mode: parseEnum[BridgeMode](config.get_value("use_bridge")),
+      option_bridge_address: config.get_value("bridge_address"),
     )
+  return ansurf_config
 
 
 proc ansurf_create_default_config*(): SurfConfig =
@@ -57,7 +67,7 @@ proc ansurf_options_handle_load_config*() =
   if not ansurf_options_config_file_exists():
     system_config = ansurf_create_default_config()
   else:
-    discard # LOAD config here
+    system_config = ansurf_options_load_config()
 
 
 proc ansurf_options_read_config*(): SurfConfig =
@@ -67,6 +77,15 @@ proc ansurf_options_read_config*(): SurfConfig =
     make-torrc to generate new torrc
   ]#
   discard
+
+
+proc ansurf_options_handle_write_config*(options: SurfConfig) =
+  let system_config = ansurf_options_to_config(options)
+  try:
+    system_config.writeConfig(ansurf_config_path)
+  except:
+    # TODO callback error here
+    discard
 
 
 proc ansurf_option_sendp*(user_options: SurfConfig) =
@@ -80,10 +99,6 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
     # TODO execute make-torrc to write configs
   else:
     discard # print error
-
-
-proc ansurf_options_handle_write_config(options: SurfConfig) =
-  discard
 
 
 proc ansurf_option_readp*() =
