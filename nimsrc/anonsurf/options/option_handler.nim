@@ -19,7 +19,7 @@ proc set_value(config: var Config, key: string, value: auto) =
   config.setSectionKey("AnonSurfConfig", key, $value)
 
 
-proc get_value(config: Config, key: string): auto =
+proc get_value(config: Config, key: string): string =
   return config.getSectionValue("AnonSurfConfig", key)
 
 
@@ -62,7 +62,7 @@ proc ansurf_create_default_config*(): SurfConfig =
   return config
 
 
-proc ansurf_options_handle_load_config*() =
+proc ansurf_options_handle_load_config*(): SurfConfig =
   var system_config: SurfConfig
   if not ansurf_options_config_file_exists():
     system_config = ansurf_create_default_config()
