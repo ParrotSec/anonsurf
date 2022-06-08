@@ -5,6 +5,10 @@ type
     transPort*: string
     socksPort*: string
     dnsPort*: string
+  AnonOptions* = object
+    use_bridge*: bool
+    custom_bridge*: bool
+    bridge_addr*: string
   StatusImg* = enum
     SecurityHigh, SecurityMedium, SecurityLow, SecurityInfo
 
