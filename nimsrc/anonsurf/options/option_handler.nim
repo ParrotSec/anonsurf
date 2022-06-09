@@ -38,19 +38,6 @@ proc ansurf_options_read_config_from_disk(): Config =
   return loadConfig(ansurf_config_path)
 
 
-proc ansurf_options_load_config(): SurfConfig =
-  let
-    config = ansurf_options_read_config_from_disk()
-    ansurf_config = SurfConfig(
-      option_sandbox: parseBool(config.get_value("use_sandbox")),
-      # option_bypass_firewall: parseBool(config.get_value("bypass_firewall")),
-      # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
-      option_bridge_mode: parseEnum[BridgeMode](config.get_value("use_bridge")),
-      option_bridge_address: config.get_value("bridge_address"),
-    )
-  return ansurf_config
-
-
 proc ansurf_create_default_config*(): SurfConfig =
   let config = SurfConfig(
     option_sandbox: true,
@@ -62,14 +49,27 @@ proc ansurf_create_default_config*(): SurfConfig =
   return config
 
 
+proc ansurf_options_load_config(): SurfConfig =
+  try:
+    let
+      config = ansurf_options_read_config_from_disk()
+      ansurf_config = SurfConfig(
+        option_sandbox: parseBool(config.get_value("use_sandbox")),
+        # option_bypass_firewall: parseBool(config.get_value("bypass_firewall")),
+        # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
+        option_bridge_mode: parseEnum[BridgeMode](config.get_value("use_bridge")),
+        option_bridge_address: config.get_value("bridge_address"),
+      )
+    return ansurf_config
+  except:
+    return ansurf_create_default_config()
+
+
 proc ansurf_options_handle_load_config*(): SurfConfig =
   var system_config: SurfConfig
 
   if ansurf_options_config_file_exists():
-    try:
-      system_config = ansurf_options_load_config()
-    except:
-      system_config = ansurf_create_default_config()
+    system_config = ansurf_options_load_config()
   else:
     system_config = ansurf_create_default_config()
 
