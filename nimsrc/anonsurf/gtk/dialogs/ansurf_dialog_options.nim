@@ -59,7 +59,7 @@ proc onClickOptions*(b: Button) =
   dialogArea.add(optionSandbox)
   dialogArea.add(optionBypassFirewall)
   dialogArea.add(optionBlockInbound)
-  dialogArea.add(initBoxButtons(buttonApply, buttonCancel, dialogSettings))
+  dialogArea.packStart(initBoxButtons(buttonApply, buttonCancel, dialogSettings), true, false, 3)
 
   dialogSettings.setTitle("AnonSurf Settings")
   dialogSEttings.setIconName("preferences-desktop")
