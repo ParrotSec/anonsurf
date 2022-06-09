@@ -44,7 +44,7 @@ proc onClickOptions*(b: Button) =
     optionBridge = newComboBoxText()
     addrBridge = newEntry()
     optionSandbox = newCheckButton("Sandbox mode")
-    optionBlockInbound = newCheckButton("Block Inbound traffic")
+    # optionBlockInbound = newCheckButton("Block Inbound traffic")
     optionBypassFirewall = newCheckButton("Bypass NetworkFirewall")
     buttonApply = newButton("Apply")
     buttonCancel = newButton("Cancel")
@@ -52,13 +52,13 @@ proc onClickOptions*(b: Button) =
   initOptionBridge(optionBridge, 0) # TODO load active number from settings instead
   initEntryBridge(addrBridge)
   initOptionSandbox(optionSandbox)
-  initOptionBlockInbound(optionBlockInbound)
+  # initOptionBlockInbound(optionBlockInbound)
 
   dialogArea.add(optionBridge)
   dialogArea.add(addrBridge)
   dialogArea.add(optionSandbox)
   dialogArea.add(optionBypassFirewall)
-  dialogArea.add(optionBlockInbound)
+  # dialogArea.add(optionBlockInbound)
   dialogArea.packStart(initBoxButtons(buttonApply, buttonCancel, dialogSettings), true, false, 3)
 
   dialogSettings.setTitle("AnonSurf Settings")
