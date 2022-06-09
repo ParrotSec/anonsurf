@@ -18,8 +18,8 @@ proc initOptionSandbox(cb: CheckButton) =
   cb.setTooltipText("Only work without bridge")
 
 
-proc initOptionBlockInbound(cb: CheckButton) =
-  cb.setTooltipText("Block all inbound traffic when AnonSurf is on")
+# proc initOptionBlockInbound(cb: CheckButton) =
+#   cb.setTooltipText("Block all inbound traffic when AnonSurf is on")
 
 
 proc onClickCancel(b: Button, d: Dialog) =
@@ -37,6 +37,21 @@ proc initBoxButtons(bA, bC: Button, d: Dialog): Box =
   return area
 
 
+proc initDialogArea(b: Box, opt1: ComboBoxText, opt2: Entry, opt3, opt4: CheckButton, btn1, btn2: Button, d: Dialog) =
+  b.add(opt1)
+  b.add(opt2)
+  b.add(opt3)
+  b.add(opt4)
+  b.packStart(initBoxButtons(btn1, btn2, d), true, false, 3)
+  discard
+
+
+proc initDialogSettings(d: Dialog) =
+  d.setTitle("AnonSurf Settings")
+  d.setIconName("preferences-desktop")
+  d.showAll()
+
+
 proc onClickOptions*(b: Button) =
   let
     dialogSettings = newDialog()
@@ -52,18 +67,9 @@ proc onClickOptions*(b: Button) =
   initOptionBridge(optionBridge, 0) # TODO load active number from settings instead
   initEntryBridge(addrBridge)
   initOptionSandbox(optionSandbox)
-  # initOptionBlockInbound(optionBlockInbound)
 
-  dialogArea.add(optionBridge)
-  dialogArea.add(addrBridge)
-  dialogArea.add(optionSandbox)
-  dialogArea.add(optionBypassFirewall)
-  # dialogArea.add(optionBlockInbound)
-  dialogArea.packStart(initBoxButtons(buttonApply, buttonCancel, dialogSettings), true, false, 3)
+  dialogArea.initDialogArea(optionBridge, addrBridge, optionSandbox, optionBypassFirewall, buttonApply, buttonCancel, dialogSettings)
+  dialogSettings.initDialogSettings()
 
-  dialogSettings.setTitle("AnonSurf Settings")
-  dialogSettings.setIconName("preferences-desktop")
-
-  dialogSettings.showAll()
   discard dialogSettings.run()
   ansurf_gtk_close_dialog(dialogSettings)
