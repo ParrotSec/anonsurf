@@ -62,7 +62,7 @@ proc onClickOptions*(b: Button) =
   dialogArea.packStart(initBoxButtons(buttonApply, buttonCancel, dialogSettings), true, false, 3)
 
   dialogSettings.setTitle("AnonSurf Settings")
-  dialogSEttings.setIconName("preferences-desktop")
+  dialogSettings.setIconName("preferences-desktop")
 
   dialogSettings.showAll()
   discard dialogSettings.run()
