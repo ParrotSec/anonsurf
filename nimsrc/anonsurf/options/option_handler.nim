@@ -72,6 +72,7 @@ proc ansurf_options_handle_load_config*(): SurfConfig =
     system_config = ansurf_options_load_config()
   else:
     system_config = ansurf_create_default_config()
+  return system_config
 
 
 proc ansurf_options_handle_write_config*(options: SurfConfig) =
