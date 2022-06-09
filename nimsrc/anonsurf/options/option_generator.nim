@@ -105,8 +105,8 @@ proc ansurf_options_generate_torrc*(user_options: SurfConfig): string =
 
   settings.ansurf_options_generate_common_settings()
 
-  if user_options.option_bypass_firewall:
-      settings.option_bypass_firewall()
+  # if user_options.option_bypass_firewall:
+  #     settings.option_bypass_firewall()
   if user_options.option_bridge_mode == NoBridge:
     if user_options.option_sandbox:
       settings.option_enable_sandbox_mode()

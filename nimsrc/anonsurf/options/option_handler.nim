@@ -27,7 +27,7 @@ proc ansurf_options_to_config(user_options: SurfConfig): Config =
   var
     surfOptions = newConfig()
   surfOptions.set_value("user_sandbox", user_options.option_sandbox)
-  surfOptions.set_value("bypass_firewall", user_options.option_bypass_firewall)
+  # surfOptions.set_value("bypass_firewall", user_options.option_bypass_firewall)
   surfOptions.set_value("use_bridge", user_options.option_bridge_mode)
   surfOptions.set_value("bridge_address", user_options.option_bridge_address)
 
@@ -43,7 +43,7 @@ proc ansurf_options_load_config(): SurfConfig =
     config = ansurf_options_read_config_from_disk()
     ansurf_config = SurfConfig(
       option_sandbox: parseBool(config.get_value("use_sandbox")),
-      option_bypass_firewall: parseBool(config.get_value("bypass_firewall")),
+      # option_bypass_firewall: parseBool(config.get_value("bypass_firewall")),
       # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
       option_bridge_mode: parseEnum[BridgeMode](config.get_value("use_bridge")),
       option_bridge_address: config.get_value("bridge_address"),
@@ -54,7 +54,7 @@ proc ansurf_options_load_config(): SurfConfig =
 proc ansurf_create_default_config*(): SurfConfig =
   let config = SurfConfig(
     option_sandbox: true,
-    option_bypass_firewall: false,
+    # option_bypass_firewall: false,
     # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
     option_bridge_mode: NoBridge,
     option_bridge_address: "",
