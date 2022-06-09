@@ -2,7 +2,6 @@ import random
 import strutils
 import osproc
 import option_objects
-# import .. / cores / commons / parse_config
 
 
 randomize()

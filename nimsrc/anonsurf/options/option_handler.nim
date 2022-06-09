@@ -74,16 +74,10 @@ proc ansurf_options_handle_load_config*(): SurfConfig =
     system_config = ansurf_create_default_config()
 
 
-proc ansurf_options_read_config*(): SurfConfig =
-  #[
-    Map the config from file into a struct
-    should be used by option dialog or
-    make-torrc to generate new torrc
-  ]#
-  discard
-
-
 proc ansurf_options_handle_write_config*(options: SurfConfig) =
+  #[
+    Save config from GUI to /etc/anonsurf/anonsurf.cfg
+  ]#
   let system_config = ansurf_options_to_config(options)
   try:
     system_config.writeConfig(ansurf_config_path)
