@@ -13,7 +13,7 @@ proc initOptionBridge(cb: ComboBoxText, active: int) =
 
 proc initEntryBridge(en: Entry, bridge_addr: string, bridge_mode: int) =
   en.setPlaceholderText("Bridge address")
-  en.setTooltipText("We should put format here?")
+  en.setTooltipText("obfs4 <IP>:<port> [A-Z\\d]{40} cert=[\\w\\d\\+\\/]{70} iat-mode=[\\d]")
   en.setText(bridge_addr)
   if bridge_mode == 2:
     en.setSensitive(true)
