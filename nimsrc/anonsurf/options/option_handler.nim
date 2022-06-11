@@ -75,16 +75,14 @@ proc ansurf_options_handle_load_config*(): SurfConfig =
   return system_config
 
 
-proc ansurf_options_handle_write_config*(options: SurfConfig) =
+proc ansurf_options_handle_write_config*(options: string) =
   #[
     Save config from GUI to /etc/anonsurf/anonsurf.cfg
   ]#
-  let system_config = ansurf_options_to_config(options)
   try:
-    system_config.writeConfig(ansurf_config_path)
+    writeFile(ansurf_config_path, options)
   except:
-    # TODO callback error here
-    discard
+    echo "Failed to write new config to system"
 
 
 proc ansurf_option_sendp*(user_options: SurfConfig) =
@@ -96,7 +94,7 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
   var
     process_stream = process.inputStream()
 
-  process_stream.write($user_options)
+  process_stream.write($ansurf_options_to_config(user_options))
   process_stream.close()
   discard waitForExit(process)
 
@@ -108,4 +106,4 @@ proc ansurf_option_readp*() =
   let
     config_from_stdin = readLine(stdin)
 
-  ansurf_options_handle_write_config(cast[SurfConfig](config_from_stdin))
+  ansurf_options_handle_write_config(config_from_stdin)
