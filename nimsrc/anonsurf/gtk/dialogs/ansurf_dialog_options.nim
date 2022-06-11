@@ -11,10 +11,14 @@ proc initOptionBridge(cb: ComboBoxText, active: int) =
   cb.active = active 
 
 
-proc initEntryBridge(en: Entry, bridge_addr: string) =
+proc initEntryBridge(en: Entry, bridge_addr: string, bridge_mode: int) =
   en.setPlaceholderText("Bridge address")
   en.setTooltipText("We should put format here?")
   en.setText(bridge_addr)
+  if bridge_mode == 2:
+    en.setSensitive(true)
+  else:
+    en.setSensitive(false)
 
 
 proc initOptionSandbox(cb: CheckButton, set_sandbox: bool) =
@@ -68,7 +72,7 @@ proc onClickOptions*(b: Button) =
     buttonCancel = newButton("Cancel")
 
   initOptionBridge(optionBridge, int(ansurfConfig.option_bridge_mode))
-  initEntryBridge(addrBridge, ansurfConfig.option_bridge_address)
+  initEntryBridge(addrBridge, ansurfConfig.option_bridge_address, int(ansurfConfig.option_bridge_mode))
   initOptionSandbox(optionSandbox, ansurfConfig.option_sandbox)
 
   dialogArea.initDialogArea(optionBridge, addrBridge, optionSandbox, buttonApply, buttonCancel, dialogSettings)
