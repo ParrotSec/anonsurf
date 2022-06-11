@@ -40,7 +40,7 @@ proc ansurf_options_read_config_from_disk(): Config =
 
 proc ansurf_create_default_config*(): SurfConfig =
   let config = SurfConfig(
-    option_sandbox: true,
+    option_sandbox: false,
     # option_bypass_firewall: false,
     # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
     option_bridge_mode: NoBridge,
