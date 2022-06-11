@@ -92,7 +92,7 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
     Send data using pipe
   ]#
   let
-    process = startProcess("pkexec env DISPLAY=\"$DISPLAY\" XAUTHORITY=\"$XAUTHORITY\" " & ansurf_maketorrc_path & " new-config")
+    process = startProcess("/usr/bin/pkexec env DISPLAY=\"$DISPLAY\" XAUTHORITY=\"$XAUTHORITY\" " & ansurf_maketorrc_path & " new-config")
   var
     process_stream = process.inputStream()
 
