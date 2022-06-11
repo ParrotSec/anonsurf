@@ -31,5 +31,6 @@ proc surfTitleBar*(): HeaderBar =
   titleBar.settitle("AnonSurf")
   titleBar.add(btnAbout())
   titleBar.add(btnSettings())
+  titleBar.setDecorationLayout(cstring(":close"))
 
   return titleBar
