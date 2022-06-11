@@ -19,6 +19,13 @@ proc onClickApplyConfig(b: Button, c: ApplyConfigObj) =
   ansurf_gtk_save_config(config)
 
 
+proc onClickBridgeMode(c: ComboBoxText, e: Entry) =
+  if c.getActive == 2:
+    e.setSensitive(true)
+  else:
+    e.setSensitive(false)
+
+
 proc onClickCancel(b: Button, d: Dialog) =
   ansurf_gtk_close_dialog(d)
 
@@ -54,6 +61,7 @@ proc initBoxButtons(bA, bC: Button, d: Dialog, opt1: ComboBoxText, opt2: Entry, 
   area.packEnd(bC, true, false, 3)
   bA.connect("clicked", onClickApplyConfig, config)
   bC.connect("clicked", onClickCancel, d)
+  opt1.connect("changed", onClickBridgeMode, opt2)
 
   return area
 
