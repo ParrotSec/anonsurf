@@ -12,7 +12,7 @@ proc initOptionBridge(cb: ComboBoxText, active: int) =
 
 
 proc initEntryBridge(en: Entry, bridge_addr: string, bridge_mode: int) =
-  en.setPlaceholderText("Bridge address")
+  en.setPlaceholderText("obfs4 proxy address")
   en.setTooltipText("obfs4 <IP>:<port> [A-Z\\d]{40} cert=[\\w\\d\\+\\/]{70} iat-mode=[\\d]")
   # obfs4 (?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)(?::\d{0,5})? [A-Z\d]{40} cert=[\w\d\+\/]{70} iat-mode=[\d]
   en.setText(bridge_addr)
