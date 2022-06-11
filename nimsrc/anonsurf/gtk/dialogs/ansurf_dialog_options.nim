@@ -1,7 +1,6 @@
 import gintro / [gtk, gobject]
 import .. / gui_activities / core_activities
 import .. / .. / options / [option_handler, option_objects]
-import strutils
 
 
 type
