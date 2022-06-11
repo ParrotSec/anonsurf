@@ -37,4 +37,4 @@ proc ansurf_gtk_save_config*(c: SurfConfig) =
   const
     mk_torrc = "/usr/lib/anonsurf/make-torrc"
   ansurf_option_sendp(c)
-  discard execShellCmd("menuexecg " & mk_torrc & " new-config")
+  discard execShellCmd("pkexec env DISPLAY=\"$DISPLAY\" XAUTHORITY=\"$XAUTHORITY\" " & mk_torrc & " new-config")
