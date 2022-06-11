@@ -15,8 +15,7 @@ proc maketorrc_restore_torrc_backup() =
     echo "Error while restore torrc backup"
 
 
-proc maketorrc_create_nyx() =
-  let password = ansurf_options_gen_random_password()
+proc maketorrc_create_nyx(password: string) =
   try:
     writeFile(ansurf_nyx_config_path, "password " & password & "\n")
     echo "New nyxrc created"
@@ -33,10 +32,11 @@ proc maketorrc_create_torrc_backup() =
 
 proc maketorrc_create_new_config() =
   let
+    password = ansurf_options_gen_random_password()
     config = ansurf_options_handle_load_config()
-    config_to_torrc = ansurf_options_generate_torrc(config)
+    config_to_torrc = ansurf_options_generate_torrc(config, password)
 
-  maketorrc_create_nyx()
+  maketorrc_create_nyx(password)
   maketorrc_create_torrc_backup()
   try:
     writeFile(ansurf_torrc_default_path, config_to_torrc)

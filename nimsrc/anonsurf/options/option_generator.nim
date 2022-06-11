@@ -76,10 +76,9 @@ proc option_set_torrc_hash(settings: var string, hash: string) =
   settings &= "HashedControlPassword " & hash & "\n"
 
 
-proc ansurf_options_generate_common_settings(settings: var string) =
+proc ansurf_options_generate_common_settings(settings: var string, password: string) =
   let
-    random_passwd = ansurf_options_gen_random_password()
-    tor_hash = ansurf_options_parse_tor_hash(random_passwd)
+    tor_hash = ansurf_options_parse_tor_hash(password)
 
   settings = ansurf_config_torrc_default
   settings.option_set_torrc_hash(tor_hash)
@@ -99,11 +98,11 @@ proc ansurf_options_add_bridge_options(settings: var string, user_options: SurfC
   settings.option_set_bridge_addr(bridge_addr)
 
 
-proc ansurf_options_generate_torrc*(user_options: SurfConfig): string =
+proc ansurf_options_generate_torrc*(user_options: SurfConfig, password: string): string =
   var
     settings: string
 
-  settings.ansurf_options_generate_common_settings()
+  settings.ansurf_options_generate_common_settings(password)
 
   # if user_options.option_bypass_firewall:
   #     settings.option_bypass_firewall()
