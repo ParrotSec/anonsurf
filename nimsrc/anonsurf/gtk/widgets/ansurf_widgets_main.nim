@@ -1,6 +1,6 @@
 import gintro / [gtk, glib, gobject]
 import gintro / gdk except Window
-import .. / gui_activities / [core_activities, main_widget_activities]
+import .. / gui_activities / [core_activities, widget_main]
 import .. / .. / cores / commons / ansurf_types
 
 

@@ -1,5 +1,5 @@
 import gintro / [gtk, gdk, gobject, glib]
-import .. / gui_activities / [core_activities, details_widget_activities]
+import .. / gui_activities / [core_activities, widget_details]
 import .. / .. / cores / commons / ansurf_types
 
 
