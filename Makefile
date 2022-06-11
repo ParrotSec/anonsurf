@@ -64,7 +64,8 @@ install:
 	fi
 
 	# Copy configs
-	cp configs/* $(DESTDIR)/etc/anonsurf/.
+	cp configs/bridges.txt $(DESTDIR)/etc/anonsurf/.
+	cp configs/onion.pac $(DESTDIR)/etc/anonsurf/.
 
 	# Copy daemon service
 	cp sys-units/anonsurfd.service $(DESTDIR)/lib/systemd/system/anonsurfd.service
