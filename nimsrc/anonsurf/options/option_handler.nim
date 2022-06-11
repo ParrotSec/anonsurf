@@ -26,7 +26,7 @@ proc get_value(config: Config, key: string): string =
 proc ansurf_options_to_config(user_options: SurfConfig): Config =
   var
     surfOptions = newConfig()
-  surfOptions.set_value("user_sandbox", user_options.option_sandbox)
+  surfOptions.set_value("use_sandbox", user_options.option_sandbox)
   # surfOptions.set_value("bypass_firewall", user_options.option_bypass_firewall)
   surfOptions.set_value("use_bridge", user_options.option_bridge_mode)
   surfOptions.set_value("bridge_address", user_options.option_bridge_address)
