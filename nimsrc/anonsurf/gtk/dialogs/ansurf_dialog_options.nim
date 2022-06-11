@@ -27,20 +27,22 @@ proc initOptionSandbox(cb: CheckButton, set_sandbox: bool) =
   cb.setActive(set_sandbox)
 
 
-proc initBoxButtons(bA, bC: Button, d: Dialog, opt1: ComboBoxText, opt2: Entry, opt3: CheckButton): Box =
+proc initBoxButtons(bA, bC: Button, d: Dialog, optionBridge, optionPlainPort: ComboBoxText, addrBridge: Entry, optionSandbox, optionSafeSock: CheckButton): Box =
   let
     area = newBox(Orientation.horizontal, 3)
     config = ApplyConfigObj(
-      bridgeOption: opt1,
-      bridgeAddr: opt2,
-      sandboxMode: opt3,
+      bridgeOption: optionBridge,
+      bridgeAddr: addrBridge,
+      sandboxMode: optionSandbox,
+      safeSock: optionSafeSock,
+      plainPortMode: optionPlainPort
     )
 
   area.packStart(bA, true, false, 3)
   area.packEnd(bC, true, false, 3)
   bA.connect("clicked", onClickApplyConfig, config)
   bC.connect("clicked", onClickCancel, d)
-  opt1.connect("changed", onClickBridgeMode, opt2)
+  optionBridge.connect("changed", onClickBridgeMode, addrBridge)
 
   return area
 
@@ -61,7 +63,7 @@ proc initDialogArea(b: Box, optionBridge, optionPlainPort: ComboBoxText, addrBri
   b.add(addrBridge)
   b.add(optionSafeSock)
   b.add(optionSandbox)
-  b.packStart(initBoxButtons(btn1, btn2, d, optionBridge, addrBridge, optionSandbox), true, false, 3)
+  b.packStart(initBoxButtons(btn1, btn2, d, optionBridge, optionPlainPort, addrBridge, optionSandbox, optionSafeSock), true, false, 3)
 
 
 proc initDialogSettings(d: Dialog) =
