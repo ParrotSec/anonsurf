@@ -54,6 +54,13 @@ proc maketorrc_get_new_config() =
 
 
 proc main() =
+  if paramCount() == 0:
+    #[
+      In old version, we are having the same logic
+      No need to change bash file for this
+    ]#
+    maketorrc_create_new_config()
+    return
   if paramCount() != 1:
     return
   if paramStr(1) == "restore":

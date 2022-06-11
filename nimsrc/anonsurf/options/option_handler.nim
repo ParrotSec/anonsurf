@@ -95,7 +95,6 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
     pipe_connector: PipeArray
   if dup2(pipe_connector[1], STDOUT_FILENO) != -1:
     discard pipe_connector[1].close()
-    # TODO execute make-torrc to write configs
   else:
     discard # print error
 

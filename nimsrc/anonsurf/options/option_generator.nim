@@ -54,11 +54,11 @@ proc option_enable_sandbox_mode(settings: var string) =
   settings &= "Sandbox 1\n"
 
 
-proc option_bypass_firewall(settings: var string) =
-  # https://2019.www.torproject.org/docs/tor-manual.html.en
-  # TODO check ReachableDirAddresses or ReachableORAddresses
-  settings &= "\n# Set bypass firewall\n"
-  settings &= "FascistFirewall 1\n"
+# proc option_bypass_firewall(settings: var string) =
+#   # https://2019.www.torproject.org/docs/tor-manual.html.en
+#   # TODO check ReachableDirAddresses or ReachableORAddresses
+#   settings &= "\n# Set bypass firewall\n"
+#   settings &= "FascistFirewall 1\n"
 
 
 proc option_enable_bridge(settings: var string) =

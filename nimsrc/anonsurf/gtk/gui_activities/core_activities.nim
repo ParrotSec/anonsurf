@@ -1,5 +1,7 @@
 import gintro / gtk
 import gintro / gdk except Window
+import .. / .. / options / [option_handler, option_objects]
+import os
 
 
 proc ansurf_gtk_widget_show_details*(e: EventBox, eb: gdk.EventButton, s: Stack): bool =
@@ -29,3 +31,10 @@ proc ansurf_gtk_do_not_stop*(w: Window, e: Event): bool =
 
 proc ansurf_gtk_close_dialog*(d: Dialog) =
   d.destroy()
+
+
+proc ansurf_gtk_save_config*(c: SurfConfig) =
+  const
+    mk_torrc = "/usr/lib/anonsurf/make-torrc"
+  ansurf_option_sendp(c)
+  discard execShellCmd("sudo " & mk_torrc & " new-config")
