@@ -96,7 +96,7 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
   if dup2(pipe_connector[1], STDOUT_FILENO) != -1:
     discard pipe_connector[1].close()
   else:
-    discard # print error
+    echo "Error while sending config via pipe"
 
 
 proc ansurf_option_readp*() =
@@ -111,4 +111,4 @@ proc ansurf_option_readp*() =
     discard pipe_connector[0].close()
     ansurf_options_handle_write_config(user_options)
   else:
-    discard
+    echo "Error while receiving config via pipe"
