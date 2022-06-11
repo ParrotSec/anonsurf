@@ -81,8 +81,8 @@ proc ansurf_options_handle_write_config*(options: ConfigTuple) =
   ]#
   let
     to_surf_config = SurfConfig(
-      option_sandbox: options.option_sandbox,
-      option_bridge_mode: options.option_bridge_mode,
+      option_sandbox: parseBool(options.option_sandbox),
+      option_bridge_mode: parseEnum[BridgeMode](options.option_bridge_mode),
       option_bridge_address: options.option_bridge_address,
     )
     system_config = ansurf_options_to_config(to_surf_config)
