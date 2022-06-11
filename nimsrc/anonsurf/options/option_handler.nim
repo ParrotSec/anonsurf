@@ -75,12 +75,21 @@ proc ansurf_options_handle_load_config*(): SurfConfig =
   return system_config
 
 
-proc ansurf_options_handle_write_config*(options: string) =
+proc ansurf_options_handle_write_config*(options: ConfigTuple) =
   #[
     Save config from GUI to /etc/anonsurf/anonsurf.cfg
   ]#
+  let
+    to_surf_config = SurfConfig(
+      option_sandbox: options.option_sandbox,
+      option_bridge_mode: options.option_bridge_mode,
+      option_bridge_address: options.option_bridge_address,
+    )
+    system_config = ansurf_options_to_config(to_surf_config)
+
   try:
-    writeFile(ansurf_config_path, options)
+    # writeFile(ansurf_config_path, to_system_config)
+    system_config.writeConfig(ansurf_config_path)
   except:
     echo "Failed to write new config to system"
 
@@ -94,7 +103,7 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
   var
     process_stream = process.inputStream()
 
-  process_stream.write($ansurf_options_to_config(user_options))
+  process_stream.write($user_options)
   process_stream.close()
   discard waitForExit(process)
 
@@ -103,7 +112,10 @@ proc ansurf_option_readp*() =
   #[
     Read data from pipe
   ]#
+  var config: ConfigTuple
   let
-    config_from_stdin = readAll(stdin)
+    config_from_stdin = readLine(stdin)
 
-  ansurf_options_handle_write_config(config_from_stdin)
+  config = cast[ConfigTuple](config_from_stdin)
+
+  ansurf_options_handle_write_config(config)
