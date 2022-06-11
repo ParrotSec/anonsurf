@@ -69,6 +69,7 @@ proc initDialogArea(b: Box, optionBridge, optionPlainPort: ComboBoxText, addrBri
 proc initDialogSettings(d: Dialog) =
   d.setTitle("AnonSurf Settings")
   d.setIconName("preferences-desktop")
+  d.setResizable(false)
   d.showAll()
 
 
