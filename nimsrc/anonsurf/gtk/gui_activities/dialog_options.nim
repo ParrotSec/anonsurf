@@ -8,6 +8,8 @@ type
     bridgeOption*: ComboBoxText
     bridgeAddr*: Entry
     sandboxMode*: CheckButton
+    safeSock*: CheckButton
+    plainPortMode*: ComboBoxText
 
 
 proc onClickApplyConfig*(b: Button, c: ApplyConfigObj) =
@@ -15,6 +17,8 @@ proc onClickApplyConfig*(b: Button, c: ApplyConfigObj) =
     option_sandbox: c.sandboxMode.getActive(),
     option_bridge_mode: cast[BridgeMode](c.bridgeOption.getActive()),
     option_bridge_address: c.bridgeAddr.getText(),
+    option_plain_port: cast[PlainPortMode](c.plainPortMode.getActive()),
+    option_safe_sock: c.safeSock.getActive()
   )
   ansurf_gtk_save_config(config)
 

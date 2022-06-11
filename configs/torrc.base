@@ -24,7 +24,6 @@ HardwareAccel 1
 #socket safety hacks
 TestSocks 1
 AllowNonRFC953Hostnames 0
-WarnPlaintextPorts 23,109,110,143,80
 
 #dns safety hacks
 ClientRejectInternalAddresses 1

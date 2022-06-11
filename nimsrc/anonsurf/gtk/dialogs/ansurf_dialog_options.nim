@@ -45,12 +45,23 @@ proc initBoxButtons(bA, bC: Button, d: Dialog, opt1: ComboBoxText, opt2: Entry, 
   return area
 
 
-proc initDialogArea(b: Box, opt1: ComboBoxText, opt2: Entry, opt3: CheckButton, btn1, btn2: Button, d: Dialog) =
-  b.add(opt1)
-  b.add(opt2)
-  b.add(opt3)
-  b.packStart(initBoxButtons(btn1, btn2, d, opt1, opt2, opt3), true, false, 3)
-  discard
+proc initOptionPlainPort(opt: ComboBoxText, i: int) =
+  opt.appendText("Warn plain ports")
+  opt.appendText("Reject plain ports")
+  opt.setActive(i)
+
+
+proc initOptionSafeSock(opt: CheckButton, set_active: bool) =
+  opt.setActive(set_active)
+
+
+proc initDialogArea(b: Box, optionBridge, optionPlainPort: ComboBoxText, addrBridge: Entry, optionSandbox, optionSafeSock: CheckButton, btn1, btn2: Button, d: Dialog) =
+  b.add(optionPlainPort)
+  b.add(optionBridge)
+  b.add(addrBridge)
+  b.add(optionSafeSock)
+  b.add(optionSandbox)
+  b.packStart(initBoxButtons(btn1, btn2, d, optionBridge, addrBridge, optionSandbox), true, false, 3)
 
 
 proc initDialogSettings(d: Dialog) =
@@ -65,6 +76,8 @@ proc onClickOptions*(b: Button) =
     dialogSettings = newDialog()
     dialogArea = dialogSettings.getContentArea()
     optionBridge = newComboBoxText()
+    optionPlainPort = newComboBoxText()
+    optionSafeSock = newCheckButton("Safe Sock protocol")
     addrBridge = newEntry()
     optionSandbox = newCheckButton("Sandbox mode")
     # optionBlockInbound = newCheckButton("Block Inbound traffic")
@@ -72,11 +85,13 @@ proc onClickOptions*(b: Button) =
     buttonApply = newButton("Apply")
     buttonCancel = newButton("Cancel")
 
+  initOptionPlainPort(optionPlainPort, int(ansurfConfig.option_plain_port))
+  initOptionSafeSock(optionSafeSock, ansurfConfig.option_safe_sock)
   initOptionBridge(optionBridge, int(ansurfConfig.option_bridge_mode))
   initEntryBridge(addrBridge, ansurfConfig.option_bridge_address, int(ansurfConfig.option_bridge_mode))
   initOptionSandbox(optionSandbox, ansurfConfig.option_sandbox)
 
-  dialogArea.initDialogArea(optionBridge, addrBridge, optionSandbox, buttonApply, buttonCancel, dialogSettings)
+  dialogArea.initDialogArea(optionBridge, optionPlainPort, addrBridge, optionSandbox, optionSafeSock, buttonApply, buttonCancel, dialogSettings)
   dialogSettings.initDialogSettings()
 
   discard dialogSettings.run()

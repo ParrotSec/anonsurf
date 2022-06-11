@@ -31,6 +31,8 @@ proc ansurf_options_to_config(user_options: SurfConfig): Config =
   # surfOptions.set_value("bypass_firewall", user_options.option_bypass_firewall)
   surfOptions.set_value("use_bridge", user_options.option_bridge_mode)
   surfOptions.set_value("bridge_address", user_options.option_bridge_address)
+  surfOptions.set_value("safe_sock", user_options.option_safe_sock)
+  surfOptions.set_value("plain_port", user_options.option_plain_port)
 
   return surfOptions
 
@@ -46,6 +48,8 @@ proc ansurf_create_default_config*(): SurfConfig =
     # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
     option_bridge_mode: NoBridge,
     option_bridge_address: "",
+    option_safe_sock: false,
+    option_plain_port: LevelWarn,
   )
   return config
 
@@ -60,6 +64,8 @@ proc ansurf_options_load_config(): SurfConfig =
         # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
         option_bridge_mode: parseEnum[BridgeMode](config.get_value("use_bridge")),
         option_bridge_address: config.get_value("bridge_address"),
+        option_safe_sock: parseBool(config.get_value("safe_sock")),
+        option_plain_port: parseEnum[PlainPortMode](config.get_value("plain_port"))
       )
     return ansurf_config
   except:
@@ -86,12 +92,13 @@ proc ansurf_options_handle_write_config*(options: JsonNode) =
         option_sandbox: getBool(options["option_sandbox"]),
         option_bridge_mode: parseEnum[BridgeMode](getStr(options["option_bridge_mode"])),
         option_bridge_address: getStr(options["option_bridge_address"]),
+        option_safe_sock: getBool(options["option_safe_sock"]),
+        option_plain_port: parseEnum[PlainPortMode](getStr(options["option_plain_port"]))
       )
       system_config = ansurf_options_to_config(to_surf_config)
     system_config.writeConfig(ansurf_config_path)
   except:
     echo "Failed to parse config from stdin"
-    echo getCurrentExceptionMsg()
 
 
 proc ansurf_option_sendp*(user_options: SurfConfig) =

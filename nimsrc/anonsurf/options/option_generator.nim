@@ -76,6 +76,19 @@ proc option_set_torrc_hash(settings: var string, hash: string) =
   settings &= "HashedControlPassword " & hash & "\n"
 
 
+proc option_set_safe_sock(settings: var string) =
+  settings &= "\n# Set SafeSocks\n"
+  settings &= "SafeSocks 1\n"
+
+
+proc option_set_plain_port(settings: var string, level: PlainPortMode) =
+  settings &= "\n# Set plain port warn / reject level\n"
+  if level == LevelWarn:
+    settings &= "WarnPlaintextPorts 23,109,110,143,80"
+  else:
+    settings &= " RejectPlaintextPorts 23,109,110,143,80"
+
+
 proc ansurf_options_generate_common_settings(settings: var string, password: string) =
   let
     tor_hash = ansurf_options_parse_tor_hash(password)
@@ -103,6 +116,11 @@ proc ansurf_options_generate_torrc*(user_options: SurfConfig, password: string):
     settings: string
 
   settings.ansurf_options_generate_common_settings(password)
+  settings.option_set_plain_port(user_options.option_plain_port)
+
+
+  if user_options.option_safe_sock:
+    settings.option_set_safe_sock()
 
   # if user_options.option_bypass_firewall:
   #     settings.option_bypass_firewall()
