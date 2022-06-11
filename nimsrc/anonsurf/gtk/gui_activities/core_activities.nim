@@ -1,7 +1,6 @@
 import gintro / gtk
 import gintro / gdk except Window
 import .. / .. / options / [option_handler, option_objects]
-import os
 
 
 proc ansurf_gtk_widget_show_details*(e: EventBox, eb: gdk.EventButton, s: Stack): bool =
