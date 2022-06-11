@@ -80,19 +80,18 @@ proc ansurf_options_handle_write_config*(options: JsonNode) =
   #[
     Save config from GUI to /etc/anonsurf/anonsurf.cfg
   ]#
-  let
-    to_surf_config = SurfConfig(
-      option_sandbox: getBool(options["option_sandbox"]),
-      option_bridge_mode: parseEnum[BridgeMode](getStr(options["option_bridge_mode"])),
-      option_bridge_address: getStr(options["option_bridge_address"]),
-    )
-    system_config = ansurf_options_to_config(to_surf_config)
-
   try:
-    # writeFile(ansurf_config_path, to_system_config)
+    let
+      to_surf_config = SurfConfig(
+        option_sandbox: getBool(options["option_sandbox"]),
+        option_bridge_mode: parseEnum[BridgeMode](getStr(options["option_bridge_mode"])),
+        option_bridge_address: getStr(options["option_bridge_address"]),
+      )
+      system_config = ansurf_options_to_config(to_surf_config)
     system_config.writeConfig(ansurf_config_path)
   except:
-    echo "Failed to write new config to system"
+    echo "Failed to parse config from stdin"
+    echo getCurrentExceptionMsg()
 
 
 proc ansurf_option_sendp*(user_options: SurfConfig) =
