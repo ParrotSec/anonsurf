@@ -3,12 +3,12 @@
   and transfer config object using pipe
   Tutorial: https://www.youtube.com/watch?v=4xYu2WrygtQ
 ]#
-
-import posix
 import option_objects
 import parsecfg
 import os
 import strutils
+import osproc
+import streams
 
 
 proc ansurf_options_config_file_exists(): bool =
@@ -91,24 +91,21 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
   #[
     Send data using pipe
   ]#
+  let
+    process = startProcess("pkexec env DISPLAY=\"$DISPLAY\" XAUTHORITY=\"$XAUTHORITY\" " & ansurf_maketorrc_path & " new-config")
   var
-    pipe_connector: PipeArray
-  if dup2(pipe_connector[1], STDOUT_FILENO) != -1:
-    discard pipe_connector[1].close()
-  else:
-    echo "Error while sending config via pipe"
+    process_stream = process.inputStream()
+
+  process_stream.write($user_options)
+  process_stream.close()
+  discard waitForExit(process)
 
 
 proc ansurf_option_readp*() =
   #[
     Read data from pipe
   ]#
-  var
-    pipe_connector: PipeArray
-    user_options: SurfConfig
+  let
+    config_from_stdin = readLine(stdin)
 
-  if read(pipe_connector[0], addr(user_options), sizeof(user_options)) == 0:
-    discard pipe_connector[0].close()
-    ansurf_options_handle_write_config(user_options)
-  else:
-    echo "Error while receiving config via pipe"
+  ansurf_options_handle_write_config(cast[SurfConfig](config_from_stdin))

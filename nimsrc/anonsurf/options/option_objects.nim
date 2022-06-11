@@ -10,11 +10,11 @@ const
   ansurf_onion_system_path* = "/etc/tor/onion.pac"
   ansurf_config_torrc_default* = staticRead("../../../configs/torrc.base")
   ansurf_config_torrc_bridge* = staticRead("../../../configs/bridgerc.base")
+  ansurf_maketorrc_path* = "/usr/lib/anonsurf/make-torrc"
 
 type
   BridgeMode* = enum
     NoBridge, AutoBridge, ManualBridge
-  PipeArray* = array[2, cint]
   SurfConfig* = object
     option_sandbox*: bool
     # option_bypass_firewall*: bool
