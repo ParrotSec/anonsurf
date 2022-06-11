@@ -63,7 +63,7 @@ proc option_enable_sandbox_mode(settings: var string) =
 
 proc option_enable_bridge(settings: var string) =
   settings &= "\n# Enable bridge mode\n"
-  settings &= "UseBridges 1\n"
+  settings &= "BridgeRelay 1\n"
 
 
 proc option_set_bridge_addr(settings: var string, bridge_addr: string) =
