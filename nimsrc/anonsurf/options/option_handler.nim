@@ -103,7 +103,7 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
   var
     process_stream = process.inputStream()
 
-  process_stream.write(%user_options)
+  process_stream.write($(%user_options))
   process_stream.close()
   discard waitForExit(process)
 
@@ -114,6 +114,6 @@ proc ansurf_option_readp*() =
   ]#
   let
     config_from_stdin = readLine(stdin)
-    config = parseJson(config_from_stdin) # FIXME failed to cast
+    config = parseJson(config_from_stdin)
 
   ansurf_options_handle_write_config(config)
