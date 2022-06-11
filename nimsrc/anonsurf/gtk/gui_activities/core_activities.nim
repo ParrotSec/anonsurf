@@ -37,4 +37,4 @@ proc ansurf_gtk_save_config*(c: SurfConfig) =
   const
     mk_torrc = "/usr/lib/anonsurf/make-torrc"
   ansurf_option_sendp(c)
-  discard execShellCmd("sudo " & mk_torrc & " new-config")
+  discard execShellCmd("menuexecg " & mk_torrc & " new-config")
