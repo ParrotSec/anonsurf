@@ -15,9 +15,13 @@ const
 type
   BridgeMode* = enum
     NoBridge, AutoBridge, ManualBridge
+  PlainPortMode* = enum
+    LevelWarn, LevelReject
   SurfConfig* = object
     option_sandbox*: bool
     # option_bypass_firewall*: bool
     # option_block_inbound*: bool # TODO it's iptables rules rather than the torrc
     option_bridge_mode*: BridgeMode
     option_bridge_address*: string
+    option_safe_sock*: bool
+    option_plain_port*: PlainPortMode
