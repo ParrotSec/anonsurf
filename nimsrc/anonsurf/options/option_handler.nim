@@ -9,6 +9,7 @@ import os
 import strutils
 import osproc
 import streams
+import json
 
 
 proc ansurf_options_config_file_exists(): bool =
@@ -75,15 +76,15 @@ proc ansurf_options_handle_load_config*(): SurfConfig =
   return system_config
 
 
-proc ansurf_options_handle_write_config*(options: ConfigTuple) =
+proc ansurf_options_handle_write_config*(options: JsonNode) =
   #[
     Save config from GUI to /etc/anonsurf/anonsurf.cfg
   ]#
   let
     to_surf_config = SurfConfig(
-      option_sandbox: parseBool(options.option_sandbox),
-      option_bridge_mode: parseEnum[BridgeMode](options.option_bridge_mode),
-      option_bridge_address: options.option_bridge_address,
+      option_sandbox: getBool(options["option_sandbox"]),
+      option_bridge_mode: parseEnum[BridgeMode](getStr(options["option_bridge_mode"])),
+      option_bridge_address: getStr(options["option_bridge_address"]),
     )
     system_config = ansurf_options_to_config(to_surf_config)
 
@@ -103,7 +104,7 @@ proc ansurf_option_sendp*(user_options: SurfConfig) =
   var
     process_stream = process.inputStream()
 
-  process_stream.write($user_options)
+  process_stream.write(%user_options)
   process_stream.close()
   discard waitForExit(process)
 
@@ -112,10 +113,8 @@ proc ansurf_option_readp*() =
   #[
     Read data from pipe
   ]#
-  var config: ConfigTuple
   let
     config_from_stdin = readLine(stdin)
-
-  config = cast[ConfigTuple](config_from_stdin)
+    config = parseJson(config_from_stdin) # FIXME failed to cast
 
   ansurf_options_handle_write_config(config)
