@@ -2,7 +2,7 @@ import system
 
 const
   ansurf_config_path* = "/etc/anonsurf/anonsurf.cfg"
-  ansurf_list_bridges* = "/etc/anonsurf/bridge.txt"
+  ansurf_list_bridges* = "/etc/anonsurf/bridges.txt"
   ansurf_nyx_config_path* = "/etc/anonsurf/nyxrc"
   ansurf_torrc_default_path* = "/etc/tor/torrc"
   ansurf_torrc_backup_path* = "/etc/tor/torrc.bak"
