@@ -104,6 +104,6 @@ proc ansurf_option_readp*() =
     Read data from pipe
   ]#
   let
-    config_from_stdin = readLine(stdin)
+    config_from_stdin = readAll(stdin)
 
   ansurf_options_handle_write_config(config_from_stdin)
