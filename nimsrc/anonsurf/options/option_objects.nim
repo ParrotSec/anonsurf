@@ -13,6 +13,7 @@ const
   ansurf_maketorrc_path* = "/usr/lib/anonsurf/make-torrc"
 
 type
+  ConfigTuple* = tuple[option_sandbox: bool, option_bridge_mode: BridgeMode, option_bridge_address: string]
   BridgeMode* = enum
     NoBridge, AutoBridge, ManualBridge
   SurfConfig* = object
