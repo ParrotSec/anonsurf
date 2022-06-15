@@ -40,4 +40,9 @@ proc daemon(a1, a2: cint): cint {.importc, header: "<unistd.h>"}
 
 
 proc ansurf_gtk_start_daemon*() =
-  discard daemon(0, 0)
+  #[
+    DAEMON(3)
+    If nochdir is zero, pwd is /; otherwise, the current working directory is left unchanged.
+    If noclose is zero, all stdin, stdout, stderror > /dev/null, no changes are made to these file descriptors.
+  ]#
+  discard daemon(1, 1)
