@@ -25,6 +25,9 @@ Files:
   launcher/anon-gui.desktop
   nimsrc/*
   configs/*
+  Makefile
+  README.md
+  scripts/safekill
 Copyright: 2020, Nong Hoang "DmKnght" Tu <dmknght@parrotsec.org>
 License: GPL-3.0+
 
@@ -63,6 +66,7 @@ License: GPL-3.0+
 
 Files:
   icons/anon-about.svg
+  icons/nyx-logo.png
 Copyright: 2020, Federica "marafed" Marasà
 License: GPL-3.0+
 
