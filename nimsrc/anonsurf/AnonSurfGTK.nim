@@ -92,6 +92,7 @@ proc main =
     Create new window
     http://blog.borovsak.si/2009/06/multi-threaded-gtk-applications.html
   ]#
+  ansurf_gtk_start_daemon()
   gtk.init()
 
   let

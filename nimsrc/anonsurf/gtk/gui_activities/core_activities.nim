@@ -34,3 +34,10 @@ proc ansurf_gtk_close_dialog*(d: Dialog) =
 
 proc ansurf_gtk_save_config*(c: SurfConfig) =
   ansurf_option_sendp(c)
+
+
+proc daemon(a1, a2: cint): cint {.importc, header: "<unistd.h>"}
+
+
+proc ansurf_gtk_start_daemon*() =
+  discard daemon(0, 0)
