@@ -36,7 +36,7 @@ proc start() =
   if getServStatus("anonsurfd"):
     callback_msg_proc("AnonSurf Status", "AnonSurf is running. Can't start it again", SecurityLow)
     return
-  
+
   callback_kill_apps(callback_msg_proc)
   ansurf_acts_handle_start(sudo, callback_msg_proc)
 
