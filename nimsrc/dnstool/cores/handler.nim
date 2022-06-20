@@ -6,7 +6,15 @@ import dhclient
 import utils
 
 
-proc handle_hookscript_for_dhcp() =
+proc hookscript_resolvconfig_exits(): bool =
+  return fileExists(hook_script_resolvconf)
+
+
+proc hookscript_dnstool_exists(): bool =
+  return fileExists(hook_script_path)
+
+
+proc handle_hook_script_remove() =
   #[
     If system is not using resolvconf
     and hook script exists, we remove it
@@ -18,21 +26,23 @@ proc handle_hookscript_for_dhcp() =
       if not tryRemoveFile(dns_hook_script):
         print_error("Failed to remove hook script " & dns_hook_script)
   ]#
-  discard
+  if hookscript_dnstool_exists():
+    if not tryRemoveFile(hook_script_path):
+      print_error("Error while removing hook script of dnstool")
 
 
-proc handle_hookscript_for_custom_addr() =
+proc handle_hookscript_create_new() =
   #[
     If system is not using resolvconf
     create a hook script to keep custom addr
     The logic to check resolvconf exists and
     dhclient exists should be covered by other func
   ]#
-  #[
-    if not fileExists(dns_hook_script):
-      dhclient_create_hook_script()
-  ]#
-  discard
+  if not hookscript_resolvconfig_exits():
+    try:
+      writeFile(hook_script_path, hook_script_data)
+    except:
+      print_error("Error while making new hook script")
 
 
 proc handle_create_resolvconf_symlink() =
@@ -145,6 +155,10 @@ proc handle_create_dns_addr*(has_dhcp: bool, list_addr: seq[string]) =
     else:
       handle_addr_mix_with_dhcp(list_addr)
 
+  if resolvconf_exists():
+    handle_hook_script_remove()
+  else:
+    handle_hookscript_create_new()
   # echo "\n[*] Applied DNS settings"
   # TODO only print completed if all functions are good
   dnst_show_status()
