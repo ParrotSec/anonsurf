@@ -6,10 +6,6 @@ import dhclient
 import utils
 
 
-proc hookscript_resolvconfig_exits(): bool =
-  return fileExists(hook_script_resolvconf)
-
-
 proc hookscript_dnstool_exists(): bool =
   return fileExists(hook_script_path)
 
@@ -20,11 +16,6 @@ proc handle_hook_script_remove() =
     and hook script exists, we remove it
     The logic to check resolvconf exists and
     dhclient exists should be covered by other func
-  ]#
-  #[
-    if fileExists(dns_hook_script):
-      if not tryRemoveFile(dns_hook_script):
-        print_error("Failed to remove hook script " & dns_hook_script)
   ]#
   if hookscript_dnstool_exists():
     if not tryRemoveFile(hook_script_path):
@@ -38,11 +29,10 @@ proc handle_hookscript_create_new() =
     The logic to check resolvconf exists and
     dhclient exists should be covered by other func
   ]#
-  if not hookscript_resolvconfig_exits():
-    try:
-      writeFile(hook_script_path, hook_script_data)
-    except:
-      print_error("Error while making new hook script")
+  try:
+    writeFile(hook_script_path, hook_script_data)
+  except:
+    print_error("Error while making new hook script")
 
 
 proc handle_create_resolvconf_symlink() =
