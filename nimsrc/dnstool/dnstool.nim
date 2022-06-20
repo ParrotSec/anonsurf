@@ -21,10 +21,6 @@ proc main() =
   elif paramStr(1) == "address" or paramStr(1) == "addr":
     let addr_result = parse_addr_from_params(commandLineParams()[1 .. ^1])
     handle_create_dns_addr(addr_result.has_dhcp_flag, addr_result.list_addr)
-  elif paramStr(1) == "add-address" or paramStr(1) == "add-addr":
-    # TODO handle command "add-addr" that do add new addr into current
-    # let addr_result = parse_addr_from_params(commandLineParams()[1 .. ^1])
-    discard
   else:
     dnst_show_help()
     print_error("Invalid option")
