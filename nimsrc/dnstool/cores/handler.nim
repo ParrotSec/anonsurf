@@ -30,7 +30,8 @@ proc handle_hookscript_create_new() =
     dhclient exists should be covered by other func
   ]#
   try:
-    writeFile(hook_script_path, hook_script_data)
+    if not hookscript_dnstool_exists():
+      writeFile(hook_script_path, hook_script_data)
   except:
     print_error("Error while making new hook script")
 
