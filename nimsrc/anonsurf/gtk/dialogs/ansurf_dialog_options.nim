@@ -88,6 +88,7 @@ proc onClickOptions*(b: Button) =
     buttonApply = newButton("Apply")
     buttonCancel = newButton("Cancel")
 
+  # TODO init the callback
   initOptionPlainPort(optionPlainPort, int(ansurfConfig.option_plain_port))
   initOptionSafeSock(optionSafeSock, ansurfConfig.option_safe_sock)
   initOptionBridge(optionBridge, int(ansurfConfig.option_bridge_mode))
