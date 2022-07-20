@@ -3,6 +3,7 @@ import .. / gui_activities / dialog_options
 import .. / gui_activities / core_activities
 import .. / .. / options / [option_handler, option_objects]
 import .. / ansurf_gtk_objects
+import .. / .. / cores / handle_activities
 
 
 proc initOptionBridge(cb: ComboBoxText, active: int) =
@@ -28,7 +29,8 @@ proc initOptionSandbox(cb: CheckButton, set_sandbox: bool) =
   cb.setActive(set_sandbox)
 
 
-proc initBoxButtons(bA, bC: Button, d: Dialog, optionBridge, optionPlainPort: ComboBoxText, addrBridge: Entry, optionSandbox, optionSafeSock: CheckButton): Box =
+proc initBoxButtons(bA, bC: Button, d: Dialog, optionBridge, optionPlainPort: ComboBoxText,
+  addrBridge: Entry, optionSandbox, optionSafeSock: CheckButton, callback: proc): Box =
   let
     area = newBox(Orientation.horizontal, 3)
     config = ApplyConfigObj(
@@ -36,7 +38,8 @@ proc initBoxButtons(bA, bC: Button, d: Dialog, optionBridge, optionPlainPort: Co
       bridgeAddr: addrBridge,
       sandboxMode: optionSandbox,
       safeSock: optionSafeSock,
-      plainPortMode: optionPlainPort
+      plainPortMode: optionPlainPort,
+      callback_show_error: callback
     )
 
   area.packStart(bA, true, false, 3)
@@ -58,13 +61,14 @@ proc initOptionSafeSock(opt: CheckButton, set_active: bool) =
   opt.setActive(set_active)
 
 
-proc initDialogArea(b: Box, optionBridge, optionPlainPort: ComboBoxText, addrBridge: Entry, optionSandbox, optionSafeSock: CheckButton, btn1, btn2: Button, d: Dialog) =
+proc initDialogArea(b: Box, optionBridge, optionPlainPort: ComboBoxText, addrBridge: Entry,
+  optionSandbox, optionSafeSock: CheckButton, btn1, btn2: Button, d: Dialog, callback: proc) =
   b.add(optionPlainPort)
   b.add(optionBridge)
   b.add(addrBridge)
   b.add(optionSafeSock)
   b.add(optionSandbox)
-  b.packStart(initBoxButtons(btn1, btn2, d, optionBridge, optionPlainPort, addrBridge, optionSandbox, optionSafeSock), true, false, 3)
+  b.packStart(initBoxButtons(btn1, btn2, d, optionBridge, optionPlainPort, addrBridge, optionSandbox, optionSafeSock, callback), true, false, 3)
 
 
 proc initDialogSettings(d: Dialog) =
@@ -88,15 +92,15 @@ proc onClickOptions*(b: Button) =
     # optionBypassFirewall = newCheckButton("Bypass NetworkFirewall")
     buttonApply = newButton("Apply")
     buttonCancel = newButton("Cancel")
+    callback_send_msg = cli_init_callback_msg(true)
 
-  # TODO init the callback
   initOptionPlainPort(optionPlainPort, int(ansurfConfig.option_plain_port))
   initOptionSafeSock(optionSafeSock, ansurfConfig.option_safe_sock)
   initOptionBridge(optionBridge, int(ansurfConfig.option_bridge_mode))
   initEntryBridge(addrBridge, ansurfConfig.option_bridge_address, int(ansurfConfig.option_bridge_mode))
   initOptionSandbox(optionSandbox, ansurfConfig.option_sandbox)
 
-  dialogArea.initDialogArea(optionBridge, optionPlainPort, addrBridge, optionSandbox, optionSafeSock, buttonApply, buttonCancel, dialogSettings)
+  dialogArea.initDialogArea(optionBridge, optionPlainPort, addrBridge, optionSandbox, optionSafeSock, buttonApply, buttonCancel, dialogSettings, callback_send_msg)
   dialogSettings.initDialogSettings()
 
   discard dialogSettings.run()

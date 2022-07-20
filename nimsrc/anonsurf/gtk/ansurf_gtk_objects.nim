@@ -42,6 +42,7 @@ type
     sandboxMode*: CheckButton
     safeSock*: CheckButton
     plainPortMode*: ComboBoxText
+    callback_show_error*: callback_send_messenger
   BridgeFormatError* = enum
     Ok, InvalidSyntax, InvalidProtocol, InvalidIpAddr, InvalidPortNumber, InvalidFingerprint, InvalidCertSyntax, InvalidIatMode
 

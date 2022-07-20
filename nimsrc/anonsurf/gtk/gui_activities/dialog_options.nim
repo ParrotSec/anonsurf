@@ -3,6 +3,7 @@ import strutils
 import .. / gui_activities / core_activities
 import .. / .. / options / option_objects
 import .. / ansurf_gtk_objects
+import .. / .. / cores / commons / ansurf_objects
 import re
 import net
 
@@ -48,8 +49,7 @@ proc onClickApplyConfig*(b: Button, c: ApplyConfigObj) =
     bridge_addr_error = checkBridgeAddrFormat(c.bridgeAddr.getText())
   if config.option_bridge_mode == ManualBridge:
     if bridge_addr_error != OK:
-      # TODO show error here
-      return
+      c.callback_show_error("Invalid bridge option", "Error " & $bridge_addr_error, SecurityLow)
   ansurf_gtk_save_config(config)
 
 
