@@ -50,6 +50,7 @@ proc onClickApplyConfig*(b: Button, c: ApplyConfigObj) =
   if config.option_bridge_mode == ManualBridge:
     if bridge_addr_error != OK:
       c.callback_show_error("Invalid bridge option", "Error " & $bridge_addr_error, SecurityLow)
+      return
   ansurf_gtk_save_config(config)
 
 
