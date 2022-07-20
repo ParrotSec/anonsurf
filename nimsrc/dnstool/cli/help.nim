@@ -11,14 +11,12 @@ proc print_help(cmd = "dnstool", keyword = "help", args = "", descr = "") =
     args (optional) -> yellow
     description (optional) -> blue
   ]#
-  var print_text = "\e[92m" & cmd & "\e[91m " & keyword # & "\e[0m "
+  var print_text = "\e[92m" & cmd & "\e[91m " & keyword & "\e[0m "
 
   if args != "":
-    print_text &= "\e[93m" & args # & "\e[0m "
+    print_text &= "\e[93m" & args & "\e[0m "
   if descr != "":
-    print_text &= "[\e[94m" & descr #  & "\e[0m]"
-
-  print_text &= "\e[0m]"
+    print_text &= "[\e[94m" & descr  & "\e[0m]"
 
   echo print_text
 

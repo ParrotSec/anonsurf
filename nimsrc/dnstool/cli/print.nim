@@ -8,9 +8,9 @@ proc print_error*(msg: string) =
 
 proc print_file_static*(is_static: bool) =
   if is_static:
-    echo "[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m Static File\e[0m"
+    echo "[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m:\e[36m Static File\e[0m"
   else:
-    echo "[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m: \e[36m Symlink\e[0m"
+    echo "[\e[32mSTATUS\e[0m]\n- \e[91mMethod\e[0m:\e[36m Symlink\e[0m"
 
 
 proc print_under_tor_dns*() =
