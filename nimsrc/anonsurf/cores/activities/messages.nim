@@ -1,6 +1,6 @@
 import strformat
 import gintro / notify
-import .. / commons / ansurf_types
+import .. / commons / ansurf_objects
 
 
 proc cli_send_msg*(title, body: string, code: StatusImg) =

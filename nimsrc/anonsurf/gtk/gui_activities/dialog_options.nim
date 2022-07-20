@@ -2,19 +2,9 @@ import gintro / gtk
 import strutils
 import .. / gui_activities / core_activities
 import .. / .. / options / option_objects
+import .. / ansurf_gtk_objects
 import re
 import net
-
-
-type
-  ApplyConfigObj* = object
-    bridgeOption*: ComboBoxText
-    bridgeAddr*: Entry
-    sandboxMode*: CheckButton
-    safeSock*: CheckButton
-    plainPortMode*: ComboBoxText
-  BridgeFormatError* = enum
-    Ok, InvalidSyntax, InvalidProtocol, InvalidIpAddr, InvalidPortNumber, InvalidFingerprint, InvalidCertSyntax, InvalidIatMode
 
 
 proc checkBridgeAddrFormat(bridge_addr: string): BridgeFormatError =

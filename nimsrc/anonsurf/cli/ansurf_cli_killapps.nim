@@ -1,5 +1,5 @@
 import .. / cores / activities / kill_apps_actions
-import .. / cores / commons / ansurf_types
+import .. / cores / commons / ansurf_objects
 
 
 proc cli_kill_apps*(callback_send_msg: callback_send_messenger) =

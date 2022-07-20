@@ -1,6 +1,6 @@
 import gintro / [gtk, gobject]
 import gui_activities / [systray_activities, core_activities]
-import .. / cores / commons / ansurf_types
+import .. / cores / commons / ansurf_objects
 
 
 proc ansurf_right_click_menu*(i: StatusIcon, b: int, activeTime: int, cb_send_msg: callback_send_messenger) =

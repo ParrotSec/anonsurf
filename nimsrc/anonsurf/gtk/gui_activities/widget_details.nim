@@ -1,7 +1,7 @@
 import gintro / gtk
 import .. / .. / cores / handle_activities
 import .. / ansurf_gtk_objects
-import .. / .. / cores / commons / ansurf_types
+import .. / .. / cores / commons / ansurf_objects
 
 
 proc do_anonsurf_enable_boot(cb_send_msg: callback_send_messenger) {.gcsafe.} =

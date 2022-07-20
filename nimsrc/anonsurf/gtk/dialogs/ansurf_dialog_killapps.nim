@@ -4,7 +4,7 @@
 ]#
 
 import gintro / [gtk, gobject]
-import .. / .. / cores / commons / ansurf_types
+import .. / .. / cores / commons / ansurf_objects
 import .. / .. / cores / activities / kill_apps_actions
 import .. / gui_activities / core_activities
 

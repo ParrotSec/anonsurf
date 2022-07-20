@@ -1,6 +1,6 @@
 import gintro / [gtk, gdk, gobject, glib]
 import .. / gui_activities / [core_activities, widget_details]
-import .. / .. / cores / commons / ansurf_types
+import .. / .. / cores / commons / ansurf_objects
 
 
 proc ansurf_detail_w_service_area*(labelServices, labelPorts, labelDNS: Label, s: Stack): Frame =

@@ -2,7 +2,7 @@ import gintro / gtk
 import .. / .. / cores / handle_activities
 import .. / ansurf_gtk_objects
 import .. / dialogs / [ansurf_dialog_tor_status, ansurf_dialog_killapps]
-import .. / .. / cores / commons / [services_status, ansurf_types]
+import .. / .. / cores / commons / [services_status, ansurf_objects]
 
 
 proc do_anonsurf_start(cb_send_msg: callback_send_messenger) {.gcsafe.} =

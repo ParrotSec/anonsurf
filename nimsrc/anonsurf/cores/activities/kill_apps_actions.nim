@@ -1,5 +1,5 @@
 import osproc
-import .. / commons / ansurf_types
+import .. / commons / ansurf_objects
 
 
 proc ansurf_kill_apps*(callback_send_messages: callback_send_messenger) =

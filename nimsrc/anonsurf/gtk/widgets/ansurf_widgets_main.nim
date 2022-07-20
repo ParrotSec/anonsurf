@@ -1,7 +1,7 @@
 import gintro / [gtk, glib, gobject]
 import gintro / gdk except Window
 import .. / gui_activities / [core_activities, widget_main]
-import .. / .. / cores / commons / ansurf_types
+import .. / .. / cores / commons / ansurf_objects
 
 
 proc ansurf_main_w_detail_area*(imgStatus: Image, labDetails: Label, btnStatus, btnRestart: Button, s: Stack, cb_send_msg: callback_send_messenger): Frame =

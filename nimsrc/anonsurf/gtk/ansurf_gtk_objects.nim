@@ -1,5 +1,5 @@
 import gintro / gtk
-import .. / cores / commons / ansurf_types
+import .. / cores / commons / ansurf_objects
 
 
 type
@@ -36,6 +36,14 @@ type
     isDNSPort*: bool
     isSocksPort*: bool
     isTransPort*: bool
+  ApplyConfigObj* = object
+    bridgeOption*: ComboBoxText
+    bridgeAddr*: Entry
+    sandboxMode*: CheckButton
+    safeSock*: CheckButton
+    plainPortMode*: ComboBoxText
+  BridgeFormatError* = enum
+    Ok, InvalidSyntax, InvalidProtocol, InvalidIpAddr, InvalidPortNumber, InvalidFingerprint, InvalidCertSyntax, InvalidIatMode
 
 #[
   The workers are meant to run start / stop / restart / ... without hanging main gui

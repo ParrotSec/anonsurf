@@ -1,7 +1,7 @@
 import net
 import os
 import activities / [boot_actions, core_actions, extra_actions, messages]
-import commons / [services_status, ansurf_types]
+import commons / [services_status, ansurf_objects]
 import strutils
 
 
