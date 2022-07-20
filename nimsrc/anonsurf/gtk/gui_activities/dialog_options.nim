@@ -10,10 +10,13 @@ import net
 
 proc checkBridgeAddrFormat(bridge_addr: string): BridgeFormatError =
   let list_bridge_elements = bridge_addr.split(" ")
+
   if len(list_bridge_elements) != 5:
     return InvalidSyntax
+
   if list_bridge_elements[0] != "obfs4":
     return InvalidProtocol
+
   if list_bridge_elements[1].contains(":"):
     let addr_elements = list_bridge_elements[1].split(":")
     if not isIpAddress(addr_elements[0]):
@@ -27,6 +30,7 @@ proc checkBridgeAddrFormat(bridge_addr: string): BridgeFormatError =
   else:
     if not isIpAddress(list_bridge_elements[1]):
       return InvalidIpAddr
+
   if not match(list_bridge_elements[2], re"[A-Z\d]{40}"):
     return InvalidFingerprint
   if not match(list_bridge_elements[3], re"cert=[\w\d\+\/]{70}"):
