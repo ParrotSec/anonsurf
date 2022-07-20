@@ -2,6 +2,7 @@ import gintro / [gtk, gobject]
 import .. / gui_activities / dialog_options
 import .. / gui_activities / core_activities
 import .. / .. / options / [option_handler, option_objects]
+import .. / ansurf_gtk_objects
 
 
 proc initOptionBridge(cb: ComboBoxText, active: int) =
