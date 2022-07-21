@@ -5,8 +5,8 @@ const
   dhclient_dns_file* = "/var/lib/dhcp/dhclient.leases"
   resolvconf_tail_file* = "/etc/resolvconf/resolv.conf.d/tail"
   dhclient_binary* = "/usr/sbin/dhclient"
-  hook_script_path* = "/etc/dhcp/dhclient-enter-hooks.d/dnstool_hook"
-  hook_script_data* = "#!/bin/sh\nmake_resolv_conf() { : ; }\n"
+  hook_script_path* = "/etc/dhcp/dhclient-enter-hooks.d/dnstool"
+  hook_script_data* = "make_resolv_conf() { :; }"
   # https://www.cyberciti.biz/faq/dhclient-etcresolvconf-hooks/
   # This path only works with Debian based
   hook_script_resolvconf* = "/etc/dhcp/dhclient-enter-hooks.d/resolvconf"
