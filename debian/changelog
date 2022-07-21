@@ -1,3 +1,9 @@
+anonsurf (3.3.2+parrot1) parrot-updates; urgency=medium
+
+  * Update dnstool hook script for dhclient.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 21 Jul 2022 19:38:47 +0200
+
 anonsurf (3.3.2+parrot0) parrot-updates; urgency=medium
 
   * Fix getuid logic bugs in dnstool caused missing resolv.conf
