@@ -1,3 +1,206 @@
+anonsurf (3.3.3+parrot1) parrot-updates; urgency=medium
+
+  [ Nong Hoang Tu ]
+  * Move bottom bar to header bar. Close #7
+  * Use EventBox to switch from Main to Details widget
+  * Remove unused objects
+  * Switch to main from Details. Close #8
+  * Add descriptions about Gintro version
+  * Change version to 4.0.0 pre
+  * Check if runResolvconf exists
+  * Create type MessageCallback for callback function. It looks better than "proc" only
+  * Remove old fixme which was fixed
+  * Reverse the proc type for callback, which doesn't work for macro
+  * Allow function check ip to be used by right click menu
+  * Quit now uses the same function with core
+  * Make restore main widget by left click work. Close #12
+  * Remove unused comments
+  * Add submenu with start / stop / restart/ status of anonsurf
+  * Rewrite module main widget for better code structure
+  * Change module name to ansurf_gtk_objects instead of ansurf_objects, which less confussing
+  * New code structure for details widget
+  * Optmize spacing between frames
+  * All dialogs are no longer in folder "widgets"
+  * Use same callback for menu and gui. Close #11
+  * Add thank to author who wrote tutorial of systray + gtk
+  * Move status to main menu
+  * Swap position of about and settings
+  * Status backend now shows AnonSurf not running using callback
+  * Connect systray's status with backend
+  * Change name "AnonSurf GUI" to "AnonSurf"
+  * Create function init_main_window for window app settings
+  * Merge code stack with the create Layout
+  * Remove boxMainWindow show all because mainboard did this
+  * Move back systray icon to main. systray icon doesn't appear when it's in child function
+  * Smaller refresh boot by move update boot to other functions
+  * Improve function name
+  * Move all condition blocks to small functions
+  * Move functions to other module
+  * Move some functions to other module
+  * Improve code spacing
+  * Create function to update ports and services status
+  * Remove trail characters
+  * Remove unused libs
+  * Fix wrong tag close
+  * Make condition be more simple
+  * Improve function name
+  * Move handle refresh to refresher module
+  * Imrprove name and move all refresh code to module fresher
+  * Improve comment for refresh
+  * Move code to make stack to other small function
+  * Create a object for right click menu Item
+  * remove unused comments
+  * Move all backend code of menuitem to other module. Complete features
+  * Update notification in makefile
+  * Change callback args to enum
+  * Remove comment
+  * code clean
+  * Improve object types
+  * Code clean and close #6
+  * Move module kill_apps, improve some module names
+  * Add more options to settings
+  * Add tooltip for bridge
+  * Add option to block inbound traffic. force this feature to optional
+  * New code structure
+  * Move some old functions to new code
+  * Add some more tmp functions
+  * shorter condition by using function
+  * Add button bypass network firewall to complete later
+  * improve var name
+  * add some hardcoded print
+  * Move functions to small modules
+  * More small functions
+  * sightly change function structure
+  * Improve condition to check dhclient's files
+  * More print
+  * Some more template functions
+  * Improve code format
+  * some more extra tmp tools
+  * Add a proc to handle all dns addr
+  * Filter valid addr
+  * basic handle create symlink with resolvconf
+  * Validate dns addr
+  * Complete more functions
+  * New way to handle dns addr from user
+  * Remove todo
+  * Complete mix with dhcp when tool can't find dhcp addr
+  * Use deduplicate in write_dns_addr_to_file so it will be called by all functions
+  * Make parse dhclient dns be global
+  * Complete mix addr
+  * Check if dns is empty before write
+  * Improve dhclient code by calling pre-write functions
+  * Move backup functions to util and create function to check if anonsurf is running
+  * change function name to print_file_static
+  * Add function to check localhost and the other features of status
+  * Remove old dnstool
+  * Add new dnstool to makefile build. close #9
+  * Add resolvconf to suggest list
+  * Improve error msg when option is invalid
+  * Move check_system_dns_is_static to utils
+  * Fix grammar
+  * Fix wrong file to be called to parse dns addresses
+  * Shorter descriptions
+  * Add print function to print banner of addresses
+  * Check if current system is having only localhost. Do not create backup if true
+  * Add tmp function to create hook script
+  * Improve code syntax
+  * Create a function to do destroy dialog
+  * Add some buttons to dialogs
+  * Improve create backup logic check
+  * Prepare objects for setting dialog
+  * Move all option objects to new module
+  * No longer use multiple spacing
+  * Correct the symlink info to "resolvconf settings"
+  * Correct the symlink info to "resolvconf settings"
+  * reverse wrong commit that test text align
+  * Add some basic tmp functions to handle options
+  * Add a pipe object
+  * Add one other function
+  * Add short comment with video tutorial
+  * Add more tmp functions for workflow
+  * Create function to get value and set value for Config object
+  * Change value type to string
+  * Use default config if parser failed to load config
+  * Move extOrPort to base file
+  * Prepare for new option structure
+  * Remove comments from old code
+  * New code flow for torrc
+  * Spacing for buttons
+  * Fix typo in var name
+  * tmp block inbound traffic
+  * Move commands to smaller functions
+  * Add load settings from file. Remove option firewall (need to rework on it)
+  * Code clean
+  * temp remove option bypass firewall
+  * Better logic to load config. Use try catch when load
+  * Fix a bug that config is always default after load
+  * Connect apply button
+  * Hotfix: wrong sudo call
+  * Make option sandbox be false by default
+  * No longer install old config files
+  * Remove strutils which is unusded
+  * Add debug msg when program failed to get / send pipe
+  * Force executing using pkexec. Menuexecg has pipe redirection
+  * Use process stream to send input instead
+  * Use absolute path for pkexec
+  * Use args for full command instead of strings
+  * Remove unused lib
+  * Convert options to string before pass. Reduce code complexity when receive
+  * use readAll instead of readLine
+  * Fix wrong keyword cause failed to load config
+  * Mark version as 4.0.0. close #5
+  * Fix wrong absolute path of list bridges
+  * Set static decorator that has only close button. Close #16
+  * Change module name to shorter name
+  * Close #15
+  * Update module name when call
+  * Move backend button to new module
+  * Check and disable entry when load option
+  * Add tooltip to show address format
+  * Add comment that has full msg
+  * Change text holder to obfs4 proxy addr
+  * Create a tuple object to get value from pipeline
+  * Use new tuple to get value
+  * Set all elements to string and convert later
+  * Convert data type to json
+  * Remove unusded object
+  * Better exception handling
+  * cast output type to string. make sure data type is correct in every steps
+  * Add bridge link to readme
+  * Update list of brigdes
+  * Add 2 options that tor wiki suggested
+  * Change UseBridge to BrdigeRelay. #Close 22
+  * Use same random string for tor hash and nyx password. Should close #26
+  * Add plain port and safe sock
+  * Add option for plain ports and safe sock. Close #24. Close #25
+  * Fix a crash when Click apply. Reason: missing 2 new objects when call
+  * Disable resize for dialog options
+  * Fix no new line at end
+  * Update license for some files
+  * AnonSurf gtk now call daemon function
+  * Add description from daemon3, change args to not zero
+  * remove some spacing
+  * Remove add addr
+  * Add hook script. Close #23
+  * Force script to write hook without checking resolvconf hook script
+  * Add shebang to script
+  * Add descriptions of source
+  * Do not overwrite hook script if it exists
+  * Do not overwrite hook script if it exists
+  * Add method to check bridge addresses
+  * Change name "ansurf_types" to "ansurf_objects"
+  * Fix missing lib
+  * Add notification to show error
+  * Break function when error shows
+  * Improve error msg when bridge addr has error
+  * Make code be easier to read. Close #20
+  * Fix dnstool output
+
+  [ Lorenzo Palinuro Faletra ]
+  * update dnstool hook script for dhclient
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Thu, 21 Jul 2022 20:04:39 +0200
+
 anonsurf (3.3.2+parrot0) parrot-updates; urgency=medium
 
   * Fix getuid logic bugs in dnstool caused missing resolv.conf
