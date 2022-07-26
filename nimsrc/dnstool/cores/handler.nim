@@ -138,15 +138,18 @@ proc handle_argv_missing*() =
 
 
 proc handle_create_dns_addr*(has_dhcp: bool, list_addr: seq[string]) =
+  var
+    keep_hook_script = true
   if not has_dhcp:
     handle_addr_custom_only(list_addr)
   else:
     if len(list_addr) == 0:
+      keep_hook_script = false
       handle_addr_dhcp_only()
     else:
       handle_addr_mix_with_dhcp(list_addr)
 
-  if resolvconf_exists():
+  if resolvconf_exists() or not keep_hook_script:
     handle_hook_script_remove()
   else:
     handle_hookscript_create_new()
