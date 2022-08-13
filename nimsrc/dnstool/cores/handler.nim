@@ -105,7 +105,7 @@ proc handle_restore_backup*() =
       restore_backup()
   else:
     # Called by either user or hook script.
-    if not resolvconf_exists() or system_has_only_localhost():
+    if not system_resolvconf_exists() or system_has_only_localhost():
       handle_addr_dhcp_only()
 
   dnst_show_status()
