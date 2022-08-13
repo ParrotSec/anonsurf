@@ -1,4 +1,3 @@
-import posix
 import os
 import dnstool_const
 import .. / cli / print
@@ -8,8 +7,7 @@ proc hook_script_create_new(script_path, script_data: string) =
   if not fileExists(script_path):
     try:
       writeFile(script_path, script_data)
-      if chmod(cstring(script_path), 755) != 0:
-        print_error("Failed to set execute permission to " & script_path)
+      setFilePermissions(script_path, {fpUserExec, fpUserRead, fpGroupExec, fpGroupRead, fpOthersRead, fpOthersExec})
     except:
       print_error("Failed to write hook script to " & script_path)
 
