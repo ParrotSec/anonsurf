@@ -195,8 +195,6 @@ function stopSurf {
 		echo -e "$GREEN*$BLUE Iptables rules restored"
 	fi
 	echo -e -n "$GREEN*$BLUE Restore DNS service\n$RESETCOLOR"
-	# Restore DNS settings
-	/usr/bin/dnstool address dhcp
 
 	if [ "$(systemctl is-active tor)" == "active" ]
 	then
@@ -204,6 +202,8 @@ function stopSurf {
 	fi
 	# sleep 1
 	killall tor
+	# Restore DNS settings
+	/usr/bin/dnstool address dhcp
 }
 
 
