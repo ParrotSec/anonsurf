@@ -12,8 +12,10 @@ const
   # hook_script_resolvconf_path* = "/etc/dhcp/dhclient-enter-hooks.d/resolvconf"
   hook_script_if_down_path* = "/etc/NetworkManager/dispatcher.d/pre-down.d/dnstool"
   hook_script_if_down_data* = "#!/bin/sh\n/usr/bin/dnstool create-backup\n"
-  hook_script_if_up_path* = "/etc/network/if-up.d/dnstool_hook"
+  hook_script_if_up_path* = "/etc/network/if-up.d/dnstool"
   hook_script_if_up_data* = "#!/bin/sh\n/usr/bin/dnstool restore-backup\n"
+  hook_script_sys_shutdown_path* = "/etc/network/if-down.d/dnstool"
+  hook_script_sys_shutdown_data* = "#!/bin/sh\n/usr/bin/dnstool create-backup\n"
 
 type
   AddrFromParams* = object
