@@ -5,11 +5,15 @@ const
   dhclient_dns_file* = "/var/lib/dhcp/dhclient.leases"
   resolvconf_tail_file* = "/etc/resolvconf/resolv.conf.d/tail"
   dhclient_binary* = "/usr/sbin/dhclient"
-  hook_script_path* = "/etc/dhcp/dhclient-enter-hooks.d/dnstool"
-  hook_script_data* = "make_resolv_conf() { :; }"
+  hook_script_dhcp_path* = "/etc/dhcp/dhclient-enter-hooks.d/dnstool"
+  hook_script_dhcp_data* = "make_resolv_conf() { :; }"
   # https://www.cyberciti.biz/faq/dhclient-etcresolvconf-hooks/
   # This path only works with Debian based
-  hook_script_resolvconf* = "/etc/dhcp/dhclient-enter-hooks.d/resolvconf"
+  # hook_script_resolvconf_path* = "/etc/dhcp/dhclient-enter-hooks.d/resolvconf"
+  hook_script_if_down_path* = "/etc/NetworkManager/dispatcher.d/pre-down.d/dnstool"
+  hook_script_if_down_data* = "#!/bin/sh\n/usr/bin/dnstool create-backup\n"
+  hook_script_if_up_path* = "/etc/network/if-up.d/dnstool_hook"
+  hook_script_if_up_data* = "#!/bin/sh\n/usr/bin/dnstool restore-backup\n"
 
 type
   AddrFromParams* = object
