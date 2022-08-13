@@ -23,7 +23,6 @@ proc hook_script_init*() =
   hook_script_create_new(hook_script_if_down_path, hook_script_if_down_data)
   hook_script_create_new(hook_script_if_up_path, hook_script_if_up_data)
   hook_script_create_new(hook_script_sys_shutdown_path, hook_script_sys_shutdown_data)
-  hook_script_create_new(hook_script_sys_start_path, hook_script_sys_start_data)
 
 
 proc hook_script_finit*() =
@@ -31,4 +30,3 @@ proc hook_script_finit*() =
   hook_script_remove_hook(hook_script_if_down_path)
   hook_script_remove_hook(hook_script_if_up_path)
   hook_script_remove_hook(hook_script_sys_shutdown_path)
-  hook_script_remove_hook(hook_script_sys_start_path)

@@ -16,8 +16,6 @@ const
   hook_script_if_up_data* = "#!/bin/sh\n/usr/bin/dnstool restore-backup\n"
   hook_script_sys_shutdown_path* = "/etc/network/if-down.d/dnstool"
   hook_script_sys_shutdown_data* = "#!/bin/sh\n/usr/bin/dnstool create-backup\n"
-  hook_script_sys_start_path* = "/etc/network/if-pre-up.d/dnstool"
-  hook_script_sys_start_data* = "#!/bin/sh\n/usr/bin/dnstool status\n" # Don't know why NetworkManager needs this
 
 type
   AddrFromParams* = object
