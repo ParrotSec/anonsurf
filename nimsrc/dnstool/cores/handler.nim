@@ -93,12 +93,20 @@ proc handle_create_backup*() =
 
 
 proc handle_restore_backup*() =
-  if not tryRemoveFile(system_dns_file):
-    print_error("Failed to remove " & system_dns_file & " to restore backup.")
-  if fileExists(system_dns_backup):
-    restore_backup()
+  #[
+    Restore /etc/resolv.conf.bak to /etc/resolv.conf
+  ]#
+  if anonsurf_is_running() and not tor_is_running():
+    # Triggered by AnonSurf stop. We restore file
+    # if not, then it's called by hook script, we shouldn't do anything
+    if not tryRemoveFile(system_dns_file):
+      print_error("Failed to remove " & system_dns_file & " to restore backup.")
+    if fileExists(system_dns_backup):
+      restore_backup()
   else:
-    handle_addr_dhcp_only()
+    # Called by either user or hook script.
+    if not resolvconf_exists() or system_has_only_localhost():
+      handle_addr_dhcp_only()
 
   dnst_show_status()
 

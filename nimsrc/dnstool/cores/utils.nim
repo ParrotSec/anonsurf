@@ -44,6 +44,10 @@ proc anonsurf_is_running*(): bool =
   return getServStatus("anonsurfd")
 
 
+proc tor_is_running*(): bool =
+  return getServStatus("tor")
+
+
 proc create_backup*() =
   try:
     copyFile(system_dns_file, system_dns_backup)
@@ -58,10 +62,12 @@ proc restore_backup*() =
     print_error("Failed to restore backup")
 
 
+proc resolv_config_is_not_symlink*(): bool =
+  return if getFileInfo(system_dns_file, followSymlink = false).kind == pcLinkToFile: false else: true
+
+
 proc check_system_dns_is_static*() =
-  let
-    is_static = if getFileInfo(system_dns_file, followSymlink = false).kind == pcLinkToFile: false else: true
-  print_file_static(is_static)
+  print_file_static(resolv_config_is_not_symlink())
 
 
 proc write_dns_addr_to_file*(file_path: string, list_dns_addr: seq[string]) =
