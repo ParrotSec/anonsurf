@@ -92,6 +92,13 @@ proc handle_create_backup*() =
     print_error("Skip creating backup file because " & system_dns_file & " is a symlink.")
 
 
+proc do_restore_backup() =
+  if not tryRemoveFile(system_dns_file):
+    print_error("Failed to remove " & system_dns_file & " to restore backup.")
+  if fileExists(system_dns_backup):
+    restore_backup()
+
+
 proc handle_restore_backup*() =
   #[
     Restore /etc/resolv.conf.bak to /etc/resolv.conf
@@ -99,12 +106,12 @@ proc handle_restore_backup*() =
   if anonsurf_is_running() and not tor_is_running():
     # Triggered by AnonSurf stop. We restore file
     # if not, then it's called by hook script, we shouldn't do anything
-    if not tryRemoveFile(system_dns_file):
-      print_error("Failed to remove " & system_dns_file & " to restore backup.")
-    if fileExists(system_dns_backup):
-      restore_backup()
+    do_restore_backup()
   else:
     # Called by either user or hook script.
+    # If DNS is having only localhost, or /etc/resolv.conf is missing,
+    # force system to use DHCP
+    do_restore_backup()
     if not system_resolvconf_exists() or system_has_only_localhost():
       handle_addr_dhcp_only()
 
