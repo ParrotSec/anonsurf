@@ -62,6 +62,13 @@ proc restore_backup*() =
     print_error("Failed to restore backup")
 
 
+proc do_restore_backup*() =
+  if not tryRemoveFile(system_dns_file):
+    print_error("Failed to remove " & system_dns_file & " to restore backup.")
+  if fileExists(system_dns_backup):
+    restore_backup()
+
+
 proc resolv_config_is_not_symlink*(): bool =
   return if getFileInfo(system_dns_file, followSymlink = false).kind == pcLinkToFile: false else: true
 
