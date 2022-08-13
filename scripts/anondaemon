@@ -85,6 +85,8 @@ function startSurf {
 	DNS_PORT=$(grep DNSPort "/etc/tor/torrc" | cut -d " " -f 2 | cut -d ":" -f 2)
 	# Init DNS
 	echo -e "[$GREEN*${RESETCOLOR}]$BLUE Modified resolv.conf to use Tor${RESETCOLOR}"
+
+	/usr/bin/dnstool create-backup
 	/usr/bin/dnstool address 127.0.0.1
 
 	# disable ipv6
@@ -203,7 +205,7 @@ function stopSurf {
 	# sleep 1
 	killall tor
 	# Restore DNS settings
-	/usr/bin/dnstool address dhcp
+	/usr/bin/dnstool restore-backup
 }
 
 
