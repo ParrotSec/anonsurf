@@ -20,13 +20,11 @@ proc hook_script_remove_hook(script_path: string) =
 
 proc hook_script_init*() =
   hook_script_create_new(hook_script_dhcp_path, hook_script_dhcp_data)
-  hook_script_create_new(hook_script_if_down_path, hook_script_if_down_data)
-  hook_script_create_new(hook_script_if_up_path, hook_script_if_up_data)
-  hook_script_create_new(hook_script_sys_shutdown_path, hook_script_sys_shutdown_data)
+  hook_script_create_new(hook_script_nm_path, hook_script_nm_data)
+  discard execShellCmd("systemctl reload NetworkManager")
 
 
 proc hook_script_finit*() =
   hook_script_remove_hook(hook_script_dhcp_path)
-  hook_script_remove_hook(hook_script_if_down_path)
-  hook_script_remove_hook(hook_script_if_up_path)
-  hook_script_remove_hook(hook_script_sys_shutdown_path)
+  hook_script_remove_hook(hook_script_nm_data)
+  discard execShellCmd("systemctl reload NetworkManager")

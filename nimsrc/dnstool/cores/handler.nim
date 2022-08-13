@@ -97,21 +97,12 @@ proc handle_restore_backup*() =
     Restore /etc/resolv.conf.bak to /etc/resolv.conf
   ]#
   if fileExists(system_dns_backup):
-    if anonsurf_is_running():
-      # If AnonSurf is running, but called by AnonSurf stop
-      if not tor_is_running():
-        do_restore_backup()
-      # If AnonSurf is running but called by hook script, skip
-      else:
-        discard
-    else:
-      do_restore_backup()
+    do_restore_backup()
     # If called by hook script and AnonSurf is not running, restore backup
-  else:
+  elif not system_resolvconf_exists() or system_has_only_localhost_or_empty_dns():
     # Called by hook script multiple times, backup file isn't there anymore
     # Only create DHCP when current system is having error dns
-    if not system_resolvconf_exists() or system_has_only_localhost_or_empty_dns() and not anonsurf_is_running():
-      handle_addr_dhcp_only()
+    handle_addr_dhcp_only()
 
   dnst_show_status()
 

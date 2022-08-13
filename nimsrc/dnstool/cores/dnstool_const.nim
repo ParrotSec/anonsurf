@@ -7,15 +7,11 @@ const
   dhclient_binary* = "/usr/sbin/dhclient"
   hook_script_dhcp_path* = "/etc/dhcp/dhclient-enter-hooks.d/dnstool"
   hook_script_dhcp_data* = "make_resolv_conf() { :; }"
+  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/manually-configuring-the-etc-resolv-conf-file_configuring-and-managing-networking
+  hook_script_nm_path* = "/etc/NetworkManager/conf.d/90-dns-none.conf"
+  hook_script_nm_data* = "[main]\ndns=none\n"
   # https://www.cyberciti.biz/faq/dhclient-etcresolvconf-hooks/
   # This path only works with Debian based
-  # hook_script_resolvconf_path* = "/etc/dhcp/dhclient-enter-hooks.d/resolvconf"
-  hook_script_if_down_path* = "/etc/NetworkManager/dispatcher.d/pre-down.d/dnstool"
-  hook_script_if_down_data* = "#!/bin/sh\n/usr/bin/dnstool create-backup\n"
-  hook_script_if_up_path* = "/etc/network/if-up.d/dnstool"
-  hook_script_if_up_data* = "#!/bin/sh\n/usr/bin/dnstool restore-backup\n"
-  hook_script_sys_shutdown_path* = "/etc/network/if-down.d/dnstool"
-  hook_script_sys_shutdown_data* = "#!/bin/sh\n/usr/bin/dnstool create-backup\n"
 
 type
   AddrFromParams* = object
