@@ -110,9 +110,8 @@ proc handle_restore_backup*() =
   else:
     # Called by hook script multiple times, backup file isn't there anymore
     # Only create DHCP when current system is having error dns
-    # FIXME: empty DNS addr as well
     # FIXME: maybe reboot doesn't create backup
-    if not system_resolvconf_exists() or system_has_only_localhost():
+    if not system_resolvconf_exists() or system_has_only_localhost_or_empty_dns():
       handle_addr_dhcp_only()
     discard
 

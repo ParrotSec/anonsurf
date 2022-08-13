@@ -37,7 +37,17 @@ proc parse_dns_addresses*(): seq[string] =
 proc system_has_only_localhost*(): bool =
   let
     addresses = parse_dns_addresses()
+
   return has_only_localhost(addresses)
+
+
+proc system_has_only_localhost_or_empty_dns*(): bool =
+  let
+    addresses = parse_dns_addresses()
+
+  if len(addresses) == 0:
+    return true
+  return has_only_localhost(addresses) 
 
 
 proc anonsurf_is_running*(): bool =
