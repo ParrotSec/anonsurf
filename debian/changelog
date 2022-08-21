@@ -1,3 +1,9 @@
+anonsurf (4.0.0+parrot1) parrot-updates; urgency=medium
+
+  * 4.0 release
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Sun, 21 Aug 2022 23:27:49 +0700
+
 anonsurf (3.3.3+parrot1) parrot-updates; urgency=medium
 
   [ Nong Hoang Tu ]
