@@ -1,18 +1,18 @@
 import options / [option_objects, option_generator, option_handler]
 import os
-# TODO print
-# TODO help banner if needed
+import cli / ansurf_cli_print
+
 
 proc maketorrc_remove_nyx() =
   if not tryRemoveFile(ansurf_nyx_config_path):
-    echo "Error remove file"
+    print_error("Error while removing nyx config")
 
 
 proc maketorrc_restore_torrc_backup() =
   try:
     moveFile(ansurf_torrc_backup_path, ansurf_torrc_default_path)
   except:
-    echo "Error while restore torrc backup"
+    print_error("Failed to restore torrc")
 
 
 proc maketorrc_create_nyx(password: string) =
@@ -20,14 +20,14 @@ proc maketorrc_create_nyx(password: string) =
     writeFile(ansurf_nyx_config_path, "password " & password & "\n")
     echo "New nyxrc created"
   except:
-    echo "Error write new nyxrc"
+    print_error("Failed to create new nyxrc")
 
 
 proc maketorrc_create_torrc_backup() =
   try:
     copyFile(ansurf_torrc_default_path, ansurf_torrc_backup_path)
   except:
-    echo "Failed to create new torrc backup"
+    print_error("Failed to create new torrc backup")
 
 
 proc maketorrc_create_new_config() =
@@ -41,7 +41,7 @@ proc maketorrc_create_new_config() =
   try:
     writeFile(ansurf_torrc_default_path, config_to_torrc)
   except:
-    echo "Error failed to create new torrc"
+    print_error("Failed to create new torrc")
 
 
 proc maketorrc_restore_system_config() =
