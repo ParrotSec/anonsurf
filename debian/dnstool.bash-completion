@@ -1,1 +1,0 @@
-complete -W 'help address status create-backup restore-backup' dnstool

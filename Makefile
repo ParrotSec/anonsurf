@@ -19,15 +19,6 @@ uninstall:
 	# Remove launchers
 	rm /usr/share/applications/anonsurf*.desktop
 
-build-parrot:
-	# Compile binary on parrot's platform. libnim-gintro-dev is required.
-	# Gintro 0.9.8 is required
-	mkdir -p bin/
-	nim c --nimcache:/tmp --out:bin/dnstool -d:release nimsrc/dnstool/dnstool.nim
-	nim c --nimcache:/tmp --out:bin/make-torrc -d:release nimsrc/anonsurf/make_torrc.nim
-	nim c --nimcache:/tmp --out:bin/anonsurf-gtk -p:/usr/include/nim/ -d:release nimsrc/anonsurf/AnonSurfGTK.nim
-	nim c --nimcache:/tmp --out:bin/anonsurf -p:/usr/include/nim/ -d:release nimsrc/anonsurf/AnonSurfCli.nim
-
 build:
 	# Build on other system. nimble install gintro is required
 	# Note: AnonSurf 3.3.2 was made with Gintro 0.9.6, and newer version comes with gintro 0.9.8 pre-release 

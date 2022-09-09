@@ -1,8 +1,0 @@
-configs/onion.pac etc/anonsurf/
-configs/bridges.txt etc/anonsurf/
-
-bin/make-torrc usr/lib/anonsurf/
-bin/dnstool usr/bin/
-
-scripts/* usr/lib/anonsurf/
-sys-units/anonsurfd.service lib/systemd/system/

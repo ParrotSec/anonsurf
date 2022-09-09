@@ -1,5 +1,0 @@
-# bash completion for anonsurf
-# https://askubuntu.com/a/95214
-# https://www.cyberciti.biz/faq/add-bash-auto-completion-in-ubuntu-linux/
-
-complete -W 'start stop status restart enable-boot disable-boot status-boot changeid myip dns' anonsurf
