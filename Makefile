@@ -23,19 +23,19 @@ build-parrot:
 	# Compile binary on parrot's platform. libnim-gintro-dev is required.
 	# Gintro 0.9.8 is required
 	mkdir -p bin/
-	nim c --nimcache:/tmp --out:bin/dnstool -d:release nimsrc/dnstool/dnstool.nim
-	nim c --nimcache:/tmp --out:bin/make-torrc -d:release nimsrc/anonsurf/make_torrc.nim
-	nim c --nimcache:/tmp --out:bin/anonsurf-gtk -p:/usr/include/nim/ -d:release nimsrc/anonsurf/AnonSurfGTK.nim
-	nim c --nimcache:/tmp --out:bin/anonsurf -p:/usr/include/nim/ -d:release nimsrc/anonsurf/AnonSurfCli.nim
+	nim c --nimcache:/tmp --out:bin/dnstool -d:release src/nim/dnstool/dnstool.nim
+	nim c --nimcache:/tmp --out:bin/make-torrc -d:release src/nim/anonsurf/make_torrc.nim
+	nim c --nimcache:/tmp --out:bin/anonsurf-gtk -p:/usr/include/nim/ -d:release src/nim/anonsurf/AnonSurfGTK.nim
+	nim c --nimcache:/tmp --out:bin/anonsurf -p:/usr/include/nim/ -d:release src/nim/anonsurf/AnonSurfCli.nim
 
 build:
 	# Build on other system. nimble install gintro is required
 	# Note: AnonSurf 3.3.2 was made with Gintro 0.9.6, and newer version comes with gintro 0.9.8 pre-release 
 	mkdir -p bin/
-	nim c --out:bin/dnstool -d:release nimsrc/dnstool/dnstool.nim
-	nim c --out:bin/make-torrc -d:release nimsrc/anonsurf/make_torrc.nim
-	nim c --out:bin/anonsurf-gtk -d:release nimsrc/anonsurf/AnonSurfGTK.nim
-	nim c --out:bin/anonsurf -d:release nimsrc/anonsurf/AnonSurfCli.nim
+	nim c --out:bin/dnstool -d:release src/nim/dnstool/dnstool.nim
+	nim c --out:bin/make-torrc -d:release src/nim/anonsurf/make_torrc.nim
+	nim c --out:bin/anonsurf-gtk -d:release src/nim/anonsurf/AnonSurfGTK.nim
+	nim c --out:bin/anonsurf -d:release src/nim/anonsurf/AnonSurfCli.nim
 
 install:
 	# Create all folders
