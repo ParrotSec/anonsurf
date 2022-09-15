@@ -23,7 +23,7 @@ Files:
   sys-units/anonsurfd.service
   AnonSurfGUI.nimble
   launcher/anon-gui.desktop
-  nimsrc/*
+  src/*
   configs/*
   Makefile
   README.md
