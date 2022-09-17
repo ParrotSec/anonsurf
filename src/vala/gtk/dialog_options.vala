@@ -67,7 +67,7 @@ public class AnonSurfDialogOptions: Dialog {
 
   private void init_checkbuttons() {
     enable_safe_sock_port = new CheckButton.with_label("Safe Sock Port");
-    enable_sandbox_mode = new CheckButton.with_mnemonic("Sandbox Mode");
+    enable_sandbox_mode = new CheckButton.with_label("Sandbox Mode");
   }
 
   private void init_button_apply() {
