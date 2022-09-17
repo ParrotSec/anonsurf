@@ -8,8 +8,8 @@ const
   ansurf_torrc_backup_path* = "/etc/tor/torrc.bak"
   ansurf_onion_config_path* = "/etc/anonsurf/onion.pac"
   ansurf_onion_system_path* = "/etc/tor/onion.pac"
-  ansurf_config_torrc_default* = staticRead("../../../configs/torrc.base")
-  ansurf_config_torrc_bridge* = staticRead("../../../configs/bridgerc.base")
+  ansurf_config_torrc_default* = staticRead("../../../../configs/torrc.base")
+  ansurf_config_torrc_bridge* = staticRead("../../../../configs/bridgerc.base")
   ansurf_maketorrc_path* = "/usr/lib/anonsurf/make-torrc"
 
 type
