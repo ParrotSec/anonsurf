@@ -18,6 +18,7 @@ public class AnonSurfTitleBar: HeaderBar {
 
   private void init_button_settings() {
     button_settings = new Button.from_icon_name("preferences-desktop");
+    button_settings.clicked.connect(on_click_options);
   }
 
   private void init_button_about() {
@@ -26,8 +27,14 @@ public class AnonSurfTitleBar: HeaderBar {
   }
 
   private void on_click_about() {
-    var dialog_about = new AnonSurfAbout();
+    var dialog_about = new AnonSurfDialogAbout();
     dialog_about.run();
     dialog_about.destroy();
+  }
+
+  private void on_click_options() {
+    var dialog_options = new AnonSurfDialogOptions();
+    dialog_options.run();
+    dialog_options.destroy();
   }
 }
