@@ -2,8 +2,9 @@ using Gtk;
 
 
 public class MainLayout: Box {
-  public Label label_anonsurf_status;
   public Label label_boot_status;
+  public Label label_anonsurf_status;
+  //  public Button button_anonsurf_status;
   public Button button_anonsurf_actions; // Start or Stop anonsurf
   public Button button_change_id;
   public Button button_my_ip;
@@ -16,16 +17,13 @@ public class MainLayout: Box {
 
   private Frame frame_boot_area;
 
-  const uchar button_size_x = 80;
-  const uchar button_size_y = 70;
-
+  const uchar button_size_x = 105;
+  const uchar button_size_y = 65;
 
   public MainLayout() {
     GLib.Object(orientation: Orientation.HORIZONTAL);
 
-    init_detail_area();
-    init_boot_area();
-    init_button_area();
+    init_all_objects();
 
     var box_extra_details = new Box(Orientation.VERTICAL, 3);
 
@@ -36,16 +34,21 @@ public class MainLayout: Box {
     this.pack_start(box_button_area, false, true, 1);
   }
 
+  private void init_all_objects() {
+    init_detail_area();
+    init_boot_area();
+    init_button_area();
+  }
 
   private void init_detail_area() {
     image_status = new Image.from_icon_name("security-medium", DIALOG);
     label_anonsurf_status = new Label.with_mnemonic("Disabled");
+    //  button_anonsurf_status = new Button.with_label("Disabled");
     box_detail_area = new Box(Orientation.HORIZONTAL, 3);
 
     box_detail_area.pack_start(image_status, false, true, 3);
     box_detail_area.pack_start(label_anonsurf_status, false, true, 3);
   }
-
 
   private void init_boot_area() {
     label_boot_status = new Label.with_mnemonic("Not enabled");
@@ -62,10 +65,11 @@ public class MainLayout: Box {
     frame_boot_area.add(box_boot_area);
   }
 
-
   private void init_button_area() {
-    button_anonsurf_actions = new Button.from_icon_name("media-playback-start");
-    button_restart = new Button.from_icon_name("system-restart-panel");
+    //  button_anonsurf_actions = new Button.from_icon_name("media-playback-start");
+    //  button_restart = new Button.from_icon_name("system-restart-panel");
+    button_anonsurf_actions = new Button.with_label("Start");
+    button_restart = new Button.with_label("Restart");
     button_change_id = new Button.with_label("Change ID");
     button_my_ip = new Button.with_label("My IP");
     box_button_area = new Box(Orientation.VERTICAL, 3);
