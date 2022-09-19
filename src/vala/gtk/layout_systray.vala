@@ -1,15 +1,14 @@
 using Gtk;
 
 
-public class AnonSurfStatusIcon {
-  private StatusIcon systray;
+public class AnonSurfStatusIcon: StatusIcon {
   private GLib.Menu menu;
   private AnonSurfApp app;
 
-  public void init_status_icon(AnonSurfApp app) {
+  public AnonSurfStatusIcon(AnonSurfApp app) {
     this.app = app;
-    systray = new StatusIcon.from_icon_name("anonsurf");
-    systray.activate.connect(on_left_click_systray);
+    this.set_from_icon_name("anonsurf");
+    this.activate.connect(on_left_click_systray);
   }
 
   //  public void init_rightclick_menu() {
@@ -28,7 +27,6 @@ public class AnonSurfStatusIcon {
   //  //  }
 
   private void on_left_click_systray() {
-
     this.app.activate();
   }
 }

@@ -18,9 +18,7 @@ int main(string[] args) {
   Gtk.init(ref args);
 
   var app = new AnonSurfApp();
-  var sys_tray = new AnonSurfStatusIcon();
-
-  sys_tray.init_status_icon(app);
+  var sys_tray = new AnonSurfStatusIcon(app);
 
   return app.run(args);
 }
