@@ -4,10 +4,10 @@ using Gtk;
 public class ButtonSettings: Button {
   public ButtonSettings() {
     this.set_image(new Image.from_icon_name("preferences-desktop", BUTTON));
-    this.activate.connect(on_click_settings);
+    this.clicked.connect(on_click_settings);
   }
 
-  private void on_click_settings() {
+  public void on_click_settings() {
     var dialog_options = new AnonSurfDialogOptions();
     dialog_options.run();
     dialog_options.destroy();
@@ -18,10 +18,10 @@ public class ButtonSettings: Button {
 public class ButtonAbout: Button {
   public ButtonAbout() {
     this.set_image(new Image.from_icon_name("help-about", BUTTON));
-    this.activate.connect(on_click_about);
+    this.clicked.connect(on_click_about);
   }
 
-  private void on_click_about() {
+  public void on_click_about() {
     var dialog_about = new AnonSurfDialogAbout();
     dialog_about.run();
     dialog_about.destroy();
