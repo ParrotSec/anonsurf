@@ -18,7 +18,7 @@ public class AnonSurfDialogOptions: Dialog {
     this.set_icon_name("preferences-desktop");
     this.set_resizable(false);
 
-    var content_area = this.get_content_area();
+    var content_area = this.get_content_area(); // FIXME: c source complains about incompatible pointer
     content_area.add(box_dialog_options);
     this.show_all();
   }
