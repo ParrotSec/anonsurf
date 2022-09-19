@@ -44,15 +44,16 @@ public class SystrayMenuCheckIP: Gtk.MenuItem {
 
 
 public class SystrayMenuSettings: Gtk.MenuItem {
-  public SystrayMenuSettings() {
+  private AnonSurfDialogOptions dialog_options;
+
+  public SystrayMenuSettings(AnonSurfDialogOptions dialog_options) {
     this.set_label("Settings");
+    this.dialog_options = dialog_options;
     this.activate.connect(on_click_settings);
   }
 
   private void on_click_settings() {
-    var dialog_options = new AnonSurfDialogOptions();
-    dialog_options.run();
-    dialog_options.destroy();
+    this.dialog_options.invoke();
   }
 }
 
@@ -66,13 +67,13 @@ public class SystrayMenuQuit: Gtk.MenuItem {
 
 
 public class AnonSurfSystrayMenu: Gtk.Menu {
-  public AnonSurfSystrayMenu() {
+  public AnonSurfSystrayMenu(AnonSurfDialogOptions dialog_options) {
     // FIXME Incompatible pointer when append
     this.append(new SystrayMenuStart());
     this.append(new SystrayMenuStatus());
     this.append(new SystrayMenuCheckIP());
     // FIXME when open dialog settings and use this from systray, app creates 2 dialogs. Must have 1 only
-    this.append(new SystrayMenuSettings());
+    this.append(new SystrayMenuSettings(dialog_options));
     this.append(new SystrayMenuQuit());
     this.show_all();
   }
@@ -83,9 +84,9 @@ public class AnonSurfStatusIcon: StatusIcon {
   private Gtk.Menu menu;
   private AnonSurfApp app;
 
-  public AnonSurfStatusIcon(AnonSurfApp app) {
+  public AnonSurfStatusIcon(AnonSurfApp app, AnonSurfDialogOptions dialog_options) {
     this.app = app;
-    this.menu = new AnonSurfSystrayMenu();
+    this.menu = new AnonSurfSystrayMenu(dialog_options);
     this.set_from_icon_name("anonsurf");
 
     this.activate.connect(on_left_click_systray);

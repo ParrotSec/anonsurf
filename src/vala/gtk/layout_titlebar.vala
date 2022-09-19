@@ -2,15 +2,16 @@ using Gtk;
 
 
 public class ButtonSettings: Button {
-  public ButtonSettings() {
+  private AnonSurfDialogOptions dialog_options;
+
+  public ButtonSettings(AnonSurfDialogOptions dialog_options) {
     this.set_image(new Image.from_icon_name("preferences-desktop", BUTTON));
+    this.dialog_options = dialog_options;
     this.clicked.connect(on_click_settings);
   }
 
   private void on_click_settings() {
-    var dialog_options = new AnonSurfDialogOptions();
-    dialog_options.run();
-    dialog_options.destroy();
+    this.dialog_options.invoke();
   }
 }
 
@@ -30,11 +31,11 @@ public class ButtonAbout: Button {
 
 
 public class AnonSurfTitleBar: HeaderBar {
-  public AnonSurfTitleBar() {
+  public AnonSurfTitleBar(AnonSurfDialogOptions dialog_options) {
     this.set_show_close_button(true);
     this.set_title("AnonSurf");
     this.pack_end(new ButtonAbout());
-    this.pack_start(new ButtonSettings());
+    this.pack_start(new ButtonSettings(dialog_options));
     this.set_decoration_layout(":close");
   }
 }

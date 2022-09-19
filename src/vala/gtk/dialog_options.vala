@@ -75,7 +75,7 @@ public class ButtonCancel: Button {
   }
 
   private void on_click_cancel_options() {
-    this.dialog.destroy(); // FIXME doesn't destroy
+    this.dialog.hide();
   }
 }
 
@@ -115,7 +115,6 @@ public class AnonSurfDialogOptions: Dialog {
     var content_area = this.get_content_area(); // FIXME: c source complains about incompatible pointer
     dialog_options_create_layout();
     content_area.add(box_dialog_options);
-    this.show_all();
   }
 
   private void dialog_options_create_option_layout() {
@@ -148,5 +147,12 @@ public class AnonSurfDialogOptions: Dialog {
     box_dialog_options = new Box(Orientation.VERTICAL, 3);
     dialog_options_create_option_layout();
     dialog_options_add_button_layout();
+  }
+
+  public void invoke() {
+    // TODO parse saved settings here
+    this.show_all();
+    this.run();
+    this.hide();
   }
 }
