@@ -1,6 +1,24 @@
 using Gtk;
 
 
+public class SystrayMenuStart: Gtk.MenuItem {
+  // TODO when refresh, we try to change the label to Stop
+  public SystrayMenuStart() {
+    this.set_label("Start");
+    this.activate.connect(on_click_main_action);
+  }
+
+  private void on_click_main_action() {
+    if (this.get_label == "Start") {
+      print("Start\n");
+    }
+    else {
+      print("Stop\n");
+    }
+  }
+}
+
+
 public class SystrayMenuStatus: Gtk.MenuItem {
   public SystrayMenuStatus() {
     this.set_label("Status");
@@ -36,6 +54,7 @@ public class SystrayMenuQuit: Gtk.MenuItem {
 public class AnonSurfSystrayMenu: Gtk.Menu {
   public AnonSurfSystrayMenu() {
     // FIXME Incompatible pointer when append
+    this.append(new SystrayMenuStart());
     this.append(new SystrayMenuStatus());
     this.append(new SystrayMenuCheckIP());
     this.append(new SystrayMenuQuit());
