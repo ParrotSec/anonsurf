@@ -33,6 +33,7 @@ public class SetBridgeMode: ComboBoxText {
     this.append_text("Manual");
     this.set_active(selected_option);
   }
+  // TODO when user select manual, entry bridge addr should be enabled as well
 }
 
 
@@ -54,7 +55,7 @@ public class SetBridgeAddress: Entry {
 public class ButtonApply: Button {
   public ButtonApply() {
     this.set_label("Apply");
-    this.activate.connect(on_click_apply_options);
+    this.clicked.connect(on_click_apply_options);
   }
 
   private void on_click_apply_options() {
@@ -70,11 +71,10 @@ public class ButtonCancel: Button {
   public ButtonCancel(Dialog dialog) {
     this.set_label("Cancel");
     this.dialog = dialog;
-    this.activate.connect(on_click_cancel_options);
+    this.clicked.connect(on_click_cancel_options);
   }
 
   private void on_click_cancel_options() {
-    print("Cancel");
     this.dialog.destroy(); // FIXME doesn't destroy
   }
 }
