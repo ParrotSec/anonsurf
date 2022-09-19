@@ -43,6 +43,20 @@ public class SystrayMenuCheckIP: Gtk.MenuItem {
 }
 
 
+public class SystrayMenuSettings: Gtk.MenuItem {
+  public SystrayMenuSettings() {
+    this.set_label("Settings");
+    this.activate.connect(on_click_settings);
+  }
+
+  private void on_click_settings() {
+    var dialog_options = new AnonSurfDialogOptions();
+    dialog_options.run();
+    dialog_options.destroy();
+  }
+}
+
+
 public class SystrayMenuQuit: Gtk.MenuItem {
   public SystrayMenuQuit() {
     this.set_label("Quit");
@@ -57,6 +71,8 @@ public class AnonSurfSystrayMenu: Gtk.Menu {
     this.append(new SystrayMenuStart());
     this.append(new SystrayMenuStatus());
     this.append(new SystrayMenuCheckIP());
+    // FIXME when open dialog settings and use this from systray, app creates 2 dialogs. Must have 1 only
+    this.append(new SystrayMenuSettings());
     this.append(new SystrayMenuQuit());
     this.show_all();
   }
