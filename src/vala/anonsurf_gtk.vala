@@ -19,6 +19,5 @@ int main(string[] args) {
 
   var app = new AnonSurfApp();
   var sys_tray = new AnonSurfStatusIcon(app);
-
   return app.run(args);
 }
