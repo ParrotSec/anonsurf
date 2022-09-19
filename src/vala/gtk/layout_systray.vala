@@ -6,7 +6,7 @@ public class AnonSurfSystrayMenu: Gtk.Menu {
     var menu_quit = new Gtk.MenuItem.with_label("Quit");
     menu_quit.activate.connect(Gtk.main_quit);
 
-    this.append(menu_quit);
+    this.append(menu_quit); // FIXME Incompatible pointer
     this.show_all();
   }
 }
