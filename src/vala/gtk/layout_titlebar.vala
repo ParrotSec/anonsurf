@@ -7,7 +7,7 @@ public class ButtonSettings: Button {
     this.clicked.connect(on_click_settings);
   }
 
-  public void on_click_settings() {
+  private void on_click_settings() {
     var dialog_options = new AnonSurfDialogOptions();
     dialog_options.run();
     dialog_options.destroy();
@@ -21,7 +21,7 @@ public class ButtonAbout: Button {
     this.clicked.connect(on_click_about);
   }
 
-  public void on_click_about() {
+  private void on_click_about() {
     var dialog_about = new AnonSurfDialogAbout();
     dialog_about.run();
     dialog_about.destroy();
