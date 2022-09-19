@@ -9,7 +9,7 @@ public class SystrayMenuStart: Gtk.MenuItem {
   }
 
   private void on_click_main_action() {
-    if (this.get_label == "Start") {
+    if (this.get_label() == "Start") {
       print("Start\n");
     }
     else {
