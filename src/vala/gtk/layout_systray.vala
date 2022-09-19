@@ -1,12 +1,44 @@
 using Gtk;
 
 
+public class SystrayMenuStatus: Gtk.MenuItem {
+  public SystrayMenuStatus() {
+    this.set_label("Status");
+    this.activate.connect(on_click_check_status);
+  }
+
+  private void on_click_check_status() {
+    print("Clicked check status");
+  }
+}
+
+
+public class SystrayMenuCheckIP: Gtk.MenuItem {
+  public SystrayMenuCheckIP() {
+    this.set_label("Check IP");
+    this.activate.connect(on_click_check_ip);
+  }
+
+  private void on_click_check_ip() {
+    print("Clicked check ip\n");
+  }
+}
+
+
+public class SystrayMenuQuit: Gtk.MenuItem {
+  public SystrayMenuQuit() {
+    this.set_label("Quit");
+    this.activate.connect(Gtk.main_quit);
+  }
+}
+
+
 public class AnonSurfSystrayMenu: Gtk.Menu {
   public AnonSurfSystrayMenu() {
-    var menu_quit = new Gtk.MenuItem.with_label("Quit");
-    menu_quit.activate.connect(Gtk.main_quit);
-
-    this.append(menu_quit); // FIXME Incompatible pointer
+    // FIXME Incompatible pointer when append
+    this.append(new SystrayMenuStatus());
+    this.append(new SystrayMenuCheckIP());
+    this.append(new SystrayMenuQuit());
     this.show_all();
   }
 }
