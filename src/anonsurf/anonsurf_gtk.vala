@@ -1,5 +1,7 @@
 using Gtk;
 
+extern bool is_anonsurf_running();
+
 
 public class AnonSurfApp: GLib.Application {
   private AnonSurfDialogOptions dialog_options;
@@ -12,7 +14,15 @@ public class AnonSurfApp: GLib.Application {
   public override void activate() {
     var window = new AnonSurfLayout(this.dialog_options);
     window.show_all();
+    GLib.Timeout.add(200, on_refresh_gui);
     Gtk.main();
+  }
+
+  private bool on_refresh_gui() {
+    // FIXME crashed here. Seems like wrong return
+    var anonsurf_status = is_anonsurf_running();
+
+    return true;
   }
 }
 
