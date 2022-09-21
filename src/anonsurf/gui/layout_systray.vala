@@ -81,7 +81,7 @@ public class AnonSurfSystrayMenu: Gtk.Menu {
 
 
 public class AnonSurfStatusIcon: StatusIcon {
-  private Gtk.Menu menu;
+  private AnonSurfSystrayMenu menu;
   private AnonSurfApp app;
 
   public AnonSurfStatusIcon(AnonSurfApp app, AnonSurfDialogOptions dialog_options) {

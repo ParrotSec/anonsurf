@@ -1,9 +1,9 @@
 using Gtk;
 
-const uchar button_size_x = 105;
-const uchar button_size_y = 65;
-const uchar button_boot_size_x = 60;
-const uchar button_boot_size_y = 48;
+const uchar BUTTON_SIZE_X = 105;
+const uchar BUTTON_SIZE_Y = 65;
+const uchar BUTTON_BOOT_SIZE_X = 60;
+const uchar BUTTON_BOOT_SIZE_Y = 48;
 
 
 public class LabelBootStatus: Label {
@@ -39,7 +39,7 @@ public class LabelAnonSurfStatus: Label {
 public class ButtonAnonSurfAction: Button {
   public ButtonAnonSurfAction(bool anonsurf_status) {
     on_update_button(anonsurf_status);
-    this.set_size_request(button_size_x, button_size_y);
+    this.set_size_request(BUTTON_SIZE_X, BUTTON_SIZE_Y);
     this.clicked.connect(on_click_anonsurf_action);
   }
 
@@ -65,7 +65,7 @@ public class ButtonAnonSurfAction: Button {
 public class ButtonChangeID: Button {
   public ButtonChangeID(bool anonsurf_status) {
     this.set_label("Change ID");
-    this.set_size_request(button_size_x, button_size_y);
+    this.set_size_request(BUTTON_SIZE_X, BUTTON_SIZE_Y);
     this.clicked.connect(on_click_changeid);
     on_update_button(anonsurf_status);
   }
@@ -87,7 +87,7 @@ public class ButtonChangeID: Button {
 public class ButtonRestart: Button {
   public ButtonRestart(bool anonsurf_status) {
     this.set_label("Restart");
-    this.set_size_request(button_size_x, button_size_y);
+    this.set_size_request(BUTTON_SIZE_X, BUTTON_SIZE_Y);
     this.clicked.connect(on_click_restart);
 
     on_update_button(anonsurf_status);
@@ -110,7 +110,7 @@ public class ButtonRestart: Button {
 public class ButtonMyIP: Button {
   public ButtonMyIP() {
     this.set_label("My IP");
-    this.set_size_request(button_size_x, button_size_y);
+    this.set_size_request(BUTTON_SIZE_X, BUTTON_SIZE_Y);
     this.clicked.connect(on_click_myip);
   }
 
@@ -122,14 +122,8 @@ public class ButtonMyIP: Button {
 
 public class ButtonBootAction: Button {
   public ButtonBootAction(bool is_enabled) {
-    if (is_enabled == true) {
-      this.set_label("Disable");
-    }
-    else {
-      this.set_label("Enable");
-    }
-
-    this.set_size_request(button_boot_size_x, button_boot_size_y);
+    on_update_button(is_enabled);
+    this.set_size_request(BUTTON_BOOT_SIZE_X, BUTTON_BOOT_SIZE_Y);
     this.clicked.connect(on_click_boot_action);
   }
 
@@ -139,6 +133,14 @@ public class ButtonBootAction: Button {
     }
     else {
       print("Disabling boot\n");
+    }
+  }
+
+  public void on_update_button(bool is_enabled_boot) {
+    if (is_enabled_boot == true) {
+      this.set_label("Disable");
+    } else {
+      this.set_label("Enable");
     }
   }
 }
@@ -152,14 +154,14 @@ public class ImageAnonSurfStatus: Image {
 
 
 public class MainLayout: Box {
-  private Label label_boot_status;
-  private Label label_anonsurf_status;
-  private Button button_anonsurf_actions; // Start or Stop anonsurf
-  private Button button_change_id;
-  private Button button_my_ip;
-  private Button button_restart;
-  private Button button_boot_actions;
-  private Image image_status;
+  private LabelBootStatus label_boot_status;
+  private LabelAnonSurfStatus label_anonsurf_status;
+  private ButtonAnonSurfAction button_anonsurf_actions; // Start or Stop anonsurf
+  private ButtonChangeID button_change_id;
+  private ButtonMyIP button_my_ip;
+  private ButtonRestart button_restart;
+  private ButtonBootAction button_boot_actions;
+  private ImageAnonSurfStatus image_status;
 
   private Box box_detail_area;
   private Box box_button_area;
@@ -221,21 +223,29 @@ public class MainLayout: Box {
   }
 
   private void create_object_with_status() {
-
     bool anonsurf_status = is_anonsurf_running();
     bool anonsurf_boot_status = is_anonsurf_enabled_boot();
 
-    label_boot_status = new LabelBootStatus(anonsurf_boot_status);
-    label_anonsurf_status = new LabelAnonSurfStatus(anonsurf_status);
-    button_anonsurf_actions = new ButtonAnonSurfAction(anonsurf_status);
-    button_change_id = new ButtonChangeID(anonsurf_status);
-    button_restart = new ButtonRestart(anonsurf_status);
-    button_boot_actions = new ButtonBootAction(anonsurf_boot_status);
-    button_my_ip = new ButtonMyIP();
-    image_status = new ImageAnonSurfStatus(); // TODO: complicated task. do later
+    this.label_boot_status = new LabelBootStatus(anonsurf_boot_status);
+    this.label_anonsurf_status = new LabelAnonSurfStatus(anonsurf_status);
+    this.button_anonsurf_actions = new ButtonAnonSurfAction(anonsurf_status);
+    this.button_change_id = new ButtonChangeID(anonsurf_status);
+    this.button_restart = new ButtonRestart(anonsurf_status);
+    this.button_boot_actions = new ButtonBootAction(anonsurf_boot_status);
+    this.button_my_ip = new ButtonMyIP();
+    this.image_status = new ImageAnonSurfStatus(); // TODO: complicated task. do later
   }
 
-  public void on_update_layout(bool anonsurf_status, bool anonsurf_boot_status) {
-    //  label_boot_status.on_update_label(anonsurf_boot_status);
+  public void on_update_layout() {
+    bool anonsurf_status = is_anonsurf_running();
+    bool anonsurf_boot_status = is_anonsurf_enabled_boot();
+
+    this.label_boot_status.on_update_label(anonsurf_boot_status);
+    this.label_anonsurf_status.on_update_label(anonsurf_status);
+    this.button_anonsurf_actions.on_update_button(anonsurf_status);
+    this.button_change_id.on_update_button(anonsurf_status);
+    this.button_restart.on_update_button(anonsurf_status);
+    this.button_boot_actions.on_update_button(anonsurf_boot_status);
+    //  this.image_status = new ImageAnonSurfStatus(); // TODO: complicated task. do later
   }
 }

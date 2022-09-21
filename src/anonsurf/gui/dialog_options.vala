@@ -81,13 +81,13 @@ public class ButtonCancel: Button {
 
 
 public class AnonSurfDialogOptions: Dialog {
-  private ComboBoxText cmbxt_plain_port;
-  private ComboBoxText cmbxt_bridge_mode;
-  private Entry entr_bridge_addr;
-  private CheckButton cbtn_safe_sock_port;
-  private CheckButton cbtn_sandbox_mode;
-  private Button button_apply;
-  private Button button_cancel;
+  private SetPlainPort cmbxt_plain_port;
+  private SetBridgeMode cmbxt_bridge_mode;
+  private SetBridgeAddress entr_bridge_addr;
+  private SetSafeSock cbtn_safe_sock_port;
+  private SetSandbox cbtn_sandbox_mode;
+  private ButtonApply button_apply;
+  private ButtonCancel button_cancel;
 
   private Box box_dialog_options;
 

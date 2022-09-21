@@ -22,12 +22,7 @@ public class AnonSurfApp: GLib.Application {
   }
 
   private bool on_refresh_gui() {
-    // FIXME crashed here when call nim lib
-    bool anonsurf_status = is_anonsurf_running();
-    //  bool tor_status = is_tor_running();
-    bool anonsurf_boot_status = is_anonsurf_enabled_boot();
-
-    this.layout.main_layout.on_update_layout(anonsurf_status, anonsurf_boot_status);
+    this.layout.main_layout.on_update_layout();
     return true;
   }
 }
