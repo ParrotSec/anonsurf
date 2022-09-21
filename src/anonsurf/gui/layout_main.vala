@@ -22,15 +22,23 @@ public class LabelBootStatus: Label {
 
 
 public class LabelAnonSurfStatus: Label {
-  public LabelAnonSurfStatus() { // TODO get the status from variable
-    this.set_label("Deactivated");
+  public LabelAnonSurfStatus(bool anonsurf_status) {
+    on_update_label(anonsurf_status);
+  }
+
+  public void on_update_label(bool anonsurf_status) {
+    if (anonsurf_status == true) {
+      this.set_label("Activated");
+    } else {
+      this.set_label("Deactivated");
+    }
   }
 }
 
 
 public class ButtonAnonSurfAction: Button {
-  public ButtonAnonSurfAction() { // TODO get status from variable
-    this.set_label("Start");
+  public ButtonAnonSurfAction(bool anonsurf_status) {
+    on_update_button(anonsurf_status);
     this.set_size_request(button_size_x, button_size_y);
     this.clicked.connect(on_click_anonsurf_action);
   }
@@ -43,24 +51,41 @@ public class ButtonAnonSurfAction: Button {
       print("Stopping\n");
     }
   }
+
+  public void on_update_button(bool anonsurf_status) {
+    if (anonsurf_status == true) {
+      this.set_label("Stop");
+    } else {
+      this.set_label("Start");
+    }
+  }
 }
 
 
 public class ButtonChangeID: Button {
-  public ButtonChangeID() { // TODO get status to disable / enable
+  public ButtonChangeID(bool anonsurf_status) {
     this.set_label("Change ID");
     this.set_size_request(button_size_x, button_size_y);
     this.clicked.connect(on_click_changeid);
+    on_update_button(anonsurf_status);
   }
 
   private void on_click_changeid() {
     print("Changing id\n");
   }
+
+  public void on_update_button(bool anonsurf_status) {
+    if (anonsurf_status == true) {
+      this.set_sensitive(true);
+    } else {
+      this.set_sensitive(false);
+    }
+  }
 }
 
 
 public class ButtonRestart: Button {
-  public ButtonRestart(bool anonsurf_status) { // TODO get status to disable / enable
+  public ButtonRestart(bool anonsurf_status) {
     this.set_label("Restart");
     this.set_size_request(button_size_x, button_size_y);
     this.clicked.connect(on_click_restart);
@@ -198,20 +223,19 @@ public class MainLayout: Box {
   private void create_object_with_status() {
 
     bool anonsurf_status = is_anonsurf_running();
-    bool tor_status = is_tor_running();
     bool anonsurf_boot_status = is_anonsurf_enabled_boot();
 
     label_boot_status = new LabelBootStatus(anonsurf_boot_status);
-    label_anonsurf_status = new LabelAnonSurfStatus();
-    button_anonsurf_actions = new ButtonAnonSurfAction();
-    button_change_id = new ButtonChangeID();
+    label_anonsurf_status = new LabelAnonSurfStatus(anonsurf_status);
+    button_anonsurf_actions = new ButtonAnonSurfAction(anonsurf_status);
+    button_change_id = new ButtonChangeID(anonsurf_status);
     button_restart = new ButtonRestart(anonsurf_status);
     button_boot_actions = new ButtonBootAction(anonsurf_boot_status);
     button_my_ip = new ButtonMyIP();
-    image_status = new ImageAnonSurfStatus();
+    image_status = new ImageAnonSurfStatus(); // TODO: complicated task. do later
   }
 
-  public void on_update_layout(bool anonsurf_status, bool tor_status, bool anonsurf_boot_status) {
+  public void on_update_layout(bool anonsurf_status, bool anonsurf_boot_status) {
     //  label_boot_status.on_update_label(anonsurf_boot_status);
   }
 }
