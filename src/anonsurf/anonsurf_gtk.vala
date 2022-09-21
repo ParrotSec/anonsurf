@@ -1,10 +1,13 @@
 using Gtk;
 
 extern bool is_anonsurf_running();
+extern bool is_tor_running();
+extern bool is_anonsurf_enabled_boot();
 
 
 public class AnonSurfApp: GLib.Application {
   private AnonSurfDialogOptions dialog_options;
+  private AnonSurfLayout layout;
 
   public AnonSurfApp(AnonSurfDialogOptions dialog_options) {
     Object(application_id: "org.parrot.anonsurf-gtk");
@@ -12,16 +15,19 @@ public class AnonSurfApp: GLib.Application {
   }
 
   public override void activate() {
-    var window = new AnonSurfLayout(this.dialog_options);
-    window.show_all();
-    GLib.Timeout.add(200, on_refresh_gui);
+    this.layout = new AnonSurfLayout(this.dialog_options);
+    this.layout.show_all();
+    Timeout.add(200, on_refresh_gui);
     Gtk.main();
   }
 
   private bool on_refresh_gui() {
-    // FIXME crashed here. Seems like wrong return
-    var anonsurf_status = is_anonsurf_running();
+    // FIXME crashed here when call nim lib
+    bool anonsurf_status = is_anonsurf_running();
+    bool tor_status = is_tor_running();
+    bool anonsurf_boot_status = is_anonsurf_enabled_boot();
 
+    this.layout.main_layout.on_update_layout(anonsurf_status, tor_status, anonsurf_boot_status);
     return true;
   }
 }
