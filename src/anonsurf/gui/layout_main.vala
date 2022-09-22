@@ -5,6 +5,12 @@ const uchar BUTTON_SIZE_Y = 65;
 const uchar BUTTON_BOOT_SIZE_X = 60;
 const uchar BUTTON_BOOT_SIZE_Y = 48;
 
+public enum AnonSurfStatusErr {
+  OK,
+  TORNOTRUNNING,
+  ANONSURFNOTRUNNING
+}
+
 
 public class LabelBootStatus: Label {
   public LabelBootStatus(bool is_enabled) {
@@ -22,15 +28,17 @@ public class LabelBootStatus: Label {
 
 
 public class LabelAnonSurfStatus: Label {
-  public LabelAnonSurfStatus(bool anonsurf_status) {
+  public LabelAnonSurfStatus(AnonSurfStatusErr anonsurf_status) {
     on_update_label(anonsurf_status);
   }
 
-  public void on_update_label(bool anonsurf_status) {
-    if (anonsurf_status == true) {
-      this.set_label("Activated");
-    } else {
+  public void on_update_label(AnonSurfStatusErr anonsurf_status) {
+    if (anonsurf_status == AnonSurfStatusErr.TORNOTRUNNING) {
+      this.set_label("Tor died");
+    } else if (anonsurf_status == AnonSurfStatusErr.ANONSURFNOTRUNNING) {
       this.set_label("Deactivated");
+    } else {
+      this.set_label("Activated");
     }
   }
 }
@@ -147,8 +155,18 @@ public class ButtonBootAction: Button {
 
 
 public class ImageAnonSurfStatus: Image {
-  public ImageAnonSurfStatus() { // TODO get status
-    this.set_from_icon_name("security-medium", DIALOG);
+  public ImageAnonSurfStatus(AnonSurfStatusErr anonsurf_status) { // TODO get status
+    on_update_image(anonsurf_status);
+  }
+
+  public void on_update_image(AnonSurfStatusErr anonsurf_status) {
+    if (anonsurf_status == AnonSurfStatusErr.TORNOTRUNNING) {
+      this.set_from_icon_name("security-low", DIALOG);
+    } else if (anonsurf_status == AnonSurfStatusErr.ANONSURFNOTRUNNING) {
+      this.set_from_icon_name("security-medium", DIALOG);
+    } else {
+      this.set_from_icon_name("security-high", DIALOG);
+    }
   }
 }
 
@@ -224,28 +242,55 @@ public class MainLayout: Box {
 
   private void create_object_with_status() {
     bool anonsurf_status = is_anonsurf_running();
-    bool anonsurf_boot_status = is_anonsurf_enabled_boot();
+    bool anonsurf_boot_status = is_anonsurf_enabled_boot(); // FIXME wrong return code -> always false for some reasons
+    bool tor_status = is_tor_running();
+    AnonSurfStatusErr surf_run_status;
 
     this.label_boot_status = new LabelBootStatus(anonsurf_boot_status);
-    this.label_anonsurf_status = new LabelAnonSurfStatus(anonsurf_status);
     this.button_anonsurf_actions = new ButtonAnonSurfAction(anonsurf_status);
     this.button_change_id = new ButtonChangeID(anonsurf_status);
     this.button_restart = new ButtonRestart(anonsurf_status);
     this.button_boot_actions = new ButtonBootAction(anonsurf_boot_status);
     this.button_my_ip = new ButtonMyIP();
-    this.image_status = new ImageAnonSurfStatus(); // TODO: complicated task. do later
+
+    if (anonsurf_status == true) {
+      if (tor_status == true) {
+        surf_run_status = AnonSurfStatusErr.OK;
+      } else {
+        surf_run_status = AnonSurfStatusErr.TORNOTRUNNING;
+      }
+    } else {
+      surf_run_status = AnonSurfStatusErr.ANONSURFNOTRUNNING;
+    }
+
+    this.image_status = new ImageAnonSurfStatus(surf_run_status);
+    this.label_anonsurf_status = new LabelAnonSurfStatus(surf_run_status);
   }
 
   public void on_update_layout() {
     bool anonsurf_status = is_anonsurf_running();
-    bool anonsurf_boot_status = is_anonsurf_enabled_boot();
+    bool anonsurf_boot_status = is_anonsurf_enabled_boot(); // FIXME wrong return code -> always false for some reasons
+    bool tor_status = is_tor_running();
+    AnonSurfStatusErr surf_run_status;
 
     this.label_boot_status.on_update_label(anonsurf_boot_status);
-    this.label_anonsurf_status.on_update_label(anonsurf_status);
+    this.button_boot_actions.on_update_button(anonsurf_boot_status);
+
     this.button_anonsurf_actions.on_update_button(anonsurf_status);
     this.button_change_id.on_update_button(anonsurf_status);
     this.button_restart.on_update_button(anonsurf_status);
-    this.button_boot_actions.on_update_button(anonsurf_boot_status);
-    //  this.image_status = new ImageAnonSurfStatus(); // TODO: complicated task. do later
+
+    if (anonsurf_status == true) {
+      if (tor_status == true) {
+        surf_run_status = AnonSurfStatusErr.OK;
+      } else {
+        surf_run_status = AnonSurfStatusErr.TORNOTRUNNING;
+      }
+    } else {
+      surf_run_status = AnonSurfStatusErr.ANONSURFNOTRUNNING;
+    }
+
+    this.label_anonsurf_status.on_update_label(surf_run_status);
+    this.image_status.on_update_image(surf_run_status);
   }
 }
