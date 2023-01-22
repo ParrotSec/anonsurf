@@ -56,6 +56,7 @@ proc onClickApplyConfig*(b: Button, c: ApplyConfigObj) =
       c.callback_show_error("Error " & $bridge_addr_error, "Your bridge address is invalid. Try option \"Auto\" instead.", SecurityLow)
       return
   ansurf_gtk_save_config(config)
+  c.callback_show_error("Config applied", "New configurations are saved", SecurityHigh)
 
 
 proc onClickBridgeMode*(c: ComboBoxText, e: Entry) =
