@@ -8,6 +8,12 @@ import re
 import net
 
 
+type
+  ClickApplyArgs* = object
+    configs*: ApplyConfigObj
+    dialog*: Dialog
+
+
 proc checkBridgeAddrFormat(bridge_addr: string): BridgeFormatError =
   let list_bridge_elements = bridge_addr.split(" ")
 
@@ -41,22 +47,23 @@ proc checkBridgeAddrFormat(bridge_addr: string): BridgeFormatError =
   return Ok
 
 
-proc onClickApplyConfig*(b: Button, c: ApplyConfigObj) =
+proc onClickApplyConfig*(b: Button, a: ClickApplyArgs) =
   let
     config = SurfConfig(
-      option_sandbox: c.sandboxMode.getActive(),
-      option_bridge_mode: cast[BridgeMode](c.bridgeOption.getActive()),
-      option_bridge_address: c.bridgeAddr.getText(),
-      option_plain_port: cast[PlainPortMode](c.plainPortMode.getActive()),
-      option_safe_sock: c.safeSock.getActive()
+      option_sandbox: a.configs.sandboxMode.getActive(),
+      option_bridge_mode: cast[BridgeMode](a.configs.bridgeOption.getActive()),
+      option_bridge_address: a.configs.bridgeAddr.getText(),
+      option_plain_port: cast[PlainPortMode](a.configs.plainPortMode.getActive()),
+      option_safe_sock: a.configs.safeSock.getActive()
     )
-    bridge_addr_error = checkBridgeAddrFormat(c.bridgeAddr.getText())
+    bridge_addr_error = checkBridgeAddrFormat(a.configs.bridgeAddr.getText())
   if config.option_bridge_mode == ManualBridge:
     if bridge_addr_error != OK:
-      c.callback_show_error("Error " & $bridge_addr_error, "Your bridge address is invalid. Try option \"Auto\" instead.", SecurityLow)
+      a.configs.callback_show_error("Error " & $bridge_addr_error, "Your bridge address is invalid. Try option \"Auto\" instead.", SecurityLow)
       return
   ansurf_gtk_save_config(config)
-  c.callback_show_error("Config applied", "New configurations are saved", SecurityHigh)
+  a.configs.callback_show_error("Config applied", "New configurations are saved", SecurityHigh)
+  ansurf_gtk_close_dialog(a.dialog)
 
 
 proc onClickBridgeMode*(c: ComboBoxText, e: Entry) =

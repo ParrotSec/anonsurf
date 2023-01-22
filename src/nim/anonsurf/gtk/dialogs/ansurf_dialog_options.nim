@@ -41,10 +41,14 @@ proc initBoxButtons(bA, bC: Button, d: Dialog, optionBridge, optionPlainPort: Co
       plainPortMode: optionPlainPort,
       callback_show_error: callback
     )
+    args = ClickApplyArgs(
+      configs: config,
+      dialog: d
+    )
 
   area.packStart(bA, true, false, 3)
   area.packEnd(bC, true, false, 3)
-  bA.connect("clicked", onClickApplyConfig, config)
+  bA.connect("clicked", onClickApplyConfig, args)
   bC.connect("clicked", onClickCancel, d)
   optionBridge.connect("changed", onClickBridgeMode, addrBridge)
 
