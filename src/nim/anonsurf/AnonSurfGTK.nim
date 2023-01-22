@@ -1,4 +1,4 @@
-import gintro / [gtk, glib, gobject]
+import gintro / [gtk, glib, gobject, gio]
 import gintro / gdk except Window
 import cores / handle_activities
 import gtk / widgets / [ansurf_widget_details, ansurf_widgets_main]
@@ -23,12 +23,11 @@ proc init_stack(b: Box, s: Stack, mainWidget, detailWidget: Box) =
   b.add(s)
 
 
-proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
+proc createWindowLayout(mainBoard: ApplicationWindow, cb_send_msg: callback_send_messenger): Box =
   #[
     Create everything for the program
   ]#
   let
-    cb_send_msg = cli_init_callback_msg(true)
     boxMainWindow = newBox(Orientation.vertical, 3)
     mainStack = newStack()
     btnStart = newButton("Start")
@@ -77,7 +76,6 @@ proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
       stackObjs: mainStack,
     )
 
-  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu, cb_send_msg)
   init_stack(boxMainWindow, mainStack, mainWidget, detailWidget)
 
   # Load latest status when start program. Useful when start AnonSurf GUI again (after it ran)
@@ -87,23 +85,28 @@ proc createWindowLayout(mainBoard: Window, sysTrayIcon: StatusIcon): Box =
   return boxMainWindow
 
 
-proc main =
-  #[
-    Create new window
-    http://blog.borovsak.si/2009/06/multi-threaded-gtk-applications.html
-  ]#
-  ansurf_gtk_start_daemon()
-  gtk.init()
-
+proc anonsurf_app(app: Application, sysTrayIcon: StatusIcon) =
   let
-    mainBoard = newWindow()
+    w = newApplicationWindow(app)
+    cb_send_msg = cli_init_callback_msg(true)
+
+  sysTrayIcon.connect("activate", ansurf_left_click, w)
+  sysTrayIcon.connect("popup-menu", ansurf_right_click_menu, cb_send_msg)
+
+  w.init_main_window()
+  w.add(createWindowLayout(w, cb_send_msg))
+  w.showAll()
+
+
+proc main =
+  let
     sysTrayIcon = newStatusIconFromPixbuf(surfIcon)
+    app = newApplication("org.parrot.anonsurf-gtk")
 
-  sysTrayIcon.connect("activate", ansurf_left_click, mainBoard)
-  init_main_window(mainBoard)
-  mainBoard.add(createWindowLayout(mainBoard, sysTrayIcon))
+  app.connect("activate", anonsurf_app, sysTrayIcon)
+  discard app.run()
 
-  mainBoard.showAll()
-  gtk.main()
 
+gtk.init()
+ansurf_gtk_start_daemon()
 main()

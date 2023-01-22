@@ -43,5 +43,5 @@ proc ansurf_right_click_menu*(i: StatusIcon, b: int, activeTime: int, cb_send_ms
   right_click_menu.popup(nil, nil, nil, nil, b, activeTime)
 
 
-proc ansurf_left_click*(i: StatusIcon, w: Window) =
+proc ansurf_left_click*(i: StatusIcon, w: ApplicationWindow) =
   w.showAll()

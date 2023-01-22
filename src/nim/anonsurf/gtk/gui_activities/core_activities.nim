@@ -1,4 +1,4 @@
-import gintro / gtk
+import gintro / [gtk, gio]
 import gintro / gdk except Window
 import .. / .. / options / [option_handler, option_objects]
 
@@ -11,11 +11,11 @@ proc ansurf_gtk_widget_show_main*(e: EventBox, eb: gdk.EventButton, s: Stack): b
   s.setVisibleChildName("main")
 
 
-proc ansurf_gtk_do_stop*(w: Window | MenuItem) =
+proc ansurf_gtk_do_stop*(w: Window | gtk.MenuItem) =
   #[
     Close program by click on title bar
   ]#
-  mainQuit()
+  quit()
 
 
 proc ansurf_gtk_do_not_stop*(w: Window, e: Event): bool =
