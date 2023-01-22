@@ -34,6 +34,7 @@ public class SetBridgeMode: ComboBoxText {
     this.set_active(selected_option);
   }
   // TODO when user select manual, entry bridge addr should be enabled as well
+  // TODO the parser should split values of bridge as well
 }
 
 
