@@ -35,7 +35,7 @@ proc checkBridgeAddrFormat(bridge_addr: string): BridgeFormatError =
     return InvalidFingerprint
   if not match(list_bridge_elements[3], re"cert=[\w\d\+\/]{70}"):
     return InvalidCertSyntax
-  if not match(list_bridge_elements[4], re"iat-mode=[[0-1]]"):
+  if not match(list_bridge_elements[4], re"iat-mode=[0-1]"):
     return InvalidIatMode
 
   return Ok
