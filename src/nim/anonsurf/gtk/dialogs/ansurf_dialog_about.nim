@@ -8,7 +8,7 @@ proc onClickAbout*(b: Button) =
   #[
     Show help for main and credit in new dialog
   ]#
-  const readImgLogo = staticRead("../../../../icons/anon-about.svg")
+  const readImgLogo = staticRead("../../../../../icons/anon-about.svg")
   let
     showAbout = newAboutDialog()
     bufLoader = newPixbufLoader()
