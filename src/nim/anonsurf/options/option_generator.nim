@@ -63,7 +63,8 @@ proc option_enable_sandbox_mode(settings: var string) =
 
 proc option_enable_bridge(settings: var string) =
   settings &= "\n# Enable bridge mode\n"
-  settings &= "BridgeRelay 1\n"
+  settings &= "UseBridges 1\n"
+  settings &= "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed\n"
 
 
 proc option_set_bridge_addr(settings: var string, bridge_addr: string) =
@@ -97,20 +98,6 @@ proc ansurf_options_generate_common_settings(settings: var string, password: str
   settings.option_set_torrc_hash(tor_hash)
 
 
-proc ansurf_options_add_bridge_options(settings: var string, user_options: SurfConfig) =
-  settings &= "\n#Bridge mode settings\n" & ansurf_config_torrc_bridge
-  var
-      bridge_addr: string
-
-  if user_options.option_bridge_mode == AutoBridge:
-    bridge_addr = ansurf_options_get_random_bridge()
-  else:
-    bridge_addr = user_options.option_bridge_address # TODO check bridge addr format
-
-  settings.option_enable_bridge()
-  settings.option_set_bridge_addr(bridge_addr)
-
-
 proc ansurf_options_generate_torrc*(user_options: SurfConfig, password: string): string =
   var
     settings: string
@@ -128,6 +115,14 @@ proc ansurf_options_generate_torrc*(user_options: SurfConfig, password: string):
     if user_options.option_sandbox:
       settings.option_enable_sandbox_mode()
   else:
-    settings.ansurf_options_add_bridge_options(user_options)
+    var bridge_addr: string
+    settings.option_enable_bridge()
+
+    if user_options.option_bridge_mode == AutoBridge:
+      bridge_addr = ansurf_options_get_random_bridge()
+    else:
+      bridge_addr = user_options.option_bridge_address
+
+    settings.option_set_bridge_addr(bridge_addr)
 
   return settings
