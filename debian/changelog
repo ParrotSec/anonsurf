@@ -1,3 +1,13 @@
+anonsurf (4.1.0+parrot0) parrot-lts; urgency=medium
+
+  [ Nong Hoang Tu ]
+  * Fixed anonsurf-gtk iat-mode regex
+  * Fixed a critical bug when generate bridge mode in torrc
+  * Change anonsurf-gtk to use Application. Fixed multiple systray
+  * Move onionshares to suggests
+  * Add Vala source code as WIP gui
+ -- dmknght <dmknght@parrot>  Mon, 23 Jan 2023 14:12:29 +0700
+
 anonsurf (4.0.0+parrot1) parrot-updates; urgency=medium
 
   * 4.0 release
