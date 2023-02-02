@@ -1,3 +1,9 @@
+anonsurf (4.1.1+parrot1) parrot-lts; urgency=medium
+
+  * Fix version name for stable release
+
+ -- dmknght <dmknght@parrot>  Thu, 02 Feb 2023 15:59:34 +0700
+
 anonsurf (4.1.0+parrot0) parrot-lts; urgency=medium
 
   [ Nong Hoang Tu ]
