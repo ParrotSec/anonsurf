@@ -1,3 +1,9 @@
+anonsurf (4.1.1+parrot2) lory; urgency=medium
+
+  * Rebuild for Parrot 6.
+
+ -- Lorenzo "Palinuro" Faletra <palinuro@parrotsec.org>  Tue, 19 Dec 2023 09:54:15 +0100
+
 anonsurf (4.1.1+parrot1) parrot-lts; urgency=medium
 
   * Fix version name for stable release
